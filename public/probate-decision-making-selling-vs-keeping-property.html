@@ -1,0 +1,1698 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Probate Decision Making: Selling vs Keeping Property</title>
+
+		<link
+			href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@400;700&family=Roboto:wght@400;900&family=League+Spartan:wght@400;700&family=Oswald&family=Poppins&family=Passions+Conflict&family=Sarpanch&display=swap"
+			rel="stylesheet"
+		/>
+
+		<style type="text/css">
+			/* =========================================
+			   1. VARIABLES & RESET
+			   ========================================= */
+			:root {
+				--primary: #0097a7;
+				--primary-dark: #00838f;
+				--primary-light: rgba(0, 151, 167, 0.1);
+				--primary-lighter: rgba(0, 151, 167, 0.05);
+
+				--secondary: #fe7702;
+				--secondary-light: rgba(254, 119, 2, 0.1);
+				--secondary-lighter: rgba(254, 119, 2, 0.05);
+
+				--accent: #ff4444;
+				--teal-soft: #e0f7fa;
+
+				--gray-100: #f3f4f6;
+				--gray-300: #d1d5db;
+				--gray-500: #6b7280;
+				--gray-600: #4b5563;
+				--white: #ffffff;
+				--black: #000000;
+
+				--font-anton: "Anton", sans-serif;
+				--font-montserrat: "Montserrat", sans-serif;
+			}
+
+			* {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
+
+			body {
+				background-color: var(--gray-100);
+				color: var(--black);
+				font-family: var(--font-montserrat);
+				padding: 1.5rem;
+				-webkit-font-smoothing: antialiased;
+			}
+
+			@media (min-width: 768px) {
+				body {
+					padding: 2.5rem;
+				}
+			}
+
+			main {
+				max-width: 80rem;
+				margin-left: auto;
+				margin-right: auto;
+				display: flex;
+				flex-direction: column;
+				gap: 2.5rem;
+			}
+
+			img {
+				display: block;
+				max-width: 100%;
+				height: auto;
+			}
+
+			/* =========================================
+			   2. TYPOGRAPHY
+			   ========================================= */
+			h1,
+			h2,
+			h3,
+			h4 {
+				font-family: var(--font-anton);
+				text-transform: uppercase;
+				line-height: 1.2;
+				font-weight: 700;
+				transition: color 0.3s ease;
+			}
+
+			.text-primary {
+				color: var(--primary);
+			}
+
+			.text-primary:hover {
+				color: var(--secondary);
+			}
+
+			.text-secondary {
+				color: var(--secondary);
+			}
+
+			.text-secondary:hover {
+				color: var(--primary);
+			}
+
+			/* Parent hover — swap colors so primary children become secondary */
+			.content-block:hover .text-secondary,
+			.point-item:hover .text-secondary {
+				color: var(--primary);
+				transition: color 0.3s ease;
+			}
+
+			.content-block:hover .text-primary,
+			.point-item:hover .text-primary {
+				color: var(--secondary);
+				transition: color 0.3s ease;
+			}
+
+			.text-gray {
+				color: var(--gray-600);
+			}
+
+			.text-center {
+				text-align: center;
+			}
+
+			.text-bold {
+				font-weight: 700;
+			}
+
+			.italic {
+				font-style: italic;
+			}
+
+			.section-title {
+				font-size: 2rem !important;
+				margin-bottom: 1rem;
+				transition: color 0.3s ease;
+			}
+
+			.section-title.text-primary:hover,
+			.section-title:hover.text-primary {
+				color: var(--secondary) !important;
+			}
+
+			.section-title.text-secondary:hover,
+			.section-title:hover.text-secondary {
+				color: var(--primary) !important;
+			}
+
+			.content-heading {
+				font-size: 1.625rem !important;
+				margin-bottom: 0.75rem;
+				transition: color 0.3s ease;
+			}
+
+			.content-heading.text-primary:hover,
+			.content-heading:hover.text-primary {
+				color: var(--secondary) !important;
+			}
+
+			.content-heading.text-secondary:hover,
+			.content-heading:hover.text-secondary {
+				color: var(--primary) !important;
+			}
+
+			.body-text {
+				font-size: 1.375rem !important;
+				line-height: 1.6;
+				font-weight: 700;
+			}
+
+			.small-text {
+				font-size: 1.125rem !important;
+				font-weight: 700;
+			}
+
+			.main-header {
+				text-align: center;
+			}
+
+			.main-header h1 {
+				font-size: 3.25rem;
+				color: var(--secondary);
+				margin-bottom: 1rem;
+				transition: color 0.3s ease;
+			}
+
+			.main-header h1:hover {
+				color: var(--primary);
+			}
+
+			@media (max-width: 767px) {
+				.section-title {
+					font-size: 1.5rem !important;
+				}
+
+				.content-heading {
+					font-size: 1.25rem !important;
+				}
+
+				.body-text {
+					font-size: 1rem !important;
+				}
+
+				.small-text {
+					font-size: 0.875rem !important;
+				}
+
+				.main-header h1 {
+					font-size: 2rem;
+				}
+
+				.step-title-text {
+					font-size: clamp(1.25rem, 3.15vw, 3.7rem);
+				}
+			}
+
+			/* =========================================
+			   3. SHADOWS & UTILITIES
+			   ========================================= */
+			.shadow-card {
+				box-shadow:
+					0 8px 12px rgba(0, 0, 0, 0.4),
+					0 -5px 12px 1px rgba(0, 0, 0, 0.4);
+				transition:
+					transform 0.3s ease,
+					box-shadow 0.3s ease;
+			}
+
+			.shadow-card:hover {
+				transform: translateY(-5px);
+				box-shadow:
+					0 12px 20px rgba(0, 0, 0, 0.5),
+					0 -8px 16px 2px rgba(0, 0, 0, 0.5);
+			}
+
+			.bg-white {
+				background-color: var(--white);
+			}
+
+			.rounded-card {
+				border-radius: 1rem;
+			}
+
+			/* =========================================
+			   4. CATEGORY BANNERS
+			   ========================================= */
+			.category-banner {
+				padding: 1.5rem;
+				border-radius: 1rem;
+				border-left: 4px solid;
+				transition:
+					transform 0.3s ease,
+					border-left-width 0.3s ease;
+			}
+
+			.category-banner:hover {
+				transform: translateX(8px);
+				border-left-width: 8px;
+			}
+
+			.category-banner h2 {
+				font-size: 2rem;
+				margin-bottom: 0.5rem;
+				font-weight: 700;
+				transition: color 0.3s ease;
+			}
+
+			.banner-primary {
+				background: linear-gradient(
+					to right,
+					var(--primary-light),
+					var(--primary-lighter)
+				);
+				border-color: var(--primary);
+			}
+
+			.banner-primary h2 {
+				color: var(--primary);
+			}
+
+			.banner-primary h2:hover {
+				color: var(--secondary);
+			}
+
+			.banner-secondary {
+				background: linear-gradient(
+					to right,
+					var(--secondary-light),
+					var(--secondary-lighter)
+				);
+				border-color: var(--secondary);
+			}
+
+			.banner-secondary h2 {
+				color: var(--secondary);
+			}
+
+			.banner-secondary h2:hover {
+				color: var(--primary);
+			}
+
+			/* =========================================
+			   5. CONTENT BLOCKS
+			   ========================================= */
+			.content-block {
+				background-color: var(--white);
+				padding: 0.9rem;
+				border-radius: 1rem;
+				transition: transform 0.3s ease;
+			}
+
+			@media (min-width: 768px) {
+				.content-block {
+					padding: 2.7rem !important;
+				}
+			}
+
+			.step-container {
+				border-radius: 1rem;
+				background-color: var(--white);
+				padding: 1.5rem;
+				transition: transform 0.3s ease;
+			}
+
+			.step-container:hover {
+				transform: scale(1.02);
+			}
+
+			.step-inner {
+				background-color: transparent;
+				padding: 0;
+				display: flex;
+				flex-direction: column;
+				gap: 0;
+			}
+
+			.circle-number-lg {
+				display: none;
+				width: 5rem;
+				height: 5rem;
+				background-color: rgba(0, 151, 167, 0.2);
+				color: var(--secondary);
+				border-radius: 50%;
+				align-items: center;
+				justify-content: center;
+				font-family: var(--font-anton);
+				font-size: 2.5rem;
+				font-weight: 700;
+				flex-shrink: 0;
+				transition: all 0.3s ease;
+			}
+
+			.step-container:hover .circle-number-lg {
+				background-color: rgba(0, 151, 167, 0.4);
+				transform: rotate(360deg) scale(1.1);
+			}
+
+			.circle-number-sm {
+				display: flex;
+				width: 2.5rem;
+				height: 2.5rem;
+				background-color: rgba(0, 151, 167, 0.2);
+				color: var(--secondary);
+				border-radius: 50%;
+				align-items: center;
+				justify-content: center;
+				font-family: var(--font-anton);
+				font-size: 1.375rem;
+				font-weight: 700;
+				flex-shrink: 0;
+				margin-bottom: 0.75rem;
+				align-self: flex-start;
+				transition: all 0.3s ease;
+			}
+
+			.step-container:hover .circle-number-sm {
+				background-color: rgba(0, 151, 167, 0.4);
+				transform: rotate(360deg) scale(1.1);
+			}
+
+			.step-content {
+				flex: 1;
+			}
+
+			.step-title-row {
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
+				margin-bottom: 0.75rem;
+			}
+
+			.step-title-text {
+				font-size: clamp(1.5rem, 3.15vw, 3.7rem);
+				color: var(--secondary);
+				transition: color 0.3s ease;
+			}
+
+			.step-title-text:hover {
+				color: var(--primary);
+			}
+
+			.step-body {
+				margin-top: 0;
+				padding: 0;
+				background-color: transparent;
+				border-radius: 0;
+			}
+
+			.step-container .step-inner {
+				box-shadow: none !important;
+				background-color: transparent !important;
+			}
+
+			.step-container .step-body {
+				box-shadow: none !important;
+			}
+
+			.step-container .step-body .content-block {
+				padding: 0 !important;
+				background-color: transparent !important;
+				box-shadow: none !important;
+			}
+
+			@media (min-width: 768px) {
+				.step-container {
+					padding: 2.5rem;
+					border-radius: 1rem;
+				}
+
+				.step-inner {
+					gap: 1.5rem;
+					border-radius: 1rem;
+					background-color: var(--white);
+					flex-direction: row;
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				.circle-number-lg {
+					display: flex;
+				}
+
+				.circle-number-sm {
+					display: none;
+					margin-bottom: 0;
+				}
+
+				.step-title-row {
+					margin-bottom: 0;
+				}
+
+				.step-body {
+					margin-top: 1.5rem;
+					padding: 1.5rem;
+					background-color: var(--white);
+					border-radius: 1rem;
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				.step-body.content-block {
+					padding: 1.5rem !important;
+					background-color: var(--white) !important;
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+			}
+
+			ul.styled-list {
+				margin-left: 1.5rem;
+				list-style-type: disc;
+				display: flex;
+				flex-direction: column;
+				gap: 1rem;
+			}
+
+			ul.styled-list li {
+				transition: transform 0.2s ease;
+			}
+
+			ul.styled-list li:hover {
+				transform: translateX(8px);
+			}
+
+			.points-wrapper {
+				display: flex;
+				flex-direction: column;
+				gap: 1rem;
+			}
+
+			.point-item {
+				display: flex;
+				align-items: flex-start;
+				gap: 1.5rem;
+				background-color: transparent;
+				padding: 0;
+				border-radius: 0;
+				transition: transform 0.2s ease;
+			}
+
+			.point-item:hover {
+				transform: translateX(5px);
+			}
+
+			.point-icon {
+				width: 1.75rem;
+				margin-top: calc((1.375rem * 1.6 - 1.75rem) / 2);
+				flex-shrink: 0;
+				transition: transform 0.3s ease;
+			}
+
+			.point-item:hover .point-icon {
+				transform: scale(1.15) rotate(5deg);
+			}
+
+			.point-item.shadow-card {
+				box-shadow: none !important;
+				background-color: transparent !important;
+				padding: 0 !important;
+			}
+
+			@media (min-width: 768px) {
+				.point-item {
+					background-color: var(--white);
+					padding: 1.5rem;
+					border-radius: 1rem;
+				}
+
+				.point-icon {
+					width: 2.25rem;
+					margin-top: calc((1.375rem * 1.6 - 2.25rem) / 2);
+				}
+
+				.point-item.shadow-card {
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+					background-color: var(--white) !important;
+					padding: 1.5rem !important;
+				}
+			}
+
+			.callout-box {
+				padding: 1rem;
+				border-radius: 1rem;
+			}
+
+			@media (min-width: 768px) {
+				.callout-box {
+					border-radius: 1rem;
+				}
+			}
+
+			.callout-inner {
+				background-color: var(--white);
+				padding: 2rem 1rem;
+				border-radius: 1rem;
+				display: flex;
+				align-items: flex-start;
+				gap: 1.5rem;
+				clip-path: polygon(0 0, 100% 0, 100% 80%, 82% 100%, 0 100%);
+			}
+
+			@media (min-width: 768px) {
+				.callout-inner {
+					clip-path: polygon(0 0, 101% 0, 100% 60%, 94% 100%, 0 100%);
+					padding: 2.5rem;
+					border-radius: 1rem;
+				}
+			}
+
+			.callout-filter {
+				filter: drop-shadow(4px -6px 10px rgba(0, 0, 0, 0.5))
+					drop-shadow(6px 5px 10px rgba(0, 0, 0, 0.5));
+			}
+
+			.bg-primary {
+				background-color: var(--primary);
+			}
+
+			.bg-secondary {
+				background-color: var(--secondary);
+			}
+
+			.grid-2-col {
+				display: grid;
+				grid-template-columns: 1fr;
+				gap: 1.5rem;
+			}
+
+			.grid-3-col {
+				display: grid;
+				grid-template-columns: 1fr;
+				gap: 1.5rem;
+			}
+
+			.grid-complex {
+				display: grid;
+				grid-template-columns: 1fr;
+				gap: 1.5rem;
+			}
+
+			@media (min-width: 768px) {
+				.grid-2-col {
+					grid-template-columns: 1fr 1fr;
+				}
+
+				.grid-3-col {
+					grid-template-columns: 1fr 1fr 1fr;
+				}
+
+				.grid-complex {
+					grid-template-columns: repeat(5, 1fr);
+				}
+
+				.span-3 {
+					grid-column: span 3;
+				}
+
+				.span-2 {
+					grid-column: span 2;
+				}
+			}
+
+			.image-column {
+				display: flex;
+				flex-direction: column;
+				gap: 1.5rem;
+				height: 100%;
+			}
+
+			.image-frame {
+				flex: 1;
+				border-radius: 1rem;
+				overflow: hidden;
+				border: 4px solid var(--primary);
+			}
+
+			.image-frame img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+
+			.section-photo {
+				width: 100%;
+				aspect-ratio: 1200 / 630;
+				margin: 0;
+				border: 4px solid var(--secondary);
+				border-radius: 1rem;
+				overflow: hidden;
+			}
+
+			.section-photo img {
+				display: block;
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				object-position: center;
+			}
+
+			.stat-card {
+				background-color: var(--white);
+				padding: 1.5rem;
+				border-radius: 1rem;
+				text-align: center;
+			}
+
+			.stat-number {
+				font-family: var(--font-anton);
+				color: var(--primary);
+				font-size: 3.25rem;
+				margin-bottom: 0.75rem;
+				transition: color 0.3s ease;
+			}
+
+			.stat-number:hover {
+				color: var(--secondary);
+			}
+
+			.quote-container {
+				background-color: var(--white);
+				padding: 2rem;
+				border-radius: 1rem;
+				transition:
+					transform 0.3s ease,
+					box-shadow 0.3s ease;
+			}
+
+			.quote-container:hover {
+				transform: translateX(10px);
+				box-shadow: -5px 5px 15px rgba(0, 0, 0, 0.1);
+			}
+
+			@media (min-width: 768px) {
+				.quote-container {
+					padding: 3rem;
+				}
+			}
+
+			blockquote {
+				border-left: 4px solid var(--secondary);
+				padding-left: 1.5rem;
+				font-weight: 400;
+			}
+
+			.cta-container {
+				background-color: var(--white);
+				padding: 2rem;
+				border-radius: 1rem;
+				text-align: center;
+				transition:
+					transform 0.3s ease,
+					box-shadow 0.3s ease;
+			}
+
+			.cta-container:hover {
+				transform: translateY(-3px);
+				box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+			}
+
+			.btn-primary {
+				background-color: #fe7702;
+				color: white;
+				box-shadow:
+					0px 3.04px 7.39px 0px rgba(0, 0, 0, 0.68),
+					6.07px -6.07px 4.05px 0px rgba(0, 0, 0, 0.25) inset,
+					-4.05px 5.06px 4.05px 0px rgba(255, 255, 255, 0.25) inset,
+					-2.02px -1.01px 4.05px 0px rgba(0, 0, 0, 0.6);
+				padding: 1rem 2rem;
+				border-radius: 1rem;
+				text-transform: uppercase;
+				font-weight: 700;
+				border: none;
+				cursor: pointer;
+				transition: all 0.3s ease;
+			}
+
+			.btn-primary:hover {
+				transform: scale(1.08) translateY(-2px);
+				background-color: #ff8820;
+				box-shadow:
+					0px 6px 15px 0px rgba(0, 0, 0, 0.75),
+					6.07px -6.07px 4.05px 0px rgba(0, 0, 0, 0.3) inset,
+					-4.05px 5.06px 4.05px 0px rgba(255, 255, 255, 0.3) inset,
+					-2.02px -1.01px 4.05px 0px rgba(0, 0, 0, 0.65);
+			}
+
+			.btn-primary:active {
+				transform: scale(1.02) translateY(0);
+			}
+
+			.table-wrapper {
+				background-color: var(--white);
+				padding: 1.5rem;
+				border-radius: 1rem;
+				overflow-x: auto;
+			}
+
+			table {
+				width: 100%;
+				border-collapse: collapse;
+				font-family: var(--font-montserrat);
+			}
+
+			th {
+				background-color: var(--primary);
+				color: white;
+				padding: 1.5rem;
+				text-align: left;
+				font-weight: 700;
+				font-size: 1.25rem;
+			}
+
+			td {
+				padding: 0.75rem;
+				border-bottom: 1px solid #e5e7eb;
+				font-size: 1.125rem;
+				font-weight: 400;
+			}
+
+			tbody tr:hover td {
+				background-color: var(--primary-lighter);
+			}
+
+			/* =========================================
+			   6. SOLD CTA INLINE HIGHLIGHT
+			   ========================================= */
+			.sold-cta {
+				text-transform: uppercase;
+				text-decoration: underline;
+				cursor: pointer;
+			}
+
+			.site-footer {
+				text-align: center;
+				padding: 2rem 0;
+				border-top: 1px solid var(--gray-300);
+				margin-top: 2rem;
+			}
+
+			/* Contact item hover */
+			.contact-item {
+				color: var(--primary);
+				transition:
+					color 0.3s ease,
+					transform 0.3s ease;
+				cursor: default;
+				width: fit-content;
+			}
+
+			/* Block parent content-block hover from bleeding into contact items */
+			.content-block:hover .contact-item .text-secondary {
+				color: var(--secondary);
+			}
+			.content-block:hover .contact-item .text-primary {
+				color: var(--primary);
+			}
+
+			/* Only directly-hovered row changes */
+			.contact-item:hover {
+				color: var(--secondary);
+				transform: scale(1.05);
+				transition:
+					color 0.3s ease,
+					transform 0.3s ease;
+			}
+			.contact-item:hover .text-secondary {
+				color: var(--primary) !important;
+				transition: color 0.3s ease;
+			}
+			.contact-item:hover .text-primary {
+				color: var(--secondary) !important;
+				transition: color 0.3s ease;
+			}
+
+			/* =========================================
+			   PHONE ONLY (max-width: 767px)
+			   Disable all hover animations & transitions
+			   Tablet (768px+) keeps full desktop design
+			   ========================================= */
+			@media (max-width: 767px) {
+				*,
+				*::before,
+				*::after {
+					transition: none !important;
+					animation: none !important;
+				}
+
+				.shadow-card:hover,
+				.step-container:hover,
+				.point-item:hover,
+				.quote-container:hover,
+				.cta-container:hover,
+				.btn-primary:hover,
+				ul.styled-list li:hover {
+					transform: none !important;
+				}
+
+				.category-banner:hover {
+					transform: none !important;
+					border-left-width: 4px !important;
+				}
+
+				.shadow-card {
+					box-shadow: none !important;
+				}
+
+				.step-container.shadow-card,
+				.content-block.shadow-card:not(.step-body) {
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				.step-container.shadow-card:hover,
+				.content-block.shadow-card:not(.step-body):hover {
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				.shadow-card:hover {
+					box-shadow: none !important;
+				}
+
+				.quote-container:hover {
+					box-shadow: none !important;
+				}
+
+				.cta-container:hover {
+					box-shadow: none !important;
+				}
+
+				.step-container:hover .circle-number-lg,
+				.step-container:hover .circle-number-sm {
+					background-color: rgba(0, 151, 167, 0.2) !important;
+					transform: none !important;
+				}
+
+				.point-item:hover .point-icon {
+					transform: none !important;
+				}
+
+				.btn-primary:hover {
+					transform: none !important;
+					background-color: #fe7702 !important;
+					box-shadow:
+						0px 3.04px 7.39px 0px rgba(0, 0, 0, 0.68),
+						6.07px -6.07px 4.05px 0px rgba(0, 0, 0, 0.25) inset,
+						-4.05px 5.06px 4.05px 0px rgba(255, 255, 255, 0.25) inset,
+						-2.02px -1.01px 4.05px 0px rgba(0, 0, 0, 0.6) !important;
+				}
+
+				tbody tr:hover td {
+					background-color: transparent !important;
+				}
+
+				.text-primary:hover {
+					color: var(--primary) !important;
+				}
+
+				.text-secondary:hover {
+					color: var(--secondary) !important;
+				}
+
+				.main-header h1:hover {
+					color: var(--secondary) !important;
+				}
+
+				.section-title.text-primary:hover,
+				.section-title:hover.text-primary {
+					color: var(--primary) !important;
+				}
+
+				.section-title.text-secondary:hover,
+				.section-title:hover.text-secondary {
+					color: var(--secondary) !important;
+				}
+
+				.content-heading.text-primary:hover,
+				.content-heading:hover.text-primary {
+					color: var(--primary) !important;
+				}
+
+				.content-heading.text-secondary:hover,
+				.content-heading:hover.text-secondary {
+					color: var(--secondary) !important;
+				}
+
+				.banner-primary h2:hover {
+					color: var(--primary) !important;
+				}
+
+				.banner-secondary h2:hover {
+					color: var(--secondary) !important;
+				}
+
+				.step-title-text:hover {
+					color: var(--secondary) !important;
+				}
+
+				.stat-number:hover {
+					color: var(--primary) !important;
+				}
+
+				/* Disable parent hover color-swap on phone */
+				.content-block:hover .text-secondary,
+				.point-item:hover .text-secondary {
+					color: var(--secondary) !important;
+				}
+
+				.content-block:hover .text-primary,
+				.point-item:hover .text-primary {
+					color: var(--primary) !important;
+				}
+
+				/* Disable contact-item hover on mobile */
+				.contact-item:hover {
+					color: var(--primary) !important;
+					transform: none !important;
+				}
+				.contact-item:hover .text-secondary {
+					color: var(--secondary) !important;
+				}
+				.contact-item:hover .text-primary {
+					color: var(--primary) !important;
+				}
+			}
+		</style>
+	</head>
+
+	<body>
+		<main>
+			<!-- INTRO -->
+			<section id="intro">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						MAKING THIS CALL&#8212;AND WHY IT MATTERS
+					</h2>
+					<p
+						class="body-text text-secondary text-bold"
+						style="margin-bottom: 1.5rem"
+					>
+						This might not be your decision alone&#8212;and that&#8217;s exactly
+						why you need a strategist, not a salesman.
+					</p>
+					<p
+						class="body-text text-secondary text-bold"
+						style="margin-bottom: 1.5rem"
+					>
+						When a property falls under probate, conservatorship, or trust
+						administration, deciding whether to sell, hold, or rent isn&#8217;t
+						about personal preference. It&#8217;s a fiduciary obligation. The
+						court isn&#8217;t looking for opinions. It&#8217;s looking for
+						justification. Backed by numbers. Backed by logic. Backed by benefit
+						to the estate.
+					</p>
+					<p
+						class="body-text text-secondary text-bold"
+						style="margin-bottom: 1.5rem"
+					>
+						Executors and conservators are subject to court oversight. Trustees
+						typically are not&#8212;but they&#8217;re still bound by the highest
+						fiduciary standard. In all three roles, the expectation is the same:
+						justify your decision and demonstrate clear benefit to the estate.
+						If the home is
+						<span
+							class="text-primary text-bold sold-cta"
+							onclick="window.open('/books/seller-guide.pdf', '_blank')"
+							>sold</span
+						>&#8212;why? If it&#8217;s held&#8212;why? If it&#8217;s
+						rented&#8212;why?
+					</p>
+					<p class="body-text text-secondary text-bold">
+						If that reasoning doesn&#8217;t hold up to scrutiny, it could
+						trigger objections, damage your credibility, or expose you to
+						liability from heirs or beneficiaries.
+					</p>
+				</div>
+			</section>
+
+			<!-- STRATEGY -->
+			<!-- SECTION PHOTO -->
+			<div class="section-photo shadow-card">
+				<img
+					src="./probate.jpg"
+					alt="Probate case support photo 1"
+					loading="lazy"
+				/>
+			</div>
+			<section id="strategy">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						STRATEGY, NOT EMOTION: MY ROLE IN THE DECISION PROCESS
+					</h2>
+					<p
+						class="body-text text-secondary text-bold"
+						style="margin-bottom: 1.5rem"
+					>
+						I represent the estate&#8212;not emotions, not outside opinions, and
+						not wishful thinking. I stay neutral, I present facts, and I create
+						structure the court respects.
+					</p>
+					<p
+						class="body-text text-secondary text-bold"
+						style="margin-bottom: 1.5rem"
+					>
+						When we meet, I won&#8217;t just walk you through the
+						options&#8212;I&#8217;ll present those options to everyone who
+						matters. Whether that&#8217;s multiple heirs, a conservator,
+						successor trustee, or the attorney on file. I take a neutral stance
+						while breaking down the outcomes of selling, renting, or
+						holding&#8212;based on condition, market timing, court authority (if
+						applicable), and what&#8217;s truly best for the estate.
+					</p>
+					<p
+						class="body-text text-secondary text-bold"
+						style="margin-bottom: 1.5rem"
+					>
+						I sit down with you and every decision-maker at the table to ensure
+						the reasoning is understood and aligned.
+					</p>
+					<p
+						class="body-text text-secondary text-bold"
+						style="margin-bottom: 1.5rem"
+					>
+						I don&#8217;t hope the family agrees&#8212;I structure the decision
+						so no one can dispute it.
+					</p>
+					<p
+						class="body-text text-secondary text-bold"
+						style="margin-bottom: 1.5rem"
+					>
+						When it&#8217;s time to move forward, there&#8217;s no confusion, no
+						pushback, no surprise objections, and no delays that stall your
+						case, your attorney&#8217;s progress, or the property sale.
+					</p>
+					<p
+						class="body-text text-primary text-bold"
+						style="margin-bottom: 1.5rem"
+					>
+						This is a fiduciary decision under scrutiny&#8212;stalling,
+						guessing, or playing it safe is what gets you blindsided.
+						Transparency now prevents conflict later.
+					</p>
+					<p
+						class="body-text text-secondary text-bold"
+						style="margin-bottom: 1.5rem"
+					>
+						I&#8217;m not an attorney, and I don&#8217;t give legal advice. What
+						I bring is strategic clarity on the real estate side&#8212;what
+						makes sense, what doesn&#8217;t, and how to execute without
+						guessing, <span class="text-primary">conflict</span>, or delays.
+						Just strategy that holds up under pressure and keeps your
+						responsibilities fully protected.
+					</p>
+					<p class="body-text text-secondary text-bold">
+						If you hold the wrong asset too long, if you sell without clarity,
+						or if one heir objects&#8212;you&#8217;ve just created a new case.
+						These aren&#8217;t theoretical problems. I&#8217;ve been brought in
+						to clean up disasters that could&#8217;ve been avoided with strategy
+						on day one.
+					</p>
+				</div>
+			</section>
+
+			<!-- MISSION -->
+			<!-- SECTION PHOTO -->
+			<div class="section-photo shadow-card">
+				<img
+					src="./probate.jpg"
+					alt="Probate case support photo 2"
+					loading="lazy"
+				/>
+			</div>
+			<section id="mission">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						THE REAL QUESTION IS: WHAT&#8217;S THE MISSION?
+					</h2>
+					<p
+						class="body-text text-secondary text-bold"
+						style="margin-bottom: 1.5rem"
+					>
+						You&#8217;re either here to:
+					</p>
+
+					<div class="points-wrapper" style="margin-bottom: 1.5rem">
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<p class="body-text">Liquidate and distribute</p>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<p class="body-text">Protect and hold</p>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<p class="body-text">Or buy time while the dust settles</p>
+						</div>
+					</div>
+
+					<p class="body-text text-secondary text-bold">
+						Each objective requires a completely different plan. And you need
+						someone who can break it down with numbers, timing, legal
+						constraints, and long-term implications. That&#8217;s what I do.
+					</p>
+				</div>
+			</section>
+
+			<!-- WHEN SELLING -->
+			<!-- SECTION PHOTO -->
+			<div class="section-photo shadow-card">
+				<img
+					src="./probate.jpg"
+					alt="Probate case support photo 3"
+					loading="lazy"
+				/>
+			</div>
+			<section id="when-selling">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						WHEN SELLING IS THE RIGHT MOVE&#8212;AND WHY MOST DO
+					</h2>
+					<p
+						class="body-text text-secondary text-bold"
+						style="margin-bottom: 1.5rem"
+					>
+						Most estates should sell, and here&#8217;s why:
+					</p>
+
+					<div class="points-wrapper">
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									THE PROPERTY IS BLEEDING CASH
+								</p>
+								<p class="body-text">
+									Vacant homes still rack up property taxes, insurance premiums,
+									utilities, and code risk. Some cities fine for blight,
+									overgrowth, or nuisance. You&#8217;re paying for a ticking
+									liability.
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									THE ESTATE NEEDS LIQUIDITY
+								</p>
+								<p class="body-text">
+									Heirs can&#8217;t get paid. Conservators can&#8217;t fund
+									care. Trustees are frozen without cash flow. Real estate is
+									often the biggest, fastest way to unlock liquidity&#8212;if
+									done right.
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									THE MARKET IS STRONG
+								</p>
+								<p class="body-text">
+									If the market is at or near peak value, you sell. There is no
+									holding out for &#8220;a better time&#8221; that may never
+									come.
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									THE FAMILY WANTS RESOLUTION
+								</p>
+								<p class="body-text">
+									Selling ends disputes. Keeping drags them out. If emotions are
+									already high, liquidation simplifies everything and clears the
+									slate.
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									THERE&#8217;S NO ONE TO MAINTAIN IT
+								</p>
+								<p class="body-text">
+									If the heirs live out of town, if the conservatee can&#8217;t
+									return, or if the trust has no one actively managing the
+									property, you&#8217;re holding a vacant asset with no game
+									plan. Sell it before it becomes a problem.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- WHEN KEEPING -->
+			<!-- SECTION PHOTO -->
+			<div class="section-photo shadow-card">
+				<img
+					src="./probate.jpg"
+					alt="Probate case support photo 4"
+					loading="lazy"
+				/>
+			</div>
+			<section id="when-keeping">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						WHEN KEEPING MAKES SENSE&#8212;BUT ONLY IF IT&#8217;S A STRATEGIC
+						MOVE
+					</h2>
+					<p
+						class="body-text text-secondary text-bold"
+						style="margin-bottom: 1.5rem"
+					>
+						There are valid reasons to hold, but only if they&#8217;re backed by
+						structure:
+					</p>
+
+					<div class="points-wrapper">
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									YOU&#8217;RE KEEPING IT IN THE FAMILY
+								</p>
+								<p class="body-text">
+									If legacy is the reason to keep it, you need structure&#8212;a
+									long-term plan, a signed agreement, and enough liquidity to
+									carry the cost. Otherwise, emotion turns into liability.
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									IT&#8217;S READY FOR RENTAL
+								</p>
+								<p class="body-text">
+									If it meets code, needs no major rehab, and the estate is
+									willing to be a landlord&#8212;keeping could generate monthly
+									income. I&#8217;ll give you a clean breakdown of what to
+									expect.
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									YOU HAVE A LONG-TERM EXIT PLAN
+								</p>
+								<p class="body-text">
+									Sometimes waiting is smart&#8212;if you&#8217;ve secured the
+									home, insured it properly, and have clear authority to
+									refinance, rent, or remodel. Most people don&#8217;t.
+									I&#8217;ll tell you if it&#8217;s feasible or dangerous.
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									TAX PLANNING IS AT PLAY
+								</p>
+								<p class="body-text">
+									In certain trust or probate cases, timing the sale for a
+									future year may benefit capital gains or step-up in basis
+									strategy. That&#8217;s for a CPA to finalize, but I&#8217;ll
+									<span class="text-secondary">flag the concerns</span> you need
+									to discuss.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- PRECISION -->
+			<!-- SECTION PHOTO -->
+			<div class="section-photo shadow-card">
+				<img
+					src="./probate.jpg"
+					alt="Probate case support photo 5"
+					loading="lazy"
+				/>
+			</div>
+			<section id="precision">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						THIS ISN&#8217;T ABOUT PREFERENCE. IT&#8217;S ABOUT PRECISION.
+					</h2>
+
+					<div class="points-wrapper">
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									LEGAL AUTHORITY
+								</p>
+								<p class="body-text">
+									Do you actually have the power to sell or hold right now? If
+									not, what&#8217;s the delay&#8212;and how much does waiting
+									cost you?
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									CARRYING COSTS
+								</p>
+								<p class="body-text">
+									What does this home cost monthly? Taxes, insurance, risk, and
+									management? Add it up.
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									MARKET TIMING
+								</p>
+								<p class="body-text">
+									Are we near a peak, a downturn, or a neutral zone? I&#8217;ll
+									give you the answer based on local comps and appraisal logic.
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									PROPERTY CONDITION
+								</p>
+								<p class="body-text">
+									Can it be kept or rented without major work? Or is it a code
+									violation waiting to happen?
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									FAMILY AGREEMENT
+								</p>
+								<p class="body-text">
+									Are all heirs or interested parties aligned? If not, keeping
+									it may lead to court petitions and
+									<span class="text-secondary">complications</span> later.
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									EMOTIONAL RISK
+								</p>
+								<p class="body-text">
+									Is
+									<span class="text-secondary">any beneficiary or heir</span>
+									emotionally attached? If so, that needs to be managed, not
+									ignored.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- HOW I GUIDE -->
+			<section id="how-i-guide">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						HOW I GUIDE THIS DECISION WITH PRECISION
+					</h2>
+
+					<div class="points-wrapper">
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									EXPERT CMA AND MARKET FORECAST
+								</p>
+								<p class="body-text">
+									I give you today&#8217;s value and projected market
+									movement&#8212;no fluff, just truth.
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									HOLDING COST BREAKDOWN
+								</p>
+								<p class="body-text">
+									Real numbers, by month, showing what keeping actually costs
+									the estate.
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									RISK EXPOSURE ANALYSIS
+								</p>
+								<p class="body-text">
+									Vacant risk, break-ins, code violations, and city
+									penalties&#8212;I flag it all before you&#8217;re blindsided.
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									EXIT STRATEGY ASSESSMENT
+								</p>
+								<p class="body-text">
+									If you choose to hold, I&#8217;ll tell you what must be in
+									place to avoid future issues.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- OUTRO -->
+			<section id="outro">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						THESE DECISIONS SHOULDN&#8217;T BE STRESSFUL&#8212;BUT THEY MUST BE
+						STRATEGIC.
+					</h2>
+					<p
+						class="body-text text-secondary text-bold"
+						style="margin-bottom: 1.5rem"
+					>
+						Schedule a real consultation at
+						<span class="text-primary">(833) PROBAID</span> or email
+						<span class="text-primary">Info@833PROBAID.com</span>. I&#8217;ll
+						show you exactly what each path looks like, who it affects, and how
+						to move forward&#8212;with full authority and zero surprises.
+					</p>
+					<h2 class="section-title text-primary" style="margin-top: 1.5rem">
+						LET&#8217;S EXECUTE THE RIGHT MOVE&#8212;NOT JUST TALK ABOUT IT
+					</h2>
+					<p
+						class="body-text text-secondary text-bold"
+						style="margin-bottom: 1.5rem"
+					>
+						<span class="text-primary">Call me.</span> I&#8217;ll end the
+						debate, break down the facts, align the decision-makers, and protect
+						the estate from future blowback. Standing still in probate,
+						conservatorship, or trust administration? That&#8217;s what costs
+						you most.
+					</p>
+					<div
+						style="
+							display: flex;
+							flex-direction: column;
+							gap: 1rem;
+							margin-bottom: 1.5rem;
+						"
+					>
+						<!-- Phone -->
+						<div
+							class="contact-item"
+							style="display: flex; align-items: flex-start; gap: 1rem"
+						>
+							<img
+								src="./svgs/phone-icon.svg"
+								style="
+									width: 2rem;
+									height: 2rem;
+									flex-shrink: 0;
+									margin-top: 0.15rem;
+								"
+							/>
+							<div class="body-text text-bold" style="line-height: 1.1">
+								<span class="text-secondary text-bold"
+									>(833)
+									<span style="letter-spacing: 0.07em">PROBAID</span></span
+								><br />
+								<span
+									class="text-primary text-bold"
+									style="
+										display: block;
+										text-align: right;
+										letter-spacing: 0.17em;
+									"
+									>7762243</span
+								>
+							</div>
+						</div>
+						<!-- Website -->
+						<div
+							class="contact-item"
+							style="display: flex; align-items: center; gap: 1rem"
+						>
+							<img
+								src="./svgs/uiw_mail.svg"
+								style="
+									width: 2rem;
+									height: 2rem;
+									flex-shrink: 0;
+									margin-top: 0.15rem;
+								"
+							/>
+							<span class="body-text text-secondary text-bold"
+								>833PROBAID.com</span
+							>
+						</div>
+						<!-- Email -->
+						<div
+							class="contact-item"
+							style="display: flex; align-items: center; gap: 1rem"
+						>
+							<img
+								src="./svgs/globe.svg"
+								style="
+									width: 1.8rem;
+									height: 1.8rem;
+									flex-shrink: 0;
+									margin-top: 0.15rem;
+								"
+							/>
+							<span class="body-text text-secondary text-bold"
+								>Info@833PROBAID.com</span
+							>
+						</div>
+					</div>
+					<p class="body-text text-secondary text-bold">
+						Because in estate sales, mistakes don&#8217;t just cost money
+						&#8212; they destroy financial stability.
+					</p>
+				</div>
+			</section>
+		</main>
+	</body>
+</html>

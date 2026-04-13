@@ -1,0 +1,82 @@
+# ============================================================
+# .htaccess — Security hardening for Node.js app on cPanel
+#
+# Copy this entire file as your .htaccess in public_html
+# (or wherever cPanel proxies your Node app from).
+#
+# Apache 2.4 syntax (Require all denied).
+# ============================================================
+
+# -------------------------------------------------------------
+# Disable directory listing
+# -------------------------------------------------------------
+Options -Indexes
+
+# -------------------------------------------------------------
+# Block sensitive named files
+# -------------------------------------------------------------
+<FilesMatch "^(\.env|\.git|\.gitignore|package\.json|package-lock\.json|yarn\.lock|ecosystem\.config\.js|\.npmrc|\.htpasswd|web\.config|Makefile|Dockerfile|docker-compose\.yml)">
+    Require all denied
+</FilesMatch>
+
+# -------------------------------------------------------------
+# Block ALL hidden files/dirs (anything starting with a dot)
+# -------------------------------------------------------------
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
+
+# -------------------------------------------------------------
+# Block direct access to source / data / key file extensions
+# -------------------------------------------------------------
+<FilesMatch "\.(js|json|env|lock|md|log|sql|bak|conf|config|cfg|ini|pem|key|crt|p12|pfx|ovpn|dump|db|sqlite|sqlite3|DS_Store|yml|yaml|toml|sh|bash|rb|py|php)$">
+    Require all denied
+</FilesMatch>
+
+# -------------------------------------------------------------
+# Block scanner / bot probe paths via RewriteRules
+# -------------------------------------------------------------
+RewriteEngine On
+
+# Path traversal
+RewriteRule (\.\./) - [F,L]
+RewriteRule (%2e%2e) - [F,L]
+
+# .env files anywhere in URL path
+RewriteRule (^|/)\.env($|[/?]) - [F,L]
+
+# Hidden dirs: .git .svn .ssh .aws
+RewriteRule (^|/)\.(git|svn|ssh|aws)(/|$) - [F,L]
+
+# WordPress attack surface
+RewriteRule ^wp-admin(/|$) - [F,L]
+RewriteRule ^wp-login\.php - [F,L]
+RewriteRule ^xmlrpc\.php - [F,L]
+RewriteRule ^wp-config\.php - [F,L]
+
+# PHP config / CMS files
+RewriteRule (wp-config|config|configuration|LocalSettings|settings|database|secrets)\.php$ - [F,L]
+
+# phpMyAdmin / admin panels
+RewriteRule ^(phpmyadmin|pma|adminer|PHPMyAdmin|myadmin)(/|$) - [F,L]
+
+# Shell / backdoor scripts
+RewriteRule (shell|cmd|eval-stdin|phpinfo|info|c99|r57|b374k)\.php$ - [F,L]
+
+# Infrastructure / framework internals
+RewriteRule ^actuator(/|$) - [F,L]
+RewriteRule ^telescope(/|$) - [F,L]
+RewriteRule ^horizon(/|$) - [F,L]
+RewriteRule ^(cgi-bin|bin|sbin)(/|$) - [F,L]
+RewriteRule ^server-(status|info)$ - [F,L]
+
+# Credential / key files
+RewriteRule (credentials|service[-_]?account)\.json$ - [F,L]
+RewriteRule (id_rsa|authorized_keys|known_hosts) - [F,L]
+
+# Stack / infra metadata
+RewriteRule ^stack\.json$ - [F,L]
+
+# Vendor exploit paths (PHP frameworks)
+RewriteRule ^vendor/phpunit - [F,L]
+RewriteRule ^laravel/vendor - [F,L]

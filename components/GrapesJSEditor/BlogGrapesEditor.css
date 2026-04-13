@@ -1,0 +1,138 @@
+.grapes-editor-container {
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	overflow: hidden;
+	background: #fff;
+}
+
+.editor-canvas {
+	min-height: 500px;
+}
+
+/* Custom styling for the editor toolbar */
+.gjs-pn-panel {
+	padding: 5px;
+}
+
+.gjs-cv-canvas {
+	width: 100%;
+	height: 100%;
+	top: 0;
+}
+
+/* Styling for the save button */
+.editor-actions {
+	padding: 12px;
+	background: linear-gradient(to bottom, #f8f9fa, #e9ecef);
+	border-top: 1px solid #dee2e6;
+	display: flex;
+	gap: 10px;
+}
+
+.save-content-btn {
+	background: linear-gradient(135deg, #0097a7 0%, #007a87 100%);
+	color: white;
+	padding: 10px 20px;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	font-weight: 600;
+	font-size: 14px;
+	transition: all 0.3s ease;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.save-content-btn:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+	background: linear-gradient(135deg, #007a87 0%, #006570 100%);
+}
+
+.save-content-btn:active {
+	transform: translateY(0);
+}
+
+.load-sample-btn {
+	background: linear-gradient(135deg, #fe7702 0%, #e56902 100%);
+	color: white;
+	padding: 10px 20px;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	font-weight: 600;
+	font-size: 14px;
+	transition: all 0.3s ease;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.load-sample-btn:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+	background: linear-gradient(135deg, #e56902 0%, #cc5e02 100%);
+}
+
+.load-sample-btn:active {
+	transform: translateY(0);
+}
+
+/* Blog Content category styling */
+.gjs-block-category .gjs-title {
+	background-color: #0097a7;
+	color: white;
+	border-radius: 4px;
+	padding: 8px;
+	font-weight: 600;
+}
+
+/* Blog Layouts category styling */
+.gjs-block-categories .gjs-block-category:nth-child(2) .gjs-title {
+	background-color: #fe7702;
+}
+
+/* Blog Media category styling */
+.gjs-block-categories .gjs-block-category:nth-child(3) .gjs-title {
+	background-color: #ff4444;
+}
+
+/* Lists & Steps category styling */
+.gjs-block-categories .gjs-block-category:nth-child(4) .gjs-title {
+	background-color: #0097a7;
+}
+
+/* Custom styling for blog blocks */
+.gjs-block {
+	padding: 10px;
+	min-height: auto;
+	font-size: 0.85rem;
+	border-radius: 4px;
+	transition: all 0.2s ease;
+}
+
+.gjs-block:hover {
+	background-color: #f7f9fc;
+	transform: translateY(-2px);
+	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Highlight selected blocks */
+.gjs-block.gjs-selected {
+	background-color: #e3f2fd;
+	border-color: #0097a7;
+}
+
+/* ===================================================================
+   Editor UI styling only
+   Content styles are injected via BlogGrapesEditor.jsx
+   =================================================================== */
+
+/* Improve responsiveness of blocks panel */
+.gjs-blocks-cs {
+	min-width: 240px;
+}
+
+/* Better visibility for FontAwesome icons in blocks */
+.gjs-block .fa {
+	font-size: 2rem;
+	margin-bottom: 8px;
+	color: #0097a7;
+}

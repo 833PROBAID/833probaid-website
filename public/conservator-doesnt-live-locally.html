@@ -1,0 +1,1454 @@
+<!DOCTYPE html><html lang="en"><head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Conservator Not Local? How I Manage Conservatorship Real Estate On-Site</title>
+		<meta name="description" content="Conservator lives out of town? Learn how I secure, manage, and prepare conservatorship properties locally with full updates and no delays.">
+
+		<link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Montserrat:wght@400;700&amp;family=Roboto:wght@400;900&amp;family=League+Spartan:wght@400;700&amp;family=Oswald&amp;family=Poppins&amp;family=Passions+Conflict&amp;family=Sarpanch&amp;display=swap" rel="stylesheet">
+
+		<style type="text/css">
+			/* =========================================
+			   1. VARIABLES & RESET
+			   ========================================= */
+			:root {
+				--primary: #0097a7;
+				--primary-dark: #00838f;
+				--primary-light: rgba(0, 151, 167, 0.1);
+				--primary-lighter: rgba(0, 151, 167, 0.05);
+
+				--secondary: #fe7702;
+				--secondary-light: rgba(254, 119, 2, 0.1);
+				--secondary-lighter: rgba(254, 119, 2, 0.05);
+
+				--accent: #ff4444;
+				--teal-soft: #e0f7fa;
+
+				--gray-100: #f3f4f6;
+				--gray-300: #d1d5db;
+				--gray-500: #6b7280;
+				--gray-600: #4b5563;
+				--white: #ffffff;
+				--black: #000000;
+
+				--font-anton: "Anton", sans-serif;
+				--font-montserrat: "Montserrat", sans-serif;
+			}
+
+			* {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
+
+			body {
+				background-color: var(--gray-100);
+				color: var(--black);
+				font-family: var(--font-montserrat);
+				padding: 1.5rem;
+				-webkit-font-smoothing: antialiased;
+			}
+
+			@media (min-width: 768px) {
+				body {
+					padding: 2.5rem;
+				}
+			}
+
+			main {
+				max-width: 80rem;
+				margin-left: auto;
+				margin-right: auto;
+				display: flex;
+				flex-direction: column;
+				gap: 2.5rem;
+			}
+
+			img {
+				display: block;
+				max-width: 100%;
+				height: auto;
+			}
+
+			/* =========================================
+			   2. TYPOGRAPHY
+			   ========================================= */
+			h1,
+			h2,
+			h3,
+			h4 {
+				font-family: var(--font-anton);
+				text-transform: uppercase;
+				line-height: 1.2;
+				font-weight: 700;
+				transition: color 0.3s ease;
+			}
+
+			.text-primary {
+				color: var(--primary);
+			}
+
+			.text-primary:hover {
+				color: var(--secondary);
+			}
+
+			.text-secondary {
+				color: var(--secondary);
+			}
+
+			.text-secondary:hover {
+				color: var(--primary);
+			}
+
+			/* Parent hover — swap colors so primary children become secondary */
+			.content-block:hover .text-secondary,
+			.point-item:hover .text-secondary {
+				color: var(--primary);
+				transition: color 0.3s ease;
+			}
+
+			.content-block:hover .text-primary,
+			.point-item:hover .text-primary {
+				color: var(--secondary);
+				transition: color 0.3s ease;
+			}
+
+			.content-block:hover .body-text.text-secondary,
+			.point-item:hover .body-text.text-secondary {
+				color: var(--gray-600);
+			}
+
+			.text-gray {
+				color: var(--gray-600);
+			}
+
+			.text-center {
+				text-align: center;
+			}
+
+			.text-justify {
+				text-align: justify;
+			}
+
+			.text-bold {
+				font-weight: 700;
+			}
+
+			.italic {
+				font-style: italic;
+			}
+
+			.section-title {
+				font-size: 2rem !important;
+				margin-bottom: 1rem;
+				transition: color 0.3s ease;
+			}
+
+			.section-title.text-primary:hover,
+			.section-title:hover.text-primary {
+				color: var(--secondary) !important;
+			}
+
+			.section-title.text-secondary:hover,
+			.section-title:hover.text-secondary {
+				color: var(--primary) !important;
+			}
+
+			.content-heading {
+				font-size: 1.625rem !important;
+				margin-bottom: 0.75rem;
+				transition: color 0.3s ease;
+			}
+
+			.content-heading.text-primary:hover,
+			.content-heading:hover.text-primary {
+				color: var(--secondary) !important;
+			}
+
+			.content-heading.text-secondary:hover,
+			.content-heading:hover.text-secondary {
+				color: var(--primary) !important;
+			}
+
+			.body-text {
+				font-size: 1.375rem !important;
+				line-height: 1.6;
+				font-weight: 700;
+			}
+
+			/* Keep body copy neutral; reserve secondary for accents. */
+			.body-text.text-secondary {
+				color: var(--gray-600);
+			}
+
+			.small-text {
+				font-size: 1.125rem !important;
+				font-weight: 700;
+			}
+
+			.main-header {
+				text-align: center;
+			}
+
+			.main-header h1 {
+				font-size: 3.25rem;
+				color: var(--secondary);
+				margin-bottom: 1rem;
+				transition: color 0.3s ease;
+			}
+
+			.main-header h1:hover {
+				color: var(--primary);
+			}
+
+			@media (max-width: 767px) {
+				.section-title {
+					font-size: 1.5rem !important;
+				}
+
+				.content-heading {
+					font-size: 1.25rem !important;
+				}
+
+				.body-text {
+					font-size: 1rem !important;
+				}
+
+				.small-text {
+					font-size: 0.875rem !important;
+				}
+
+				.main-header h1 {
+					font-size: 2rem;
+				}
+
+				.step-title-text {
+					font-size: clamp(1.25rem, 3.15vw, 3.7rem);
+				}
+			}
+
+			/* =========================================
+			   3. SHADOWS & UTILITIES
+			   ========================================= */
+			.shadow-card {
+				box-shadow:
+					0 8px 12px rgba(0, 0, 0, 0.4),
+					0 -5px 12px 1px rgba(0, 0, 0, 0.4);
+				transition:
+					transform 0.3s ease,
+					box-shadow 0.3s ease;
+			}
+
+			.shadow-card:hover {
+				transform: translateY(-5px);
+				box-shadow:
+					0 12px 20px rgba(0, 0, 0, 0.5),
+					0 -8px 16px 2px rgba(0, 0, 0, 0.5);
+			}
+
+			.bg-white {
+				background-color: var(--white);
+			}
+
+			.rounded-card {
+				border-radius: 1rem;
+			}
+
+			/* =========================================
+			   4. CATEGORY BANNERS
+			   ========================================= */
+			.category-banner {
+				padding: 1.5rem;
+				border-radius: 1rem;
+				border-left: 4px solid;
+				transition:
+					transform 0.3s ease,
+					border-left-width 0.3s ease;
+			}
+
+			.category-banner:hover {
+				transform: translateX(8px);
+				border-left-width: 8px;
+			}
+
+			.category-banner h2 {
+				font-size: 2rem;
+				margin-bottom: 0.5rem;
+				font-weight: 700;
+				transition: color 0.3s ease;
+			}
+
+			.banner-primary {
+				background: linear-gradient(
+					to right,
+					var(--primary-light),
+					var(--primary-lighter)
+				);
+				border-color: var(--primary);
+			}
+
+			.banner-primary h2 {
+				color: var(--primary);
+			}
+
+			.banner-primary h2:hover {
+				color: var(--secondary);
+			}
+
+			.banner-secondary {
+				background: linear-gradient(
+					to right,
+					var(--secondary-light),
+					var(--secondary-lighter)
+				);
+				border-color: var(--secondary);
+			}
+
+			.banner-secondary h2 {
+				color: var(--secondary);
+			}
+
+			.banner-secondary h2:hover {
+				color: var(--primary);
+			}
+
+			/* =========================================
+			   5. CONTENT BLOCKS
+			   ========================================= */
+			.content-block {
+				background-color: var(--white);
+				padding: 0.9rem;
+				border-radius: 1rem;
+				transition: transform 0.3s ease;
+				display: flow-root;
+			}
+
+			@media (min-width: 768px) {
+				.content-block {
+					padding: 2.7rem !important;
+				}
+			}
+
+			.step-container {
+				border-radius: 1rem;
+				background-color: var(--white);
+				padding: 1.5rem;
+				transition: transform 0.3s ease;
+			}
+
+			.step-container:hover {
+				transform: scale(1.02);
+			}
+
+			.step-inner {
+				background-color: transparent;
+				padding: 0;
+				display: flex;
+				flex-direction: column;
+				gap: 0;
+			}
+
+			.circle-number-lg {
+				display: none;
+				width: 5rem;
+				height: 5rem;
+				background-color: rgba(0, 151, 167, 0.2);
+				color: var(--secondary);
+				border-radius: 50%;
+				align-items: center;
+				justify-content: center;
+				font-family: var(--font-anton);
+				font-size: 2.5rem;
+				font-weight: 700;
+				flex-shrink: 0;
+				transition: all 0.3s ease;
+			}
+
+			.step-container:hover .circle-number-lg {
+				background-color: rgba(0, 151, 167, 0.4);
+				transform: rotate(360deg) scale(1.1);
+			}
+
+			.circle-number-sm {
+				display: flex;
+				width: 2.5rem;
+				height: 2.5rem;
+				background-color: rgba(0, 151, 167, 0.2);
+				color: var(--secondary);
+				border-radius: 50%;
+				align-items: center;
+				justify-content: center;
+				font-family: var(--font-anton);
+				font-size: 1.375rem;
+				font-weight: 700;
+				flex-shrink: 0;
+				margin-bottom: 0.75rem;
+				align-self: flex-start;
+				transition: all 0.3s ease;
+			}
+
+			.step-container:hover .circle-number-sm {
+				background-color: rgba(0, 151, 167, 0.4);
+				transform: rotate(360deg) scale(1.1);
+			}
+
+			.step-content {
+				flex: 1;
+			}
+
+			.step-title-row {
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
+				margin-bottom: 0.75rem;
+			}
+
+			.step-title-text {
+				font-size: clamp(1.5rem, 3.15vw, 3.7rem);
+				color: var(--secondary);
+				transition: color 0.3s ease;
+			}
+
+			.step-title-text:hover {
+				color: var(--primary);
+			}
+
+			.step-body {
+				margin-top: 0;
+				padding: 0;
+				background-color: transparent;
+				border-radius: 0;
+			}
+
+			.step-container .step-inner {
+				box-shadow: none !important;
+				background-color: transparent !important;
+			}
+
+			.step-container .step-body {
+				box-shadow: none !important;
+			}
+
+			.step-container .step-body .content-block {
+				padding: 0 !important;
+				background-color: transparent !important;
+				box-shadow: none !important;
+			}
+
+			@media (min-width: 768px) {
+				.step-container {
+					padding: 2.5rem;
+					border-radius: 1rem;
+				}
+
+				.step-inner {
+					gap: 1.5rem;
+					border-radius: 1rem;
+					background-color: var(--white);
+					flex-direction: row;
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				.circle-number-lg {
+					display: flex;
+				}
+
+				.circle-number-sm {
+					display: none;
+					margin-bottom: 0;
+				}
+
+				.step-title-row {
+					margin-bottom: 0;
+				}
+
+				.step-body {
+					margin-top: 1.5rem;
+					padding: 1.5rem;
+					background-color: var(--white);
+					border-radius: 1rem;
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				.step-body.content-block {
+					padding: 1.5rem !important;
+					background-color: var(--white) !important;
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+			}
+
+			ul.styled-list {
+				margin-left: 1.5rem;
+				list-style-type: disc;
+				display: flex;
+				flex-direction: column;
+				gap: 1rem;
+			}
+
+			ul.styled-list li {
+				transition: transform 0.2s ease;
+			}
+
+			ul.styled-list li:hover {
+				transform: translateX(8px);
+			}
+
+			.points-wrapper {
+				display: flex;
+				flex-direction: column;
+				gap: 1rem;
+			}
+
+			.point-item {
+				display: flex;
+				align-items: flex-start;
+				gap: 1.5rem;
+				background-color: transparent;
+				padding: 0;
+				border-radius: 0;
+				transition: transform 0.2s ease;
+			}
+
+			.point-item:hover {
+				transform: translateX(5px);
+			}
+
+			.point-icon {
+				width: 1.75rem;
+				margin-top: calc((1.375rem * 1.6 - 1.75rem) / 2);
+				flex-shrink: 0;
+				transition: transform 0.3s ease;
+			}
+
+			.point-item:hover .point-icon {
+				transform: scale(1.15) rotate(5deg);
+			}
+
+			.point-item.shadow-card {
+				box-shadow: none !important;
+				background-color: transparent !important;
+				padding: 0 !important;
+			}
+
+			@media (min-width: 768px) {
+				.point-item {
+					background-color: var(--white);
+					padding: 1.5rem;
+					border-radius: 1rem;
+				}
+
+				.point-icon {
+					width: 2.25rem;
+					margin-top: calc((1.375rem * 1.6 - 2.25rem) / 2);
+				}
+
+				.point-item.shadow-card {
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+					background-color: var(--white) !important;
+					padding: 1.5rem !important;
+				}
+			}
+
+			.callout-box {
+				padding: 1rem;
+				border-radius: 1rem;
+			}
+
+			@media (min-width: 768px) {
+				.callout-box {
+					border-radius: 1rem;
+				}
+			}
+
+			.callout-inner {
+				background-color: var(--white);
+				padding: 2rem 1rem;
+				border-radius: 1rem;
+				display: flex;
+				align-items: flex-start;
+				gap: 1.5rem;
+				clip-path: polygon(0 0, 100% 0, 100% 80%, 82% 100%, 0 100%);
+			}
+
+			@media (min-width: 768px) {
+				.callout-inner {
+					clip-path: polygon(0 0, 101% 0, 100% 60%, 94% 100%, 0 100%);
+					padding: 2.5rem;
+					border-radius: 1rem;
+				}
+			}
+
+			.callout-filter {
+				filter: drop-shadow(4px -6px 10px rgba(0, 0, 0, 0.5))
+					drop-shadow(6px 5px 10px rgba(0, 0, 0, 0.5));
+			}
+
+			.bg-primary {
+				background-color: var(--primary);
+			}
+
+			.bg-secondary {
+				background-color: var(--secondary);
+			}
+
+			.grid-2-col {
+				display: grid;
+				grid-template-columns: 1fr;
+				gap: 1.5rem;
+			}
+
+			.grid-3-col {
+				display: grid;
+				grid-template-columns: 1fr;
+				gap: 1.5rem;
+			}
+
+			.grid-complex {
+				display: grid;
+				grid-template-columns: 1fr;
+				gap: 1.5rem;
+			}
+
+			@media (min-width: 768px) {
+				.grid-2-col {
+					grid-template-columns: 1fr 1fr;
+				}
+
+				.grid-3-col {
+					grid-template-columns: 1fr 1fr 1fr;
+				}
+
+				.grid-complex {
+					grid-template-columns: repeat(5, 1fr);
+				}
+
+				.span-3 {
+					grid-column: span 3;
+				}
+
+				.span-2 {
+					grid-column: span 2;
+				}
+			}
+
+			.image-column {
+				display: flex;
+				flex-direction: column;
+				gap: 1.5rem;
+				height: 100%;
+			}
+
+			.image-frame {
+				flex: 1;
+				border-radius: 1rem;
+				overflow: hidden;
+				border: 4px solid var(--primary);
+			}
+
+			.image-frame img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+
+			.section-photo {
+				width: 100%;
+				aspect-ratio: 21 / 9;
+				max-height: 400px;
+				margin: 1.5rem 0;
+				border-radius: 0.75rem;
+				border: 4px solid var(--primary);
+				overflow: hidden;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
+				box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+			}
+
+			.section-photo.photo-float-left {
+				float: left;
+				width: 45%;
+				aspect-ratio: 4 / 5;
+				max-height: 400px;
+				margin: 0.5rem 2rem 1rem 0;
+			}
+
+			.section-photo.photo-float-right {
+				float: right;
+				width: 45%;
+				aspect-ratio: 4 / 5;
+				max-height: 400px;
+				margin: 0.5rem 0 1rem 2rem;
+			}
+
+			.section-photo img {
+				display: block;
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				object-position: center;
+				animation: imageLoad 0.5s ease-in-out;
+			}
+
+			@keyframes imageLoad {
+				from {
+					opacity: 0;
+					transform: scale(0.98);
+				}
+				to {
+					opacity: 1;
+					transform: scale(1);
+				}
+			}
+
+			.stat-card {
+				background-color: var(--white);
+				padding: 1.5rem;
+				border-radius: 1rem;
+				text-align: center;
+			}
+
+			.stat-number {
+				font-family: var(--font-anton);
+				color: var(--primary);
+				font-size: 3.25rem;
+				margin-bottom: 0.75rem;
+				transition: color 0.3s ease;
+			}
+
+			.stat-number:hover {
+				color: var(--secondary);
+			}
+
+			.quote-container {
+				background-color: var(--white);
+				padding: 2rem;
+				border-radius: 1rem;
+				transition:
+					transform 0.3s ease,
+					box-shadow 0.3s ease;
+			}
+
+			.quote-container:hover {
+				transform: translateX(10px);
+				box-shadow: -5px 5px 15px rgba(0, 0, 0, 0.1);
+			}
+
+			@media (min-width: 768px) {
+				.quote-container {
+					padding: 3rem;
+				}
+			}
+
+			blockquote {
+				border-left: 4px solid var(--secondary);
+				padding-left: 1.5rem;
+				font-weight: 400;
+			}
+
+			.cta-container {
+				background-color: var(--white);
+				padding: 2rem;
+				border-radius: 1rem;
+				text-align: center;
+				transition:
+					transform 0.3s ease,
+					box-shadow 0.3s ease;
+			}
+
+			.cta-container:hover {
+				transform: translateY(-3px);
+				box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+			}
+
+			.btn-primary {
+				background-color: #fe7702;
+				color: white;
+				box-shadow:
+					0px 3.04px 7.39px 0px rgba(0, 0, 0, 0.68),
+					6.07px -6.07px 4.05px 0px rgba(0, 0, 0, 0.25) inset,
+					-4.05px 5.06px 4.05px 0px rgba(255, 255, 255, 0.25) inset,
+					-2.02px -1.01px 4.05px 0px rgba(0, 0, 0, 0.6);
+				padding: 1rem 2rem;
+				border-radius: 1rem;
+				text-transform: uppercase;
+				font-weight: 700;
+				border: none;
+				cursor: pointer;
+				transition: all 0.3s ease;
+			}
+
+			.btn-primary:hover {
+				transform: scale(1.08) translateY(-2px);
+				background-color: #ff8820;
+				box-shadow:
+					0px 6px 15px 0px rgba(0, 0, 0, 0.75),
+					6.07px -6.07px 4.05px 0px rgba(0, 0, 0, 0.3) inset,
+					-4.05px 5.06px 4.05px 0px rgba(255, 255, 255, 0.3) inset,
+					-2.02px -1.01px 4.05px 0px rgba(0, 0, 0, 0.65);
+			}
+
+			.btn-primary:active {
+				transform: scale(1.02) translateY(0);
+			}
+
+			.table-wrapper {
+				background-color: var(--white);
+				padding: 1.5rem;
+				border-radius: 1rem;
+				overflow-x: auto;
+			}
+
+			table {
+				width: 100%;
+				border-collapse: collapse;
+				font-family: var(--font-montserrat);
+			}
+
+			th {
+				background-color: var(--primary);
+				color: white;
+				padding: 1.5rem;
+				text-align: left;
+				font-weight: 700;
+				font-size: 1.25rem;
+			}
+
+			td {
+				padding: 0.75rem;
+				border-bottom: 1px solid #e5e7eb;
+				font-size: 1.125rem;
+				font-weight: 400;
+			}
+
+			tbody tr:hover td {
+				background-color: var(--primary-lighter);
+			}
+
+			/* =========================================
+			   6. SOLD CTA INLINE HIGHLIGHT
+			   ========================================= */
+			.sold-cta {
+				text-transform: uppercase;
+				text-decoration: underline;
+				cursor: pointer;
+			}
+
+			.site-footer {
+				text-align: center;
+				padding: 2rem 0;
+				border-top: 1px solid var(--gray-300);
+				margin-top: 2rem;
+			}
+
+			/* Contact item hover */
+			.contact-item {
+				color: var(--primary);
+				transition:
+					color 0.3s ease,
+					transform 0.3s ease;
+				cursor: default;
+				width: fit-content;
+			}
+
+			/* Block parent content-block hover from bleeding into contact items */
+			.content-block:hover .contact-item .text-secondary {
+				color: var(--secondary);
+			}
+			.content-block:hover .contact-item .text-primary {
+				color: var(--primary);
+			}
+
+			/* Only directly-hovered row changes */
+			.contact-item:hover {
+				color: var(--secondary);
+				transform: scale(1.05);
+				transition:
+					color 0.3s ease,
+					transform 0.3s ease;
+			}
+			.contact-item:hover .text-secondary {
+				color: var(--primary) !important;
+				transition: color 0.3s ease;
+			}
+			.contact-item:hover .text-primary {
+				color: var(--secondary) !important;
+				transition: color 0.3s ease;
+			}
+
+			/* =========================================
+			   PHONE ONLY (max-width: 639px)
+			   Disable all hover animations & transitions
+			   sm (640px+) keeps full desktop design
+			   ========================================= */
+			@media (max-width: 639px), (hover: none) and (pointer: coarse) {
+				*,
+				*::before,
+				*::after {
+					transition: none !important;
+					animation: none !important;
+				}
+
+				.shadow-card:hover,
+				.step-container:hover,
+				.point-item:hover,
+				.quote-container:hover,
+				.cta-container:hover,
+				.btn-primary:hover,
+				ul.styled-list li:hover {
+					transform: none !important;
+				}
+
+				.category-banner:hover {
+					transform: none !important;
+					border-left-width: 4px !important;
+				}
+
+				.shadow-card {
+					box-shadow: none !important;
+				}
+
+				.step-container.shadow-card,
+				.content-block.shadow-card:not(.step-body) {
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				.step-container.shadow-card:hover,
+				.content-block.shadow-card:not(.step-body):hover {
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				.shadow-card:hover {
+					box-shadow: none !important;
+				}
+
+				.quote-container:hover {
+					box-shadow: none !important;
+				}
+
+				.cta-container:hover {
+					box-shadow: none !important;
+				}
+
+				.step-container:hover .circle-number-lg,
+				.step-container:hover .circle-number-sm {
+					background-color: rgba(0, 151, 167, 0.2) !important;
+					transform: none !important;
+				}
+
+				.point-item:hover .point-icon {
+					transform: none !important;
+				}
+
+				.btn-primary:hover {
+					transform: none !important;
+					background-color: #fe7702 !important;
+					box-shadow:
+						0px 3.04px 7.39px 0px rgba(0, 0, 0, 0.68),
+						6.07px -6.07px 4.05px 0px rgba(0, 0, 0, 0.25) inset,
+						-4.05px 5.06px 4.05px 0px rgba(255, 255, 255, 0.25) inset,
+						-2.02px -1.01px 4.05px 0px rgba(0, 0, 0, 0.6) !important;
+				}
+
+				tbody tr:hover td {
+					background-color: transparent !important;
+				}
+
+				.text-primary:hover {
+					color: var(--primary) !important;
+				}
+
+				.text-secondary:hover {
+					color: var(--secondary) !important;
+				}
+
+				.main-header h1:hover {
+					color: var(--secondary) !important;
+				}
+
+				.section-title.text-primary:hover,
+				.section-title:hover.text-primary {
+					color: var(--primary) !important;
+				}
+
+				.section-title.text-secondary:hover,
+				.section-title:hover.text-secondary {
+					color: var(--secondary) !important;
+				}
+
+				.content-heading.text-primary:hover,
+				.content-heading:hover.text-primary {
+					color: var(--primary) !important;
+				}
+
+				.content-heading.text-secondary:hover,
+				.content-heading:hover.text-secondary {
+					color: var(--secondary) !important;
+				}
+
+				.banner-primary h2:hover {
+					color: var(--primary) !important;
+				}
+
+				.banner-secondary h2:hover {
+					color: var(--secondary) !important;
+				}
+
+				.step-title-text:hover {
+					color: var(--secondary) !important;
+				}
+
+				.stat-number:hover {
+					color: var(--primary) !important;
+				}
+
+				/* Disable parent hover color-swap on phone */
+				.content-block:hover .text-secondary,
+				.point-item:hover .text-secondary {
+					color: var(--secondary) !important;
+				}
+
+				.content-block:hover .body-text.text-secondary,
+				.point-item:hover .body-text.text-secondary {
+					color: var(--gray-600) !important;
+				}
+
+				.content-block:hover .text-primary,
+				.point-item:hover .text-primary {
+					color: var(--primary) !important;
+				}
+
+				/* Keep nested contact text colors stable on phone */
+				.content-block:hover .contact-item .text-secondary {
+					color: var(--secondary) !important;
+				}
+
+				.content-block:hover .contact-item .text-primary {
+					color: var(--primary) !important;
+				}
+
+				/* Disable contact-item hover on mobile */
+				.contact-item:hover {
+					color: var(--primary) !important;
+					transform: none !important;
+				}
+				.contact-item:hover .text-secondary {
+					color: var(--secondary) !important;
+				}
+				.contact-item:hover .text-primary {
+					color: var(--primary) !important;
+				}
+			}
+		
+
+/* POINTER SECTION IMAGE OVERRIDE */
+			.pointer-section > .content-block > .section-photo,
+			.pointer-section > .content-block > .section-photo.photo-float-left,
+			.pointer-section > .content-block > .section-photo.photo-float-right {
+				float: none !important;
+				width: 100% !important;
+				max-width: 100% !important;
+				aspect-ratio: 21 / 9 !important;
+				margin: 1.5rem 0 !important;
+				shape-outside: none !important;
+			}
+
+			.pointer-section > .content-block > .section-photo img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+
+/* MOBILE OVERRIDES */
+@media (max-width: 767px) {
+    .section-photo,
+    .section-photo.photo-float-left,
+    .section-photo.photo-float-right {
+        float: none !important;
+        width: 100% !important;
+        aspect-ratio: 21 / 9 !important;
+        max-height: 300px !important;
+        margin: 1.5rem 0 !important;
+    }
+    
+    .text-justify {
+        text-align: left !important;
+    }
+}
+/* END MOBILE OVERRIDES */</style>
+	</head>
+
+	<body>
+		<main>
+			
+			<!-- BLOG BANNER IMAGE -->
+			<div class="section-photo">
+				<img src="./uploads/banner/1769962067709-blog.png" alt="conservator-not-local-how-i-manage-conservatorship-real-estate-on-site-b" loading="lazy">
+			</div>
+<!-- INTRO -->
+			<section id="intro">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						CONSERVATOR DOESN’T LIVE LOCALLY. HOW I MANAGE EVERYTHING
+						ON-SITE
+					</h2>
+					<!-- SECTION PHOTO -->
+					<div class="section-photo photo-float-left">
+						<img src="./blog-images/conservator-doesnt-live-locally/conservator-doesn-t-live-locally-how-i-manage-everything-on-site.jpg" alt="CONSERVATOR DOESN’T LIVE LOCALLY. HOW I MANAGE EVERYTHING ON-SITE" loading="lazy">
+					</div>
+
+<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						One of the most common challenges in conservatorship real estate is
+						when the conservator does not live anywhere near the property. This
+						situation creates problems for everyone involved. Vendors cannot
+						get access. The property is left unchecked for weeks or months.
+						Attorneys begin receiving calls they should not have to handle. The
+						conservator feels stuck, overwhelmed, and alone. And most
+						importantly, the property sits vacant, unprepared, and vulnerable.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						This delay often creates unnecessary stress and financial risk.
+						Vacant homes are magnets for issues like break-ins, leaks, damage,
+						or even squatters. At the same time, families start to lose
+						patience, attorneys get dragged into logistics, and the conservator
+						struggles to fulfill their responsibilities.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						That is where I step in. My role is to be the conservator’s
+						presence on-site. I act as their boots on the ground, eyes on the
+						property, and hands in motion. I secure the home, coordinate
+						vendors, provide real-time updates, and make sure every action
+						aligns with the legal requirements. This allows the conservator to
+						focus on their duties without worrying about the day-to-day
+						property management.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify">
+						Below, I will explain how I handle long-distance conservatorship
+						cases and why attorneys and conservators trust me to manage the
+						real estate process with professionalism, clarity, and
+						accountability.
+					</p>
+				</div>
+			</section>
+
+			<!-- SECURING THE PROPERTY IMMEDIATELY -->
+			
+<section id="securing-property">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						SECURING THE PROPERTY IMMEDIATELY
+					</h2>
+<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						The first and most important step is securing the home. Vacant
+						properties are vulnerable from the moment they are left unattended.
+						They can attract squatters, burglars, or vandals.
+						Weather-related damage, like burst pipes or roof leaks, can go
+						unnoticed until it is too late. Even something as simple as
+						piled-up mail can signal that the home is empty, creating both
+						safety and liability issues.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						When I am brought into a case, I do not wait for someone to fly in
+						or figure it out later. Securing the property is always my first
+						priority. I handle lock changes, set up coded lockboxes, and
+						coordinate security measures. I also ensure utilities are managed
+						properly, so the property remains safe while avoiding unnecessary
+						costs. If vacant property insurance is needed, I flag it
+						immediately.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify">
+						Once the property is secure, I document everything with photos,
+						videos, and written condition reports. The conservator receives a
+						full picture of the property’s status without having to leave
+						their home. This not only brings peace of mind but also prevents
+						costly issues before they start.
+					</p>
+				</div>
+			</section>
+
+			<!-- COORDINATING ALL VENDORS PERSONALLY -->
+			
+<section id="coordinating-vendors">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						COORDINATING ALL VENDORS PERSONALLY
+					</h2>
+<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						Another major challenge for long-distance conservators is vendor
+						coordination. Cleanouts, repairs, inspections, and compliance tasks
+						all require someone to meet contractors on-site. Without a local
+						representative, these tasks are delayed, creating friction with
+						court timelines and legal requirements.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						I take ownership of this entire process. I do not simply provide
+						names or phone numbers. I schedule, meet, and oversee every vendor
+						personally. Whether it is junk removal, locksmiths, cleaning
+						crews, hazard insurance inspectors, or city compliance officers, I
+						am the one on-site ensuring the job is done right.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify">
+						Every service is documented with receipts, photos, and completion
+						reports. This protects the conservator legally and ensures
+						attorneys have the documentation they need if questions ever arise.
+						Instead of a long-distance conservator scrambling to manage
+						logistics, everything is handled with precision and accountability.
+					</p>
+				</div>
+			</section>
+
+			<!-- PROVIDING REAL-TIME UPDATES AND VISUALS -->
+			
+<section id="real-time-updates">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						PROVIDING REAL-TIME UPDATES AND VISUALS
+					</h2>
+					<!-- SECTION PHOTO -->
+					<div class="section-photo photo-float-right">
+						<img src="./blog-images/conservator-doesnt-live-locally/providing-real-time-updates-and-visuals.jpg" alt="PROVIDING REAL-TIME UPDATES AND VISUALS" loading="lazy">
+					</div>
+
+<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						Most out-of-town conservators want one thing above all else: peace
+						of mind. They want to know what the property looks like, what work
+						has been done, and what issues might need attention.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						I provide consistent updates that eliminate uncertainty. Every
+						major task is backed up with photos and video. Progress reports are
+						clear, concise, and sent without delay. Conservators do not have
+						to chase me for answers. Instead, I anticipate their questions and
+						provide updates before they even ask.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify">
+						This level of communication builds trust and helps conservators
+						feel as if they are managing the property in person, even if they
+						are thousands of miles away. Attorneys also benefit from this
+						approach because they no longer get bombarded with update requests
+						from anxious conservators.
+					</p>
+				</div>
+			</section>
+
+			<!-- ALIGNING REAL ESTATE WITH LEGAL STRATEGY -->
+			
+<section id="aligning-legal-strategy">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						ALIGNING REAL ESTATE WITH LEGAL STRATEGY
+					</h2>
+<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						One of the most overlooked aspects of conservatorship real estate
+						is how property tasks can accidentally conflict with the legal side
+						of the case. For example, scheduling a cleanout or making repairs
+						before authority is confirmed can cause problems in court. On the
+						other hand, waiting too long to act can create financial or safety
+						risks.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						This is why I always align my actions with the attorney’s
+						strategy. I never make assumptions or move forward without
+						considering the legal framework. If court approval is required, I
+						work within that timeline. If authority has been granted, I make
+						sure the conservator knows how to use it properly.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify">
+						My role is to move quickly, but never recklessly. Attorneys trust
+						me because I know how to balance efficiency with compliance, which
+						keeps the case on track without creating new issues.
+					</p>
+				</div>
+			</section>
+
+			<!-- HANDLING THE ENTIRE PROCESS LIKE THEY ARE IN TOWN -->
+			
+<section id="handling-entire-process">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						HANDLING THE ENTIRE PROCESS LIKE THEY ARE IN TOWN
+					</h2>
+					<!-- SECTION PHOTO -->
+					<div class="section-photo">
+						<img src="./blog-images/conservator-doesnt-live-locally/handling-the-entire-process-like-they-are-in-town.jpg" alt="HANDLING THE ENTIRE PROCESS LIKE THEY ARE IN TOWN" loading="lazy">
+					</div>
+
+<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						The ultimate goal is simple. I make the conservator feel as if
+						they are present and managing everything, even when they are far
+						away. I become the local representative they can trust, managing
+						the property from start to finish while keeping them fully
+						informed.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						I handle cleanouts, coordinate photography, prepare valuations,
+						market the property, educate buyers about conservatorship rules,
+						and manage escrow. Throughout the process, I keep the conservator
+						and attorney in the loop with clear updates. Nothing falls through
+						the cracks, and no one feels left out of the decision-making.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify">
+						By the time the property is ready for sale, everyone involved feels
+						confident because every detail has been handled with care and
+						transparency.
+					</p>
+				</div>
+			</section>
+
+			<!-- WHY THIS MATTERS FOR ATTORNEYS -->
+			<section id="matters-for-attorneys">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						WHY THIS MATTERS FOR ATTORNEYS
+					</h2>
+<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						Attorneys are often the ones who feel the most pressure in
+						long-distance conservatorship cases. When the conservator cannot be
+						present, families naturally turn to the attorney for help.
+						Suddenly, the attorney is fielding questions about locksmiths, junk
+						removal, and home repairs. None of this is legal work, yet it
+						creates extra stress and delays.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify">
+						By stepping in, I remove that burden entirely. Conservators know
+						who to call, families stay informed, and attorneys are protected
+						from being dragged into logistics they should not have to manage.
+						This keeps the case clean, professional, and efficient.
+					</p>
+				</div>
+			</section>
+
+			<!-- REAL-WORLD EXAMPLE -->
+			<section id="real-world-example">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">REAL-WORLD EXAMPLE</h2>
+					
+					<p class="body-text text-secondary text-bold" style="margin-bottom: 1.5rem">
+						I recently managed a conservatorship property where the conservator
+						lived across the country. The home had been vacant for months, and
+						neighbors were starting to complain. Break-ins were becoming a
+						real concern. The attorney was receiving constant emails about how
+						to handle the situation.
+					</p>
+					<p class="body-text text-secondary text-bold" style="margin-bottom: 1.5rem">
+						When I stepped in, the first step was securing the property. I
+						changed the locks, installed coded access, and arranged for
+						utilities to be managed. Next, I coordinated a cleanout with
+						photos and videos sent directly to the conservator. I then brought
+						in vendors for minor repairs, handled insurance requirements, and
+						positioned the property for sale.
+					</p>
+					<p class="body-text text-secondary text-bold">
+						Throughout the process, the conservator never had to leave their
+						home. They received real-time updates, trusted the work was being
+						done correctly, and had peace of mind. The attorney was relieved
+						of logistical headaches, and the case moved forward smoothly.
+					</p>
+				</div>
+			</section>
+
+			<!-- BOTTOM LINE -->
+			<section id="bottom-line">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">BOTTOM LINE</h2>
+					<!-- SECTION PHOTO -->
+					<div class="section-photo photo-float-left">
+						<img src="./blog-images/conservator-doesnt-live-locally/bottom-line.jpg" alt="BOTTOM LINE" loading="lazy">
+					</div>
+
+<p class="body-text text-secondary text-bold" style="margin-bottom: 1.5rem">
+						Long-distance conservatorship cases do not have to be stressful or
+						delayed. With the right partner on-site, everything can move
+						forward without unnecessary conflict or confusion.
+					</p>
+					<p class="body-text text-secondary text-bold" style="margin-bottom: 1.5rem">
+						When I manage conservatorship properties, I secure the home,
+						coordinate vendors, provide real-time updates, and align everything
+						with the legal process. I act as the conservator’s trusted
+						presence on the ground while protecting the attorney’s time
+						and keeping the property on track.
+					</p>
+					<p class="body-text text-secondary text-bold">
+						If you are dealing with a conservatorship where the conservator
+						does not live locally, I am ready to handle everything on-site.
+						You focus on your role. I will take care of the rest.
+					</p>
+				</div>
+			</section>
+
+			<!-- OUTRO / CTA -->
+			<section id="outro">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						NEED A LOCAL PRESENCE FOR YOUR CONSERVATORSHIP PROPERTY?
+					</h2>
+					<p class="body-text text-secondary text-bold" style="margin-bottom: 1.5rem">
+						Distance should never be the reason a conservatorship case stalls.
+						I am on-site, fully accountable, and ready to manage everything
+						from securing the property to closing escrow. Let’s connect
+						today.
+					</p>
+					<div style="
+							display: flex;
+							flex-direction: column;
+							gap: 1rem;
+							margin-bottom: 1.5rem;
+						">
+						<!-- Phone -->
+						<div class="contact-item" style="display: flex; align-items: flex-start; gap: 1rem">
+							<img src="./svgs/phone-icon.svg" style="
+									width: 2rem;
+									height: 2rem;
+									flex-shrink: 0;
+									margin-top: 0.15rem;
+								">
+							<div class="body-text text-bold" style="line-height: 1.1">
+								<span class="text-secondary text-bold">(833)
+									<span style="letter-spacing: 0.07em">PROBAID</span></span><br>
+								<span class="text-primary text-bold" style="
+										display: block;
+										text-align: right;
+										letter-spacing: 0.17em;
+									">7762243</span>
+							</div>
+						</div>
+						<!-- Website -->
+						<div class="contact-item" style="display: flex; align-items: center; gap: 1rem">
+							<img src="./svgs/uiw_mail.svg" style="
+									width: 2rem;
+									height: 2rem;
+									flex-shrink: 0;
+									margin-top: 0.15rem;
+								">
+							<span class="body-text text-secondary text-bold text-justify">833PROBAID.com</span>
+						</div>
+						<!-- Email -->
+						<div class="contact-item" style="display: flex; align-items: center; gap: 1rem">
+							<img src="./svgs/globe.svg" style="
+									width: 1.8rem;
+									height: 1.8rem;
+									flex-shrink: 0;
+									margin-top: 0.15rem;
+								">
+							<span class="body-text text-secondary text-bold text-justify">Info@833PROBAID.com</span>
+						</div>
+					</div>
+					<p class="body-text text-secondary text-bold">
+						Because when the conservator can’t be there—I am.
+					</p>
+				</div>
+			</section>
+		</main>
+</body></html>

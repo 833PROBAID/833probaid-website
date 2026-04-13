@@ -1,0 +1,1540 @@
+<!DOCTYPE html><html lang="en"><head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>How I Support Attorneys and Keep Clients Calm During Probate</title>
+		<meta name="description" content="Learn how I support probate attorneys by calming heirs, guiding executors, and managing property tasks so cases stay on track without extra stress.">
+
+		<link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Montserrat:wght@400;700&amp;family=Roboto:wght@400;900&amp;family=League+Spartan:wght@400;700&amp;family=Oswald&amp;family=Poppins&amp;family=Passions+Conflict&amp;family=Sarpanch&amp;display=swap" rel="stylesheet">
+
+		<style type="text/css">
+			/* =========================================
+			   1. VARIABLES & RESET
+			   ========================================= */
+			:root {
+				--primary: #0097a7;
+				--primary-dark: #00838f;
+				--primary-light: rgba(0, 151, 167, 0.1);
+				--primary-lighter: rgba(0, 151, 167, 0.05);
+
+				--secondary: #fe7702;
+				--secondary-light: rgba(254, 119, 2, 0.1);
+				--secondary-lighter: rgba(254, 119, 2, 0.05);
+
+				--accent: #ff4444;
+				--teal-soft: #e0f7fa;
+
+				--gray-100: #f3f4f6;
+				--gray-300: #d1d5db;
+				--gray-500: #6b7280;
+				--gray-600: #4b5563;
+				--white: #ffffff;
+				--black: #000000;
+
+				--font-anton: "Anton", sans-serif;
+				--font-montserrat: "Montserrat", sans-serif;
+			}
+
+			* {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
+
+			body {
+				background-color: var(--gray-100);
+				color: var(--black);
+				font-family: var(--font-montserrat);
+				padding: 1.5rem;
+				-webkit-font-smoothing: antialiased;
+			}
+
+			@media (min-width: 768px) {
+				body {
+					padding: 2.5rem;
+				}
+			}
+
+			main {
+				max-width: 80rem;
+				margin-left: auto;
+				margin-right: auto;
+				display: flex;
+				flex-direction: column;
+				gap: 2.5rem;
+			}
+
+			img {
+				display: block;
+				max-width: 100%;
+				height: auto;
+			}
+
+			/* =========================================
+			   2. TYPOGRAPHY
+			   ========================================= */
+			h1,
+			h2,
+			h3,
+			h4 {
+				font-family: var(--font-anton);
+				text-transform: uppercase;
+				line-height: 1.2;
+				font-weight: 700;
+				transition: color 0.3s ease;
+			}
+
+			.text-primary {
+				color: var(--primary);
+			}
+
+			.text-primary:hover {
+				color: var(--secondary);
+			}
+
+			.text-secondary {
+				color: var(--secondary);
+			}
+
+			.text-secondary:hover {
+				color: var(--primary);
+			}
+
+			/* Parent hover — swap colors so primary children become secondary */
+			.content-block:hover .text-secondary,
+			.point-item:hover .text-secondary {
+				color: var(--primary);
+				transition: color 0.3s ease;
+			}
+
+			.content-block:hover .text-primary,
+			.point-item:hover .text-primary {
+				color: var(--secondary);
+				transition: color 0.3s ease;
+			}
+
+			.content-block:hover .body-text.text-secondary,
+			.point-item:hover .body-text.text-secondary {
+				color: var(--gray-600);
+			}
+
+			.text-gray {
+				color: var(--gray-600);
+			}
+
+			.text-center {
+				text-align: center;
+			}
+
+			.text-justify {
+				text-align: justify;
+			}
+
+			.text-bold {
+				font-weight: 700;
+			}
+
+			.italic {
+				font-style: italic;
+			}
+
+			.section-title {
+				font-size: 2rem !important;
+				margin-bottom: 1rem;
+				transition: color 0.3s ease;
+			}
+
+			.section-title.text-primary:hover,
+			.section-title:hover.text-primary {
+				color: var(--secondary) !important;
+			}
+
+			.section-title.text-secondary:hover,
+			.section-title:hover.text-secondary {
+				color: var(--primary) !important;
+			}
+
+			.content-heading {
+				font-size: 1.625rem !important;
+				margin-bottom: 0.75rem;
+				transition: color 0.3s ease;
+			}
+
+			.content-heading.text-primary:hover,
+			.content-heading:hover.text-primary {
+				color: var(--secondary) !important;
+			}
+
+			.content-heading.text-secondary:hover,
+			.content-heading:hover.text-secondary {
+				color: var(--primary) !important;
+			}
+
+			.body-text {
+				font-size: 1.375rem !important;
+				line-height: 1.6;
+				font-weight: 700;
+			}
+
+			/* Keep body copy neutral; reserve secondary for accents. */
+			.body-text.text-secondary {
+				color: var(--gray-600);
+			}
+
+			.small-text {
+				font-size: 1.125rem !important;
+				font-weight: 700;
+			}
+
+			.main-header {
+				text-align: center;
+			}
+
+			.main-header h1 {
+				font-size: 3.25rem;
+				color: var(--secondary);
+				margin-bottom: 1rem;
+				transition: color 0.3s ease;
+			}
+
+			.main-header h1:hover {
+				color: var(--primary);
+			}
+
+			@media (max-width: 767px) {
+				.section-title {
+					font-size: 1.5rem !important;
+				}
+
+				.content-heading {
+					font-size: 1.25rem !important;
+				}
+
+				.body-text {
+					font-size: 1rem !important;
+				}
+
+				.small-text {
+					font-size: 0.875rem !important;
+				}
+
+				.main-header h1 {
+					font-size: 2rem;
+				}
+
+				.step-title-text {
+					font-size: clamp(1.25rem, 3.15vw, 3.7rem);
+				}
+			}
+
+			/* =========================================
+			   3. SHADOWS & UTILITIES
+			   ========================================= */
+			.shadow-card {
+				box-shadow:
+					0 8px 12px rgba(0, 0, 0, 0.4),
+					0 -5px 12px 1px rgba(0, 0, 0, 0.4);
+				transition:
+					transform 0.3s ease,
+					box-shadow 0.3s ease;
+			}
+
+			.shadow-card:hover {
+				transform: translateY(-5px);
+				box-shadow:
+					0 12px 20px rgba(0, 0, 0, 0.5),
+					0 -8px 16px 2px rgba(0, 0, 0, 0.5);
+			}
+
+			.bg-white {
+				background-color: var(--white);
+			}
+
+			.rounded-card {
+				border-radius: 1rem;
+			}
+
+			/* =========================================
+			   4. CATEGORY BANNERS
+			   ========================================= */
+			.category-banner {
+				padding: 1.5rem;
+				border-radius: 1rem;
+				border-left: 4px solid;
+				transition:
+					transform 0.3s ease,
+					border-left-width 0.3s ease;
+			}
+
+			.category-banner:hover {
+				transform: translateX(8px);
+				border-left-width: 8px;
+			}
+
+			.category-banner h2 {
+				font-size: 2rem;
+				margin-bottom: 0.5rem;
+				font-weight: 700;
+				transition: color 0.3s ease;
+			}
+
+			.banner-primary {
+				background: linear-gradient(
+					to right,
+					var(--primary-light),
+					var(--primary-lighter)
+				);
+				border-color: var(--primary);
+			}
+
+			.banner-primary h2 {
+				color: var(--primary);
+			}
+
+			.banner-primary h2:hover {
+				color: var(--secondary);
+			}
+
+			.banner-secondary {
+				background: linear-gradient(
+					to right,
+					var(--secondary-light),
+					var(--secondary-lighter)
+				);
+				border-color: var(--secondary);
+			}
+
+			.banner-secondary h2 {
+				color: var(--secondary);
+			}
+
+			.banner-secondary h2:hover {
+				color: var(--primary);
+			}
+
+			/* =========================================
+			   5. CONTENT BLOCKS
+			   ========================================= */
+			.content-block {
+				background-color: var(--white);
+				padding: 0.9rem;
+				border-radius: 1rem;
+				transition: transform 0.3s ease;
+				display: flow-root;
+			}
+
+			@media (min-width: 768px) {
+				.content-block {
+					padding: 2.7rem !important;
+				}
+			}
+
+			.step-container {
+				border-radius: 1rem;
+				background-color: var(--white);
+				padding: 1.5rem;
+				transition: transform 0.3s ease;
+			}
+
+			.step-container:hover {
+				transform: scale(1.02);
+			}
+
+			.step-inner {
+				background-color: transparent;
+				padding: 0;
+				display: flex;
+				flex-direction: column;
+				gap: 0;
+			}
+
+			.circle-number-lg {
+				display: none;
+				width: 5rem;
+				height: 5rem;
+				background-color: rgba(0, 151, 167, 0.2);
+				color: var(--secondary);
+				border-radius: 50%;
+				align-items: center;
+				justify-content: center;
+				font-family: var(--font-anton);
+				font-size: 2.5rem;
+				font-weight: 700;
+				flex-shrink: 0;
+				transition: all 0.3s ease;
+			}
+
+			.step-container:hover .circle-number-lg {
+				background-color: rgba(0, 151, 167, 0.4);
+				transform: rotate(360deg) scale(1.1);
+			}
+
+			.circle-number-sm {
+				display: flex;
+				width: 2.5rem;
+				height: 2.5rem;
+				background-color: rgba(0, 151, 167, 0.2);
+				color: var(--secondary);
+				border-radius: 50%;
+				align-items: center;
+				justify-content: center;
+				font-family: var(--font-anton);
+				font-size: 1.375rem;
+				font-weight: 700;
+				flex-shrink: 0;
+				margin-bottom: 0.75rem;
+				align-self: flex-start;
+				transition: all 0.3s ease;
+			}
+
+			.step-container:hover .circle-number-sm {
+				background-color: rgba(0, 151, 167, 0.4);
+				transform: rotate(360deg) scale(1.1);
+			}
+
+			.step-content {
+				flex: 1;
+			}
+
+			.step-title-row {
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
+				margin-bottom: 0.75rem;
+			}
+
+			.step-title-text {
+				font-size: clamp(1.5rem, 3.15vw, 3.7rem);
+				color: var(--secondary);
+				transition: color 0.3s ease;
+			}
+
+			.step-title-text:hover {
+				color: var(--primary);
+			}
+
+			.step-body {
+				margin-top: 0;
+				padding: 0;
+				background-color: transparent;
+				border-radius: 0;
+			}
+
+			.step-container .step-inner {
+				box-shadow: none !important;
+				background-color: transparent !important;
+			}
+
+			.step-container .step-body {
+				box-shadow: none !important;
+			}
+
+			.step-container .step-body .content-block {
+				padding: 0 !important;
+				background-color: transparent !important;
+				box-shadow: none !important;
+			}
+
+			@media (min-width: 768px) {
+				.step-container {
+					padding: 2.5rem;
+					border-radius: 1rem;
+				}
+
+				.step-inner {
+					gap: 1.5rem;
+					border-radius: 1rem;
+					background-color: var(--white);
+					flex-direction: row;
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				.circle-number-lg {
+					display: flex;
+				}
+
+				.circle-number-sm {
+					display: none;
+					margin-bottom: 0;
+				}
+
+				.step-title-row {
+					margin-bottom: 0;
+				}
+
+				.step-body {
+					margin-top: 1.5rem;
+					padding: 1.5rem;
+					background-color: var(--white);
+					border-radius: 1rem;
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				.step-body.content-block {
+					padding: 1.5rem !important;
+					background-color: var(--white) !important;
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+			}
+
+			ul.styled-list {
+				margin-left: 1.5rem;
+				list-style-type: disc;
+				display: flex;
+				flex-direction: column;
+				gap: 1rem;
+			}
+
+			ul.styled-list li {
+				transition: transform 0.2s ease;
+			}
+
+			ul.styled-list li:hover {
+				transform: translateX(8px);
+			}
+
+			.points-wrapper {
+				display: flex;
+				flex-direction: column;
+				gap: 1rem;
+			}
+
+			.point-item {
+				display: flex;
+				align-items: flex-start;
+				gap: 1.5rem;
+				background-color: transparent;
+				padding: 0;
+				border-radius: 0;
+				transition: transform 0.2s ease;
+			}
+
+			.point-item:hover {
+				transform: translateX(5px);
+			}
+
+			.point-icon {
+				width: 1.75rem;
+				margin-top: calc((1.375rem * 1.6 - 1.75rem) / 2);
+				flex-shrink: 0;
+				transition: transform 0.3s ease;
+			}
+
+			.point-item:hover .point-icon {
+				transform: scale(1.15) rotate(5deg);
+			}
+
+			.point-item.shadow-card {
+				box-shadow: none !important;
+				background-color: transparent !important;
+				padding: 0 !important;
+			}
+
+			@media (min-width: 768px) {
+				.point-item {
+					background-color: var(--white);
+					padding: 1.5rem;
+					border-radius: 1rem;
+				}
+
+				.point-icon {
+					width: 2.25rem;
+					margin-top: calc((1.375rem * 1.6 - 2.25rem) / 2);
+				}
+
+				.point-item.shadow-card {
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+					background-color: var(--white) !important;
+					padding: 1.5rem !important;
+				}
+			}
+
+			.callout-box {
+				padding: 1rem;
+				border-radius: 1rem;
+			}
+
+			@media (min-width: 768px) {
+				.callout-box {
+					border-radius: 1rem;
+				}
+			}
+
+			.callout-inner {
+				background-color: var(--white);
+				padding: 2rem 1rem;
+				border-radius: 1rem;
+				display: flex;
+				align-items: flex-start;
+				gap: 1.5rem;
+				clip-path: polygon(0 0, 100% 0, 100% 80%, 82% 100%, 0 100%);
+			}
+
+			@media (min-width: 768px) {
+				.callout-inner {
+					clip-path: polygon(0 0, 101% 0, 100% 60%, 94% 100%, 0 100%);
+					padding: 2.5rem;
+					border-radius: 1rem;
+				}
+			}
+
+			.callout-filter {
+				filter: drop-shadow(4px -6px 10px rgba(0, 0, 0, 0.5))
+					drop-shadow(6px 5px 10px rgba(0, 0, 0, 0.5));
+			}
+
+			.bg-primary {
+				background-color: var(--primary);
+			}
+
+			.bg-secondary {
+				background-color: var(--secondary);
+			}
+
+			.grid-2-col {
+				display: grid;
+				grid-template-columns: 1fr;
+				gap: 1.5rem;
+			}
+
+			.grid-3-col {
+				display: grid;
+				grid-template-columns: 1fr;
+				gap: 1.5rem;
+			}
+
+			.grid-complex {
+				display: grid;
+				grid-template-columns: 1fr;
+				gap: 1.5rem;
+			}
+
+			@media (min-width: 768px) {
+				.grid-2-col {
+					grid-template-columns: 1fr 1fr;
+				}
+
+				.grid-3-col {
+					grid-template-columns: 1fr 1fr 1fr;
+				}
+
+				.grid-complex {
+					grid-template-columns: repeat(5, 1fr);
+				}
+
+				.span-3 {
+					grid-column: span 3;
+				}
+
+				.span-2 {
+					grid-column: span 2;
+				}
+			}
+
+			.image-column {
+				display: flex;
+				flex-direction: column;
+				gap: 1.5rem;
+				height: 100%;
+			}
+
+			.image-frame {
+				flex: 1;
+				border-radius: 1rem;
+				overflow: hidden;
+				border: 4px solid var(--primary);
+			}
+
+			.image-frame img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+
+			.section-photo {
+				width: 100%;
+				aspect-ratio: 21 / 9;
+				max-height: 400px;
+				margin: 1.5rem 0;
+				border-radius: 0.75rem;
+				border: 4px solid var(--primary);
+				overflow: hidden;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
+				box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+			}
+
+			.section-photo.photo-float-left {
+				float: left;
+				width: 45%;
+				aspect-ratio: 4 / 5;
+				max-height: 400px;
+				margin: 0.5rem 2rem 1rem 0;
+			}
+
+			.section-photo.photo-float-right {
+				float: right;
+				width: 45%;
+				aspect-ratio: 4 / 5;
+				max-height: 400px;
+				margin: 0.5rem 0 1rem 2rem;
+			}
+
+			.section-photo img {
+				display: block;
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				object-position: center;
+				animation: imageLoad 0.5s ease-in-out;
+			}
+
+			@keyframes imageLoad {
+				from {
+					opacity: 0;
+					transform: scale(0.98);
+				}
+				to {
+					opacity: 1;
+					transform: scale(1);
+				}
+			}
+
+			.stat-card {
+				background-color: var(--white);
+				padding: 1.5rem;
+				border-radius: 1rem;
+				text-align: center;
+			}
+
+			.stat-number {
+				font-family: var(--font-anton);
+				color: var(--primary);
+				font-size: 3.25rem;
+				margin-bottom: 0.75rem;
+				transition: color 0.3s ease;
+			}
+
+			.stat-number:hover {
+				color: var(--secondary);
+			}
+
+			.quote-container {
+				background-color: var(--white);
+				padding: 2rem;
+				border-radius: 1rem;
+				transition:
+					transform 0.3s ease,
+					box-shadow 0.3s ease;
+			}
+
+			.quote-container:hover {
+				transform: translateX(10px);
+				box-shadow: -5px 5px 15px rgba(0, 0, 0, 0.1);
+			}
+
+			@media (min-width: 768px) {
+				.quote-container {
+					padding: 3rem;
+				}
+			}
+
+			blockquote {
+				border-left: 4px solid var(--secondary);
+				padding-left: 1.5rem;
+				font-weight: 400;
+			}
+
+			.cta-container {
+				background-color: var(--white);
+				padding: 2rem;
+				border-radius: 1rem;
+				text-align: center;
+				transition:
+					transform 0.3s ease,
+					box-shadow 0.3s ease;
+			}
+
+			.cta-container:hover {
+				transform: translateY(-3px);
+				box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+			}
+
+			.btn-primary {
+				background-color: #fe7702;
+				color: white;
+				box-shadow:
+					0px 3.04px 7.39px 0px rgba(0, 0, 0, 0.68),
+					6.07px -6.07px 4.05px 0px rgba(0, 0, 0, 0.25) inset,
+					-4.05px 5.06px 4.05px 0px rgba(255, 255, 255, 0.25) inset,
+					-2.02px -1.01px 4.05px 0px rgba(0, 0, 0, 0.6);
+				padding: 1rem 2rem;
+				border-radius: 1rem;
+				text-transform: uppercase;
+				font-weight: 700;
+				border: none;
+				cursor: pointer;
+				transition: all 0.3s ease;
+			}
+
+			.btn-primary:hover {
+				transform: scale(1.08) translateY(-2px);
+				background-color: #ff8820;
+				box-shadow:
+					0px 6px 15px 0px rgba(0, 0, 0, 0.75),
+					6.07px -6.07px 4.05px 0px rgba(0, 0, 0, 0.3) inset,
+					-4.05px 5.06px 4.05px 0px rgba(255, 255, 255, 0.3) inset,
+					-2.02px -1.01px 4.05px 0px rgba(0, 0, 0, 0.65);
+			}
+
+			.btn-primary:active {
+				transform: scale(1.02) translateY(0);
+			}
+
+			.table-wrapper {
+				background-color: var(--white);
+				padding: 1.5rem;
+				border-radius: 1rem;
+				overflow-x: auto;
+			}
+
+			table {
+				width: 100%;
+				border-collapse: collapse;
+				font-family: var(--font-montserrat);
+			}
+
+			th {
+				background-color: var(--primary);
+				color: white;
+				padding: 1.5rem;
+				text-align: left;
+				font-weight: 700;
+				font-size: 1.25rem;
+			}
+
+			td {
+				padding: 0.75rem;
+				border-bottom: 1px solid #e5e7eb;
+				font-size: 1.125rem;
+				font-weight: 400;
+			}
+
+			tbody tr:hover td {
+				background-color: var(--primary-lighter);
+			}
+
+			/* =========================================
+			   6. SOLD CTA INLINE HIGHLIGHT
+			   ========================================= */
+			.sold-cta {
+				text-transform: uppercase;
+				text-decoration: underline;
+				cursor: pointer;
+			}
+
+			.site-footer {
+				text-align: center;
+				padding: 2rem 0;
+				border-top: 1px solid var(--gray-300);
+				margin-top: 2rem;
+			}
+
+			/* Contact item hover */
+			.contact-item {
+				color: var(--primary);
+				transition:
+					color 0.3s ease,
+					transform 0.3s ease;
+				cursor: default;
+				width: fit-content;
+			}
+
+			/* Block parent content-block hover from bleeding into contact items */
+			.content-block:hover .contact-item .text-secondary {
+				color: var(--secondary);
+			}
+			.content-block:hover .contact-item .text-primary {
+				color: var(--primary);
+			}
+
+			/* Only directly-hovered row changes */
+			.contact-item:hover {
+				color: var(--secondary);
+				transform: scale(1.05);
+				transition:
+					color 0.3s ease,
+					transform 0.3s ease;
+			}
+			.contact-item:hover .text-secondary {
+				color: var(--primary) !important;
+				transition: color 0.3s ease;
+			}
+			.contact-item:hover .text-primary {
+				color: var(--secondary) !important;
+				transition: color 0.3s ease;
+			}
+
+			/* =========================================
+			   PHONE ONLY (max-width: 639px)
+			   Disable all hover animations & transitions
+			   sm (640px+) keeps full desktop design
+			   ========================================= */
+			@media (max-width: 639px), (hover: none) and (pointer: coarse) {
+				*,
+				*::before,
+				*::after {
+					transition: none !important;
+					animation: none !important;
+				}
+
+				.shadow-card:hover,
+				.step-container:hover,
+				.point-item:hover,
+				.quote-container:hover,
+				.cta-container:hover,
+				.btn-primary:hover,
+				ul.styled-list li:hover {
+					transform: none !important;
+				}
+
+				.category-banner:hover {
+					transform: none !important;
+					border-left-width: 4px !important;
+				}
+
+				.shadow-card {
+					box-shadow: none !important;
+				}
+
+				.step-container.shadow-card,
+				.content-block.shadow-card:not(.step-body) {
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				.step-container.shadow-card:hover,
+				.content-block.shadow-card:not(.step-body):hover {
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				.shadow-card:hover {
+					box-shadow: none !important;
+				}
+
+				.quote-container:hover {
+					box-shadow: none !important;
+				}
+
+				.cta-container:hover {
+					box-shadow: none !important;
+				}
+
+				.step-container:hover .circle-number-lg,
+				.step-container:hover .circle-number-sm {
+					background-color: rgba(0, 151, 167, 0.2) !important;
+					transform: none !important;
+				}
+
+				.point-item:hover .point-icon {
+					transform: none !important;
+				}
+
+				.btn-primary:hover {
+					transform: none !important;
+					background-color: #fe7702 !important;
+					box-shadow:
+						0px 3.04px 7.39px 0px rgba(0, 0, 0, 0.68),
+						6.07px -6.07px 4.05px 0px rgba(0, 0, 0, 0.25) inset,
+						-4.05px 5.06px 4.05px 0px rgba(255, 255, 255, 0.25) inset,
+						-2.02px -1.01px 4.05px 0px rgba(0, 0, 0, 0.6) !important;
+				}
+
+				tbody tr:hover td {
+					background-color: transparent !important;
+				}
+
+				.text-primary:hover {
+					color: var(--primary) !important;
+				}
+
+				.text-secondary:hover {
+					color: var(--secondary) !important;
+				}
+
+				.main-header h1:hover {
+					color: var(--secondary) !important;
+				}
+
+				.section-title.text-primary:hover,
+				.section-title:hover.text-primary {
+					color: var(--primary) !important;
+				}
+
+				.section-title.text-secondary:hover,
+				.section-title:hover.text-secondary {
+					color: var(--secondary) !important;
+				}
+
+				.content-heading.text-primary:hover,
+				.content-heading:hover.text-primary {
+					color: var(--primary) !important;
+				}
+
+				.content-heading.text-secondary:hover,
+				.content-heading:hover.text-secondary {
+					color: var(--secondary) !important;
+				}
+
+				.banner-primary h2:hover {
+					color: var(--primary) !important;
+				}
+
+				.banner-secondary h2:hover {
+					color: var(--secondary) !important;
+				}
+
+				.step-title-text:hover {
+					color: var(--secondary) !important;
+				}
+
+				.stat-number:hover {
+					color: var(--primary) !important;
+				}
+
+				/* Disable parent hover color-swap on phone */
+				.content-block:hover .text-secondary,
+				.point-item:hover .text-secondary {
+					color: var(--secondary) !important;
+				}
+
+				.content-block:hover .body-text.text-secondary,
+				.point-item:hover .body-text.text-secondary {
+					color: var(--gray-600) !important;
+				}
+
+				.content-block:hover .text-primary,
+				.point-item:hover .text-primary {
+					color: var(--primary) !important;
+				}
+
+				/* Keep nested contact text colors stable on phone */
+				.content-block:hover .contact-item .text-secondary {
+					color: var(--secondary) !important;
+				}
+
+				.content-block:hover .contact-item .text-primary {
+					color: var(--primary) !important;
+				}
+
+				/* Disable contact-item hover on mobile */
+				.contact-item:hover {
+					color: var(--primary) !important;
+					transform: none !important;
+				}
+				.contact-item:hover .text-secondary {
+					color: var(--secondary) !important;
+				}
+				.contact-item:hover .text-primary {
+					color: var(--primary) !important;
+				}
+			}
+		
+
+/* POINTER SECTION IMAGE OVERRIDE */
+			.pointer-section > .content-block > .section-photo,
+			.pointer-section > .content-block > .section-photo.photo-float-left,
+			.pointer-section > .content-block > .section-photo.photo-float-right {
+				float: none !important;
+				width: 100% !important;
+				max-width: 100% !important;
+				aspect-ratio: 21 / 9 !important;
+				margin: 1.5rem 0 !important;
+				shape-outside: none !important;
+			}
+
+			.pointer-section > .content-block > .section-photo img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+
+/* MOBILE OVERRIDES */
+@media (max-width: 767px) {
+    .section-photo,
+    .section-photo.photo-float-left,
+    .section-photo.photo-float-right {
+        float: none !important;
+        width: 100% !important;
+        aspect-ratio: 21 / 9 !important;
+        max-height: 300px !important;
+        margin: 1.5rem 0 !important;
+    }
+    
+    .text-justify {
+        text-align: left !important;
+    }
+}
+/* END MOBILE OVERRIDES */</style>
+	</head>
+
+	<body>
+		<main>
+			
+			<!-- BLOG BANNER IMAGE -->
+			<div class="section-photo">
+				<img src="./uploads/banner/1769962067709-blog.png" alt="how-i-support-attorneys-and-keep-clients-calm-during-probate-banner" loading="lazy">
+			</div>
+<!-- INTRO -->
+			<section id="intro">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						HOW I SUPPORT ATTORNEYS AND KEEP CLIENTS CALM DURING PROBATE CHAOS
+					</h2>
+					<!-- SECTION PHOTO -->
+					<div class="section-photo photo-float-left">
+						<img src="./blog-images/probate-chaos/how-i-support-attorneys-and-keep-clients-calm-during-probate-chaos.jpg" alt="HOW I SUPPORT ATTORNEYS AND KEEP CLIENTS CALM DURING PROBATE CHAOS" loading="lazy">
+					</div>
+
+<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						Probate is rarely simple. On paper, it might look like a legal
+						process of transferring property, settling debts, and distributing
+						assets. But in real life, probate is filled with emotions, delays,
+						family tension, and constant questions.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						Attorneys know this better than anyone. You are not only expected to
+						be the legal expert but also the calm voice in the storm. Families
+						lean on you for guidance, heirs want quick answers, and executors
+						often ask questions that have nothing to do with law. On top of
+						that, the property side of the case can quickly get messy. Locked
+						doors, overdue utility bills, property insurance lapses, and
+						uncooperative heirs all add stress to your already full desk.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						That is where I step in.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						I am not here to impress anyone with flashy sales tactics or to
+						complicate what is already complicated. My role is simple: I protect
+						your time, support your client, and handle every part of the
+						property process so you can focus on the legal work. While emotions
+						rise and questions pour in, I step into the room as a steady hand,
+						a clear communicator, and a problem solver.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify">
+						Here is exactly how I keep your file moving forward and your clients
+						calm during <span class="text-primary">probate chaos</span>.
+					</p>
+				</div>
+			</section>
+
+			<!-- CALM THE ROOM -->
+			
+<section id="calm-the-room">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						I CALM THE ROOM BEFORE IT GETS LOUD
+					</h2>
+<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						Probate often starts quietly, but emotions can build fast. Family
+						members disagree about price. Heirs question why things are taking
+						so long. Executors feel overwhelmed and start calling their attorney
+						for answers that are outside of your legal scope. Before long, all
+						the frustration lands on your shoulders.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						I have seen this happen countless times. That is why my first
+						priority is to calm the room before it even gets loud. From the
+						beginning, I explain what is happening, what the next steps are, and
+						what each person’s role will be in plain and simple language.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify">
+						Instead of leaving heirs confused, I show them a clear timeline of
+						how the property will be handled. Instead of letting small
+						disagreements turn into shouting matches, I clarify the process so
+						everyone feels included and respected. By taking time to explain and
+						set expectations, I remove the drama before it ever reaches you.
+					</p>
+				</div>
+			</section>
+
+			<!-- PROPERTY OFF THE DESK -->
+			
+<section id="property-off-desk">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						I TAKE THE PROPERTY OFF THE ATTORNEY’S DESK
+					</h2>
+<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						Here is the truth: you should not be dealing with property tasks at
+						all. Yet in probate, they almost always end up on your plate.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						Who will meet the cleanout crew? Who will handle showings? Who is
+						dealing with neighbors or a buyer’s questions about the
+						property? If no one else steps up, the attorney gets dragged into
+						it. That wastes your time and puts you in the middle of logistics
+						that are not part of your role.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						When I am on the case, all of that comes to me. If it involves a
+						lock, a key, a showing, a yard, or a vendor, I handle it. You
+						should never be copied on emails about insurance binders or junk
+						removal bids. I make sure your client never feels abandoned, but you
+						never get pulled into tasks that are not legal work.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify">
+						This frees you to focus only on what you do best:
+						<span class="text-primary">protecting the estate legally and keeping the process
+							compliant</span>.
+					</p>
+				</div>
+			</section>
+
+			<!-- EXECUTOR GAME PLAN -->
+			
+<section class="pointer-section" id="executor-game-plan">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						I GIVE THE EXECUTOR A CLEAR GAME PLAN
+					</h2>
+					<!-- SECTION PHOTO -->
+					<div class="section-photo">
+						<img src="./blog-images/probate-chaos/i-give-the-executor-a-clear-game-plan.jpg" alt="I GIVE THE EXECUTOR A CLEAR GAME PLAN" loading="lazy">
+					</div>
+
+<p class="body-text text-secondary text-bold" style="margin-bottom: 1.5rem">
+						Executors are often new to the process. They may have never handled
+						a probate case before, and they do not know where the
+						attorney’s job ends and where someone else’s begins. So
+						they call you for everything.
+					</p>
+
+					<div class="points-wrapper" style="margin-bottom: 1.5rem">
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon">
+							<p class="body-text">How do we change utilities?</p>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon">
+							<p class="body-text">How do we insure a vacant house?</p>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon">
+							<p class="body-text">When should we get photos?</p>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon">
+							<p class="body-text">Who do we hire for a cleanout?</p>
+						</div>
+					</div>
+
+					<p class="body-text text-secondary text-bold" style="margin-bottom: 1.5rem">
+						These are not legal questions, but without guidance, the executor
+						sends them to you anyway. That is where I step in.
+					</p>
+					<p class="body-text text-secondary text-bold" style="margin-bottom: 1.5rem">
+						From the very beginning, I walk the executor through the full real
+						estate process. I explain each step, what needs to be done, and how
+						it fits into the timeline. Instead of reacting to every question, I
+						provide a structure they can follow. I do not just answer one-off
+						calls, I create clarity.
+					</p>
+					<p class="body-text text-secondary text-bold">
+						Executors gain confidence. Families feel supported. And you stop
+						getting interrupted with tasks that were never yours in the first
+						place.
+					</p>
+				</div>
+			</section>
+
+			<!-- DEFUSE PROBLEMS -->
+			
+<section id="defuse-problems">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						I DEFUSE PROBLEMS BEFORE THEY ESCALATE
+					</h2>
+<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						Probate can feel like a minefield. Sometimes an heir is difficult,
+						sometimes a buyer is shaky, sometimes a timeline is in danger of
+						slipping. If no one is watching closely, these small issues can
+						become big problems that explode in your lap.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						I make sure that never happens.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						When I see red flags, I raise them early. If an heir is pushing
+						for unrealistic pricing, I prepare data to show real market
+						conditions. If a buyer seems unstable, I check financing strength
+						before we waste time. If a timeline looks like it might stall, I
+						address it before deadlines are missed.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify">
+						Most importantly, I keep you informed without overwhelming you. You
+						will know what is happening, what could come next, and how I am
+						already handling it. That way, you are never blindsided and never
+						dragged into a crisis that should not be yours.
+					</p>
+				</div>
+			</section>
+
+			<!-- REPUTATION -->
+			
+<section id="reputation">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						I SUPPORT YOUR REPUTATION, NOT JUST THE SALE
+					</h2>
+					<!-- SECTION PHOTO -->
+					<div class="section-photo">
+						<img src="./blog-images/probate-chaos/i-support-your-reputation-not-just-the-sale.jpg" alt="I SUPPORT YOUR REPUTATION, NOT JUST THE SALE" loading="lazy">
+					</div>
+
+<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						Probate is not only about getting a property sold. It is also about
+						how the family feels during the process. Were they respected? Were
+						their questions answered? Did they feel cared for?
+					</p>
+					<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						Here is the key: when the client feels supported, they credit that
+						experience to you, the attorney.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						That is why I see my role as protecting your reputation, not just
+						closing a deal. When I keep the executor calm, when I answer heir
+						questions, when I manage the property smoothly, the client feels
+						that everything was handled well. And when they tell their friends
+						or write reviews later, they talk about how confident and supported
+						they felt working with you.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify">
+						My job is not just about selling the property. It is about making
+						the entire probate experience smoother, calmer, and easier which
+						reflects positively on
+						<span class="text-primary">you and your practice</span>.
+					</p>
+				</div>
+			</section>
+
+			<!-- BOTTOM LINE -->
+			<section id="bottom-line">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">BOTTOM LINE</h2>
+<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						Probate is already heavy. Families are grieving. Executors are
+						overwhelmed. Attorneys are balancing strict legal work with constant
+						calls from confused clients. Without the right support, the entire
+						process can feel like chaos.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						That is why my role is so important. When I am on the file, I calm
+						the room, take property tasks off your desk, guide the executor,
+						defuse red flags, and keep the family steady. You stay focused on
+						the legal work. The property moves forward without drama. And the
+						client feels fully supported.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						If you have a file right now that feels off track, I am ready to
+						step in and steady the property side so you can get back to
+						practicing law.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify">
+						At <span class="text-primary">833PROBAID.com</span>, we specialize
+						in guiding probate property sales the right way. If you want to
+						protect your time, reduce stress for your clients, and ensure every
+						file moves forward smoothly, visit
+						<span class="text-primary">833PROBAID.com</span> today. Let us
+						handle the property side so you can focus on the law.
+					</p>
+				</div>
+			</section>
+
+			<!-- FAQs -->
+			<section class="pointer-section" id="faqs">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary" style="margin-bottom: 1.5rem">FAQS</h2>
+					<!-- SECTION PHOTO -->
+					<div class="section-photo">
+						<img src="./blog-images/probate-chaos/faqs.jpg" alt="FAQS" loading="lazy">
+					</div>
+
+<div class="points-wrapper">
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon">
+							<div>
+								<p class="body-text text-primary text-bold" style="margin-bottom: 0.5rem">
+									HOW CAN A PROBATE REAL ESTATE SPECIALIST HELP ATTORNEYS?
+								</p>
+								<p class="body-text">
+									A probate real estate specialist takes over the property side
+									of the case. This includes managing access, coordinating
+									vendors, preparing the home for sale, and communicating with
+									heirs and executors. By doing this, the attorney can focus
+									only on the legal work without being distracted by
+									property-related tasks.
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon">
+							<div>
+								<p class="body-text text-primary text-bold" style="margin-bottom: 0.5rem">
+									WHY DO PROBATE CASES BECOME CHAOTIC FOR ATTORNEYS?
+								</p>
+								<p class="body-text">
+									Probate cases often involve grieving families, overwhelmed
+									executors, and heirs who may not understand the process. When
+									emotions rise, attorneys end up fielding calls about issues
+									that are not legal, such as property cleanouts or insurance.
+									Without support, this creates unnecessary stress and delays.
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon">
+							<div>
+								<p class="body-text text-primary text-bold" style="margin-bottom: 0.5rem">
+									HOW DOES SUPPORTING THE EXECUTOR MAKE THE ATTORNEY’S
+									JOB EASIER?
+								</p>
+								<p class="body-text">
+									When the executor is given a clear game plan and structure,
+									they stop calling their attorney for every small detail. This
+									saves the attorney time, keeps the client confident, and
+									ensures the property side of probate runs smoothly.
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon">
+							<div>
+								<p class="body-text text-primary text-bold" style="margin-bottom: 0.5rem">
+									WHAT HAPPENS IF A PROBATE PROPERTY ISSUE IS IGNORED?
+								</p>
+								<p class="body-text">
+									If property issues are not managed, they can create bigger
+									problems like insurance lapses, property damage, or family
+									disputes. These eventually stall the case and put more pressure
+									on the attorney. Addressing them early prevents delays and
+									protects the estate’s value.
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon">
+							<div>
+								<p class="body-text text-primary text-bold" style="margin-bottom: 0.5rem">
+									HOW DOES THIS SERVICE IMPROVE THE CLIENT’S EXPERIENCE?
+								</p>
+								<p class="body-text">
+									When families feel supported and informed throughout probate,
+									they associate that positive experience with their attorney.
+									This builds trust, protects the attorney’s reputation,
+									and helps the entire case close smoothly without conflict.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- OUTRO / CTA -->
+			<section id="outro">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						READY TO TAKE THE PROPERTY SIDE OFF YOUR PLATE?
+					</h2>
+					
+					
+
+					
+					
+
+					
+					
+
+					
+					
+
+					<p class="body-text text-secondary text-bold" style="margin-bottom: 1.5rem">
+						Schedule a real consultation at
+						<span class="text-primary">(833) PROBAID</span> or email
+						<span class="text-primary">Info@833PROBAID.com</span>. I’ll
+						step in, calm the file, and handle every property task so you can
+						get back to practicing law.
+					</p>
+					<div style="
+							display: flex;
+							flex-direction: column;
+							gap: 1rem;
+							margin-bottom: 1.5rem;
+						">
+						<!-- Phone -->
+						<div class="contact-item" style="display: flex; align-items: flex-start; gap: 1rem">
+							<img src="./svgs/phone-icon.svg" style="
+									width: 2rem;
+									height: 2rem;
+									flex-shrink: 0;
+									margin-top: 0.15rem;
+								">
+							<div class="body-text text-bold" style="line-height: 1.1">
+								<span class="text-secondary text-bold">(833)
+									<span style="letter-spacing: 0.07em">PROBAID</span></span><br>
+								<span class="text-primary text-bold" style="
+										display: block;
+										text-align: right;
+										letter-spacing: 0.17em;
+									">7762243</span>
+							</div>
+						</div>
+						<!-- Website -->
+						<div class="contact-item" style="display: flex; align-items: center; gap: 1rem">
+							<img src="./svgs/uiw_mail.svg" style="
+									width: 2rem;
+									height: 2rem;
+									flex-shrink: 0;
+									margin-top: 0.15rem;
+								">
+							<span class="body-text text-secondary text-bold text-justify">833PROBAID.com</span>
+						</div>
+						<!-- Email -->
+						<div class="contact-item" style="display: flex; align-items: center; gap: 1rem">
+							<img src="./svgs/globe.svg" style="
+									width: 1.8rem;
+									height: 1.8rem;
+									flex-shrink: 0;
+									margin-top: 0.15rem;
+								">
+							<span class="body-text text-secondary text-bold text-justify">Info@833PROBAID.com</span>
+						</div>
+					</div>
+					<p class="body-text text-secondary text-bold">
+						Because in probate, the right support doesn’t just move the
+						property forward—it protects your practice.
+					</p>
+				</div>
+			</section>
+		</main>
+</body></html>

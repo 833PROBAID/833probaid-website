@@ -1,0 +1,1457 @@
+<!DOCTYPE html><html lang="en"><head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Trustee Real Estate Sales: How to Handle Family Pressure</title>
+		<meta name="description" content="Trustees face family pressure when selling real estate. Learn how a probate real estate specialist helps trustees navigate conflict and move cases forward.">
+
+		<link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Montserrat:wght@400;700&amp;family=Roboto:wght@400;900&amp;family=League+Spartan:wght@400;700&amp;family=Oswald&amp;family=Poppins&amp;family=Passions+Conflict&amp;family=Sarpanch&amp;display=swap" rel="stylesheet">
+
+		<style type="text/css">
+			/* =========================================
+			   1. VARIABLES & RESET
+			   ========================================= */
+			:root {
+				--primary: #0097a7;
+				--primary-dark: #00838f;
+				--primary-light: rgba(0, 151, 167, 0.1);
+				--primary-lighter: rgba(0, 151, 167, 0.05);
+
+				--secondary: #fe7702;
+				--secondary-light: rgba(254, 119, 2, 0.1);
+				--secondary-lighter: rgba(254, 119, 2, 0.05);
+
+				--accent: #ff4444;
+				--teal-soft: #e0f7fa;
+
+				--gray-100: #f3f4f6;
+				--gray-300: #d1d5db;
+				--gray-500: #6b7280;
+				--gray-600: #4b5563;
+				--white: #ffffff;
+				--black: #000000;
+
+				--font-anton: "Anton", sans-serif;
+				--font-montserrat: "Montserrat", sans-serif;
+			}
+
+			* {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
+
+			body {
+				background-color: var(--gray-100);
+				color: var(--black);
+				font-family: var(--font-montserrat);
+				padding: 1.5rem;
+				-webkit-font-smoothing: antialiased;
+			}
+
+			@media (min-width: 768px) {
+				body {
+					padding: 2.5rem;
+				}
+			}
+
+			main {
+				max-width: 80rem;
+				margin-left: auto;
+				margin-right: auto;
+				display: flex;
+				flex-direction: column;
+				gap: 2.5rem;
+			}
+
+			img {
+				display: block;
+				max-width: 100%;
+				height: auto;
+			}
+
+			/* =========================================
+			   2. TYPOGRAPHY
+			   ========================================= */
+			h1,
+			h2,
+			h3,
+			h4 {
+				font-family: var(--font-anton);
+				text-transform: uppercase;
+				line-height: 1.2;
+				font-weight: 700;
+				transition: color 0.3s ease;
+			}
+
+			.text-primary {
+				color: var(--primary);
+			}
+
+			.text-primary:hover {
+				color: var(--secondary);
+			}
+
+			.text-secondary {
+				color: var(--secondary);
+			}
+
+			.text-secondary:hover {
+				color: var(--primary);
+			}
+
+			/* Parent hover — swap colors so primary children become secondary */
+			.content-block:hover .text-secondary,
+			.point-item:hover .text-secondary {
+				color: var(--primary);
+				transition: color 0.3s ease;
+			}
+
+			.content-block:hover .text-primary,
+			.point-item:hover .text-primary {
+				color: var(--secondary);
+				transition: color 0.3s ease;
+			}
+
+			.content-block:hover .body-text.text-secondary,
+			.point-item:hover .body-text.text-secondary {
+				color: var(--gray-600);
+			}
+
+			.text-gray {
+				color: var(--gray-600);
+			}
+
+			.text-center {
+				text-align: center;
+			}
+
+			.text-justify {
+				text-align: justify;
+			}
+
+			.text-bold {
+				font-weight: 700;
+			}
+
+			.italic {
+				font-style: italic;
+			}
+
+			.section-title {
+				font-size: 2rem !important;
+				margin-bottom: 1rem;
+				transition: color 0.3s ease;
+			}
+
+			.section-title.text-primary:hover,
+			.section-title:hover.text-primary {
+				color: var(--secondary) !important;
+			}
+
+			.section-title.text-secondary:hover,
+			.section-title:hover.text-secondary {
+				color: var(--primary) !important;
+			}
+
+			.content-heading {
+				font-size: 1.625rem !important;
+				margin-bottom: 0.75rem;
+				transition: color 0.3s ease;
+			}
+
+			.content-heading.text-primary:hover,
+			.content-heading:hover.text-primary {
+				color: var(--secondary) !important;
+			}
+
+			.content-heading.text-secondary:hover,
+			.content-heading:hover.text-secondary {
+				color: var(--primary) !important;
+			}
+
+			.body-text {
+				font-size: 1.375rem !important;
+				line-height: 1.6;
+				font-weight: 700;
+			}
+
+			/* Keep body copy neutral; reserve secondary for accents. */
+			.body-text.text-secondary {
+				color: var(--gray-600);
+			}
+
+			.small-text {
+				font-size: 1.125rem !important;
+				font-weight: 700;
+			}
+
+			.main-header {
+				text-align: center;
+			}
+
+			.main-header h1 {
+				font-size: 3.25rem;
+				color: var(--secondary);
+				margin-bottom: 1rem;
+				transition: color 0.3s ease;
+			}
+
+			.main-header h1:hover {
+				color: var(--primary);
+			}
+
+			@media (max-width: 767px) {
+				.section-title {
+					font-size: 1.5rem !important;
+				}
+
+				.content-heading {
+					font-size: 1.25rem !important;
+				}
+
+				.body-text {
+					font-size: 1rem !important;
+				}
+
+				.small-text {
+					font-size: 0.875rem !important;
+				}
+
+				.main-header h1 {
+					font-size: 2rem;
+				}
+
+				.step-title-text {
+					font-size: clamp(1.25rem, 3.15vw, 3.7rem);
+				}
+			}
+
+			/* =========================================
+			   3. SHADOWS & UTILITIES
+			   ========================================= */
+			.shadow-card {
+				box-shadow:
+					0 8px 12px rgba(0, 0, 0, 0.4),
+					0 -5px 12px 1px rgba(0, 0, 0, 0.4);
+				transition:
+					transform 0.3s ease,
+					box-shadow 0.3s ease;
+			}
+
+			.shadow-card:hover {
+				transform: translateY(-5px);
+				box-shadow:
+					0 12px 20px rgba(0, 0, 0, 0.5),
+					0 -8px 16px 2px rgba(0, 0, 0, 0.5);
+			}
+
+			.bg-white {
+				background-color: var(--white);
+			}
+
+			.rounded-card {
+				border-radius: 1rem;
+			}
+
+			/* =========================================
+			   4. CATEGORY BANNERS
+			   ========================================= */
+			.category-banner {
+				padding: 1.5rem;
+				border-radius: 1rem;
+				border-left: 4px solid;
+				transition:
+					transform 0.3s ease,
+					border-left-width 0.3s ease;
+			}
+
+			.category-banner:hover {
+				transform: translateX(8px);
+				border-left-width: 8px;
+			}
+
+			.category-banner h2 {
+				font-size: 2rem;
+				margin-bottom: 0.5rem;
+				font-weight: 700;
+				transition: color 0.3s ease;
+			}
+
+			.banner-primary {
+				background: linear-gradient(
+					to right,
+					var(--primary-light),
+					var(--primary-lighter)
+				);
+				border-color: var(--primary);
+			}
+
+			.banner-primary h2 {
+				color: var(--primary);
+			}
+
+			.banner-primary h2:hover {
+				color: var(--secondary);
+			}
+
+			.banner-secondary {
+				background: linear-gradient(
+					to right,
+					var(--secondary-light),
+					var(--secondary-lighter)
+				);
+				border-color: var(--secondary);
+			}
+
+			.banner-secondary h2 {
+				color: var(--secondary);
+			}
+
+			.banner-secondary h2:hover {
+				color: var(--primary);
+			}
+
+			/* =========================================
+			   5. CONTENT BLOCKS
+			   ========================================= */
+			.content-block {
+				background-color: var(--white);
+				padding: 0.9rem;
+				border-radius: 1rem;
+				transition: transform 0.3s ease;
+				display: flow-root;
+			}
+
+			@media (min-width: 768px) {
+				.content-block {
+					padding: 2.7rem !important;
+				}
+			}
+
+			.step-container {
+				border-radius: 1rem;
+				background-color: var(--white);
+				padding: 1.5rem;
+				transition: transform 0.3s ease;
+			}
+
+			.step-container:hover {
+				transform: scale(1.02);
+			}
+
+			.step-inner {
+				background-color: transparent;
+				padding: 0;
+				display: flex;
+				flex-direction: column;
+				gap: 0;
+			}
+
+			.circle-number-lg {
+				display: none;
+				width: 5rem;
+				height: 5rem;
+				background-color: rgba(0, 151, 167, 0.2);
+				color: var(--secondary);
+				border-radius: 50%;
+				align-items: center;
+				justify-content: center;
+				font-family: var(--font-anton);
+				font-size: 2.5rem;
+				font-weight: 700;
+				flex-shrink: 0;
+				transition: all 0.3s ease;
+			}
+
+			.step-container:hover .circle-number-lg {
+				background-color: rgba(0, 151, 167, 0.4);
+				transform: rotate(360deg) scale(1.1);
+			}
+
+			.circle-number-sm {
+				display: flex;
+				width: 2.5rem;
+				height: 2.5rem;
+				background-color: rgba(0, 151, 167, 0.2);
+				color: var(--secondary);
+				border-radius: 50%;
+				align-items: center;
+				justify-content: center;
+				font-family: var(--font-anton);
+				font-size: 1.375rem;
+				font-weight: 700;
+				flex-shrink: 0;
+				margin-bottom: 0.75rem;
+				align-self: flex-start;
+				transition: all 0.3s ease;
+			}
+
+			.step-container:hover .circle-number-sm {
+				background-color: rgba(0, 151, 167, 0.4);
+				transform: rotate(360deg) scale(1.1);
+			}
+
+			.step-content {
+				flex: 1;
+			}
+
+			.step-title-row {
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
+				margin-bottom: 0.75rem;
+			}
+
+			.step-title-text {
+				font-size: clamp(1.5rem, 3.15vw, 3.7rem);
+				color: var(--secondary);
+				transition: color 0.3s ease;
+			}
+
+			.step-title-text:hover {
+				color: var(--primary);
+			}
+
+			.step-body {
+				margin-top: 0;
+				padding: 0;
+				background-color: transparent;
+				border-radius: 0;
+			}
+
+			.step-container .step-inner {
+				box-shadow: none !important;
+				background-color: transparent !important;
+			}
+
+			.step-container .step-body {
+				box-shadow: none !important;
+			}
+
+			.step-container .step-body .content-block {
+				padding: 0 !important;
+				background-color: transparent !important;
+				box-shadow: none !important;
+			}
+
+			@media (min-width: 768px) {
+				.step-container {
+					padding: 2.5rem;
+					border-radius: 1rem;
+				}
+
+				.step-inner {
+					gap: 1.5rem;
+					border-radius: 1rem;
+					background-color: var(--white);
+					flex-direction: row;
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				.circle-number-lg {
+					display: flex;
+				}
+
+				.circle-number-sm {
+					display: none;
+					margin-bottom: 0;
+				}
+
+				.step-title-row {
+					margin-bottom: 0;
+				}
+
+				.step-body {
+					margin-top: 1.5rem;
+					padding: 1.5rem;
+					background-color: var(--white);
+					border-radius: 1rem;
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				.step-body.content-block {
+					padding: 1.5rem !important;
+					background-color: var(--white) !important;
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+			}
+
+			ul.styled-list {
+				margin-left: 1.5rem;
+				list-style-type: disc;
+				display: flex;
+				flex-direction: column;
+				gap: 1rem;
+			}
+
+			ul.styled-list li {
+				transition: transform 0.2s ease;
+			}
+
+			ul.styled-list li:hover {
+				transform: translateX(8px);
+			}
+
+			.points-wrapper {
+				display: flex;
+				flex-direction: column;
+				gap: 1rem;
+			}
+
+			.point-item {
+				display: flex;
+				align-items: flex-start;
+				gap: 1.5rem;
+				background-color: transparent;
+				padding: 0;
+				border-radius: 0;
+				transition: transform 0.2s ease;
+			}
+
+			.point-item:hover {
+				transform: translateX(5px);
+			}
+
+			.point-icon {
+				width: 1.75rem;
+				margin-top: calc((1.375rem * 1.6 - 1.75rem) / 2);
+				flex-shrink: 0;
+				transition: transform 0.3s ease;
+			}
+
+			.point-item:hover .point-icon {
+				transform: scale(1.15) rotate(5deg);
+			}
+
+			.point-item.shadow-card {
+				box-shadow: none !important;
+				background-color: transparent !important;
+				padding: 0 !important;
+			}
+
+			@media (min-width: 768px) {
+				.point-item {
+					background-color: var(--white);
+					padding: 1.5rem;
+					border-radius: 1rem;
+				}
+
+				.point-icon {
+					width: 2.25rem;
+					margin-top: calc((1.375rem * 1.6 - 2.25rem) / 2);
+				}
+
+				.point-item.shadow-card {
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+					background-color: var(--white) !important;
+					padding: 1.5rem !important;
+				}
+			}
+
+			.callout-box {
+				padding: 1rem;
+				border-radius: 1rem;
+			}
+
+			@media (min-width: 768px) {
+				.callout-box {
+					border-radius: 1rem;
+				}
+			}
+
+			.callout-inner {
+				background-color: var(--white);
+				padding: 2rem 1rem;
+				border-radius: 1rem;
+				display: flex;
+				align-items: flex-start;
+				gap: 1.5rem;
+				clip-path: polygon(0 0, 100% 0, 100% 80%, 82% 100%, 0 100%);
+			}
+
+			@media (min-width: 768px) {
+				.callout-inner {
+					clip-path: polygon(0 0, 101% 0, 100% 60%, 94% 100%, 0 100%);
+					padding: 2.5rem;
+					border-radius: 1rem;
+				}
+			}
+
+			.callout-filter {
+				filter: drop-shadow(4px -6px 10px rgba(0, 0, 0, 0.5))
+					drop-shadow(6px 5px 10px rgba(0, 0, 0, 0.5));
+			}
+
+			.bg-primary {
+				background-color: var(--primary);
+			}
+
+			.bg-secondary {
+				background-color: var(--secondary);
+			}
+
+			.grid-2-col {
+				display: grid;
+				grid-template-columns: 1fr;
+				gap: 1.5rem;
+			}
+
+			.grid-3-col {
+				display: grid;
+				grid-template-columns: 1fr;
+				gap: 1.5rem;
+			}
+
+			.grid-complex {
+				display: grid;
+				grid-template-columns: 1fr;
+				gap: 1.5rem;
+			}
+
+			@media (min-width: 768px) {
+				.grid-2-col {
+					grid-template-columns: 1fr 1fr;
+				}
+
+				.grid-3-col {
+					grid-template-columns: 1fr 1fr 1fr;
+				}
+
+				.grid-complex {
+					grid-template-columns: repeat(5, 1fr);
+				}
+
+				.span-3 {
+					grid-column: span 3;
+				}
+
+				.span-2 {
+					grid-column: span 2;
+				}
+			}
+
+			.image-column {
+				display: flex;
+				flex-direction: column;
+				gap: 1.5rem;
+				height: 100%;
+			}
+
+			.image-frame {
+				flex: 1;
+				border-radius: 1rem;
+				overflow: hidden;
+				border: 4px solid var(--primary);
+			}
+
+			.image-frame img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+
+			.section-photo {
+				width: 100%;
+				aspect-ratio: 21 / 9;
+				max-height: 400px;
+				margin: 1.5rem 0;
+				border-radius: 0.75rem;
+				border: 4px solid var(--primary);
+				overflow: hidden;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
+				box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+			}
+
+			.section-photo.photo-float-left {
+				float: left;
+				width: 45%;
+				aspect-ratio: 4 / 5;
+				max-height: 400px;
+				margin: 0.5rem 2rem 1rem 0;
+			}
+
+			.section-photo.photo-float-right {
+				float: right;
+				width: 45%;
+				aspect-ratio: 4 / 5;
+				max-height: 400px;
+				margin: 0.5rem 0 1rem 2rem;
+			}
+
+			.section-photo img {
+				display: block;
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				object-position: center;
+				animation: imageLoad 0.5s ease-in-out;
+			}
+
+			@keyframes imageLoad {
+				from {
+					opacity: 0;
+					transform: scale(0.98);
+				}
+				to {
+					opacity: 1;
+					transform: scale(1);
+				}
+			}
+
+			.stat-card {
+				background-color: var(--white);
+				padding: 1.5rem;
+				border-radius: 1rem;
+				text-align: center;
+			}
+
+			.stat-number {
+				font-family: var(--font-anton);
+				color: var(--primary);
+				font-size: 3.25rem;
+				margin-bottom: 0.75rem;
+				transition: color 0.3s ease;
+			}
+
+			.stat-number:hover {
+				color: var(--secondary);
+			}
+
+			.quote-container {
+				background-color: var(--white);
+				padding: 2rem;
+				border-radius: 1rem;
+				transition:
+					transform 0.3s ease,
+					box-shadow 0.3s ease;
+			}
+
+			.quote-container:hover {
+				transform: translateX(10px);
+				box-shadow: -5px 5px 15px rgba(0, 0, 0, 0.1);
+			}
+
+			@media (min-width: 768px) {
+				.quote-container {
+					padding: 3rem;
+				}
+			}
+
+			blockquote {
+				border-left: 4px solid var(--secondary);
+				padding-left: 1.5rem;
+				font-weight: 400;
+			}
+
+			.cta-container {
+				background-color: var(--white);
+				padding: 2rem;
+				border-radius: 1rem;
+				text-align: center;
+				transition:
+					transform 0.3s ease,
+					box-shadow 0.3s ease;
+			}
+
+			.cta-container:hover {
+				transform: translateY(-3px);
+				box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+			}
+
+			.btn-primary {
+				background-color: #fe7702;
+				color: white;
+				box-shadow:
+					0px 3.04px 7.39px 0px rgba(0, 0, 0, 0.68),
+					6.07px -6.07px 4.05px 0px rgba(0, 0, 0, 0.25) inset,
+					-4.05px 5.06px 4.05px 0px rgba(255, 255, 255, 0.25) inset,
+					-2.02px -1.01px 4.05px 0px rgba(0, 0, 0, 0.6);
+				padding: 1rem 2rem;
+				border-radius: 1rem;
+				text-transform: uppercase;
+				font-weight: 700;
+				border: none;
+				cursor: pointer;
+				transition: all 0.3s ease;
+			}
+
+			.btn-primary:hover {
+				transform: scale(1.08) translateY(-2px);
+				background-color: #ff8820;
+				box-shadow:
+					0px 6px 15px 0px rgba(0, 0, 0, 0.75),
+					6.07px -6.07px 4.05px 0px rgba(0, 0, 0, 0.3) inset,
+					-4.05px 5.06px 4.05px 0px rgba(255, 255, 255, 0.3) inset,
+					-2.02px -1.01px 4.05px 0px rgba(0, 0, 0, 0.65);
+			}
+
+			.btn-primary:active {
+				transform: scale(1.02) translateY(0);
+			}
+
+			.table-wrapper {
+				background-color: var(--white);
+				padding: 1.5rem;
+				border-radius: 1rem;
+				overflow-x: auto;
+			}
+
+			table {
+				width: 100%;
+				border-collapse: collapse;
+				font-family: var(--font-montserrat);
+			}
+
+			th {
+				background-color: var(--primary);
+				color: white;
+				padding: 1.5rem;
+				text-align: left;
+				font-weight: 700;
+				font-size: 1.25rem;
+			}
+
+			td {
+				padding: 0.75rem;
+				border-bottom: 1px solid #e5e7eb;
+				font-size: 1.125rem;
+				font-weight: 400;
+			}
+
+			tbody tr:hover td {
+				background-color: var(--primary-lighter);
+			}
+
+			/* =========================================
+			   6. SOLD CTA INLINE HIGHLIGHT
+			   ========================================= */
+			.sold-cta {
+				text-transform: uppercase;
+				text-decoration: underline;
+				cursor: pointer;
+			}
+
+			.site-footer {
+				text-align: center;
+				padding: 2rem 0;
+				border-top: 1px solid var(--gray-300);
+				margin-top: 2rem;
+			}
+
+			/* Contact item hover */
+			.contact-item {
+				color: var(--primary);
+				transition:
+					color 0.3s ease,
+					transform 0.3s ease;
+				cursor: default;
+				width: fit-content;
+			}
+
+			/* Block parent content-block hover from bleeding into contact items */
+			.content-block:hover .contact-item .text-secondary {
+				color: var(--secondary);
+			}
+			.content-block:hover .contact-item .text-primary {
+				color: var(--primary);
+			}
+
+			/* Only directly-hovered row changes */
+			.contact-item:hover {
+				color: var(--secondary);
+				transform: scale(1.05);
+				transition:
+					color 0.3s ease,
+					transform 0.3s ease;
+			}
+			.contact-item:hover .text-secondary {
+				color: var(--primary) !important;
+				transition: color 0.3s ease;
+			}
+			.contact-item:hover .text-primary {
+				color: var(--secondary) !important;
+				transition: color 0.3s ease;
+			}
+
+			/* =========================================
+			   PHONE ONLY (max-width: 639px)
+			   Disable all hover animations & transitions
+			   sm (640px+) keeps full desktop design
+			   ========================================= */
+			@media (max-width: 639px), (hover: none) and (pointer: coarse) {
+				*,
+				*::before,
+				*::after {
+					transition: none !important;
+					animation: none !important;
+				}
+
+				.shadow-card:hover,
+				.step-container:hover,
+				.point-item:hover,
+				.quote-container:hover,
+				.cta-container:hover,
+				.btn-primary:hover,
+				ul.styled-list li:hover {
+					transform: none !important;
+				}
+
+				.category-banner:hover {
+					transform: none !important;
+					border-left-width: 4px !important;
+				}
+
+				.shadow-card {
+					box-shadow: none !important;
+				}
+
+				.step-container.shadow-card,
+				.content-block.shadow-card:not(.step-body) {
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				.step-container.shadow-card:hover,
+				.content-block.shadow-card:not(.step-body):hover {
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				.shadow-card:hover {
+					box-shadow: none !important;
+				}
+
+				.quote-container:hover {
+					box-shadow: none !important;
+				}
+
+				.cta-container:hover {
+					box-shadow: none !important;
+				}
+
+				.step-container:hover .circle-number-lg,
+				.step-container:hover .circle-number-sm {
+					background-color: rgba(0, 151, 167, 0.2) !important;
+					transform: none !important;
+				}
+
+				.point-item:hover .point-icon {
+					transform: none !important;
+				}
+
+				.btn-primary:hover {
+					transform: none !important;
+					background-color: #fe7702 !important;
+					box-shadow:
+						0px 3.04px 7.39px 0px rgba(0, 0, 0, 0.68),
+						6.07px -6.07px 4.05px 0px rgba(0, 0, 0, 0.25) inset,
+						-4.05px 5.06px 4.05px 0px rgba(255, 255, 255, 0.25) inset,
+						-2.02px -1.01px 4.05px 0px rgba(0, 0, 0, 0.6) !important;
+				}
+
+				tbody tr:hover td {
+					background-color: transparent !important;
+				}
+
+				.text-primary:hover {
+					color: var(--primary) !important;
+				}
+
+				.text-secondary:hover {
+					color: var(--secondary) !important;
+				}
+
+				.main-header h1:hover {
+					color: var(--secondary) !important;
+				}
+
+				.section-title.text-primary:hover,
+				.section-title:hover.text-primary {
+					color: var(--primary) !important;
+				}
+
+				.section-title.text-secondary:hover,
+				.section-title:hover.text-secondary {
+					color: var(--secondary) !important;
+				}
+
+				.content-heading.text-primary:hover,
+				.content-heading:hover.text-primary {
+					color: var(--primary) !important;
+				}
+
+				.content-heading.text-secondary:hover,
+				.content-heading:hover.text-secondary {
+					color: var(--secondary) !important;
+				}
+
+				.banner-primary h2:hover {
+					color: var(--primary) !important;
+				}
+
+				.banner-secondary h2:hover {
+					color: var(--secondary) !important;
+				}
+
+				.step-title-text:hover {
+					color: var(--secondary) !important;
+				}
+
+				.stat-number:hover {
+					color: var(--primary) !important;
+				}
+
+				/* Disable parent hover color-swap on phone */
+				.content-block:hover .text-secondary,
+				.point-item:hover .text-secondary {
+					color: var(--secondary) !important;
+				}
+
+				.content-block:hover .body-text.text-secondary,
+				.point-item:hover .body-text.text-secondary {
+					color: var(--gray-600) !important;
+				}
+
+				.content-block:hover .text-primary,
+				.point-item:hover .text-primary {
+					color: var(--primary) !important;
+				}
+
+				/* Keep nested contact text colors stable on phone */
+				.content-block:hover .contact-item .text-secondary {
+					color: var(--secondary) !important;
+				}
+
+				.content-block:hover .contact-item .text-primary {
+					color: var(--primary) !important;
+				}
+
+				/* Disable contact-item hover on mobile */
+				.contact-item:hover {
+					color: var(--primary) !important;
+					transform: none !important;
+				}
+				.contact-item:hover .text-secondary {
+					color: var(--secondary) !important;
+				}
+				.contact-item:hover .text-primary {
+					color: var(--primary) !important;
+				}
+			}
+		
+
+/* POINTER SECTION IMAGE OVERRIDE */
+			.pointer-section > .content-block > .section-photo,
+			.pointer-section > .content-block > .section-photo.photo-float-left,
+			.pointer-section > .content-block > .section-photo.photo-float-right {
+				float: none !important;
+				width: 100% !important;
+				max-width: 100% !important;
+				aspect-ratio: 21 / 9 !important;
+				margin: 1.5rem 0 !important;
+				shape-outside: none !important;
+			}
+
+			.pointer-section > .content-block > .section-photo img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+
+/* MOBILE OVERRIDES */
+@media (max-width: 767px) {
+    .section-photo,
+    .section-photo.photo-float-left,
+    .section-photo.photo-float-right {
+        float: none !important;
+        width: 100% !important;
+        aspect-ratio: 21 / 9 !important;
+        max-height: 300px !important;
+        margin: 1.5rem 0 !important;
+    }
+    
+    .text-justify {
+        text-align: left !important;
+    }
+}
+/* END MOBILE OVERRIDES */</style>
+	</head>
+
+	<body>
+		<main>
+			
+			<!-- BLOG BANNER IMAGE -->
+			<div class="section-photo">
+				<img src="./probate.jpg" alt="trustee-real-estate-sales-how-to-handle-family-pressure-banner" loading="lazy">
+			</div>
+<!-- INTRO -->
+			<section id="intro">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						HOW I HELP TRUSTEES NAVIGATE FAMILY PRESSURE WHEN IT’S TIME
+						TO SELL
+					</h2>
+					<!-- SECTION PHOTO -->
+					<div class="section-photo photo-float-left">
+						<img src="./blog-images/trustees-navigate-family-pressure/how-i-help-trustees-navigate-family-pressure-when-it-s-time-to-sell.jpg" alt="HOW I HELP TRUSTEES NAVIGATE FAMILY PRESSURE WHEN IT’S TIME TO SELL" loading="lazy">
+					</div>
+
+<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						Being a trustee is not easy. Trustees carry the heavy
+						responsibility of following the terms of the trust, protecting the
+						beneficiaries, and managing the assets. On top of that, they are
+						often expected to keep the peace in families that may not agree on
+						much.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						And when a trust includes real estate, things can get complicated
+						very quickly. I have seen it many times. The trustee is ready to
+						move forward with the sale, but the family is not on the same
+						page. One sibling wants to rent the property. Another thinks it is
+						worth far more than it really is. Someone else does not want
+						strangers walking through grandma’s house. Suddenly, the
+						trustee is caught between doing what is required by the trust and
+						trying to avoid family conflict.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						The attorney is doing their part. The documents are clear. The
+						legal framework is in place. But then the property becomes the
+						sticking point, and the trustee is left in the middle of emotional
+						disagreements and financial expectations.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify">
+						This is where I come in. As a Certified Probate Real Estate
+						Specialist, I help trustees handle the property side of the trust
+						with professionalism, clarity, and neutrality. My role is to move
+						the property forward while reducing family pressure and keeping
+						the trustee aligned with the terms of the trust.
+					</p>
+				</div>
+			</section>
+
+			<!-- I GIVE THE TRUSTEE A REAL PLAN -->
+			
+<section id="give-trustee-real-plan">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						I GIVE THE TRUSTEE A REAL PLAN
+					</h2>
+<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						The first step in reducing stress is providing the trustee with a
+						clear plan. Trustees often feel isolated and pressured because they
+						do not know what to expect next.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						I meet with the trustee personally and explain every step of the
+						process. I show them how the property will be prepared, marketed,
+						and sold. I break everything down so they have a roadmap instead
+						of uncertainty.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify">
+						This gives trustees something they often do not have confidence
+						in. When they see the plan laid out step by step, they no longer
+						feel like they are carrying the entire burden alone. They know
+						exactly what will happen and when, and they can share that clarity
+						with the beneficiaries.
+					</p>
+				</div>
+			</section>
+
+			<!-- I STAY NEUTRAL WITH THE BENEFICIARIES -->
+			
+<section id="stay-neutral-beneficiaries">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						I STAY NEUTRAL WITH THE BENEFICIARIES
+					</h2><p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						Family dynamics are often the hardest part of trust
+						administration. Beneficiaries may have strong opinions, conflicting
+						goals, and personal attachments to the property. One of the most
+						important things I do is stay completely neutral.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						I never take sides. I never let emotions drive the process. I
+						speak to each beneficiary with respect and professionalism. When I
+						explain the real market value of the home, I back it up with comps
+						and data. I walk them through what happens if the home is sold,
+						rented, or held.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify">
+						By showing them real numbers including holding costs and market
+						conditions, I allow the facts to guide the conversation instead of
+						feelings. Everyone hears the same information, in the same tone,
+						at the same time. That consistency reduces confusion and builds
+						trust.
+					</p>
+				</div>
+			</section>
+
+			<!-- I KEEP THE ATTORNEY OUT OF THE FAMILY DRAMA -->
+			
+<section id="keep-attorney-out-of-drama">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						I KEEP THE ATTORNEY OUT OF THE FAMILY DRAMA
+					</h2>
+					<!-- SECTION PHOTO -->
+					<div class="section-photo photo-float-right">
+						<img src="./blog-images/trustees-navigate-family-pressure/i-keep-the-attorney-out-of-the-family-drama.jpg" alt="I KEEP THE ATTORNEY OUT OF THE FAMILY DRAMA" loading="lazy">
+					</div>
+
+<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						Attorneys play a vital role in trust administration. But too
+						often, beneficiaries pull them into arguments that have nothing to
+						do with the law. Upset beneficiaries start calling the
+						attorney’s office with questions or frustrations about the
+						property. This wastes time, racks up unnecessary legal fees, and
+						slows down progress.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						Once I am involved, those calls shift. Beneficiaries call me
+						instead of the attorney when they have property-related concerns. I
+						answer their questions, provide updates, and help them understand
+						the process without getting into legal interpretation.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify">
+						This protects the attorney’s time and reduces interruptions.
+						It also reassures the beneficiaries, who see that someone is
+						actively handling their concerns about the property.
+					</p>
+				</div>
+			</section>
+
+			<!-- I ALIGN EVERYTHING WITH THE TRUST -->
+			
+<section id="align-with-trust">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						I ALIGN EVERYTHING WITH THE TRUST
+					</h2>
+<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						Trusts are not one-size-fits-all. Some require court approval for
+						certain steps. Others grant full authority to the trustee. Each
+						situation is unique, and the trustee needs to feel secure that
+						they are acting in line with the trust.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						I work within the framework of the trust, never outside it. If
+						court approval is required, I align my timeline with the legal
+						process. If the trustee has full authority, I empower them with
+						clarity so they can act confidently.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify">
+						I also take the time to explain the real estate process to
+						beneficiaries who may not understand it. This prevents
+						misunderstandings and ensures that the trustee does not have to
+						repeat themselves over and over again.
+					</p>
+				</div>
+			</section>
+
+			<!-- I HANDLE THE ENTIRE REAL ESTATE PROCESS -->
+			
+<section id="handle-entire-process">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						I HANDLE THE ENTIRE REAL ESTATE PROCESS
+					</h2>
+					<!-- SECTION PHOTO -->
+					<div class="section-photo">
+						<img src="./blog-images/trustees-navigate-family-pressure/i-handle-the-entire-real-estate-process.jpg" alt="I HANDLE THE ENTIRE REAL ESTATE PROCESS" loading="lazy">
+					</div>
+
+<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						Trustees already have enough on their shoulders. Managing the
+						entire real estate process on top of their other responsibilities
+						is simply too much. That is why I take full ownership of the
+						property side.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						I handle cleanouts, vendors, photography, comps, listings,
+						showings, buyer education, negotiations, escrow, and closing. At
+						every stage, I keep the trustee updated and the attorney informed.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify">
+						I do not wait for things to happen, I make them happen. That is
+						the difference between cases that stall for months and cases that
+						move forward smoothly.
+					</p>
+				</div>
+			</section>
+
+			<!-- THE BOTTOM LINE -->
+			<section id="bottom-line">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">THE BOTTOM LINE</h2>
+<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						Trustees are under pressure. Attorneys are focused on legal
+						requirements. Beneficiaries are often emotional and divided. Real
+						estate can either add more problems—or it can be the part of
+						the case that gets handled with clarity and professionalism.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						That is what I bring to the table. I give trustees a real plan. I
+						stay neutral with beneficiaries. I protect attorneys from
+						unnecessary distractions. I align everything with trust. And I
+						manage the property from start to finish so the case can move
+						forward.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify">
+						If you are a trustee caught in the middle of family conflict, or
+						an attorney watching a case stall because of property issues, I
+						can help. I take the real estate burden off your shoulders and
+						keep everything calm, fair, and moving.
+					</p>
+				</div>
+			</section>
+
+			<!-- FAQs -->
+			<section class="pointer-section" id="faqs">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						FREQUENTLY ASKED QUESTIONS
+					</h2>
+					<!-- SECTION PHOTO -->
+					<div class="section-photo">
+						<img src="./blog-images/trustees-navigate-family-pressure/frequently-asked-questions.jpg" alt="FREQUENTLY ASKED QUESTIONS" loading="lazy">
+					</div>
+
+<div class="points-wrapper">
+						<!-- FAQ 1 -->
+						<div class="point-item shadow-card">
+							<img class="point-icon" src="./images/arrow.png" alt="arrow">
+							<div>
+								<p class="body-text text-primary text-bold" style="margin-bottom: 0.5rem">
+									WHAT HAPPENS IF BENEFICIARIES DO NOT AGREE ABOUT SELLING
+									THE TRUST PROPERTY?
+								</p>
+								<p class="body-text text-secondary text-bold">
+									A probate-trained real estate specialist can present neutral
+									data, market comps, and clear options. This often helps
+									families make decisions based on facts instead of emotions.
+								</p>
+							</div>
+						</div>
+						<!-- FAQ 2 -->
+						<div class="point-item shadow-card">
+							<img class="point-icon" src="./images/arrow.png" alt="arrow">
+							<div>
+								<p class="body-text text-primary text-bold" style="margin-bottom: 0.5rem">
+									CAN A TRUSTEE SELL PROPERTY WITHOUT THE AGREEMENT OF ALL
+									BENEFICIARIES?
+								</p>
+								<p class="body-text text-secondary text-bold">
+									It depends on the terms of the trust. Some trustees have
+									full authority, while others require court approval. An
+									attorney will guide the legal requirements, while a probate
+									real estate expert ensures the property side aligns with
+									them.
+								</p>
+							</div>
+						</div>
+						<!-- FAQ 3 -->
+						<div class="point-item shadow-card">
+							<img class="point-icon" src="./images/arrow.png" alt="arrow">
+							<div>
+								<p class="body-text text-primary text-bold" style="margin-bottom: 0.5rem">
+									HOW CAN TRUSTEES AVOID FAMILY CONFLICT WHEN SELLING TRUST
+									PROPERTY?
+								</p>
+								<p class="body-text text-secondary text-bold">
+									By working with a neutral probate real estate professional
+									who communicates clearly, keeps everyone informed, and
+									focuses on moving the process forward fairly.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- OUTRO / CTA -->
+			<section id="outro">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						LET US TAKE CARE OF THE PROPERTY SO YOU CAN FOCUS ON WHAT
+						MATTERS MOST
+					</h2>
+					<p class="body-text text-secondary text-bold" style="margin-bottom: 1.5rem">
+						Trustees do not have to carry the full weight of family pressure
+						when it is time to sell a property. With the right probate real
+						estate partner, the process becomes structured, transparent, and
+						manageable.
+					</p>
+					<p class="body-text text-secondary text-bold" style="margin-bottom: 1.5rem">
+						At 833PROBAID.com, we specialize in probate, trust, and
+						conservatorship real estate sales. If you are an attorney or
+						trustee facing family conflict around a property, let us help. We
+						provide clarity, reduce tension, and ensure the property is sold
+						the right way.
+					</p>
+					<div style="
+							display: flex;
+							flex-direction: column;
+							gap: 1rem;
+							margin-bottom: 1.5rem;
+						">
+						<!-- Phone -->
+						<div class="contact-item" style="display: flex; align-items: flex-start; gap: 1rem">
+							<img src="./svgs/phone-icon.svg" style="
+									width: 2rem;
+									height: 2rem;
+									flex-shrink: 0;
+									margin-top: 0.15rem;
+								">
+							<div class="body-text text-bold" style="line-height: 1.1">
+								<span class="text-secondary text-bold">(833)
+									<span style="letter-spacing: 0.07em">PROBAID</span></span><br>
+								<span class="text-primary text-bold" style="
+										display: block;
+										text-align: right;
+										letter-spacing: 0.17em;
+									">7762243</span>
+							</div>
+						</div>
+						<!-- Website -->
+						<div class="contact-item" style="display: flex; align-items: center; gap: 1rem">
+							<img src="./svgs/uiw_mail.svg" style="
+									width: 2rem;
+									height: 2rem;
+									flex-shrink: 0;
+									margin-top: 0.15rem;
+								">
+							<span class="body-text text-secondary text-bold">833PROBAID.com</span>
+						</div>
+						<!-- Email -->
+						<div class="contact-item" style="display: flex; align-items: center; gap: 1rem">
+							<img src="./svgs/globe.svg" style="
+									width: 1.8rem;
+									height: 1.8rem;
+									flex-shrink: 0;
+									margin-top: 0.15rem;
+								">
+							<span class="body-text text-secondary text-bold">Info@833PROBAID.com</span>
+						</div>
+					</div>
+					<p class="body-text text-secondary text-bold">
+						Call (833) PROBAID today for a free, no-obligation consultation.
+						Let us take care of the property so you can focus on what matters
+						most.
+					</p>
+				</div>
+			</section>
+		</main>
+</body></html>

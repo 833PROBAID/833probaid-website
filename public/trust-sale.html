@@ -1,0 +1,1293 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Trust Sale Real Estate</title>
+
+		<link
+			href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@400;700&family=Roboto:wght@400;900&family=League+Spartan:wght@400;700&family=Oswald&family=Poppins&family=Passions+Conflict&family=Sarpanch&display=swap"
+			rel="stylesheet"
+		/>
+
+		<style type="text/css">
+			/* =========================================
+			   1. VARIABLES & RESET
+			   ========================================= */
+			:root {
+				--primary: #0097a7;
+				--primary-dark: #00838f;
+				/* Primary light: 10% opacity and 5% opacity approximations */
+				--primary-light: rgba(0, 151, 167, 0.1);
+				--primary-lighter: rgba(0, 151, 167, 0.05);
+
+				--secondary: #fe7702;
+				/* Secondary light: 10% opacity and 5% opacity approximations */
+				--secondary-light: rgba(254, 119, 2, 0.1);
+				--secondary-lighter: rgba(254, 119, 2, 0.05);
+
+				--accent: #ff4444;
+				--teal-soft: #e0f7fa;
+
+				--gray-100: #f3f4f6;
+				--gray-300: #d1d5db;
+				--gray-500: #6b7280;
+				--gray-600: #4b5563;
+				--white: #ffffff;
+				--black: #000000;
+
+				--font-anton: "Anton", sans-serif;
+				--font-montserrat: "Montserrat", sans-serif;
+			}
+
+			* {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
+
+			body {
+				background-color: var(--gray-100);
+				color: var(--black);
+				font-family: var(--font-montserrat);
+				padding: 1.5rem;
+				-webkit-font-smoothing: antialiased;
+			}
+
+			@media (min-width: 768px) {
+				body {
+					padding: 2.5rem;
+				}
+			}
+
+			main {
+				max-width: 80rem;
+				/* equivalent to max-w-7xl */
+				margin-left: auto;
+				margin-right: auto;
+				display: flex;
+				flex-direction: column;
+				gap: 2.5rem;
+				/* space-y-10 */
+			}
+
+			img {
+				display: block;
+				max-width: 100%;
+				height: auto;
+			}
+
+			/* =========================================
+			   2. TYPOGRAPHY
+			   ========================================= */
+			h1,
+			h2,
+			h3,
+			h4 {
+				font-family: var(--font-anton);
+				text-transform: uppercase;
+				line-height: 1.2;
+				font-weight: 700;
+				transition: color 0.3s ease;
+			}
+
+			/* Helper classes for specific colors used frequently */
+			.text-primary {
+				color: var(--primary);
+			}
+
+			.text-primary:hover {
+				color: var(--secondary);
+			}
+
+			.text-secondary {
+				color: var(--secondary);
+			}
+
+			.text-secondary:hover {
+				color: var(--primary);
+			}
+
+			/* Parent hover — swap colors so primary children become secondary */
+			.content-block:hover .text-secondary,
+			.point-item:hover .text-secondary {
+				color: var(--primary);
+				transition: color 0.3s ease;
+			}
+
+			.content-block:hover .text-primary,
+			.point-item:hover .text-primary {
+				color: var(--secondary);
+				transition: color 0.3s ease;
+			}
+
+			.text-gray {
+				color: var(--gray-600);
+			}
+
+			.text-center {
+				text-align: center;
+			}
+
+			.text-bold {
+				font-weight: 700;
+			}
+
+			.italic {
+				font-style: italic;
+			}
+
+			/* Fixed Typography Sizes */
+			.section-title {
+				font-size: 2rem !important;
+				margin-bottom: 1rem;
+				transition: color 0.3s ease;
+			}
+
+			.section-title.text-primary:hover,
+			.section-title:hover.text-primary {
+				color: var(--secondary) !important;
+			}
+
+			.section-title.text-secondary:hover,
+			.section-title:hover.text-secondary {
+				color: var(--primary) !important;
+			}
+
+			.content-heading {
+				font-size: 1.625rem !important;
+				margin-bottom: 0.75rem;
+				transition: color 0.3s ease;
+			}
+
+			.content-heading.text-primary:hover,
+			.content-heading:hover.text-primary {
+				color: var(--secondary) !important;
+			}
+
+			.content-heading.text-secondary:hover,
+			.content-heading:hover.text-secondary {
+				color: var(--primary) !important;
+			}
+
+			.body-text {
+				font-size: 1.375rem !important;
+				line-height: 1.6;
+				font-weight: 700;
+			}
+
+			.small-text {
+				font-size: 1.125rem !important;
+				font-weight: 700;
+			}
+
+			/* Header specific */
+			.main-header {
+				text-align: center;
+			}
+
+			.main-header h1 {
+				font-size: 3.25rem;
+				/* text-5xl */
+				color: var(--secondary);
+				margin-bottom: 1rem;
+				transition: color 0.3s ease;
+			}
+
+			.main-header h1:hover {
+				color: var(--primary);
+			}
+
+			/* Mobile Typography Adjustments */
+			@media (max-width: 767px) {
+				.section-title {
+					font-size: 1.5rem !important;
+				}
+
+				.content-heading {
+					font-size: 1.25rem !important;
+				}
+
+				.body-text {
+					font-size: 1rem !important;
+				}
+
+				.small-text {
+					font-size: 0.875rem !important;
+				}
+
+				.main-header h1 {
+					font-size: 2rem;
+				}
+
+				.step-title-text {
+					font-size: clamp(1.25rem, 3.15vw, 3.7rem);
+				}
+			}
+
+			/* =========================================
+			   3. SHADOWS & UTILITIES
+			   ========================================= */
+			.shadow-card {
+				box-shadow:
+					0 8px 12px rgba(0, 0, 0, 0.4),
+					0 -5px 12px 1px rgba(0, 0, 0, 0.4);
+				transition:
+					transform 0.3s ease,
+					box-shadow 0.3s ease;
+			}
+
+			.shadow-card:hover {
+				transform: translateY(-5px);
+				box-shadow:
+					0 12px 20px rgba(0, 0, 0, 0.5),
+					0 -8px 16px 2px rgba(0, 0, 0, 0.5);
+			}
+
+			.bg-white {
+				background-color: var(--white);
+			}
+
+			.rounded-card {
+				border-radius: 1rem;
+			}
+
+			/* =========================================
+			   4. CATEGORY BANNERS
+			   ========================================= */
+			.category-banner {
+				padding: 1.5rem;
+				border-radius: 1rem;
+				border-left: 4px solid;
+				transition:
+					transform 0.3s ease,
+					border-left-width 0.3s ease;
+			}
+
+			.category-banner:hover {
+				transform: translateX(8px);
+				border-left-width: 8px;
+			}
+
+			.category-banner h2 {
+				font-size: 2rem;
+				/* text-3xl */
+				margin-bottom: 0.5rem;
+				font-weight: 700;
+				transition: color 0.3s ease;
+			}
+
+			.banner-primary {
+				background: linear-gradient(
+					to right,
+					var(--primary-light),
+					var(--primary-lighter)
+				);
+				border-color: var(--primary);
+			}
+
+			.banner-primary h2 {
+				color: var(--primary);
+			}
+
+			.banner-primary h2:hover {
+				color: var(--secondary);
+			}
+
+			.banner-secondary {
+				background: linear-gradient(
+					to right,
+					var(--secondary-light),
+					var(--secondary-lighter)
+				);
+				border-color: var(--secondary);
+			}
+
+			.banner-secondary h2 {
+				color: var(--secondary);
+			}
+
+			.banner-secondary h2:hover {
+				color: var(--primary);
+			}
+
+			/* =========================================
+			   5. CONTENT BLOCKS
+			   ========================================= */
+
+			/* Standard Content Card */
+			.content-block {
+				background-color: var(--white);
+				padding: 0.9rem;
+				border-radius: 1rem;
+				transition: transform 0.3s ease;
+			}
+
+			@media (min-width: 768px) {
+				.content-block {
+					padding: 2.7rem !important;
+				}
+			}
+
+			/* Step / Process Section */
+			.step-container {
+				border-radius: 1rem;
+				background-color: var(--white);
+				padding: 1.5rem;
+				transition: transform 0.3s ease;
+			}
+
+			.step-container:hover {
+				transform: scale(1.02);
+			}
+
+			.step-inner {
+				background-color: transparent;
+				padding: 0;
+				display: flex;
+				flex-direction: column;
+				gap: 0;
+			}
+
+			/* Step Circles */
+			.circle-number-lg {
+				display: none;
+				width: 5rem;
+				height: 5rem;
+				background-color: rgba(0, 151, 167, 0.2);
+				/* primary/20 */
+				color: var(--secondary);
+				border-radius: 50%;
+				align-items: center;
+				justify-content: center;
+				font-family: var(--font-anton);
+				font-size: 2.5rem;
+				font-weight: 700;
+				flex-shrink: 0;
+				transition: all 0.3s ease;
+			}
+
+			.step-container:hover .circle-number-lg {
+				background-color: rgba(0, 151, 167, 0.4);
+				transform: rotate(360deg) scale(1.1);
+			}
+
+			.circle-number-sm {
+				display: flex;
+				width: 2.5rem;
+				height: 2.5rem;
+				background-color: rgba(0, 151, 167, 0.2);
+				color: var(--secondary);
+				border-radius: 50%;
+				align-items: center;
+				justify-content: center;
+				font-family: var(--font-anton);
+				font-size: 1.375rem;
+				font-weight: 700;
+				flex-shrink: 0;
+				margin-bottom: 0.75rem;
+				align-self: flex-start;
+				transition: all 0.3s ease;
+			}
+
+			.step-container:hover .circle-number-sm {
+				background-color: rgba(0, 151, 167, 0.4);
+				transform: rotate(360deg) scale(1.1);
+			}
+
+			.step-content {
+				flex: 1;
+			}
+
+			.step-title-row {
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
+				margin-bottom: 0.75rem;
+			}
+
+			.step-title-text {
+				font-size: clamp(1.5rem, 3.15vw, 3.7rem);
+				color: var(--secondary);
+				transition: color 0.3s ease;
+			}
+
+			.step-title-text:hover {
+				color: var(--primary);
+			}
+
+			.step-body {
+				margin-top: 0;
+				padding: 0;
+				background-color: transparent;
+				border-radius: 0;
+			}
+
+			/* Remove all nested shadows and cards on mobile */
+			.step-container .step-inner {
+				box-shadow: none !important;
+				background-color: transparent !important;
+			}
+
+			.step-container .step-body {
+				box-shadow: none !important;
+			}
+
+			.step-container .step-body .content-block {
+				padding: 0 !important;
+				background-color: transparent !important;
+				box-shadow: none !important;
+			}
+
+			@media (min-width: 768px) {
+				.step-container {
+					padding: 2.5rem;
+					border-radius: 1rem;
+				}
+
+				.step-inner {
+					
+					gap: 1.5rem;
+					border-radius: 1rem;
+					background-color: var(--white);
+					flex-direction: row;
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				.circle-number-lg {
+					display: flex;
+				}
+
+				.circle-number-sm {
+					display: none;
+					margin-bottom: 0;
+				}
+
+				.step-title-row {
+					
+					margin-bottom: 0;
+				}
+
+				.step-body {
+					margin-top: 1.5rem;
+					padding: 1.5rem;
+					background-color: var(--white);
+					border-radius: 1rem;
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				.step-body.content-block {
+					padding: 1.5rem !important;
+					background-color: var(--white) !important;
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+			}
+
+			/* Lists */
+			ul.styled-list {
+				margin-left: 1.5rem;
+				list-style-type: disc;
+				display: flex;
+				flex-direction: column;
+				gap: 1rem;
+			}
+
+			ul.styled-list li {
+				transition: transform 0.2s ease;
+			}
+
+			ul.styled-list li:hover {
+				transform: translateX(8px);
+			}
+
+			/* Point Items Wrapper */
+			.points-wrapper {
+				display: flex;
+				flex-direction: column;
+				gap: 1rem;
+			}
+
+			/* Point Items */
+			.point-item {
+				display: flex;
+				align-items: flex-start;
+				gap: 1.5rem;
+				background-color: transparent;
+				padding: 0;
+				border-radius: 0;
+				transition: transform 0.2s ease;
+			}
+
+			.point-item:hover {
+				transform: translateX(5px);
+			}
+
+			.point-icon {
+				width: 1.75rem;
+				margin-top: calc((1.375rem * 1.6 - 1.75rem) / 2);
+				flex-shrink: 0;
+				transition: transform 0.3s ease;
+			}
+
+			.point-item:hover .point-icon {
+				transform: scale(1.15) rotate(5deg);
+			}
+
+			/* Remove shadow-card styling on mobile for point-items */
+			.point-item.shadow-card {
+				box-shadow: none !important;
+				background-color: transparent !important;
+				padding: 0 !important;
+			}
+
+			@media (min-width: 768px) {
+				.point-item {
+					background-color: var(--white);
+					padding: 1.5rem;
+					border-radius: 1rem;
+				}
+
+				.point-icon {
+					width: 2.25rem;
+					margin-top: calc((1.375rem * 1.6 - 2.25rem) / 2);
+				}
+
+				.point-item.shadow-card {
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+					background-color: var(--white) !important;
+					padding: 1.5rem !important;
+				}
+			}
+
+			/* Callouts */
+			.callout-box {
+				padding: 1rem;
+				border-radius: 1rem;
+			}
+
+			@media (min-width: 768px) {
+				.callout-box {
+					border-radius: 1rem;
+				}
+			}
+
+			.callout-inner {
+				background-color: var(--white);
+				padding: 2rem 1rem;
+				border-radius: 1rem;
+				display: flex;
+				align-items: flex-start;
+				gap: 1.5rem;
+				/* Clip path logic */
+				clip-path: polygon(0 0, 100% 0, 100% 80%, 82% 100%, 0 100%);
+			}
+
+			@media (min-width: 768px) {
+				.callout-inner {
+					clip-path: polygon(0 0, 101% 0, 100% 60%, 94% 100%, 0 100%);
+					padding: 2.5rem;
+					border-radius: 1rem;
+				}
+			}
+
+			.callout-filter {
+				filter: drop-shadow(4px -6px 10px rgba(0, 0, 0, 0.5))
+					drop-shadow(6px 5px 10px rgba(0, 0, 0, 0.5));
+			}
+
+			.bg-primary {
+				background-color: var(--primary);
+			}
+
+			.bg-secondary {
+				background-color: var(--secondary);
+			}
+
+			/* Grids */
+			.grid-2-col {
+				display: grid;
+				grid-template-columns: 1fr;
+				gap: 1.5rem;
+			}
+
+			.grid-3-col {
+				display: grid;
+				grid-template-columns: 1fr;
+				gap: 1.5rem;
+			}
+
+			.grid-complex {
+				display: grid;
+				grid-template-columns: 1fr;
+				gap: 1.5rem;
+			}
+
+			@media (min-width: 768px) {
+				.grid-2-col {
+					grid-template-columns: 1fr 1fr;
+				}
+
+				.grid-3-col {
+					grid-template-columns: 1fr 1fr 1fr;
+				}
+
+				.grid-complex {
+					grid-template-columns: repeat(5, 1fr);
+				}
+
+				.span-3 {
+					grid-column: span 3;
+				}
+
+				.span-2 {
+					grid-column: span 2;
+				}
+			}
+
+			/* Image Grid Columns */
+			.image-column {
+				display: flex;
+				flex-direction: column;
+				gap: 1.5rem;
+				height: 100%;
+			}
+
+			.image-frame {
+				flex: 1;
+				border-radius: 1rem;
+				overflow: hidden;
+				border: 4px solid var(--primary);
+			}
+
+			.image-frame img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+
+			.section-photo {
+				width: 100%;
+				aspect-ratio: 1200 / 630;
+				margin: 0;
+				border: 4px solid var(--secondary);
+				border-radius: 1rem;
+				overflow: hidden;
+			}
+
+			.section-photo img {
+				display: block;
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				object-position: center;
+			}
+
+			/* Stats Cards */
+			.stat-card {
+				background-color: var(--white);
+				padding: 1.5rem;
+				border-radius: 1rem;
+				text-align: center;
+			}
+
+			.stat-number {
+				font-family: var(--font-anton);
+				color: var(--primary);
+				font-size: 3.25rem;
+				margin-bottom: 0.75rem;
+				transition: color 0.3s ease;
+			}
+
+			.stat-number:hover {
+				color: var(--secondary);
+			}
+
+			/* Blockquote */
+			.quote-container {
+				background-color: var(--white);
+				padding: 2rem;
+				border-radius: 1rem;
+				transition:
+					transform 0.3s ease,
+					box-shadow 0.3s ease;
+			}
+
+			.quote-container:hover {
+				transform: translateX(10px);
+				box-shadow: -5px 5px 15px rgba(0, 0, 0, 0.1);
+			}
+
+			@media (min-width: 768px) {
+				.quote-container {
+					padding: 3rem;
+				}
+			}
+
+			blockquote {
+				border-left: 4px solid var(--secondary);
+				padding-left: 1.5rem;
+				font-weight: 400;
+			}
+
+			/* Buttons */
+			.cta-container {
+				background-color: var(--white);
+				padding: 2rem;
+				border-radius: 1rem;
+				text-align: center;
+				transition:
+					transform 0.3s ease,
+					box-shadow 0.3s ease;
+			}
+
+			.cta-container:hover {
+				transform: translateY(-3px);
+				box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+			}
+
+			.btn-primary {
+				background-color: #fe7702;
+				color: white;
+				box-shadow:
+					0px 3.04px 7.39px 0px rgba(0, 0, 0, 0.68),
+					6.07px -6.07px 4.05px 0px rgba(0, 0, 0, 0.25) inset,
+					-4.05px 5.06px 4.05px 0px rgba(255, 255, 255, 0.25) inset,
+					-2.02px -1.01px 4.05px 0px rgba(0, 0, 0, 0.6);
+				padding: 1rem 2rem;
+				border-radius: 1rem;
+				text-transform: uppercase;
+				font-weight: 700;
+				border: none;
+				cursor: pointer;
+				transition: all 0.3s ease;
+			}
+
+			.btn-primary:hover {
+				transform: scale(1.08) translateY(-2px);
+				background-color: #ff8820;
+				box-shadow:
+					0px 6px 15px 0px rgba(0, 0, 0, 0.75),
+					6.07px -6.07px 4.05px 0px rgba(0, 0, 0, 0.3) inset,
+					-4.05px 5.06px 4.05px 0px rgba(255, 255, 255, 0.3) inset,
+					-2.02px -1.01px 4.05px 0px rgba(0, 0, 0, 0.65);
+			}
+
+			.btn-primary:active {
+				transform: scale(1.02) translateY(0);
+			}
+
+			/* Tables */
+			.table-wrapper {
+				background-color: var(--white);
+				padding: 1.5rem;
+				border-radius: 1rem;
+				overflow-x: auto;
+			}
+
+			table {
+				width: 100%;
+				border-collapse: collapse;
+				font-family: var(--font-montserrat);
+			}
+
+			th {
+				background-color: var(--primary);
+				color: white;
+				padding: 1.5rem;
+				text-align: left;
+				font-weight: 700;
+				font-size: 1.25rem;
+			}
+
+			td {
+				padding: 0.75rem;
+				border-bottom: 1px solid #e5e7eb;
+				font-size: 1.125rem;
+				font-weight: 400;
+			}
+
+			tbody tr:hover td {
+				background-color: var(--primary-lighter);
+			}
+
+			/* =========================================
+			   6. SOLD CTA INLINE HIGHLIGHT
+			   ========================================= */
+			.sold-cta {
+				text-transform: uppercase;
+				text-decoration: underline;
+				cursor: pointer;
+			}
+
+			/* Footer */
+			.site-footer {
+				text-align: center;
+				padding: 2rem 0;
+				border-top: 1px solid var(--gray-300);
+				margin-top: 2rem;
+			}
+
+			/* =========================================
+			   PHONE ONLY (max-width: 767px)
+			   Disable all hover animations & transitions
+			   Tablet (768px+) keeps full desktop design
+			   ========================================= */
+			@media (max-width: 767px) {
+				/* Kill all transitions and animations */
+				*,
+				*::before,
+				*::after {
+					transition: none !important;
+					animation: none !important;
+				}
+
+				/* Reset transform-based hovers */
+				.shadow-card:hover,
+				.step-container:hover,
+				.point-item:hover,
+				.quote-container:hover,
+				.cta-container:hover,
+				.btn-primary:hover,
+				ul.styled-list li:hover {
+					transform: none !important;
+				}
+
+				.category-banner:hover {
+					transform: none !important;
+					border-left-width: 4px !important;
+				}
+
+				/* Remove resting shadow from ALL shadow-card on phone */
+				.shadow-card {
+					box-shadow: none !important;
+				}
+
+				/* Keep resting shadow on step-container and content-block on phone, but no hover change */
+				.step-container.shadow-card,
+				.content-block.shadow-card:not(.step-body) {
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				.step-container.shadow-card:hover,
+				.content-block.shadow-card:not(.step-body):hover {
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				/* Reset shadow hovers */
+				.shadow-card:hover {
+					box-shadow: none !important;
+				}
+
+				.quote-container:hover {
+					box-shadow: none !important;
+				}
+
+				.cta-container:hover {
+					box-shadow: none !important;
+				}
+
+				/* Reset circle spin hovers */
+				.step-container:hover .circle-number-lg,
+				.step-container:hover .circle-number-sm {
+					background-color: rgba(0, 151, 167, 0.2) !important;
+					transform: none !important;
+				}
+
+				/* Reset point icon hover */
+				.point-item:hover .point-icon {
+					transform: none !important;
+				}
+
+				/* Reset button hover */
+				.btn-primary:hover {
+					transform: none !important;
+					background-color: #fe7702 !important;
+					box-shadow:
+						0px 3.04px 7.39px 0px rgba(0, 0, 0, 0.68),
+						6.07px -6.07px 4.05px 0px rgba(0, 0, 0, 0.25) inset,
+						-4.05px 5.06px 4.05px 0px rgba(255, 255, 255, 0.25) inset,
+						-2.02px -1.01px 4.05px 0px rgba(0, 0, 0, 0.6) !important;
+				}
+
+				/* Reset table row hover */
+				tbody tr:hover td {
+					background-color: transparent !important;
+				}
+
+				/* Reset all color-change hovers */
+				.text-primary:hover {
+					color: var(--primary) !important;
+				}
+
+				.text-secondary:hover {
+					color: var(--secondary) !important;
+				}
+
+				.main-header h1:hover {
+					color: var(--secondary) !important;
+				}
+
+				.section-title.text-primary:hover,
+				.section-title:hover.text-primary {
+					color: var(--primary) !important;
+				}
+
+				.section-title.text-secondary:hover,
+				.section-title:hover.text-secondary {
+					color: var(--secondary) !important;
+				}
+
+				.content-heading.text-primary:hover,
+				.content-heading:hover.text-primary {
+					color: var(--primary) !important;
+				}
+
+				.content-heading.text-secondary:hover,
+				.content-heading:hover.text-secondary {
+					color: var(--secondary) !important;
+				}
+
+				.banner-primary h2:hover {
+					color: var(--primary) !important;
+				}
+
+				.banner-secondary h2:hover {
+					color: var(--secondary) !important;
+				}
+
+				.step-title-text:hover {
+					color: var(--secondary) !important;
+				}
+
+				.stat-number:hover {
+					color: var(--primary) !important;
+				}
+
+				/* Disable parent hover color-swap on phone */
+				.content-block:hover .text-secondary,
+				.point-item:hover .text-secondary {
+					color: var(--secondary) !important;
+				}
+
+				.content-block:hover .text-primary,
+				.point-item:hover .text-primary {
+					color: var(--primary) !important;
+				}
+			}
+		</style>
+	</head>
+
+	<body>
+		<main>
+			<section id="intro">
+				<div class="content-block shadow-card">
+					<p class="body-text text-secondary text-bold">
+						When a property is held in a trust, the sale process bypasses
+						probate — but that doesn't mean it's simple. Trust sales are often
+						misunderstood by general agents and mishandled by families who assume
+						everything is automatic. The reality? Trust sales still require legal
+						authority, precise documentation, and strategic planning — especially
+						when multiple beneficiaries or complex trust terms are involved.
+						<br />
+						<br />
+						If real estate is involved, the Trustee carries the burden of
+						managing that asset in the best interest of the trust. That includes
+						protecting its value, complying with fiduciary duties, and overseeing
+						the transaction from start to finish.
+					</p>
+				</div>
+			</section>
+			<!-- SECTION PHOTO -->
+			<div class="section-photo shadow-card">
+				<img
+					src="./probate.jpg"
+					alt="Probate case support photo 1"
+					loading="lazy"
+				/>
+			</div>
+
+			<section id="what-is">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">WHAT IS A TRUST SALE?</h2>
+					<p class="body-text" style="margin-bottom: 1.5rem">
+						A trust sale occurs when real estate owned by a revocable or
+						irrevocable trust is <span class="text-primary text-bold sold-cta" onclick="window.open('/books/seller-guide.pdf', '_blank')">sold</span> by the acting Trustee. Unlike probate,
+						there's typically no need for court confirmation — unless the trust
+						is contested or unclear — but that doesn't mean the process is
+						informal or risk-free.
+					</p>
+					<p class="body-text">
+						Trustees owe a legal duty to act in the best interest of the
+						beneficiaries. Real estate is often the most valuable asset in the
+						trust, so any misstep can lead to delays, disputes, or financial
+						loss. That's why proper documentation, authority verification, and
+						title alignment are critical before proceeding with any sale.
+					</p>
+				</div>
+			</section>
+			<!-- SECTION PHOTO -->
+			<div class="section-photo shadow-card">
+				<img
+					src="./probate.jpg"
+					alt="Probate case support photo 2"
+					loading="lazy"
+				/>
+			</div>
+
+			<section id="why-sell">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						WHY DO TRUSTEES SELL REAL ESTATE?
+					</h2>
+					<p class="body-text" style="margin-bottom: 1.5rem">
+						Trust property is often <span class="text-primary text-bold sold-cta" onclick="window.open('/books/seller-guide.pdf', '_blank')">sold</span> for several reasons:
+					</p>
+					<div class="points-wrapper">
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" alt="" />
+							<div class="body-text point-text" style="flex: 1">
+								<b class="text-primary text-bold point-title">Equitable Distribution</b><br />
+								Converting property to cash allows for fair division among
+								beneficiaries.
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" alt="" />
+							<div class="body-text point-text" style="flex: 1">
+								<b class="text-primary text-bold point-title">Liquidity Needs</b><br />
+								The trust may need funds to pay off debts, taxes, or
+								administrative expenses.
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" alt="" />
+							<div class="body-text point-text" style="flex: 1">
+								<b class="text-primary text-bold point-title">Property Burden</b><br />
+								The home may require repairs, may be vacant, or may carry
+								financial risk.
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" alt="" />
+							<div class="body-text point-text" style="flex: 1">
+								<b class="text-primary text-bold point-title">Trust Terms Require It</b><br />
+								Some trusts instruct the Trustee to sell property after the
+								settlor's death.
+							</div>
+						</div>
+					</div>
+					<p class="body-text" style="margin-top: 1.5rem">
+						Each of these reasons ties directly to the Trustee's duty to protect and administer trust assets
+						responsibly.
+					</p>
+				</div>
+			</section>
+			<!-- SECTION PHOTO -->
+			<div class="section-photo shadow-card">
+				<img
+					src="./probate.jpg"
+					alt="Probate case support photo 3"
+					loading="lazy"
+				/>
+			</div>
+
+			<section id="what-to-verify">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						WHAT MUST BE VERIFIED BEFORE A TRUST SALE?
+					</h2>
+					<p class="body-text" style="margin-bottom: 1.5rem">
+						Before listing a property for sale, certain items must be confirmed:
+					</p>
+					<div class="points-wrapper">
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" alt="" />
+							<div class="body-text point-text" style="flex: 1">
+								<b class="text-primary text-bold point-title">Trustee Authority</b><br />
+								The person acting must be named as the current Trustee and have
+								powers of sale.
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" alt="" />
+							<div class="body-text point-text" style="flex: 1">
+								<b class="text-primary text-bold point-title">Trust Structure</b><br />
+								The trust must be irrevocable if the settlor is deceased or
+								incapacitated.
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" alt="" />
+							<div class="body-text point-text" style="flex: 1">
+								<b class="text-primary text-bold point-title">Title Alignment</b><br />
+								The property must be correctly vested in the trust and recorded
+								as such.
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" alt="" />
+							<div class="body-text point-text" style="flex: 1">
+								<b class="text-primary text-bold point-title">Beneficiary Notification (if required)</b><br />
+								In some cases, formal or informal notice to beneficiaries helps
+								avoid disputes, delays, or future objections.
+							</div>
+						</div>
+					</div>
+					<p class="body-text" style="margin-top: 1.5rem">
+						If these pieces aren't verified up front, the sale could be challenged — even
+						after escrow closes.
+					</p>
+				</div>
+			</section>
+			<!-- SECTION PHOTO -->
+			<div class="section-photo shadow-card">
+				<img
+					src="./probate.jpg"
+					alt="Probate case support photo 4"
+					loading="lazy"
+				/>
+			</div>
+
+			<section id="how-different">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						HOW IS A TRUST SALE DIFFERENT FROM PROBATE OR CONSERVATORSHIP?
+					</h2>
+					<p class="body-text" style="margin-bottom: 1.5rem">
+						Trust sales have distinct advantages and responsibilities:
+					</p>
+					<div class="points-wrapper" style="margin-bottom: 1.5rem">
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" alt="" />
+							<div class="body-text point-text" style="flex: 1">
+								<b class="text-primary text-bold point-title">No Court Petition Required</b><br />
+								The Trustee can move forward without filing for court
+								authorization in most cases.
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" alt="" />
+							<div class="body-text point-text" style="flex: 1">
+								<b class="text-primary text-bold point-title">No Referee Appraisal Mandated</b><br />
+								Unlike probate, there's no court-appointed probate referee
+								required to validate the value.
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" alt="" />
+							<div class="body-text point-text" style="flex: 1">
+								<b class="text-primary text-bold point-title">Trustee Has Power Granted by Trust</b><br />
+								Authority comes directly from the trust document itself, not from
+								the court.
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" alt="" />
+							<div class="body-text point-text" style="flex: 1">
+								<b class="text-primary text-bold point-title">No Letters, Confirmation Hearings, or Blocked Accounts</b>
+							</div>
+						</div>
+					</div>
+					<p class="body-text" style="margin-top: 1.5rem">
+						However, this also means there's no court oversight to catch
+						mistakes. Trustees are fully responsible for ensuring compliance,
+						accuracy, and transparency.
+					</p>
+				</div>
+			</section>
+			<!-- SECTION PHOTO -->
+			<div class="section-photo shadow-card">
+				<img
+					src="./probate.jpg"
+					alt="Probate case support photo 5"
+					loading="lazy"
+				/>
+			</div>
+
+			<section id="common-risks">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						COMMON RISKS IN TRUST SALES
+					</h2>
+					<p class="body-text" style="margin-bottom: 1.5rem">
+						Trust sales carry specific risks that must be managed:
+					</p>
+					<div class="points-wrapper">
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" alt="" />
+							<div class="body-text point-text" style="flex: 1">
+								<b class="text-primary text-bold point-title">Unverified Authority</b><br />
+								Signing documents without proper authority can void the sale.
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" alt="" />
+							<div class="body-text point-text" style="flex: 1">
+								<b class="text-primary text-bold point-title">Beneficiary Disputes</b><br />
+								Failing to notify or involve beneficiaries can trigger legal
+								claims.
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" alt="" />
+							<div class="body-text point-text" style="flex: 1">
+								<b class="text-primary text-bold point-title">Incorrect Vesting</b><br />
+								If title doesn't match the trust, probate may be required anyway.
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" alt="" />
+							<div class="body-text point-text" style="flex: 1">
+								<b class="text-primary text-bold point-title">Inexperienced Agents</b><br />
+								Most agents don't understand trust sales — putting Trustees at
+								risk.
+							</div>
+						</div>
+					</div>
+					<p class="body-text" style="margin-top: 1.5rem">
+						Understanding these risks is crucial for a successful trust sale.
+					</p>
+				</div>
+			</section>
+
+			<section id="outro">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">BOTTOM LINE</h2>
+					<p class="body-text text-secondary text-bold" style="margin-bottom: 1.5rem">
+						Trust sales may not involve the court — but they still involve the
+						law.
+					</p>
+					<p class="body-text text-secondary text-bold">
+						Every action must be rooted in the trust document, properly recorded,
+						and executed with care. Trustees are fiduciaries, not homeowners —
+						and trust property must be treated accordingly.
+					</p>
+				</div>
+			</section>
+		</main>
+	</body>
+</html>

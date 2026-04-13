@@ -1,0 +1,1573 @@
+<!DOCTYPE html><html lang="en"><head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>How I Protect Attorneys From Getting Dragged Into Real Estate Drama</title>
+		<meta name="description" content="Learn how a probate real estate expert keeps attorneys out of family disputes and property drama while keeping cases moving forward.">
+
+		<link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Montserrat:wght@400;700&amp;family=Roboto:wght@400;900&amp;family=League+Spartan:wght@400;700&amp;family=Oswald&amp;family=Poppins&amp;family=Passions+Conflict&amp;family=Sarpanch&amp;display=swap" rel="stylesheet">
+
+		<style type="text/css">
+			/* =========================================
+			   1. VARIABLES & RESET
+			   ========================================= */
+			:root {
+				--primary: #0097a7;
+				--primary-dark: #00838f;
+				--primary-light: rgba(0, 151, 167, 0.1);
+				--primary-lighter: rgba(0, 151, 167, 0.05);
+
+				--secondary: #fe7702;
+				--secondary-light: rgba(254, 119, 2, 0.1);
+				--secondary-lighter: rgba(254, 119, 2, 0.05);
+
+				--accent: #ff4444;
+				--teal-soft: #e0f7fa;
+
+				--gray-100: #f3f4f6;
+				--gray-300: #d1d5db;
+				--gray-500: #6b7280;
+				--gray-600: #4b5563;
+				--white: #ffffff;
+				--black: #000000;
+
+				--font-anton: "Anton", sans-serif;
+				--font-montserrat: "Montserrat", sans-serif;
+			}
+
+			* {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
+
+			body {
+				background-color: var(--gray-100);
+				color: var(--black);
+				font-family: var(--font-montserrat);
+				padding: 1.5rem;
+				-webkit-font-smoothing: antialiased;
+			}
+
+			@media (min-width: 768px) {
+				body {
+					padding: 2.5rem;
+				}
+			}
+
+			main {
+				max-width: 80rem;
+				margin-left: auto;
+				margin-right: auto;
+				display: flex;
+				flex-direction: column;
+				gap: 2.5rem;
+			}
+
+			img {
+				display: block;
+				max-width: 100%;
+				height: auto;
+			}
+
+			/* =========================================
+			   2. TYPOGRAPHY
+			   ========================================= */
+			h1,
+			h2,
+			h3,
+			h4 {
+				font-family: var(--font-anton);
+				text-transform: uppercase;
+				line-height: 1.2;
+				font-weight: 700;
+				transition: color 0.3s ease;
+			}
+
+			.text-primary {
+				color: var(--primary);
+			}
+
+			.text-primary:hover {
+				color: var(--secondary);
+			}
+
+			.text-secondary {
+				color: var(--secondary);
+			}
+
+			.text-secondary:hover {
+				color: var(--primary);
+			}
+
+			/* Parent hover — swap colors so primary children become secondary */
+			.content-block:hover .text-secondary,
+			.point-item:hover .text-secondary {
+				color: var(--primary);
+				transition: color 0.3s ease;
+			}
+
+			.content-block:hover .text-primary,
+			.point-item:hover .text-primary {
+				color: var(--secondary);
+				transition: color 0.3s ease;
+			}
+
+			.content-block:hover .body-text.text-secondary,
+			.point-item:hover .body-text.text-secondary {
+				color: var(--gray-600);
+			}
+
+			.text-gray {
+				color: var(--gray-600);
+			}
+
+			.text-center {
+				text-align: center;
+			}
+
+			.text-justify {
+				text-align: justify;
+			}
+
+			.text-bold {
+				font-weight: 700;
+			}
+
+			.italic {
+				font-style: italic;
+			}
+
+			.section-title {
+				font-size: 2rem !important;
+				margin-bottom: 1rem;
+				transition: color 0.3s ease;
+			}
+
+			.section-title.text-primary:hover,
+			.section-title:hover.text-primary {
+				color: var(--secondary) !important;
+			}
+
+			.section-title.text-secondary:hover,
+			.section-title:hover.text-secondary {
+				color: var(--primary) !important;
+			}
+
+			.content-heading {
+				font-size: 1.625rem !important;
+				margin-bottom: 0.75rem;
+				transition: color 0.3s ease;
+			}
+
+			.content-heading.text-primary:hover,
+			.content-heading:hover.text-primary {
+				color: var(--secondary) !important;
+			}
+
+			.content-heading.text-secondary:hover,
+			.content-heading:hover.text-secondary {
+				color: var(--primary) !important;
+			}
+
+			.body-text {
+				font-size: 1.375rem !important;
+				line-height: 1.6;
+				font-weight: 700;
+			}
+
+			/* Keep body copy neutral; reserve secondary for accents. */
+			.body-text.text-secondary {
+				color: var(--gray-600);
+			}
+
+			.small-text {
+				font-size: 1.125rem !important;
+				font-weight: 700;
+			}
+
+			.main-header {
+				text-align: center;
+			}
+
+			.main-header h1 {
+				font-size: 3.25rem;
+				color: var(--secondary);
+				margin-bottom: 1rem;
+				transition: color 0.3s ease;
+			}
+
+			.main-header h1:hover {
+				color: var(--primary);
+			}
+
+			@media (max-width: 767px) {
+				.section-title {
+					font-size: 1.5rem !important;
+				}
+
+				.content-heading {
+					font-size: 1.25rem !important;
+				}
+
+				.body-text {
+					font-size: 1rem !important;
+				}
+
+				.small-text {
+					font-size: 0.875rem !important;
+				}
+
+				.main-header h1 {
+					font-size: 2rem;
+				}
+
+				.step-title-text {
+					font-size: clamp(1.25rem, 3.15vw, 3.7rem);
+				}
+			}
+
+			/* =========================================
+			   3. SHADOWS & UTILITIES
+			   ========================================= */
+			.shadow-card {
+				box-shadow:
+					0 8px 12px rgba(0, 0, 0, 0.4),
+					0 -5px 12px 1px rgba(0, 0, 0, 0.4);
+				transition:
+					transform 0.3s ease,
+					box-shadow 0.3s ease;
+			}
+
+			.shadow-card:hover {
+				transform: translateY(-5px);
+				box-shadow:
+					0 12px 20px rgba(0, 0, 0, 0.5),
+					0 -8px 16px 2px rgba(0, 0, 0, 0.5);
+			}
+
+			.bg-white {
+				background-color: var(--white);
+			}
+
+			.rounded-card {
+				border-radius: 1rem;
+			}
+
+			/* =========================================
+			   4. CATEGORY BANNERS
+			   ========================================= */
+			.category-banner {
+				padding: 1.5rem;
+				border-radius: 1rem;
+				border-left: 4px solid;
+				transition:
+					transform 0.3s ease,
+					border-left-width 0.3s ease;
+			}
+
+			.category-banner:hover {
+				transform: translateX(8px);
+				border-left-width: 8px;
+			}
+
+			.category-banner h2 {
+				font-size: 2rem;
+				margin-bottom: 0.5rem;
+				font-weight: 700;
+				transition: color 0.3s ease;
+			}
+
+			.banner-primary {
+				background: linear-gradient(
+					to right,
+					var(--primary-light),
+					var(--primary-lighter)
+				);
+				border-color: var(--primary);
+			}
+
+			.banner-primary h2 {
+				color: var(--primary);
+			}
+
+			.banner-primary h2:hover {
+				color: var(--secondary);
+			}
+
+			.banner-secondary {
+				background: linear-gradient(
+					to right,
+					var(--secondary-light),
+					var(--secondary-lighter)
+				);
+				border-color: var(--secondary);
+			}
+
+			.banner-secondary h2 {
+				color: var(--secondary);
+			}
+
+			.banner-secondary h2:hover {
+				color: var(--primary);
+			}
+
+			/* =========================================
+			   5. CONTENT BLOCKS
+			   ========================================= */
+			.content-block {
+				background-color: var(--white);
+				padding: 0.9rem;
+				border-radius: 1rem;
+				transition: transform 0.3s ease;
+				display: flow-root;
+			}
+
+			@media (min-width: 768px) {
+				.content-block {
+					padding: 2.7rem !important;
+				}
+			}
+
+			.step-container {
+				border-radius: 1rem;
+				background-color: var(--white);
+				padding: 1.5rem;
+				transition: transform 0.3s ease;
+			}
+
+			.step-container:hover {
+				transform: scale(1.02);
+			}
+
+			.step-inner {
+				background-color: transparent;
+				padding: 0;
+				display: flex;
+				flex-direction: column;
+				gap: 0;
+			}
+
+			.circle-number-lg {
+				display: none;
+				width: 5rem;
+				height: 5rem;
+				background-color: rgba(0, 151, 167, 0.2);
+				color: var(--secondary);
+				border-radius: 50%;
+				align-items: center;
+				justify-content: center;
+				font-family: var(--font-anton);
+				font-size: 2.5rem;
+				font-weight: 700;
+				flex-shrink: 0;
+				transition: all 0.3s ease;
+			}
+
+			.step-container:hover .circle-number-lg {
+				background-color: rgba(0, 151, 167, 0.4);
+				transform: rotate(360deg) scale(1.1);
+			}
+
+			.circle-number-sm {
+				display: flex;
+				width: 2.5rem;
+				height: 2.5rem;
+				background-color: rgba(0, 151, 167, 0.2);
+				color: var(--secondary);
+				border-radius: 50%;
+				align-items: center;
+				justify-content: center;
+				font-family: var(--font-anton);
+				font-size: 1.375rem;
+				font-weight: 700;
+				flex-shrink: 0;
+				margin-bottom: 0.75rem;
+				align-self: flex-start;
+				transition: all 0.3s ease;
+			}
+
+			.step-container:hover .circle-number-sm {
+				background-color: rgba(0, 151, 167, 0.4);
+				transform: rotate(360deg) scale(1.1);
+			}
+
+			.step-content {
+				flex: 1;
+			}
+
+			.step-title-row {
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
+				margin-bottom: 0.75rem;
+			}
+
+			.step-title-text {
+				font-size: clamp(1.5rem, 3.15vw, 3.7rem);
+				color: var(--secondary);
+				transition: color 0.3s ease;
+			}
+
+			.step-title-text:hover {
+				color: var(--primary);
+			}
+
+			.step-body {
+				margin-top: 0;
+				padding: 0;
+				background-color: transparent;
+				border-radius: 0;
+			}
+
+			.step-container .step-inner {
+				box-shadow: none !important;
+				background-color: transparent !important;
+			}
+
+			.step-container .step-body {
+				box-shadow: none !important;
+			}
+
+			.step-container .step-body .content-block {
+				padding: 0 !important;
+				background-color: transparent !important;
+				box-shadow: none !important;
+			}
+
+			@media (min-width: 768px) {
+				.step-container {
+					padding: 2.5rem;
+					border-radius: 1rem;
+				}
+
+				.step-inner {
+					gap: 1.5rem;
+					border-radius: 1rem;
+					background-color: var(--white);
+					flex-direction: row;
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				.circle-number-lg {
+					display: flex;
+				}
+
+				.circle-number-sm {
+					display: none;
+					margin-bottom: 0;
+				}
+
+				.step-title-row {
+					margin-bottom: 0;
+				}
+
+				.step-body {
+					margin-top: 1.5rem;
+					padding: 1.5rem;
+					background-color: var(--white);
+					border-radius: 1rem;
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				.step-body.content-block {
+					padding: 1.5rem !important;
+					background-color: var(--white) !important;
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+			}
+
+			ul.styled-list {
+				margin-left: 1.5rem;
+				list-style-type: disc;
+				display: flex;
+				flex-direction: column;
+				gap: 1rem;
+			}
+
+			ul.styled-list li {
+				transition: transform 0.2s ease;
+			}
+
+			ul.styled-list li:hover {
+				transform: translateX(8px);
+			}
+
+			.points-wrapper {
+				display: flex;
+				flex-direction: column;
+				gap: 1rem;
+			}
+
+			.point-item {
+				display: flex;
+				align-items: flex-start;
+				gap: 1.5rem;
+				background-color: transparent;
+				padding: 0;
+				border-radius: 0;
+				transition: transform 0.2s ease;
+			}
+
+			.point-item:hover {
+				transform: translateX(5px);
+			}
+
+			.point-icon {
+				width: 1.75rem;
+				margin-top: calc((1.375rem * 1.6 - 1.75rem) / 2);
+				flex-shrink: 0;
+				transition: transform 0.3s ease;
+			}
+
+			.point-item:hover .point-icon {
+				transform: scale(1.15) rotate(5deg);
+			}
+
+			.point-item.shadow-card {
+				box-shadow: none !important;
+				background-color: transparent !important;
+				padding: 0 !important;
+			}
+
+			@media (min-width: 768px) {
+				.point-item {
+					background-color: var(--white);
+					padding: 1.5rem;
+					border-radius: 1rem;
+				}
+
+				.point-icon {
+					width: 2.25rem;
+					margin-top: calc((1.375rem * 1.6 - 2.25rem) / 2);
+				}
+
+				.point-item.shadow-card {
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+					background-color: var(--white) !important;
+					padding: 1.5rem !important;
+				}
+			}
+
+			.callout-box {
+				padding: 1rem;
+				border-radius: 1rem;
+			}
+
+			@media (min-width: 768px) {
+				.callout-box {
+					border-radius: 1rem;
+				}
+			}
+
+			.callout-inner {
+				background-color: var(--white);
+				padding: 2rem 1rem;
+				border-radius: 1rem;
+				display: flex;
+				align-items: flex-start;
+				gap: 1.5rem;
+				clip-path: polygon(0 0, 100% 0, 100% 80%, 82% 100%, 0 100%);
+			}
+
+			@media (min-width: 768px) {
+				.callout-inner {
+					clip-path: polygon(0 0, 101% 0, 100% 60%, 94% 100%, 0 100%);
+					padding: 2.5rem;
+					border-radius: 1rem;
+				}
+			}
+
+			.callout-filter {
+				filter: drop-shadow(4px -6px 10px rgba(0, 0, 0, 0.5))
+					drop-shadow(6px 5px 10px rgba(0, 0, 0, 0.5));
+			}
+
+			.bg-primary {
+				background-color: var(--primary);
+			}
+
+			.bg-secondary {
+				background-color: var(--secondary);
+			}
+
+			.grid-2-col {
+				display: grid;
+				grid-template-columns: 1fr;
+				gap: 1.5rem;
+			}
+
+			.grid-3-col {
+				display: grid;
+				grid-template-columns: 1fr;
+				gap: 1.5rem;
+			}
+
+			.grid-complex {
+				display: grid;
+				grid-template-columns: 1fr;
+				gap: 1.5rem;
+			}
+
+			@media (min-width: 768px) {
+				.grid-2-col {
+					grid-template-columns: 1fr 1fr;
+				}
+
+				.grid-3-col {
+					grid-template-columns: 1fr 1fr 1fr;
+				}
+
+				.grid-complex {
+					grid-template-columns: repeat(5, 1fr);
+				}
+
+				.span-3 {
+					grid-column: span 3;
+				}
+
+				.span-2 {
+					grid-column: span 2;
+				}
+			}
+
+			.image-column {
+				display: flex;
+				flex-direction: column;
+				gap: 1.5rem;
+				height: 100%;
+			}
+
+			.image-frame {
+				flex: 1;
+				border-radius: 1rem;
+				overflow: hidden;
+				border: 4px solid var(--primary);
+			}
+
+			.image-frame img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+
+			.section-photo {
+				width: 100%;
+				aspect-ratio: 21 / 9;
+				max-height: 400px;
+				margin: 1.5rem 0;
+				border-radius: 0.75rem;
+				border: 4px solid var(--primary);
+				overflow: hidden;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
+				box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+			}
+
+			.section-photo.photo-float-left {
+				float: left;
+				width: 45%;
+				aspect-ratio: 4 / 5;
+				max-height: 400px;
+				margin: 0.5rem 2rem 1rem 0;
+			}
+
+			.section-photo.photo-float-right {
+				float: right;
+				width: 45%;
+				aspect-ratio: 4 / 5;
+				max-height: 400px;
+				margin: 0.5rem 0 1rem 2rem;
+			}
+
+			.section-photo img {
+				display: block;
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				object-position: center;
+				animation: imageLoad 0.5s ease-in-out;
+			}
+
+			@keyframes imageLoad {
+				from {
+					opacity: 0;
+					transform: scale(0.98);
+				}
+				to {
+					opacity: 1;
+					transform: scale(1);
+				}
+			}
+
+			.stat-card {
+				background-color: var(--white);
+				padding: 1.5rem;
+				border-radius: 1rem;
+				text-align: center;
+			}
+
+			.stat-number {
+				font-family: var(--font-anton);
+				color: var(--primary);
+				font-size: 3.25rem;
+				margin-bottom: 0.75rem;
+				transition: color 0.3s ease;
+			}
+
+			.stat-number:hover {
+				color: var(--secondary);
+			}
+
+			.quote-container {
+				background-color: var(--white);
+				padding: 2rem;
+				border-radius: 1rem;
+				transition:
+					transform 0.3s ease,
+					box-shadow 0.3s ease;
+			}
+
+			.quote-container:hover {
+				transform: translateX(10px);
+				box-shadow: -5px 5px 15px rgba(0, 0, 0, 0.1);
+			}
+
+			@media (min-width: 768px) {
+				.quote-container {
+					padding: 3rem;
+				}
+			}
+
+			blockquote {
+				border-left: 4px solid var(--secondary);
+				padding-left: 1.5rem;
+				font-weight: 400;
+			}
+
+			.cta-container {
+				background-color: var(--white);
+				padding: 2rem;
+				border-radius: 1rem;
+				text-align: center;
+				transition:
+					transform 0.3s ease,
+					box-shadow 0.3s ease;
+			}
+
+			.cta-container:hover {
+				transform: translateY(-3px);
+				box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+			}
+
+			.btn-primary {
+				background-color: #fe7702;
+				color: white;
+				box-shadow:
+					0px 3.04px 7.39px 0px rgba(0, 0, 0, 0.68),
+					6.07px -6.07px 4.05px 0px rgba(0, 0, 0, 0.25) inset,
+					-4.05px 5.06px 4.05px 0px rgba(255, 255, 255, 0.25) inset,
+					-2.02px -1.01px 4.05px 0px rgba(0, 0, 0, 0.6);
+				padding: 1rem 2rem;
+				border-radius: 1rem;
+				text-transform: uppercase;
+				font-weight: 700;
+				border: none;
+				cursor: pointer;
+				transition: all 0.3s ease;
+			}
+
+			.btn-primary:hover {
+				transform: scale(1.08) translateY(-2px);
+				background-color: #ff8820;
+				box-shadow:
+					0px 6px 15px 0px rgba(0, 0, 0, 0.75),
+					6.07px -6.07px 4.05px 0px rgba(0, 0, 0, 0.3) inset,
+					-4.05px 5.06px 4.05px 0px rgba(255, 255, 255, 0.3) inset,
+					-2.02px -1.01px 4.05px 0px rgba(0, 0, 0, 0.65);
+			}
+
+			.btn-primary:active {
+				transform: scale(1.02) translateY(0);
+			}
+
+			.table-wrapper {
+				background-color: var(--white);
+				padding: 1.5rem;
+				border-radius: 1rem;
+				overflow-x: auto;
+			}
+
+			table {
+				width: 100%;
+				border-collapse: collapse;
+				font-family: var(--font-montserrat);
+			}
+
+			th {
+				background-color: var(--primary);
+				color: white;
+				padding: 1.5rem;
+				text-align: left;
+				font-weight: 700;
+				font-size: 1.25rem;
+			}
+
+			td {
+				padding: 0.75rem;
+				border-bottom: 1px solid #e5e7eb;
+				font-size: 1.125rem;
+				font-weight: 400;
+			}
+
+			tbody tr:hover td {
+				background-color: var(--primary-lighter);
+			}
+
+			/* =========================================
+			   6. SOLD CTA INLINE HIGHLIGHT
+			   ========================================= */
+			.sold-cta {
+				text-transform: uppercase;
+				text-decoration: underline;
+				cursor: pointer;
+			}
+
+			.site-footer {
+				text-align: center;
+				padding: 2rem 0;
+				border-top: 1px solid var(--gray-300);
+				margin-top: 2rem;
+			}
+
+			/* Contact item hover */
+			.contact-item {
+				color: var(--primary);
+				transition:
+					color 0.3s ease,
+					transform 0.3s ease;
+				cursor: default;
+				width: fit-content;
+			}
+
+			/* Block parent content-block hover from bleeding into contact items */
+			.content-block:hover .contact-item .text-secondary {
+				color: var(--secondary);
+			}
+			.content-block:hover .contact-item .text-primary {
+				color: var(--primary);
+			}
+
+			/* Only directly-hovered row changes */
+			.contact-item:hover {
+				color: var(--secondary);
+				transform: scale(1.05);
+				transition:
+					color 0.3s ease,
+					transform 0.3s ease;
+			}
+			.contact-item:hover .text-secondary {
+				color: var(--primary) !important;
+				transition: color 0.3s ease;
+			}
+			.contact-item:hover .text-primary {
+				color: var(--secondary) !important;
+				transition: color 0.3s ease;
+			}
+
+			/* =========================================
+			   PHONE ONLY (max-width: 639px)
+			   Disable all hover animations & transitions
+			   sm (640px+) keeps full desktop design
+			   ========================================= */
+			@media (max-width: 639px), (hover: none) and (pointer: coarse) {
+				*,
+				*::before,
+				*::after {
+					transition: none !important;
+					animation: none !important;
+				}
+
+				.shadow-card:hover,
+				.step-container:hover,
+				.point-item:hover,
+				.quote-container:hover,
+				.cta-container:hover,
+				.btn-primary:hover,
+				ul.styled-list li:hover {
+					transform: none !important;
+				}
+
+				.category-banner:hover {
+					transform: none !important;
+					border-left-width: 4px !important;
+				}
+
+				.shadow-card {
+					box-shadow: none !important;
+				}
+
+				.step-container.shadow-card,
+				.content-block.shadow-card:not(.step-body) {
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				.step-container.shadow-card:hover,
+				.content-block.shadow-card:not(.step-body):hover {
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				.shadow-card:hover {
+					box-shadow: none !important;
+				}
+
+				.quote-container:hover {
+					box-shadow: none !important;
+				}
+
+				.cta-container:hover {
+					box-shadow: none !important;
+				}
+
+				.step-container:hover .circle-number-lg,
+				.step-container:hover .circle-number-sm {
+					background-color: rgba(0, 151, 167, 0.2) !important;
+					transform: none !important;
+				}
+
+				.point-item:hover .point-icon {
+					transform: none !important;
+				}
+
+				.btn-primary:hover {
+					transform: none !important;
+					background-color: #fe7702 !important;
+					box-shadow:
+						0px 3.04px 7.39px 0px rgba(0, 0, 0, 0.68),
+						6.07px -6.07px 4.05px 0px rgba(0, 0, 0, 0.25) inset,
+						-4.05px 5.06px 4.05px 0px rgba(255, 255, 255, 0.25) inset,
+						-2.02px -1.01px 4.05px 0px rgba(0, 0, 0, 0.6) !important;
+				}
+
+				tbody tr:hover td {
+					background-color: transparent !important;
+				}
+
+				.text-primary:hover {
+					color: var(--primary) !important;
+				}
+
+				.text-secondary:hover {
+					color: var(--secondary) !important;
+				}
+
+				.main-header h1:hover {
+					color: var(--secondary) !important;
+				}
+
+				.section-title.text-primary:hover,
+				.section-title:hover.text-primary {
+					color: var(--primary) !important;
+				}
+
+				.section-title.text-secondary:hover,
+				.section-title:hover.text-secondary {
+					color: var(--secondary) !important;
+				}
+
+				.content-heading.text-primary:hover,
+				.content-heading:hover.text-primary {
+					color: var(--primary) !important;
+				}
+
+				.content-heading.text-secondary:hover,
+				.content-heading:hover.text-secondary {
+					color: var(--secondary) !important;
+				}
+
+				.banner-primary h2:hover {
+					color: var(--primary) !important;
+				}
+
+				.banner-secondary h2:hover {
+					color: var(--secondary) !important;
+				}
+
+				.step-title-text:hover {
+					color: var(--secondary) !important;
+				}
+
+				.stat-number:hover {
+					color: var(--primary) !important;
+				}
+
+				/* Disable parent hover color-swap on phone */
+				.content-block:hover .text-secondary,
+				.point-item:hover .text-secondary {
+					color: var(--secondary) !important;
+				}
+
+				.content-block:hover .body-text.text-secondary,
+				.point-item:hover .body-text.text-secondary {
+					color: var(--gray-600) !important;
+				}
+
+				.content-block:hover .text-primary,
+				.point-item:hover .text-primary {
+					color: var(--primary) !important;
+				}
+
+				/* Keep nested contact text colors stable on phone */
+				.content-block:hover .contact-item .text-secondary {
+					color: var(--secondary) !important;
+				}
+
+				.content-block:hover .contact-item .text-primary {
+					color: var(--primary) !important;
+				}
+
+				/* Disable contact-item hover on mobile */
+				.contact-item:hover {
+					color: var(--primary) !important;
+					transform: none !important;
+				}
+				.contact-item:hover .text-secondary {
+					color: var(--secondary) !important;
+				}
+				.contact-item:hover .text-primary {
+					color: var(--primary) !important;
+				}
+			}
+		
+
+/* POINTER SECTION IMAGE OVERRIDE */
+			.pointer-section > .content-block > .section-photo,
+			.pointer-section > .content-block > .section-photo.photo-float-left,
+			.pointer-section > .content-block > .section-photo.photo-float-right {
+				float: none !important;
+				width: 100% !important;
+				max-width: 100% !important;
+				aspect-ratio: 21 / 9 !important;
+				margin: 1.5rem 0 !important;
+				shape-outside: none !important;
+			}
+
+			.pointer-section > .content-block > .section-photo img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+
+/* MOBILE OVERRIDES */
+@media (max-width: 767px) {
+    .section-photo,
+    .section-photo.photo-float-left,
+    .section-photo.photo-float-right {
+        float: none !important;
+        width: 100% !important;
+        aspect-ratio: 21 / 9 !important;
+        max-height: 300px !important;
+        margin: 1.5rem 0 !important;
+    }
+    
+    .text-justify {
+        text-align: left !important;
+    }
+}
+/* END MOBILE OVERRIDES */</style>
+	</head>
+
+	<body>
+		<main>
+			
+			<!-- BLOG BANNER IMAGE -->
+			<div class="section-photo">
+				<img src="./probate.jpg" alt="how-i-protect-attorneys-from-getting-dragged-into-real-estate-drama-bann" loading="lazy">
+			</div>
+<!-- INTRO -->
+			<section id="intro">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						HOW I PROTECT ATTORNEYS FROM GETTING DRAGGED INTO REAL ESTATE
+						DRAMA
+					</h2>
+<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						If you have handled probate or trust cases long enough, you have
+						felt it.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						You are hired to manage the legal side of the case. But somehow,
+						you end up solving problems that have nothing to do with the law.
+						Heirs start fighting over who has the keys. The executor calls you
+						about junk removal. One sibling refuses to sign the listing
+						paperwork. And all of it funnels into your office like you are not
+						only the attorney, but also the real estate manager.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify">
+						This is where I come in. As a probate-trained real estate
+						professional, my job is to keep attorneys out of the day-to-day
+						property drama and focused on their legal work. Here is how I
+						protect you from getting pulled into the mess.
+					</p>
+				</div>
+			</section>
+
+			<!-- I TAKE OVER THE REAL ESTATE LANE FULLY -->
+			
+<section class="pointer-section" id="take-over-real-estate-lane">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						I TAKE OVER THE REAL ESTATE LANE FULLY
+					</h2>
+					<!-- SECTION PHOTO -->
+					<div class="section-photo">
+						<img src="./blog-images/how-i-protect-attorneys/i-take-over-the-real-estate-lane-fully.jpg" alt="I TAKE OVER THE REAL ESTATE LANE FULLY" loading="lazy">
+					</div>
+
+<p class="body-text text-secondary text-bold" style="margin-bottom: 1.5rem">
+						From the very first conversation, I set the expectation with the
+						executor and family. I make it clear what I will be handling, and
+						what does not need to land on the attorney’s desk anymore.
+					</p>
+					<div class="points-wrapper" style="margin-bottom: 1.5rem">
+						<div class="point-item shadow-card">
+							<img class="point-icon" src="./images/arrow.png" alt="arrow">
+							<p class="body-text text-secondary text-bold">
+								Questions about cleanouts? They come to me.
+							</p>
+						</div>
+						<div class="point-item shadow-card">
+							<img class="point-icon" src="./images/arrow.png" alt="arrow">
+							<p class="body-text text-secondary text-bold">
+								Issues with access or lockboxes? They call me.
+							</p>
+						</div>
+						<div class="point-item shadow-card">
+							<img class="point-icon" src="./images/arrow.png" alt="arrow">
+							<p class="body-text text-secondary text-bold">
+								Concerns about showings, buyers, or offers? I am their point
+								of contact.
+							</p>
+						</div>
+					</div>
+					<p class="body-text text-secondary text-bold">
+						I set the tone, the plan, and the process from the beginning. I do
+						not defer to the attorney unless it is a legal question. That way,
+						you are free to do what you do best, while I keep the property
+						moving forward.
+					</p>
+				</div>
+			</section>
+
+			<!-- I ESTABLISH BOUNDARIES FROM DAY ONE -->
+			
+<section class="pointer-section" id="establish-boundaries">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						I ESTABLISH BOUNDARIES FROM DAY ONE
+					</h2>
+					<!-- SECTION PHOTO -->
+					<div class="section-photo">
+						<img src="./blog-images/how-i-protect-attorneys/i-establish-boundaries-from-day-one.jpg" alt="I ESTABLISH BOUNDARIES FROM DAY ONE" loading="lazy">
+					</div>
+
+<p class="body-text text-secondary text-bold" style="margin-bottom: 1.5rem">
+						One of the biggest reasons attorneys get pulled into drama is
+						because no one else steps up to lead. Families are confused, the
+						executor is overwhelmed, and everyone assumes the lawyer is in
+						charge of everything.
+					</p>
+					<p class="body-text text-secondary text-bold" style="margin-bottom: 1.5rem">
+						I eliminate that confusion by establishing boundaries immediately.
+						I explain that I am responsible for:
+					</p>
+					<div class="points-wrapper" style="margin-bottom: 1.5rem">
+						<div class="point-item shadow-card">
+							<img class="point-icon" src="./images/arrow.png" alt="arrow">
+							<p class="body-text text-secondary text-bold">
+								Coordinating cleanouts
+							</p>
+						</div>
+						<div class="point-item shadow-card">
+							<img class="point-icon" src="./images/arrow.png" alt="arrow">
+							<p class="body-text text-secondary text-bold">
+								Scheduling property access
+							</p>
+						</div>
+						<div class="point-item shadow-card">
+							<img class="point-icon" src="./images/arrow.png" alt="arrow">
+							<p class="body-text text-secondary text-bold">
+								Providing valuations
+							</p>
+						</div>
+						<div class="point-item shadow-card">
+							<img class="point-icon" src="./images/arrow.png" alt="arrow">
+							<p class="body-text text-secondary text-bold">
+								Dealing with agents and buyers
+							</p>
+						</div>
+						<div class="point-item shadow-card">
+							<img class="point-icon" src="./images/arrow.png" alt="arrow">
+							<p class="body-text text-secondary text-bold">
+								Keeping the property moving toward sale
+							</p>
+						</div>
+					</div>
+					<p class="body-text text-secondary text-bold">
+						By defining my role clearly, I keep your name out of daily issues
+						unless absolutely necessary. This gives you breathing room to focus
+						on the legal work instead of becoming a project manager.
+					</p>
+				</div>
+			</section>
+
+			<!-- I RESOLVE CONFLICTS WITH PROFESSIONAL NEUTRALITY -->
+			
+<section id="resolve-conflicts">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						I RESOLVE CONFLICTS WITH PROFESSIONAL NEUTRALITY
+					</h2><p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						Real estate stirs up old family tension. One heir wants to hold
+						the property. Another is pushing to sell quickly. Another is upset
+						about how the process feels. Before you know it, you are being
+						copied on heated email chains or pulled into family disputes.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						That is where my experience matters.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						I never take sides. I do not add to the conflict. I listen
+						carefully, de-escalate emotions, and bring the conversation back
+						to what needs to happen. I present clear options, supported by
+						facts and data, not personal opinions.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify">
+						This calm, neutral leadership keeps heirs from dragging the
+						attorney into the middle as a referee. They see me as the person
+						to manage the property side, not the lawyer.
+					</p>
+				</div>
+			</section>
+
+			<!-- I PROVIDE UPDATES, NOT PROBLEMS -->
+			
+<section id="updates-not-problems">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						I PROVIDE UPDATES, NOT PROBLEMS
+					</h2>
+<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						When I communicate with attorneys, I do not come with a list of
+						problems. I come with solutions and status updates. My role is to
+						keep you informed, not to hand you extra work.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						For example, instead of saying: “The cleanout has not been
+						scheduled, what do we do?” I will say: “The cleanout
+						is scheduled for Tuesday at 10am, and I will confirm completion
+						with photos for your records.”
+					</p>
+					<p class="body-text text-secondary text-bold text-justify">
+						I make sure you know what is happening, what has been completed,
+						and if anything may affect the legal timeline. You get clarity, not
+						chaos.
+					</p>
+				</div>
+			</section>
+
+			<!-- I MAKE YOU LOOK GOOD TO YOUR CLIENTS -->
+			
+<section id="make-you-look-good">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						I MAKE YOU LOOK GOOD TO YOUR CLIENTS
+					</h2>
+<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						At the end of the day, your client does not separate the legal
+						side from the real estate side. To them, it all feels connected.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						When their property is handled smoothly, they think: “My
+						attorney really has a great team.” That reflects positively
+						on you. You were not just the lawyer who managed paperwork. You
+						were the professional who brought in the right partner to move the
+						property forward and relieve family stress.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify">
+						That kind of client experience builds long-term trust, strengthens
+						your reputation, and leads to referrals.
+					</p>
+				</div>
+			</section>
+
+			<!-- WHY ATTORNEYS SHOULD NOT HANDLE REAL ESTATE -->
+			<section class="pointer-section" id="why-attorneys-should-not">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						WHY ATTORNEYS SHOULD NOT HANDLE REAL ESTATE
+					</h2>
+					<!-- SECTION PHOTO -->
+					<div class="section-photo">
+						<img src="./blog-images/how-i-protect-attorneys/why-attorneys-should-not-handle-real-estate.jpg" alt="WHY ATTORNEYS SHOULD NOT HANDLE REAL ESTATE" loading="lazy">
+					</div>
+
+<p class="body-text text-secondary text-bold" style="margin-bottom: 1.5rem">
+						Attorneys are hired to manage probate and trust law, not to act as
+						project managers for property issues. Yet in many cases, attorneys
+						end up fielding calls about lockboxes, showings, and cleanouts.
+						This drains time and creates frustration.
+					</p>
+					<p class="body-text text-secondary text-bold" style="margin-bottom: 1.5rem">
+						Here are three reasons why attorneys should avoid real estate
+						management:
+					</p>
+					<div class="points-wrapper" style="margin-bottom: 1.5rem">
+						<div class="point-item shadow-card">
+							<img class="point-icon" src="./images/arrow.png" alt="arrow">
+							<div>
+								<p class="body-text text-primary text-bold" style="margin-bottom: 0.5rem">
+									IT PULLS FOCUS FROM LEGAL WORK.
+								</p>
+								<p class="body-text text-secondary text-bold">
+									Time spent chasing vendors or refereeing family disputes is
+									time taken away from legal progress.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img class="point-icon" src="./images/arrow.png" alt="arrow">
+							<div>
+								<p class="body-text text-primary text-bold" style="margin-bottom: 0.5rem">
+									IT CREATES LIABILITY.
+								</p>
+								<p class="body-text text-secondary text-bold">
+									When attorneys step into tasks outside their legal role, it
+									can create confusion or blame if something goes wrong.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img class="point-icon" src="./images/arrow.png" alt="arrow">
+							<div>
+								<p class="body-text text-primary text-bold" style="margin-bottom: 0.5rem">
+									IT CAUSES DELAYS.
+								</p>
+								<p class="body-text text-secondary text-bold">
+									Without someone experienced leading the property process,
+									families often stall, waiting on the attorney to handle
+									things they were never meant to manage.
+								</p>
+							</div>
+						</div>
+					</div>
+					<p class="body-text text-secondary text-bold">
+						By bringing me in, you avoid all three problems.
+					</p>
+				</div>
+			</section>
+
+			<!-- REAL-LIFE EXAMPLE -->
+			<section id="real-life-example">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">REAL-LIFE EXAMPLE</h2>
+<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						An attorney once called me after being dragged into endless calls
+						about a family home. The heirs could not agree, the executor was
+						overwhelmed, and every decision from cleanouts to lockbox codes
+						was being pushed back on the attorney.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						Within a week of my involvement, I had established clear
+						boundaries, scheduled the cleanout, secured the property, and
+						provided a valuation. The heirs stopped calling the lawyer for
+						every issue and started working directly with me.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify">
+						The attorney later told me it was the first time in weeks they had
+						been able to focus on legal filings without constant interruptions.
+						That is exactly the kind of relief I aim to provide.
+					</p>
+				</div>
+			</section>
+
+			<!-- BOTTOM LINE -->
+			<section id="bottom-line">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">BOTTOM LINE</h2>
+<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						You did not go to law school to coordinate vendors, mediate family
+						drama, or chase down property disclosures. You became an attorney
+						to practice law.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify" style="margin-bottom: 1.5rem">
+						That is why I take ownership of the real estate lane. I handle the
+						calls, the conflicts, and the coordination. I keep heirs aligned
+						and properties moving. And I protect attorneys from being pulled
+						into drama that does not belong on their desks.
+					</p>
+					<p class="body-text text-secondary text-bold text-justify">
+						If you are working on a case where the property is already causing
+						friction, let me step in now. I will take control of the real
+						estate process, keep the heirs calm, and keep your file moving
+						toward resolution.
+					</p>
+				</div>
+			</section>
+
+			<!-- FAQs -->
+			<section class="pointer-section" id="faqs">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						FREQUENTLY ASKED QUESTIONS
+					</h2>
+					<!-- SECTION PHOTO -->
+					<div class="section-photo">
+						<img src="./blog-images/how-i-protect-attorneys/frequently-asked-questions.jpg" alt="FREQUENTLY ASKED QUESTIONS" loading="lazy">
+					</div>
+
+<div class="points-wrapper">
+						<!-- FAQ 1 -->
+						<div class="point-item shadow-card">
+							<img class="point-icon" src="./images/arrow.png" alt="arrow">
+							<div>
+								<p class="body-text text-primary text-bold" style="margin-bottom: 0.5rem">
+									WHY SHOULD ATTORNEYS AVOID HANDLING REAL ESTATE ISSUES IN
+									PROBATE CASES?
+								</p>
+								<p class="body-text text-secondary text-bold">
+									Because it distracts from legal work, increases liability,
+									and delays the case. Property issues should be managed by a
+									trained real estate professional.
+								</p>
+							</div>
+						</div>
+						<!-- FAQ 2 -->
+						<div class="point-item shadow-card">
+							<img class="point-icon" src="./images/arrow.png" alt="arrow">
+							<div>
+								<p class="body-text text-primary text-bold" style="margin-bottom: 0.5rem">
+									HOW DO YOU PREVENT HEIRS FROM CALLING THE ATTORNEY DIRECTLY?
+								</p>
+								<p class="body-text text-secondary text-bold">
+									From day one, I establish myself as the real estate contact.
+									I explain what I will handle, set clear boundaries, and give
+									heirs confidence that their concerns will be managed without
+									involving the attorney.
+								</p>
+							</div>
+						</div>
+						<!-- FAQ 3 -->
+						<div class="point-item shadow-card">
+							<img class="point-icon" src="./images/arrow.png" alt="arrow">
+							<div>
+								<p class="body-text text-primary text-bold" style="margin-bottom: 0.5rem">
+									DO YOU PROVIDE DOCUMENTATION FOR THE ATTORNEY’S FILE?
+								</p>
+								<p class="body-text text-secondary text-bold">
+									Yes. I track property updates, cleanouts, and valuations.
+									Attorneys receive clean, professional documentation so they
+									can keep accurate records without chasing details.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- OUTRO / CTA -->
+			<section id="outro">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						READY TO KEEP THE PROPERTY DRAMA OFF YOUR DESK?
+					</h2>
+					
+					
+
+					
+					
+
+					
+					
+
+					
+					
+
+					<p class="body-text text-secondary text-bold" style="margin-bottom: 1.5rem">
+						Probate and trust cases are complex enough without attorneys being
+						dragged into real estate drama. When heirs start fighting,
+						executors feel overwhelmed, and property issues pile up, the legal
+						work slows down. That is where I make the difference.
+					</p>
+					<p class="body-text text-secondary text-bold" style="margin-bottom: 1.5rem">
+						At 833PROBAID.com, we specialize in probate and trust real estate
+						support that keeps attorneys out of the chaos. From coordinating
+						cleanouts to handling valuations and managing family conflicts, we
+						take the burden off your shoulders.
+					</p>
+					<div style="
+							display: flex;
+							flex-direction: column;
+							gap: 1rem;
+							margin-bottom: 1.5rem;
+						">
+						<!-- Phone -->
+						<div class="contact-item" style="display: flex; align-items: flex-start; gap: 1rem">
+							<img src="./svgs/phone-icon.svg" style="
+									width: 2rem;
+									height: 2rem;
+									flex-shrink: 0;
+									margin-top: 0.15rem;
+								">
+							<div class="body-text text-bold" style="line-height: 1.1">
+								<span class="text-secondary text-bold">(833)
+									<span style="letter-spacing: 0.07em">PROBAID</span></span><br>
+								<span class="text-primary text-bold" style="
+										display: block;
+										text-align: right;
+										letter-spacing: 0.17em;
+									">7762243</span>
+							</div>
+						</div>
+						<!-- Website -->
+						<div class="contact-item" style="display: flex; align-items: center; gap: 1rem">
+							<img src="./svgs/uiw_mail.svg" style="
+									width: 2rem;
+									height: 2rem;
+									flex-shrink: 0;
+									margin-top: 0.15rem;
+								">
+							<span class="body-text text-secondary text-bold text-justify">833PROBAID.com</span>
+						</div>
+						<!-- Email -->
+						<div class="contact-item" style="display: flex; align-items: center; gap: 1rem">
+							<img src="./svgs/globe.svg" style="
+									width: 1.8rem;
+									height: 1.8rem;
+									flex-shrink: 0;
+									margin-top: 0.15rem;
+								">
+							<span class="body-text text-secondary text-bold text-justify">Info@833PROBAID.com</span>
+						</div>
+					</div>
+					<p class="body-text text-secondary text-bold">
+						Call (833) PROBAID today and let us handle the property side so
+						you can stay focused on the legal work.
+					</p>
+				</div>
+			</section>
+		</main>
+</body></html>

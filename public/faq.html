@@ -1,0 +1,1810 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>FAQ &#8212; Frequently Asked Questions | 833PROBAID</title>
+
+		<link
+			href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@400;700&family=Roboto:wght@400;900&family=League+Spartan:wght@400;700&family=Oswald&family=Poppins&family=Passions+Conflict&family=Sarpanch&display=swap"
+			rel="stylesheet"
+		/>
+
+		<style type="text/css">
+			/* =========================================
+			   1. VARIABLES & RESET
+			   ========================================= */
+			:root {
+				--primary: #0097a7;
+				--primary-dark: #00838f;
+				--primary-light: rgba(0, 151, 167, 0.1);
+				--primary-lighter: rgba(0, 151, 167, 0.05);
+
+				--secondary: #fe7702;
+				--secondary-light: rgba(254, 119, 2, 0.1);
+				--secondary-lighter: rgba(254, 119, 2, 0.05);
+
+				--accent: #ff4444;
+				--teal-soft: #e0f7fa;
+
+				--gray-100: #f3f4f6;
+				--gray-300: #d1d5db;
+				--gray-500: #6b7280;
+				--gray-600: #4b5563;
+				--white: #ffffff;
+				--black: #000000;
+
+				--font-anton: "Anton", sans-serif;
+				--font-montserrat: "Montserrat", sans-serif;
+			}
+
+			* {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
+
+			body {
+				background-color: var(--gray-100);
+				color: var(--black);
+				font-family: var(--font-montserrat);
+				padding: 1.5rem;
+				-webkit-font-smoothing: antialiased;
+			}
+
+			@media (min-width: 768px) {
+				body {
+					padding: 2.5rem;
+				}
+			}
+
+			main {
+				max-width: 80rem;
+				margin-left: auto;
+				margin-right: auto;
+				display: flex;
+				flex-direction: column;
+				gap: 2.5rem;
+			}
+
+			img {
+				display: block;
+				max-width: 100%;
+				height: auto;
+			}
+
+			/* =========================================
+			   2. TYPOGRAPHY
+			   ========================================= */
+			h1,
+			h2,
+			h3,
+			h4 {
+				font-family: var(--font-anton);
+				text-transform: uppercase;
+				line-height: 1.2;
+				font-weight: 700;
+				transition: color 0.3s ease;
+			}
+
+			.text-primary {
+				color: var(--primary);
+			}
+
+			.text-primary:hover {
+				color: var(--secondary);
+			}
+
+			.text-secondary {
+				color: var(--secondary);
+			}
+
+			.text-secondary:hover {
+				color: var(--primary);
+			}
+
+			/* Parent hover — swap colors so primary children become secondary */
+			.content-block:hover .text-secondary,
+			.point-item:hover .text-secondary {
+				color: var(--primary);
+				transition: color 0.3s ease;
+			}
+
+			.content-block:hover .text-primary,
+			.point-item:hover .text-primary {
+				color: var(--secondary);
+				transition: color 0.3s ease;
+			}
+
+			.text-gray {
+				color: var(--gray-600);
+			}
+
+			.text-center {
+				text-align: center;
+			}
+
+			.text-bold {
+				font-weight: 700;
+			}
+
+			.italic {
+				font-style: italic;
+			}
+
+			.section-title {
+				font-size: 2rem !important;
+				margin-bottom: 1rem;
+				transition: color 0.3s ease;
+			}
+
+			.section-title.text-primary:hover,
+			.section-title:hover.text-primary {
+				color: var(--secondary) !important;
+			}
+
+			.section-title.text-secondary:hover,
+			.section-title:hover.text-secondary {
+				color: var(--primary) !important;
+			}
+
+			.content-heading {
+				font-size: 1.625rem !important;
+				margin-bottom: 0.75rem;
+				transition: color 0.3s ease;
+			}
+
+			.content-heading.text-primary:hover,
+			.content-heading:hover.text-primary {
+				color: var(--secondary) !important;
+			}
+
+			.content-heading.text-secondary:hover,
+			.content-heading:hover.text-secondary {
+				color: var(--primary) !important;
+			}
+
+			.body-text {
+				font-size: 1.375rem !important;
+				line-height: 1.6;
+				font-weight: 700;
+			}
+
+			.small-text {
+				font-size: 1.125rem !important;
+				font-weight: 700;
+			}
+
+			.main-header {
+				text-align: center;
+			}
+
+			.main-header h1 {
+				font-size: 3.25rem;
+				color: var(--secondary);
+				margin-bottom: 1rem;
+				transition: color 0.3s ease;
+			}
+
+			.main-header h1:hover {
+				color: var(--primary);
+			}
+
+			@media (max-width: 767px) {
+				.section-title {
+					font-size: 1.5rem !important;
+				}
+
+				.content-heading {
+					font-size: 1.25rem !important;
+				}
+
+				.body-text {
+					font-size: 1rem !important;
+				}
+
+				.small-text {
+					font-size: 0.875rem !important;
+				}
+
+				.main-header h1 {
+					font-size: 2rem;
+				}
+
+				.step-title-text {
+					font-size: clamp(1.25rem, 3.15vw, 3.7rem);
+				}
+			}
+
+			/* =========================================
+			   3. SHADOWS & UTILITIES
+			   ========================================= */
+			.shadow-card {
+				box-shadow:
+					0 8px 12px rgba(0, 0, 0, 0.4),
+					0 -5px 12px 1px rgba(0, 0, 0, 0.4);
+				transition:
+					transform 0.3s ease,
+					box-shadow 0.3s ease;
+			}
+
+			.shadow-card:hover {
+				transform: translateY(-5px);
+				box-shadow:
+					0 12px 20px rgba(0, 0, 0, 0.5),
+					0 -8px 16px 2px rgba(0, 0, 0, 0.5);
+			}
+
+			.bg-white {
+				background-color: var(--white);
+			}
+
+			.rounded-card {
+				border-radius: 1rem;
+			}
+
+			/* =========================================
+			   4. CATEGORY BANNERS
+			   ========================================= */
+			.category-banner {
+				padding: 1.5rem;
+				border-radius: 1rem;
+				border-left: 4px solid;
+				transition:
+					transform 0.3s ease,
+					border-left-width 0.3s ease;
+			}
+
+			.category-banner:hover {
+				transform: translateX(8px);
+				border-left-width: 8px;
+			}
+
+			.category-banner h2 {
+				font-size: 2rem;
+				margin-bottom: 0.5rem;
+				font-weight: 700;
+				transition: color 0.3s ease;
+			}
+
+			.banner-primary {
+				background: linear-gradient(
+					to right,
+					var(--primary-light),
+					var(--primary-lighter)
+				);
+				border-color: var(--primary);
+			}
+
+			.banner-primary h2 {
+				color: var(--primary);
+			}
+
+			.banner-primary h2:hover {
+				color: var(--secondary);
+			}
+
+			.banner-secondary {
+				background: linear-gradient(
+					to right,
+					var(--secondary-light),
+					var(--secondary-lighter)
+				);
+				border-color: var(--secondary);
+			}
+
+			.banner-secondary h2 {
+				color: var(--secondary);
+			}
+
+			.banner-secondary h2:hover {
+				color: var(--primary);
+			}
+
+			/* =========================================
+			   5. CONTENT BLOCKS
+			   ========================================= */
+			.content-block {
+				background-color: var(--white);
+				padding: 0.9rem;
+				border-radius: 1rem;
+				transition: transform 0.3s ease;
+			}
+
+			@media (min-width: 768px) {
+				.content-block {
+					padding: 2.7rem !important;
+				}
+			}
+
+			.step-container {
+				border-radius: 1rem;
+				background-color: var(--white);
+				padding: 1.5rem;
+				transition: transform 0.3s ease;
+			}
+
+			.step-container:hover {
+				transform: scale(1.02);
+			}
+
+			.step-inner {
+				background-color: transparent;
+				padding: 0;
+				display: flex;
+				flex-direction: column;
+				gap: 0;
+			}
+
+			.circle-number-lg {
+				display: none;
+				width: 5rem;
+				height: 5rem;
+				background-color: rgba(0, 151, 167, 0.2);
+				color: var(--secondary);
+				border-radius: 50%;
+				align-items: center;
+				justify-content: center;
+				font-family: var(--font-anton);
+				font-size: 2.5rem;
+				font-weight: 700;
+				flex-shrink: 0;
+				transition: all 0.3s ease;
+			}
+
+			.step-container:hover .circle-number-lg {
+				background-color: rgba(0, 151, 167, 0.4);
+				transform: rotate(360deg) scale(1.1);
+			}
+
+			.circle-number-sm {
+				display: flex;
+				width: 2.5rem;
+				height: 2.5rem;
+				background-color: rgba(0, 151, 167, 0.2);
+				color: var(--secondary);
+				border-radius: 50%;
+				align-items: center;
+				justify-content: center;
+				font-family: var(--font-anton);
+				font-size: 1.375rem;
+				font-weight: 700;
+				flex-shrink: 0;
+				margin-bottom: 0.75rem;
+				align-self: flex-start;
+				transition: all 0.3s ease;
+			}
+
+			.step-container:hover .circle-number-sm {
+				background-color: rgba(0, 151, 167, 0.4);
+				transform: rotate(360deg) scale(1.1);
+			}
+
+			.step-content {
+				flex: 1;
+			}
+
+			.step-title-row {
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
+				margin-bottom: 0.75rem;
+			}
+
+			.step-title-text {
+				font-size: clamp(1.5rem, 3.15vw, 3.7rem);
+				color: var(--secondary);
+				transition: color 0.3s ease;
+			}
+
+			.step-title-text:hover {
+				color: var(--primary);
+			}
+
+			.step-body {
+				margin-top: 0;
+				padding: 0;
+				background-color: transparent;
+				border-radius: 0;
+			}
+
+			.step-container .step-inner {
+				box-shadow: none !important;
+				background-color: transparent !important;
+			}
+
+			.step-container .step-body {
+				box-shadow: none !important;
+			}
+
+			.step-container .step-body .content-block {
+				padding: 0 !important;
+				background-color: transparent !important;
+				box-shadow: none !important;
+			}
+
+			@media (min-width: 768px) {
+				.step-container {
+					padding: 2.5rem;
+					border-radius: 1rem;
+				}
+
+				.step-inner {
+					gap: 1.5rem;
+					border-radius: 1rem;
+					background-color: var(--white);
+					flex-direction: row;
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				.circle-number-lg {
+					display: flex;
+				}
+
+				.circle-number-sm {
+					display: none;
+					margin-bottom: 0;
+				}
+
+				.step-title-row {
+					margin-bottom: 0;
+				}
+
+				.step-body {
+					margin-top: 1.5rem;
+					padding: 1.5rem;
+					background-color: var(--white);
+					border-radius: 1rem;
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				.step-body.content-block {
+					padding: 1.5rem !important;
+					background-color: var(--white) !important;
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+			}
+
+			ul.styled-list {
+				margin-left: 1.5rem;
+				list-style-type: disc;
+				display: flex;
+				flex-direction: column;
+				gap: 1rem;
+			}
+
+			ul.styled-list li {
+				transition: transform 0.2s ease;
+			}
+
+			ul.styled-list li:hover {
+				transform: translateX(8px);
+			}
+
+			.points-wrapper {
+				display: flex;
+				flex-direction: column;
+				gap: 1rem;
+			}
+
+			.point-item {
+				display: flex;
+				align-items: flex-start;
+				gap: 1.5rem;
+				background-color: transparent;
+				padding: 0;
+				border-radius: 0;
+				transition: transform 0.2s ease;
+			}
+
+			.point-item:hover {
+				transform: translateX(5px);
+			}
+
+			.point-icon {
+				width: 1.75rem;
+				margin-top: calc((1.375rem * 1.6 - 1.75rem) / 2);
+				flex-shrink: 0;
+				transition: transform 0.3s ease;
+			}
+
+			.point-item:hover .point-icon {
+				transform: scale(1.15) rotate(5deg);
+			}
+
+			.point-item.shadow-card {
+				box-shadow: none !important;
+				background-color: transparent !important;
+				padding: 0 !important;
+			}
+
+			@media (min-width: 768px) {
+				.point-item {
+					background-color: var(--white);
+					padding: 1.5rem;
+					border-radius: 1rem;
+				}
+
+				.point-icon {
+					width: 2.25rem;
+					margin-top: calc((1.375rem * 1.6 - 2.25rem) / 2);
+				}
+
+				.point-item.shadow-card {
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+					background-color: var(--white) !important;
+					padding: 1.5rem !important;
+				}
+			}
+
+			.callout-box {
+				padding: 1rem;
+				border-radius: 1rem;
+			}
+
+			@media (min-width: 768px) {
+				.callout-box {
+					border-radius: 1rem;
+				}
+			}
+
+			.callout-inner {
+				background-color: var(--white);
+				padding: 2rem 1rem;
+				border-radius: 1rem;
+				display: flex;
+				align-items: flex-start;
+				gap: 1.5rem;
+				clip-path: polygon(0 0, 100% 0, 100% 80%, 82% 100%, 0 100%);
+			}
+
+			@media (min-width: 768px) {
+				.callout-inner {
+					clip-path: polygon(0 0, 101% 0, 100% 60%, 94% 100%, 0 100%);
+					padding: 2.5rem;
+					border-radius: 1rem;
+				}
+			}
+
+			.callout-filter {
+				filter: drop-shadow(4px -6px 10px rgba(0, 0, 0, 0.5))
+					drop-shadow(6px 5px 10px rgba(0, 0, 0, 0.5));
+			}
+
+			.bg-primary {
+				background-color: var(--primary);
+			}
+
+			.bg-secondary {
+				background-color: var(--secondary);
+			}
+
+			.grid-2-col {
+				display: grid;
+				grid-template-columns: 1fr;
+				gap: 1.5rem;
+			}
+
+			.grid-3-col {
+				display: grid;
+				grid-template-columns: 1fr;
+				gap: 1.5rem;
+			}
+
+			.grid-complex {
+				display: grid;
+				grid-template-columns: 1fr;
+				gap: 1.5rem;
+			}
+
+			@media (min-width: 768px) {
+				.grid-2-col {
+					grid-template-columns: 1fr 1fr;
+				}
+
+				.grid-3-col {
+					grid-template-columns: 1fr 1fr 1fr;
+				}
+
+				.grid-complex {
+					grid-template-columns: repeat(5, 1fr);
+				}
+
+				.span-3 {
+					grid-column: span 3;
+				}
+
+				.span-2 {
+					grid-column: span 2;
+				}
+			}
+
+			.image-column {
+				display: flex;
+				flex-direction: column;
+				gap: 1.5rem;
+				height: 100%;
+			}
+
+			.image-frame {
+				flex: 1;
+				border-radius: 1rem;
+				overflow: hidden;
+				border: 4px solid var(--primary);
+			}
+
+			.image-frame img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+
+			.section-photo {
+				width: 100%;
+				aspect-ratio: 1200 / 630;
+				margin: 0;
+				border: 4px solid var(--secondary);
+				border-radius: 1rem;
+				overflow: hidden;
+			}
+
+			.section-photo img {
+				display: block;
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				object-position: center;
+			}
+
+			.stat-card {
+				background-color: var(--white);
+				padding: 1.5rem;
+				border-radius: 1rem;
+				text-align: center;
+			}
+
+			.stat-number {
+				font-family: var(--font-anton);
+				color: var(--primary);
+				font-size: 3.25rem;
+				margin-bottom: 0.75rem;
+				transition: color 0.3s ease;
+			}
+
+			.stat-number:hover {
+				color: var(--secondary);
+			}
+
+			.quote-container {
+				background-color: var(--white);
+				padding: 2rem;
+				border-radius: 1rem;
+				transition:
+					transform 0.3s ease,
+					box-shadow 0.3s ease;
+			}
+
+			.quote-container:hover {
+				transform: translateX(10px);
+				box-shadow: -5px 5px 15px rgba(0, 0, 0, 0.1);
+			}
+
+			@media (min-width: 768px) {
+				.quote-container {
+					padding: 3rem;
+				}
+			}
+
+			blockquote {
+				border-left: 4px solid var(--secondary);
+				padding-left: 1.5rem;
+				font-weight: 400;
+			}
+
+			.cta-container {
+				background-color: var(--white);
+				padding: 2rem;
+				border-radius: 1rem;
+				text-align: center;
+				transition:
+					transform 0.3s ease,
+					box-shadow 0.3s ease;
+			}
+
+			.cta-container:hover {
+				transform: translateY(-3px);
+				box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+			}
+
+			.btn-primary {
+				background-color: #fe7702;
+				color: white;
+				box-shadow:
+					0px 3.04px 7.39px 0px rgba(0, 0, 0, 0.68),
+					6.07px -6.07px 4.05px 0px rgba(0, 0, 0, 0.25) inset,
+					-4.05px 5.06px 4.05px 0px rgba(255, 255, 255, 0.25) inset,
+					-2.02px -1.01px 4.05px 0px rgba(0, 0, 0, 0.6);
+				padding: 1rem 2rem;
+				border-radius: 1rem;
+				text-transform: uppercase;
+				font-weight: 700;
+				border: none;
+				cursor: pointer;
+				transition: all 0.3s ease;
+			}
+
+			.btn-primary:hover {
+				transform: scale(1.08) translateY(-2px);
+				background-color: #ff8820;
+				box-shadow:
+					0px 6px 15px 0px rgba(0, 0, 0, 0.75),
+					6.07px -6.07px 4.05px 0px rgba(0, 0, 0, 0.3) inset,
+					-4.05px 5.06px 4.05px 0px rgba(255, 255, 255, 0.3) inset,
+					-2.02px -1.01px 4.05px 0px rgba(0, 0, 0, 0.65);
+			}
+
+			.btn-primary:active {
+				transform: scale(1.02) translateY(0);
+			}
+
+			.table-wrapper {
+				background-color: var(--white);
+				padding: 1.5rem;
+				border-radius: 1rem;
+				overflow-x: auto;
+			}
+
+			table {
+				width: 100%;
+				border-collapse: collapse;
+				font-family: var(--font-montserrat);
+			}
+
+			th {
+				background-color: var(--primary);
+				color: white;
+				padding: 1.5rem;
+				text-align: left;
+				font-weight: 700;
+				font-size: 1.25rem;
+			}
+
+			td {
+				padding: 0.75rem;
+				border-bottom: 1px solid #e5e7eb;
+				font-size: 1.125rem;
+				font-weight: 400;
+			}
+
+			tbody tr:hover td {
+				background-color: var(--primary-lighter);
+			}
+
+			/* =========================================
+			   6. SOLD CTA INLINE HIGHLIGHT
+			   ========================================= */
+			.sold-cta {
+				text-transform: uppercase;
+				text-decoration: underline;
+				cursor: pointer;
+			}
+
+			.site-footer {
+				text-align: center;
+				padding: 2rem 0;
+				border-top: 1px solid var(--gray-300);
+				margin-top: 2rem;
+			}
+
+			/* Contact item hover */
+			.contact-item {
+				color: var(--primary);
+				transition:
+					color 0.3s ease,
+					transform 0.3s ease;
+				cursor: default;
+				width: fit-content;
+			}
+
+			/* Block parent content-block hover from bleeding into contact items */
+			.content-block:hover .contact-item .text-secondary {
+				color: var(--secondary);
+			}
+			.content-block:hover .contact-item .text-primary {
+				color: var(--primary);
+			}
+
+			/* Only directly-hovered row changes */
+			.contact-item:hover {
+				color: var(--secondary);
+				transform: scale(1.05);
+				transition:
+					color 0.3s ease,
+					transform 0.3s ease;
+			}
+			.contact-item:hover .text-secondary {
+				color: var(--primary) !important;
+				transition: color 0.3s ease;
+			}
+			.contact-item:hover .text-primary {
+				color: var(--secondary) !important;
+				transition: color 0.3s ease;
+			}
+
+			/* =========================================
+			   PHONE ONLY (max-width: 767px)
+			   Disable all hover animations & transitions
+			   Tablet (768px+) keeps full desktop design
+			   ========================================= */
+			@media (max-width: 767px) {
+				*,
+				*::before,
+				*::after {
+					transition: none !important;
+					animation: none !important;
+				}
+
+				.shadow-card:hover,
+				.step-container:hover,
+				.point-item:hover,
+				.quote-container:hover,
+				.cta-container:hover,
+				.btn-primary:hover,
+				ul.styled-list li:hover {
+					transform: none !important;
+				}
+
+				.category-banner:hover {
+					transform: none !important;
+					border-left-width: 4px !important;
+				}
+
+				.shadow-card {
+					box-shadow: none !important;
+				}
+
+				.step-container.shadow-card,
+				.content-block.shadow-card:not(.step-body) {
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				.step-container.shadow-card:hover,
+				.content-block.shadow-card:not(.step-body):hover {
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				.shadow-card:hover {
+					box-shadow: none !important;
+				}
+
+				.quote-container:hover {
+					box-shadow: none !important;
+				}
+
+				.cta-container:hover {
+					box-shadow: none !important;
+				}
+
+				.step-container:hover .circle-number-lg,
+				.step-container:hover .circle-number-sm {
+					background-color: rgba(0, 151, 167, 0.2) !important;
+					transform: none !important;
+				}
+
+				.point-item:hover .point-icon {
+					transform: none !important;
+				}
+
+				.btn-primary:hover {
+					transform: none !important;
+					background-color: #fe7702 !important;
+					box-shadow:
+						0px 3.04px 7.39px 0px rgba(0, 0, 0, 0.68),
+						6.07px -6.07px 4.05px 0px rgba(0, 0, 0, 0.25) inset,
+						-4.05px 5.06px 4.05px 0px rgba(255, 255, 255, 0.25) inset,
+						-2.02px -1.01px 4.05px 0px rgba(0, 0, 0, 0.6) !important;
+				}
+
+				tbody tr:hover td {
+					background-color: transparent !important;
+				}
+
+				.text-primary:hover {
+					color: var(--primary) !important;
+				}
+
+				.text-secondary:hover {
+					color: var(--secondary) !important;
+				}
+
+				.main-header h1:hover {
+					color: var(--secondary) !important;
+				}
+
+				.section-title.text-primary:hover,
+				.section-title:hover.text-primary {
+					color: var(--primary) !important;
+				}
+
+				.section-title.text-secondary:hover,
+				.section-title:hover.text-secondary {
+					color: var(--secondary) !important;
+				}
+
+				.content-heading.text-primary:hover,
+				.content-heading:hover.text-primary {
+					color: var(--primary) !important;
+				}
+
+				.content-heading.text-secondary:hover,
+				.content-heading:hover.text-secondary {
+					color: var(--secondary) !important;
+				}
+
+				.banner-primary h2:hover {
+					color: var(--primary) !important;
+				}
+
+				.banner-secondary h2:hover {
+					color: var(--secondary) !important;
+				}
+
+				.step-title-text:hover {
+					color: var(--secondary) !important;
+				}
+
+				.stat-number:hover {
+					color: var(--primary) !important;
+				}
+
+				/* Disable parent hover color-swap on phone */
+				.content-block:hover .text-secondary,
+				.point-item:hover .text-secondary {
+					color: var(--secondary) !important;
+				}
+
+				.content-block:hover .text-primary,
+				.point-item:hover .text-primary {
+					color: var(--primary) !important;
+				}
+
+				/* Disable contact-item hover on mobile */
+				.contact-item:hover {
+					color: var(--primary) !important;
+					transform: none !important;
+				}
+				.contact-item:hover .text-secondary {
+					color: var(--secondary) !important;
+				}
+				.contact-item:hover .text-primary {
+					color: var(--primary) !important;
+				}
+			}
+		</style>
+	</head>
+
+	<body>
+		<main>
+			<!-- PROBATE CATEGORY BANNER -->
+			<section id="etc-banner">
+				<div class="category-banner banner-secondary shadow-card">
+					<h2>Probate</h2>
+				</div>
+			</section>
+
+			<!-- PROBATE Q&A -->
+			<!-- SECTION PHOTO -->
+			<div class="section-photo shadow-card">
+				<img
+					src="./probate.jpg"
+					alt="Probate case support photo 1"
+					loading="lazy"
+				/>
+			</div>
+			<section id="probate-faq">
+				<div class="content-block shadow-card">
+					<div class="points-wrapper">
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									WHAT IS PROBATE AND WHY DOES IT MATTER IN REAL ESTATE?
+								</p>
+								<p class="body-text text-secondary text-bold">
+									Probate is the legal process for managing a deceased
+									person&#8217;s estate, including the distribution of assets
+									and settlement of debts. In real estate, probate ensures that
+									properties are transferred legally and properly after the
+									owner&#8217;s death.
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									HOW LONG DOES THE PROBATE PROCESS TYPICALLY TAKE?
+								</p>
+								<p class="body-text text-secondary text-bold">
+									The probate process in California generally takes about 9
+									months to 2 years. The duration can vary based on the
+									complexity of the estate, state laws, and whether any disputes
+									arise among heirs.
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									ARE PROBATE SALES DIFFERENT FROM TRADITIONAL REAL ESTATE
+									SALES?
+								</p>
+								<p class="body-text text-secondary text-bold">
+									Yes, probate sales involve properties owned by deceased
+									individuals and are subject to court oversight. This process
+									includes specific legal requirements, such as needing court
+									approval for the sale price.
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									WHAT ARE THE ADVANTAGES AND DISADVANTAGES OF BUYING A PROPERTY
+									THROUGH PROBATE?
+								</p>
+								<p
+									class="body-text text-secondary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									<span class="text-primary">Advantages:</span> Buyers may have
+									the opportunity to acquire properties at below-market prices
+									and negotiate flexible terms.
+								</p>
+								<p class="body-text text-secondary text-bold">
+									<span class="text-primary">Disadvantages:</span> The process
+									may involve longer closing times and uncertainties regarding
+									the property&#8217;s condition or title issues.
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									CAN I FINANCE A PROPERTY PURCHASED THROUGH PROBATE?
+								</p>
+								<p class="body-text text-secondary text-bold">
+									Yes, financing is typically available for probate properties
+									through traditional mortgage lenders. However, it&#8217;s
+									important to work with lenders who understand the probate
+									process, as they may have specific requirements.
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									HOW DOES PROBATE AFFECT PROPERTY TAXES ON INHERITED REAL
+									ESTATE?
+								</p>
+								<p class="body-text text-secondary text-bold">
+									In California, inherited properties may undergo reassessment
+									for property tax purposes. However, certain exclusions, such
+									as those for transfers between parents and children under
+									Proposition 13, may apply.
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									CAN I SELL A PROPERTY IN PROBATE BEFORE THE PROBATE PROCESS IS
+									COMPLETE?
+								</p>
+								<p class="body-text text-secondary text-bold">
+									Yes, properties can be
+									<span
+										class="text-primary text-bold sold-cta"
+										onclick="window.open('/books/seller-guide.pdf', '_blank')"
+										>sold</span
+									>
+									before the probate process is fully completed. Once the
+									Executor or Administrator obtains the necessary
+									authority&#8212;either full or limited&#8212;through the
+									court, they can sell the property. This authority can
+									typically be granted within a few weeks of filing for probate,
+									so you don&#8217;t have to wait for the entire process to
+									finalize, which may take much longer.
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									WHAT HAPPENS IF THERE ARE MULTIPLE HEIRS TO A PROBATE
+									PROPERTY?
+								</p>
+								<p class="body-text text-secondary text-bold">
+									If multiple heirs exist, they must agree on the sale terms and
+									how to distribute the proceeds. If disagreements occur, court
+									intervention may be necessary.
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									ARE THERE ANY TAX IMPLICATIONS ASSOCIATED WITH PROBATE
+									PROPERTY SALES?
+								</p>
+								<p class="body-text text-secondary text-bold">
+									Yes, probate property sales may have tax implications,
+									including potential capital gains taxes if the property sells
+									for more than its basis. It&#8217;s advisable to consult with
+									a tax professional for specific guidance.
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									HOW CAN I DETERMINE IF A PROPERTY IS SUBJECT TO PROBATE?
+								</p>
+								<p class="body-text text-secondary text-bold">
+									Properties that are subject to probate are typically owned by
+									deceased individuals. You can identify them through public
+									records, such as probate court filings or notices of estate
+									administration.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- EXECUTORS, TRUSTEES & CONSERVATORS CATEGORY BANNER -->
+			<!-- SECTION PHOTO -->
+			<div class="section-photo shadow-card">
+				<img
+					src="./probate.jpg"
+					alt="Probate case support photo 2"
+					loading="lazy"
+				/>
+			</div>
+			<section id="etc-banner">
+				<div class="category-banner banner-secondary shadow-card">
+					<h2>Executors, Trustees &amp; Conservators</h2>
+				</div>
+			</section>
+
+			<!-- EXECUTORS, TRUSTEES & CONSERVATORS Q&A -->
+			<!-- SECTION PHOTO -->
+			<div class="section-photo shadow-card">
+				<img
+					src="./probate.jpg"
+					alt="Probate case support photo 3"
+					loading="lazy"
+				/>
+			</div>
+			<section id="etc-faq">
+				<div class="content-block shadow-card">
+					<div class="points-wrapper">
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									WHAT DOCUMENTS DO I NEED BEFORE SELLING THE PROPERTY AS AN
+									EXECUTOR, TRUSTEE, OR CONSERVATOR?
+								</p>
+								<p class="body-text text-secondary text-bold">
+									If you&#8217;re an executor, you&#8217;ll need Letters of
+									Administration or Testamentary and a death certificate. If
+									you&#8217;re a trustee, bring a copy of the trust, proof
+									you&#8217;re the current trustee, and the deed. Conservators
+									will need a court order authorizing the sale. I&#8217;ll help
+									you gather exactly what&#8217;s needed and coordinate with
+									your attorney.
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									DO I NEED TO NOTIFY THE HOA IF I&#8217;M MANAGING THE ESTATE
+									OR TRUST?
+								</p>
+								<p class="body-text text-secondary text-bold">
+									Yes. The HOA should be informed that the homeowner passed away
+									and that you&#8217;re managing the estate, trust, or
+									conservatorship. They&#8217;ll let you know about any dues,
+									rules for selling, and access requirements. I can help you
+									notify them and make sure you&#8217;re in compliance.
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									THE PROPERTY ISN&#8217;T IN GREAT SHAPE&#8212;DO I NEED TO FIX
+									IT BEFORE SELLING?
+								</p>
+								<p class="body-text text-secondary text-bold">
+									Not necessarily. Many probate, trust, or conservatorship
+									properties are
+									<span
+										class="text-primary text-bold sold-cta"
+										onclick="window.open('/books/seller-guide.pdf', '_blank')"
+										>sold</span
+									>
+									as-is. The key is pricing it right and disclosing everything.
+									If you want to increase value with repairs, I can recommend
+									cost-effective vendors. Either way, I&#8217;ve
+									<span
+										class="text-primary text-bold sold-cta"
+										onclick="window.open('/books/seller-guide.pdf', '_blank')"
+										>sold</span
+									>
+									homes in all conditions.
+									<a
+										href="/terms-of-service"
+										class="italic text-gray"
+										style="text-decoration: underline; color: inherit"
+										>(See Terms of Service/Disclosure)</a
+									>
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									DO YOU WORK DIRECTLY WITH MY ATTORNEY OR DO I HAVE TO HANDLE
+									IT ALL?
+								</p>
+								<p class="body-text text-secondary text-bold">
+									I work hand-in-hand with your attorney, not in place of them.
+									You won&#8217;t be left to figure it all out alone&#8212;I
+									coordinate every step so you can focus on your role as
+									executor, trustee, or conservator with confidence.
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									WHAT DO WE DO WITH DAD&#8217;S GUNS OR MEDS?
+								</p>
+								<p class="body-text text-secondary text-bold">
+									Firearms should be handled with extreme care. If you&#8217;re
+									unsure, I can connect you with a licensed firearms removal or
+									storage professional. Expired medications should be disposed
+									of through local pharmacy drop-offs or hazardous waste
+									programs. We can help coordinate both if needed.
+									<a
+										href="/terms-of-service"
+										class="italic text-gray"
+										style="text-decoration: underline; color: inherit"
+										>(See Terms of Service/Disclosure)</a
+									>
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									IS THE INSURANCE STILL VALID?
+								</p>
+								<p class="body-text text-secondary text-bold">
+									That&#8217;s a big one. Many home insurance policies become
+									void once the homeowner dies or the property is vacant for too
+									long. I always recommend you contact the insurance provider
+									and ask about coverage during probate. If needed, I can refer
+									you to brokers who specialize in vacant estate coverage.
+									<a
+										href="/terms-of-service"
+										class="italic text-gray"
+										style="text-decoration: underline; color: inherit"
+										>(See Terms of Service/Disclosure)</a
+									>
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									WHAT IF SOMEONE&#8217;S LIVING IN THE HOUSE?
+								</p>
+								<p class="body-text text-secondary text-bold">
+									If it&#8217;s a tenant, relative, or squatter, we&#8217;ll
+									need to confirm the situation. In some cases, we may need
+									legal help to remove them. If they&#8217;re cooperative, we
+									can work around them&#8212;but it&#8217;s best to clarify
+									their status early. I&#8217;ll help guide you on the cleanest
+									path.
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									DO WE TURN OFF THE WATER AND GAS?
+								</p>
+								<p class="body-text text-secondary text-bold">
+									If the home&#8217;s vacant and not being cleaned or shown yet,
+									yes&#8212;shutting off water and gas can prevent leaks and
+									safety issues. But once we start prepping it for market, they
+									may need to be turned back on. I&#8217;ll coordinate timing
+									with the clean-up or repair crews.
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									WHAT DO WE DO WITH EVERYTHING INSIDE THE HOUSE?
+								</p>
+								<p class="body-text text-secondary text-bold">
+									You have a few options. You can keep what you want, donate
+									items, sell valuables, or schedule a complete estate cleanout.
+									If you&#8217;d like, I can bring in a team to sort, remove,
+									donate, or trash everything&#8212;whatever makes your life
+									easier.
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									CAN WE SELL THE HOUSE TO PAY OFF THE ESTATE DEBTS?
+								</p>
+								<p class="body-text text-secondary text-bold">
+									Absolutely. That&#8217;s often the cleanest solution.
+									We&#8217;ll talk to your attorney to make sure the timing
+									works with probate or trust rules, and once the house is
+									<span
+										class="text-primary text-bold sold-cta"
+										onclick="window.open('/books/seller-guide.pdf', '_blank')"
+										>sold</span
+									>, the proceeds can go toward debts, taxes, and beneficiary
+									distributions.
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									HOW FAST CAN WE SELL THE PROPERTY?
+								</p>
+								<p class="body-text text-secondary text-bold">
+									Depends on the authority granted by the court. If it&#8217;s
+									full authority under the Independent Administration of Estates
+									Act, you can usually sell without delays. If it&#8217;s
+									limited authority, we&#8217;ll need court approval. Either
+									way, I&#8217;ll guide you through the right steps to avoid
+									mistakes and delays.
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									WE DON&#8217;T HAVE TIME TO CLEAN OR PREP THE HOUSE. CAN YOU
+									HANDLE IT?
+								</p>
+								<p class="body-text text-secondary text-bold">
+									100%. I offer full-service coordination&#8212;junk removal,
+									cleaning crews, locksmiths, you name it. You give me access,
+									and I&#8217;ll take it from there.
+									<a
+										href="/terms-of-service"
+										class="italic text-gray"
+										style="text-decoration: underline; color: inherit"
+										>(See Terms of Service/Disclosure)</a
+									>
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									DO WE NEED COURT APPROVAL BEFORE SELLING?
+								</p>
+								<p class="body-text text-secondary text-bold">
+									Only if you have limited authority. If your Letters say full
+									authority, you can move forward without court confirmation.
+									Either way, I&#8217;ll coordinate with your attorney to make
+									sure everything&#8217;s compliant.
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									WHAT IF THE ESTATE HAS NO MONEY TO FIX OR CLEAN THE HOUSE?
+								</p>
+								<p class="body-text text-secondary text-bold">
+									That&#8217;s common, and there are solutions. I work with
+									vendors who can defer payment until close of escrow. In some
+									cases, we can even advance funds to get things moving.
+									<a
+										href="/terms-of-service"
+										class="italic text-gray"
+										style="text-decoration: underline; color: inherit"
+										>(See Terms of Service/Disclosure)</a
+									>
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									WHAT ABOUT PERSONAL MAIL AND BILLS STILL GOING TO THE HOUSE?
+								</p>
+								<p class="body-text text-secondary text-bold">
+									You should file a USPS change of address so all mail goes to
+									the executor, trustee, or conservator. I also recommend
+									notifying utility companies and banks so they update the
+									account holder and send all statements to the right person
+									while keeping essential services active.
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									AS A CONSERVATOR, CAN I SELL PROPERTY ON BEHALF OF THE
+									INCAPACITATED PERSON?
+								</p>
+								<p class="body-text text-secondary text-bold">
+									Yes, but only with proper court approval. You&#8217;ll need a
+									court order authorizing the sale. I can guide you through
+									what&#8217;s required and work with your attorney to make sure
+									we stay compliant.
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									CAN YOU HELP ME WITH CLEAN-OUT AND SECURING THE PROPERTY IF
+									I&#8217;M NOT LOCAL?
+								</p>
+								<p class="body-text text-secondary text-bold">
+									Absolutely. Whether you&#8217;re an executor, trustee, or
+									conservator managing from a distance, I can handle everything
+									on-site&#8212;lock changes, cleanout, trash removal, and
+									vendor coordination.
+									<a
+										href="/terms-of-service"
+										class="italic text-gray"
+										style="text-decoration: underline; color: inherit"
+										>(See Terms of Service/Disclosure)</a
+									>
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									WHAT IF THERE ARE MULTIPLE CO-TRUSTEES OR CO-CONSERVATORS?
+								</p>
+								<p class="body-text text-secondary text-bold">
+									All listed parties will typically need to sign listing
+									agreements and sale documents. I can help facilitate
+									communication and make sure everyone is on the same page
+									legally and logistically.
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									THE INCAPACITATED PERSON HAS BELONGINGS INSIDE. WHAT DO I DO
+									WITH THEM?
+								</p>
+								<p class="body-text text-secondary text-bold">
+									You have the responsibility to protect and document the
+									personal property. I can help coordinate item inventory,
+									cleanup, and storage if needed, while ensuring everything is
+									handled respectfully.
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									AS A TRUSTEE OR CONSERVATOR, WHAT&#8217;S MY LIABILITY IN THE
+									SALE?
+								</p>
+								<p class="body-text text-secondary text-bold">
+									As long as you&#8217;re acting within your legal authority and
+									in the best interest of the trust or individual, your
+									liability is limited. I always recommend working alongside
+									your attorney&#8212;and I&#8217;ll help you stay in full
+									compliance throughout the process.
+								</p>
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									HOW QUICKLY CAN A TRUSTEE OR CONSERVATOR SELL THE HOME?
+								</p>
+								<p class="body-text text-secondary text-bold">
+									A trustee can usually sell right away if the trust allows it.
+									A conservator will need a court order. I can help move things
+									quickly on the real estate side while your attorney handles
+									the legal side.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- OUTRO / CONTACT -->
+			<!-- SECTION PHOTO -->
+			<div class="section-photo shadow-card">
+				<img
+					src="./probate.jpg"
+					alt="Probate case support photo 4"
+					loading="lazy"
+				/>
+			</div>
+			<section id="outro">
+				<div class="content-block shadow-card">
+					<h2
+						class="section-title text-secondary"
+						style="margin-bottom: 1.5rem"
+					>
+						READY TO LIST? I&#8217;M READY TO EXECUTE.
+					</h2>
+					<div
+						style="
+							display: flex;
+							flex-direction: column;
+							gap: 1rem;
+							margin-bottom: 1.5rem;
+						"
+					>
+						<!-- Phone -->
+						<div
+							class="contact-item"
+							style="display: flex; align-items: flex-start; gap: 1rem"
+						>
+							<img
+								src="./svgs/phone-icon.svg"
+								style="
+									width: 2rem;
+									height: 2rem;
+									flex-shrink: 0;
+									margin-top: 0.15rem;
+								"
+							/>
+							<div class="body-text text-bold" style="line-height: 1.1">
+								<span class="text-secondary text-bold"
+									>(833)
+									<span style="letter-spacing: 0.07em">PROBAID</span></span
+								><br />
+								<span
+									class="text-primary text-bold"
+									style="
+										display: block;
+										text-align: right;
+										letter-spacing: 0.17em;
+									"
+									>7762243</span
+								>
+							</div>
+						</div>
+						<!-- Website -->
+						<div
+							class="contact-item"
+							style="display: flex; align-items: center; gap: 1rem"
+						>
+							<img
+								src="./svgs/uiw_mail.svg"
+								style="
+									width: 2rem;
+									height: 2rem;
+									flex-shrink: 0;
+									margin-top: 0.15rem;
+								"
+							/>
+							<span class="body-text text-secondary text-bold"
+								>833PROBAID.com</span
+							>
+						</div>
+						<!-- Email -->
+						<div
+							class="contact-item"
+							style="display: flex; align-items: center; gap: 1rem"
+						>
+							<img
+								src="./svgs/globe.svg"
+								style="
+									width: 1.8rem;
+									height: 1.8rem;
+									flex-shrink: 0;
+									margin-top: 0.15rem;
+								"
+							/>
+							<span class="body-text text-secondary text-bold"
+								>Info@833PROBAID.com</span
+							>
+						</div>
+					</div>
+					<h2 class="section-title text-primary" style="margin-top: 1.5rem">
+						EVERY QUESTION ANSWERED. EVERY STEP HANDLED. ZERO GUESSWORK.
+					</h2>
+					<p class="body-text text-secondary text-bold">
+						Whether you&#8217;re navigating probate, managing a trust, or
+						overseeing a conservatorship&#8212;I run the file so you don&#8217;t
+						have to figure it out alone.
+					</p>
+				</div>
+			</section>
+		</main>
+	</body>
+</html>

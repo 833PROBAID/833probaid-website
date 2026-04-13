@@ -1,0 +1,1584 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Executing Trust Real Estate Sales</title>
+
+		<link
+			href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@400;700&family=Roboto:wght@400;900&family=League+Spartan:wght@400;700&family=Oswald&family=Poppins&family=Passions+Conflict&family=Sarpanch&display=swap"
+			rel="stylesheet"
+		/>
+
+		<style type="text/css">
+			/* =========================================
+			   1. VARIABLES & RESET
+			   ========================================= */
+			:root {
+				--primary: #0097a7;
+				--primary-dark: #00838f;
+				/* Primary light: 10% opacity and 5% opacity approximations */
+				--primary-light: rgba(0, 151, 167, 0.1);
+				--primary-lighter: rgba(0, 151, 167, 0.05);
+
+				--secondary: #fe7702;
+				/* Secondary light: 10% opacity and 5% opacity approximations */
+				--secondary-light: rgba(254, 119, 2, 0.1);
+				--secondary-lighter: rgba(254, 119, 2, 0.05);
+
+				--accent: #ff4444;
+				--teal-soft: #e0f7fa;
+
+				--gray-100: #f3f4f6;
+				--gray-300: #d1d5db;
+				--gray-500: #6b7280;
+				--gray-600: #4b5563;
+				--white: #ffffff;
+				--black: #000000;
+
+				--font-anton: "Anton", sans-serif;
+				--font-montserrat: "Montserrat", sans-serif;
+			}
+
+			* {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
+
+			body {
+				background-color: var(--gray-100);
+				color: var(--black);
+				font-family: var(--font-montserrat);
+				padding: 1.5rem;
+				-webkit-font-smoothing: antialiased;
+			}
+
+			@media (min-width: 768px) {
+				body {
+					padding: 2.5rem;
+				}
+			}
+
+			main {
+				max-width: 80rem;
+				/* equivalent to max-w-7xl */
+				margin-left: auto;
+				margin-right: auto;
+				display: flex;
+				flex-direction: column;
+				gap: 2.5rem;
+				/* space-y-10 */
+			}
+
+			img {
+				display: block;
+				max-width: 100%;
+				height: auto;
+			}
+
+			/* =========================================
+			   2. TYPOGRAPHY
+			   ========================================= */
+			h1,
+			h2,
+			h3,
+			h4 {
+				font-family: var(--font-anton);
+				text-transform: uppercase;
+				line-height: 1.2;
+				font-weight: 700;
+				transition: color 0.3s ease;
+			}
+
+			/* Helper classes for specific colors used frequently */
+			.text-primary {
+				color: var(--primary);
+			}
+
+			.text-primary:hover {
+				color: var(--secondary);
+			}
+
+			.text-secondary {
+				color: var(--secondary);
+			}
+
+			.text-secondary:hover {
+				color: var(--primary);
+			}
+
+			/* Parent hover — swap colors so primary children become secondary */
+			.content-block:hover .text-secondary,
+			.point-item:hover .text-secondary {
+				color: var(--primary);
+				transition: color 0.3s ease;
+			}
+
+			.content-block:hover .text-primary,
+			.point-item:hover .text-primary {
+				color: var(--secondary);
+				transition: color 0.3s ease;
+			}
+
+			.text-gray {
+				color: var(--gray-600);
+			}
+
+			.text-center {
+				text-align: center;
+			}
+
+			.text-bold {
+				font-weight: 700;
+			}
+
+			.italic {
+				font-style: italic;
+			}
+
+			/* Fixed Typography Sizes */
+			.section-title {
+				font-size: 2rem !important;
+				margin-bottom: 1rem;
+				transition: color 0.3s ease;
+			}
+
+			.section-title.text-primary:hover,
+			.section-title:hover.text-primary {
+				color: var(--secondary) !important;
+			}
+
+			.section-title.text-secondary:hover,
+			.section-title:hover.text-secondary {
+				color: var(--primary) !important;
+			}
+
+			.content-heading {
+				font-size: 1.625rem !important;
+				margin-bottom: 0.75rem;
+				transition: color 0.3s ease;
+			}
+
+			.content-heading.text-primary:hover,
+			.content-heading:hover.text-primary {
+				color: var(--secondary) !important;
+			}
+
+			.content-heading.text-secondary:hover,
+			.content-heading:hover.text-secondary {
+				color: var(--primary) !important;
+			}
+
+			.body-text {
+				font-size: 1.375rem !important;
+				line-height: 1.6;
+				font-weight: 700;
+			}
+
+			.small-text {
+				font-size: 1.125rem !important;
+				font-weight: 700;
+			}
+
+			/* Header specific */
+			.main-header {
+				text-align: center;
+			}
+
+			.main-header h1 {
+				font-size: 3.25rem;
+				/* text-5xl */
+				color: var(--secondary);
+				margin-bottom: 1rem;
+				transition: color 0.3s ease;
+			}
+
+			.main-header h1:hover {
+				color: var(--primary);
+			}
+
+			/* Mobile Typography Adjustments */
+			@media (max-width: 767px) {
+				.section-title {
+					font-size: 1.5rem !important;
+				}
+
+				.content-heading {
+					font-size: 1.25rem !important;
+				}
+
+				.body-text {
+					font-size: 1rem !important;
+				}
+
+				.small-text {
+					font-size: 0.875rem !important;
+				}
+
+				.main-header h1 {
+					font-size: 2rem;
+				}
+
+				.step-title-text {
+					font-size: clamp(1.25rem, 3.15vw, 3.7rem);
+				}
+			}
+
+			/* =========================================
+			   3. SHADOWS & UTILITIES
+			   ========================================= */
+			.shadow-card {
+				box-shadow:
+					0 8px 12px rgba(0, 0, 0, 0.4),
+					0 -5px 12px 1px rgba(0, 0, 0, 0.4);
+				transition:
+					transform 0.3s ease,
+					box-shadow 0.3s ease;
+			}
+
+			.shadow-card:hover {
+				transform: translateY(-5px);
+				box-shadow:
+					0 12px 20px rgba(0, 0, 0, 0.5),
+					0 -8px 16px 2px rgba(0, 0, 0, 0.5);
+			}
+
+			.bg-white {
+				background-color: var(--white);
+			}
+
+			.rounded-card {
+				border-radius: 1rem;
+			}
+
+			/* =========================================
+			   4. CATEGORY BANNERS
+			   ========================================= */
+			.category-banner {
+				padding: 1.5rem;
+				border-radius: 1rem;
+				border-left: 4px solid;
+				transition:
+					transform 0.3s ease,
+					border-left-width 0.3s ease;
+			}
+
+			.category-banner:hover {
+				transform: translateX(8px);
+				border-left-width: 8px;
+			}
+
+			.category-banner h2 {
+				font-size: 2rem;
+				/* text-3xl */
+				margin-bottom: 0.5rem;
+				font-weight: 700;
+				transition: color 0.3s ease;
+			}
+
+			.banner-primary {
+				background: linear-gradient(
+					to right,
+					var(--primary-light),
+					var(--primary-lighter)
+				);
+				border-color: var(--primary);
+			}
+
+			.banner-primary h2 {
+				color: var(--primary);
+			}
+
+			.banner-primary h2:hover {
+				color: var(--secondary);
+			}
+
+			.banner-secondary {
+				background: linear-gradient(
+					to right,
+					var(--secondary-light),
+					var(--secondary-lighter)
+				);
+				border-color: var(--secondary);
+			}
+
+			.banner-secondary h2 {
+				color: var(--secondary);
+			}
+
+			.banner-secondary h2:hover {
+				color: var(--primary);
+			}
+
+			/* =========================================
+			   5. CONTENT BLOCKS
+			   ========================================= */
+
+			/* Standard Content Card */
+			.content-block {
+				background-color: var(--white);
+				padding: 0.9rem;
+				border-radius: 1rem;
+				transition: transform 0.3s ease;
+			}
+
+			@media (min-width: 768px) {
+				.content-block {
+					padding: 2.7rem !important;
+				}
+			}
+
+			/* Step / Process Section */
+			.step-container {
+				border-radius: 1rem;
+				background-color: var(--white);
+				padding: 1.5rem;
+				transition: transform 0.3s ease;
+			}
+
+			.step-container:hover {
+				transform: scale(1.02);
+			}
+
+			.step-inner {
+				background-color: transparent;
+				padding: 0;
+				display: flex;
+				flex-direction: column;
+				gap: 0;
+			}
+
+			/* Step Circles */
+			.circle-number-lg {
+				display: none;
+				width: 5rem;
+				height: 5rem;
+				background-color: rgba(0, 151, 167, 0.2);
+				/* primary/20 */
+				color: var(--secondary);
+				border-radius: 50%;
+				align-items: center;
+				justify-content: center;
+				font-family: var(--font-anton);
+				font-size: 2.5rem;
+				font-weight: 700;
+				flex-shrink: 0;
+				transition: all 0.3s ease;
+			}
+
+			.step-container:hover .circle-number-lg {
+				background-color: rgba(0, 151, 167, 0.4);
+				transform: rotate(360deg) scale(1.1);
+			}
+
+			.circle-number-sm {
+				display: flex;
+				width: 2.5rem;
+				height: 2.5rem;
+				background-color: rgba(0, 151, 167, 0.2);
+				color: var(--secondary);
+				border-radius: 50%;
+				align-items: center;
+				justify-content: center;
+				font-family: var(--font-anton);
+				font-size: 1.375rem;
+				font-weight: 700;
+				flex-shrink: 0;
+				margin-bottom: 0.75rem;
+				align-self: flex-start;
+				transition: all 0.3s ease;
+			}
+
+			.step-container:hover .circle-number-sm {
+				background-color: rgba(0, 151, 167, 0.4);
+				transform: rotate(360deg) scale(1.1);
+			}
+
+			.step-content {
+				flex: 1;
+			}
+
+			.step-title-row {
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
+				margin-bottom: 0.75rem;
+			}
+
+			.step-title-text {
+				font-size: clamp(1.5rem, 3.15vw, 3.7rem);
+				color: var(--secondary);
+				transition: color 0.3s ease;
+			}
+
+			.step-title-text:hover {
+				color: var(--primary);
+			}
+
+			.step-body {
+				margin-top: 0;
+				padding: 0;
+				background-color: transparent;
+				border-radius: 0;
+			}
+
+			/* Remove all nested shadows and cards on mobile */
+			.step-container .step-inner {
+				box-shadow: none !important;
+				background-color: transparent !important;
+			}
+
+			.step-container .step-body {
+				box-shadow: none !important;
+			}
+
+			.step-container .step-body .content-block {
+				padding: 0 !important;
+				background-color: transparent !important;
+				box-shadow: none !important;
+			}
+
+			@media (min-width: 768px) {
+				.step-container {
+					padding: 2.5rem;
+					border-radius: 1rem;
+				}
+
+				.step-inner {
+					gap: 1.5rem;
+					border-radius: 1rem;
+					background-color: var(--white);
+					flex-direction: row;
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				.circle-number-lg {
+					display: flex;
+				}
+
+				.circle-number-sm {
+					display: none;
+					margin-bottom: 0;
+				}
+
+				.step-title-row {
+					margin-bottom: 0;
+				}
+
+				.step-body {
+					margin-top: 1.5rem;
+					padding: 1.5rem;
+					background-color: var(--white);
+					border-radius: 1rem;
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				.step-body.content-block {
+					padding: 1.5rem !important;
+					background-color: var(--white) !important;
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+			}
+
+			/* Lists */
+			ul.styled-list {
+				margin-left: 1.5rem;
+				list-style-type: disc;
+				display: flex;
+				flex-direction: column;
+				gap: 1rem;
+			}
+
+			ul.styled-list li {
+				transition: transform 0.2s ease;
+			}
+
+			ul.styled-list li:hover {
+				transform: translateX(8px);
+			}
+
+			/* Point Items Wrapper */
+			.points-wrapper {
+				display: flex;
+				flex-direction: column;
+				gap: 1rem;
+			}
+
+			/* Point Items */
+			.point-item {
+				display: flex;
+				align-items: flex-start;
+				gap: 1.5rem;
+				background-color: transparent;
+				padding: 0;
+				border-radius: 0;
+				transition: transform 0.2s ease;
+			}
+
+			.point-item:hover {
+				transform: translateX(5px);
+			}
+
+			.point-icon {
+				width: 1.75rem;
+				margin-top: calc((1.375rem * 1.6 - 1.75rem) / 2);
+				flex-shrink: 0;
+				transition: transform 0.3s ease;
+			}
+
+			.point-item:hover .point-icon {
+				transform: scale(1.15) rotate(5deg);
+			}
+
+			/* Remove shadow-card styling on mobile for point-items */
+			.point-item.shadow-card {
+				box-shadow: none !important;
+				background-color: transparent !important;
+				padding: 0 !important;
+			}
+
+			@media (min-width: 768px) {
+				.point-item {
+					background-color: var(--white);
+					padding: 1.5rem;
+					border-radius: 1rem;
+				}
+
+				.point-icon {
+					width: 2.25rem;
+					margin-top: calc((1.375rem * 1.6 - 2.25rem) / 2);
+				}
+
+				.point-item.shadow-card {
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+					background-color: var(--white) !important;
+					padding: 1.5rem !important;
+				}
+			}
+
+			/* Callouts */
+			.callout-box {
+				padding: 1rem;
+				border-radius: 1rem;
+			}
+
+			@media (min-width: 768px) {
+				.callout-box {
+					border-radius: 1rem;
+				}
+			}
+
+			.callout-inner {
+				background-color: var(--white);
+				padding: 2rem 1rem;
+				border-radius: 1rem;
+				display: flex;
+				align-items: flex-start;
+				gap: 1.5rem;
+				/* Clip path logic */
+				clip-path: polygon(0 0, 100% 0, 100% 80%, 82% 100%, 0 100%);
+			}
+
+			@media (min-width: 768px) {
+				.callout-inner {
+					clip-path: polygon(0 0, 101% 0, 100% 60%, 94% 100%, 0 100%);
+					padding: 2.5rem;
+					border-radius: 1rem;
+				}
+			}
+
+			.callout-filter {
+				filter: drop-shadow(4px -6px 10px rgba(0, 0, 0, 0.5))
+					drop-shadow(6px 5px 10px rgba(0, 0, 0, 0.5));
+			}
+
+			.bg-primary {
+				background-color: var(--primary);
+			}
+
+			.bg-secondary {
+				background-color: var(--secondary);
+			}
+
+			/* Grids */
+			.grid-2-col {
+				display: grid;
+				grid-template-columns: 1fr;
+				gap: 1.5rem;
+			}
+
+			.grid-3-col {
+				display: grid;
+				grid-template-columns: 1fr;
+				gap: 1.5rem;
+			}
+
+			.grid-complex {
+				display: grid;
+				grid-template-columns: 1fr;
+				gap: 1.5rem;
+			}
+
+			@media (min-width: 768px) {
+				.grid-2-col {
+					grid-template-columns: 1fr 1fr;
+				}
+
+				.grid-3-col {
+					grid-template-columns: 1fr 1fr 1fr;
+				}
+
+				.grid-complex {
+					grid-template-columns: repeat(5, 1fr);
+				}
+
+				.span-3 {
+					grid-column: span 3;
+				}
+
+				.span-2 {
+					grid-column: span 2;
+				}
+			}
+
+			/* Image Grid Columns */
+			.image-column {
+				display: flex;
+				flex-direction: column;
+				gap: 1.5rem;
+				height: 100%;
+			}
+
+			.image-frame {
+				flex: 1;
+				border-radius: 1rem;
+				overflow: hidden;
+				border: 4px solid var(--primary);
+			}
+
+			.image-frame img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+
+			.section-photo {
+				width: 100%;
+				aspect-ratio: 1200 / 630;
+				margin: 0;
+				border: 4px solid var(--secondary);
+				border-radius: 1rem;
+				overflow: hidden;
+			}
+
+			.section-photo img {
+				display: block;
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				object-position: center;
+			}
+
+			/* Stats Cards */
+			.stat-card {
+				background-color: var(--white);
+				padding: 1.5rem;
+				border-radius: 1rem;
+				text-align: center;
+			}
+
+			.stat-number {
+				font-family: var(--font-anton);
+				color: var(--primary);
+				font-size: 3.25rem;
+				margin-bottom: 0.75rem;
+				transition: color 0.3s ease;
+			}
+
+			.stat-number:hover {
+				color: var(--secondary);
+			}
+
+			/* Blockquote */
+			.quote-container {
+				background-color: var(--white);
+				padding: 2rem;
+				border-radius: 1rem;
+				transition:
+					transform 0.3s ease,
+					box-shadow 0.3s ease;
+			}
+
+			.quote-container:hover {
+				transform: translateX(10px);
+				box-shadow: -5px 5px 15px rgba(0, 0, 0, 0.1);
+			}
+
+			@media (min-width: 768px) {
+				.quote-container {
+					padding: 3rem;
+				}
+			}
+
+			blockquote {
+				border-left: 4px solid var(--secondary);
+				padding-left: 1.5rem;
+				font-weight: 400;
+			}
+
+			/* Buttons */
+			.cta-container {
+				background-color: var(--white);
+				padding: 2rem;
+				border-radius: 1rem;
+				text-align: center;
+				transition:
+					transform 0.3s ease,
+					box-shadow 0.3s ease;
+			}
+
+			.cta-container:hover {
+				transform: translateY(-3px);
+				box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+			}
+
+			.btn-primary {
+				background-color: #fe7702;
+				color: white;
+				box-shadow:
+					0px 3.04px 7.39px 0px rgba(0, 0, 0, 0.68),
+					6.07px -6.07px 4.05px 0px rgba(0, 0, 0, 0.25) inset,
+					-4.05px 5.06px 4.05px 0px rgba(255, 255, 255, 0.25) inset,
+					-2.02px -1.01px 4.05px 0px rgba(0, 0, 0, 0.6);
+				padding: 1rem 2rem;
+				border-radius: 1rem;
+				text-transform: uppercase;
+				font-weight: 700;
+				border: none;
+				cursor: pointer;
+				transition: all 0.3s ease;
+			}
+
+			.btn-primary:hover {
+				transform: scale(1.08) translateY(-2px);
+				background-color: #ff8820;
+				box-shadow:
+					0px 6px 15px 0px rgba(0, 0, 0, 0.75),
+					6.07px -6.07px 4.05px 0px rgba(0, 0, 0, 0.3) inset,
+					-4.05px 5.06px 4.05px 0px rgba(255, 255, 255, 0.3) inset,
+					-2.02px -1.01px 4.05px 0px rgba(0, 0, 0, 0.65);
+			}
+
+			.btn-primary:active {
+				transform: scale(1.02) translateY(0);
+			}
+
+			/* Tables */
+			.table-wrapper {
+				background-color: var(--white);
+				padding: 1.5rem;
+				border-radius: 1rem;
+				overflow-x: auto;
+			}
+
+			table {
+				width: 100%;
+				border-collapse: collapse;
+				font-family: var(--font-montserrat);
+			}
+
+			th {
+				background-color: var(--primary);
+				color: white;
+				padding: 1.5rem;
+				text-align: left;
+				font-weight: 700;
+				font-size: 1.25rem;
+			}
+
+			td {
+				padding: 0.75rem;
+				border-bottom: 1px solid #e5e7eb;
+				font-size: 1.125rem;
+				font-weight: 400;
+			}
+
+			tbody tr:hover td {
+				background-color: var(--primary-lighter);
+			}
+
+			/* =========================================
+			   6. SOLD CTA INLINE HIGHLIGHT
+			   ========================================= */
+			.sold-cta {
+				text-transform: uppercase;
+				text-decoration: underline;
+				cursor: pointer;
+			}
+
+			/* Footer */
+			.site-footer {
+				text-align: center;
+				padding: 2rem 0;
+				border-top: 1px solid var(--gray-300);
+				margin-top: 2rem;
+			}
+
+			/* Contact item hover */
+			.contact-item {
+				color: var(--primary);
+				transition:
+					color 0.3s ease,
+					transform 0.3s ease;
+				cursor: default;
+				width: fit-content;
+			}
+
+			/* Block parent content-block hover from bleeding into contact items */
+			.content-block:hover .contact-item .text-secondary {
+				color: var(--secondary);
+			}
+			.content-block:hover .contact-item .text-primary {
+				color: var(--primary);
+			}
+
+			/* Only directly-hovered row changes */
+			.contact-item:hover {
+				color: var(--secondary);
+				transform: scale(1.05);
+				transition:
+					color 0.3s ease,
+					transform 0.3s ease;
+			}
+			.contact-item:hover .text-secondary {
+				color: var(--primary) !important;
+				transition: color 0.3s ease;
+			}
+			.contact-item:hover .text-primary {
+				color: var(--secondary) !important;
+				transition: color 0.3s ease;
+			}
+
+			/* =========================================
+			   PHONE ONLY (max-width: 767px)
+			   Disable all hover animations & transitions
+			   Tablet (768px+) keeps full desktop design
+			   ========================================= */
+			@media (max-width: 767px) {
+				/* Kill all transitions and animations */
+				*,
+				*::before,
+				*::after {
+					transition: none !important;
+					animation: none !important;
+				}
+
+				/* Reset transform-based hovers */
+				.shadow-card:hover,
+				.step-container:hover,
+				.point-item:hover,
+				.quote-container:hover,
+				.cta-container:hover,
+				.btn-primary:hover,
+				ul.styled-list li:hover {
+					transform: none !important;
+				}
+
+				.category-banner:hover {
+					transform: none !important;
+					border-left-width: 4px !important;
+				}
+
+				/* Remove resting shadow from ALL shadow-card on phone */
+				.shadow-card {
+					box-shadow: none !important;
+				}
+
+				/* Keep resting shadow on step-container and content-block on phone, but no hover change */
+				.step-container.shadow-card,
+				.content-block.shadow-card:not(.step-body) {
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				.step-container.shadow-card:hover,
+				.content-block.shadow-card:not(.step-body):hover {
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				/* Reset shadow hovers */
+				.shadow-card:hover {
+					box-shadow: none !important;
+				}
+
+				.quote-container:hover {
+					box-shadow: none !important;
+				}
+
+				.cta-container:hover {
+					box-shadow: none !important;
+				}
+
+				/* Reset circle spin hovers */
+				.step-container:hover .circle-number-lg,
+				.step-container:hover .circle-number-sm {
+					background-color: rgba(0, 151, 167, 0.2) !important;
+					transform: none !important;
+				}
+
+				/* Reset point icon hover */
+				.point-item:hover .point-icon {
+					transform: none !important;
+				}
+
+				/* Reset button hover */
+				.btn-primary:hover {
+					transform: none !important;
+					background-color: #fe7702 !important;
+					box-shadow:
+						0px 3.04px 7.39px 0px rgba(0, 0, 0, 0.68),
+						6.07px -6.07px 4.05px 0px rgba(0, 0, 0, 0.25) inset,
+						-4.05px 5.06px 4.05px 0px rgba(255, 255, 255, 0.25) inset,
+						-2.02px -1.01px 4.05px 0px rgba(0, 0, 0, 0.6) !important;
+				}
+
+				/* Reset table row hover */
+				tbody tr:hover td {
+					background-color: transparent !important;
+				}
+
+				/* Reset all color-change hovers */
+				.text-primary:hover {
+					color: var(--primary) !important;
+				}
+
+				.text-secondary:hover {
+					color: var(--secondary) !important;
+				}
+
+				.main-header h1:hover {
+					color: var(--secondary) !important;
+				}
+
+				.section-title.text-primary:hover,
+				.section-title:hover.text-primary {
+					color: var(--primary) !important;
+				}
+
+				.section-title.text-secondary:hover,
+				.section-title:hover.text-secondary {
+					color: var(--secondary) !important;
+				}
+
+				.content-heading.text-primary:hover,
+				.content-heading:hover.text-primary {
+					color: var(--primary) !important;
+				}
+
+				.content-heading.text-secondary:hover,
+				.content-heading:hover.text-secondary {
+					color: var(--secondary) !important;
+				}
+
+				.banner-primary h2:hover {
+					color: var(--primary) !important;
+				}
+
+				.banner-secondary h2:hover {
+					color: var(--secondary) !important;
+				}
+
+				.step-title-text:hover {
+					color: var(--secondary) !important;
+				}
+
+				.stat-number:hover {
+					color: var(--primary) !important;
+				}
+
+				/* Disable parent hover color-swap on phone */
+				.content-block:hover .text-secondary,
+				.point-item:hover .text-secondary {
+					color: var(--secondary) !important;
+				}
+
+				.content-block:hover .text-primary,
+				.point-item:hover .text-primary {
+					color: var(--primary) !important;
+				}
+
+				/* Disable contact-item hover on mobile */
+				.contact-item:hover {
+					color: var(--primary) !important;
+					transform: none !important;
+				}
+				.contact-item:hover .text-secondary {
+					color: var(--secondary) !important;
+				}
+				.contact-item:hover .text-primary {
+					color: var(--primary) !important;
+				}
+			}
+		</style>
+	</head>
+
+	<body>
+		<main>
+			<!-- INTRO -->
+			<section id="intro">
+				<div class="content-block shadow-card">
+					<p class="body-text text-secondary text-bold">
+						Trust sales aren't casual. They are legal, fiduciary-driven
+						transactions — and the margin for error is zero.
+						<br />
+						<br />
+						There's no court to clean up the mess if a general agent mishandles
+						it. That's why I don't just "list" trust properties. I verify the
+						authority, coordinate legal alignment, and deliver execution that
+						protects the Trustee, satisfies the beneficiaries, and withstands
+						post-sale scrutiny. Every move I make is backed by documentation,
+						transparency, and court-defensible precision.
+					</p>
+				</div>
+			</section>
+
+			<!-- STEP 1 -->
+			<section id="step-1" class="step-container shadow-card">
+				<div class="step-inner shadow-card">
+					<div class="step-content">
+						<div class="step-title-row">
+							<h3 class="step-title-text">
+								TRUST AUTHORITY CONFIRMATION — NO GRAY AREAS. NO GUESSING.
+							</h3>
+						</div>
+						<div class="content-block step-body shadow-card">
+							<p class="body-text step-intro" style="margin-bottom: 1.5rem">
+								I don't touch the property until the Trustee's authority is
+								verified beyond question.
+							</p>
+
+							<div class="points-wrapper" style="margin-bottom: 1.5rem">
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" />
+									<p class="body-text">
+										Trust agreement and any amendments reviewed in full
+									</p>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" />
+									<p class="body-text">
+										Certification of Trust cross-referenced with title
+									</p>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" />
+									<p class="body-text">
+										Confirmation of irrevocability if settlor is deceased or
+										incapacitated
+									</p>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" />
+									<p class="body-text">
+										Title vesting confirmed to match trust ownership
+									</p>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" />
+									<p class="body-text">
+										Co-Trustee signature requirements clarified
+									</p>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" />
+									<p class="body-text">
+										Beneficiary notification verified if required by the trust
+									</p>
+								</div>
+							</div>
+
+							<p class="body-text step-closing">
+								I don't move forward on assumption — I move on legal
+								verification.
+							</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- STEP 2 -->
+			<section id="step-2" class="step-container shadow-card">
+				<div class="step-inner shadow-card">
+					<div class="step-content">
+						<div class="step-title-row">
+							<h3 class="step-title-text">
+								STRATEGIC PROPERTY PREP — ZERO WASTE. ZERO LIABILITY.
+							</h3>
+						</div>
+						<div class="content-block step-body shadow-card">
+							<p class="body-text step-intro" style="margin-bottom: 1.5rem">
+								Trust assets must be protected — not just marketed. I prepare
+								the property as if it's under audit.
+							</p>
+
+							<div class="points-wrapper" style="margin-bottom: 1.5rem">
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" />
+									<p class="body-text">
+										Full condition assessment documented with photos and
+										cost-to-cure estimates
+									</p>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" />
+									<p class="body-text">
+										Deferred maintenance addressed through vetted vendors — with
+										optional deferred payment
+									</p>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" />
+									<p class="body-text">
+										Safety compliance confirmed — detectors, hazards, code
+										issues
+									</p>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" />
+									<p class="body-text">
+										Title issues, liens, or occupancy risks flagged and resolved
+										before marketing
+									</p>
+								</div>
+							</div>
+
+							<p class="body-text step-closing">
+								I don't let trust property sit vulnerable — I prepare it for
+								fiduciary-grade presentation.
+							</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- STEP 3 -->
+			<section id="step-3" class="step-container shadow-card">
+				<div class="step-inner shadow-card">
+					<div class="step-content">
+						<div class="step-title-row">
+							<h3 class="step-title-text">
+								TITLE AND ESCROW SYNC — NO MISSING PIECES.
+							</h3>
+						</div>
+						<div class="content-block step-body shadow-card">
+							<p class="body-text step-intro" style="margin-bottom: 1.5rem">
+								Before the first buyer sees the home, title and escrow are ready
+								for the final act.
+							</p>
+
+							<div class="points-wrapper" style="margin-bottom: 1.5rem">
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" />
+									<p class="body-text">
+										Preliminary Title Report reviewed with full legal name and
+										trust match
+									</p>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" />
+									<p class="body-text">
+										Vested owner confirmed under trust entity — not just the
+										Trustee's personal name
+									</p>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" />
+									<p class="body-text">
+										Escrow officer briefed on trust structure and closing
+										requirements
+									</p>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" />
+									<p class="body-text">
+										Seller-side documents drafted and pre-reviewed for accuracy
+									</p>
+								</div>
+							</div>
+
+							<p class="body-text step-closing">
+								No delays. No rejected documents. No confusion at closing.
+							</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- STEP 4 -->
+			<section id="step-4" class="step-container shadow-card">
+				<div class="step-inner shadow-card">
+					<div class="step-content">
+						<div class="step-title-row">
+							<h3 class="step-title-text">
+								LAUNCHING THE LISTING — TRUST SALE DISCLOSED. LEGITIMACY
+								DISPLAYED.
+							</h3>
+						</div>
+						<div class="content-block step-body shadow-card">
+							<p class="body-text step-intro" style="margin-bottom: 1.5rem">
+								This is not a casual listing. It's a fiduciary-controlled asset.
+								I market accordingly.
+							</p>
+
+							<div class="points-wrapper" style="margin-bottom: 1.5rem">
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" />
+									<p class="body-text">
+										MLS and public disclosures explicitly state this is a Trust
+										Sale
+									</p>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" />
+									<p class="body-text">
+										Buyer's agents receive required trust documentation prior to
+										offer
+									</p>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" />
+									<p class="body-text">
+										Marketing focuses on liquidity, certainty, and clean
+										transfer — not fluff or upgrades
+									</p>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" />
+									<p class="body-text">
+										Showings coordinated with full control and transparency for
+										the Trustee
+									</p>
+								</div>
+							</div>
+
+							<p class="body-text step-closing">
+								I don't attract amateurs. I position trust property for serious,
+								qualified buyers only.
+							</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- STEP 5 -->
+			<section id="step-5" class="step-container shadow-card">
+				<div class="step-inner shadow-card">
+					<div class="step-content">
+						<div class="step-title-row">
+							<h3 class="step-title-text">
+								OFFER REVIEW AND SELECTION — COMPLIANT, DOCUMENTED,
+								COURT-DEFENSIBLE.
+							</h3>
+						</div>
+						<div class="content-block step-body shadow-card">
+							<p class="body-text step-intro" style="margin-bottom: 1.5rem">
+								Every offer is reviewed like it's heading to litigation —
+								because in some cases, it might.
+							</p>
+
+							<div class="points-wrapper" style="margin-bottom: 1.5rem">
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" />
+									<p class="body-text">
+										Full offer summaries presented to Trustee with terms,
+										timeline, and net sheet
+									</p>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" />
+									<p class="body-text">
+										Title and escrow officers looped in early to flag vesting or
+										payoff issues
+									</p>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" />
+									<p class="body-text">
+										Beneficiary concerns addressed and documented when
+										applicable
+									</p>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" />
+									<p class="body-text">
+										No acceptance until trust terms, authority, and risk
+										exposure are fully reviewed
+									</p>
+								</div>
+							</div>
+
+							<p class="body-text step-closing">
+								I don't rush to escrow. I protect the estate's position before
+								signatures are made.
+							</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- STEP 6 -->
+			<section id="step-6" class="step-container shadow-card">
+				<div class="step-inner shadow-card">
+					<div class="step-content">
+						<div class="step-title-row">
+							<h3 class="step-title-text">
+								ESCROW MANAGEMENT — TOTAL CONTROL. TOTAL CLARITY.
+							</h3>
+						</div>
+						<div class="content-block step-body shadow-card">
+							<p class="body-text step-intro" style="margin-bottom: 1.5rem">
+								I oversee escrow from day one like a court auditor is watching.
+							</p>
+
+							<div class="points-wrapper" style="margin-bottom: 1.5rem">
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" />
+									<p class="body-text">
+										Trust vesting confirmed on all documents and wire
+										instructions
+									</p>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" />
+									<p class="body-text">
+										Final statement of information and preliminary change of
+										ownership forms pre-filled
+									</p>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" />
+									<p class="body-text">
+										Buyer acknowledgments regarding trust status signed and
+										stored
+									</p>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" />
+									<p class="body-text">
+										Escrow timeline enforced to avoid drift, confusion, or
+										surprise extensions
+									</p>
+								</div>
+							</div>
+
+							<p class="body-text step-closing">
+								I don't babysit escrow. I drive it — on schedule and under legal
+								alignment.
+							</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- STEP 7 -->
+			<section id="step-7" class="step-container shadow-card">
+				<div class="step-inner shadow-card">
+					<div class="step-content">
+						<div class="step-title-row">
+							<h3 class="step-title-text">
+								CLOSING THE SALE — EXECUTED. RECORDED. UNCONTESTED.
+							</h3>
+						</div>
+						<div class="content-block step-body shadow-card">
+							<p class="body-text step-intro" style="margin-bottom: 1.5rem">
+								When the property closes, it closes clean — no hangovers, no red
+								flags, no backlash.
+							</p>
+
+							<div class="points-wrapper" style="margin-bottom: 1.5rem">
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" />
+									<p class="body-text">
+										Final settlement statement delivered to Trustee with
+										complete breakdown
+									</p>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" />
+									<p class="body-text">
+										Proceeds wired to trust account or as directed in the trust
+										instrument
+									</p>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" />
+									<p class="body-text">
+										Recording confirmed with correct vesting and legal
+										description
+									</p>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" />
+									<p class="body-text">
+										Full closing package prepared for Trustee's records,
+										attorney files, and beneficiaries
+									</p>
+								</div>
+							</div>
+
+							<p class="body-text step-closing">
+								I don't "close deals." I close them flawlessly — with records
+								that stand up to any challenge.
+							</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- OUTRO -->
+			<!-- SECTION PHOTO -->
+			<div class="section-photo shadow-card">
+				<img
+					src="./probate.jpg"
+					alt="Probate case support photo 1"
+					loading="lazy"
+				/>
+			</div>
+			<section id="outro">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						PRESERVE WHAT MATTERS. EXECUTE WITH CERTAINTY.
+					</h2>
+					<p class="body-text text-secondary text-bold">
+						Trust property is not a retail product. It's a legal asset. Every
+						misstep exposes the Trustee to liability and opens the door to
+						disputes. I eliminate that risk — with verified authority, airtight
+						disclosures, and execution that exceeds the legal standard. You're
+						not just listing a home — you're fulfilling a legal obligation.
+						Let's do it right.
+					</p>
+					<h2 class="section-title text-primary" style="margin-top: 1.5rem">
+						HONOR THE LEGACY. LOCK THE FILE.
+					</h2>
+					<div
+						style="
+							display: flex;
+							flex-direction: column;
+							gap: 1rem;
+							margin-bottom: 1.5rem;
+						"
+					>
+						<!-- Phone -->
+						<div
+							class="contact-item"
+							style="display: flex; align-items: flex-start; gap: 1rem"
+						>
+							<img
+								src="./svgs/phone-icon.svg"
+								style="
+									width: 2rem;
+									height: 2rem;
+									flex-shrink: 0;
+									margin-top: 0.15rem;
+								"
+							/>
+							<div class="body-text text-bold" style="line-height: 1.1">
+								<span class="text-secondary text-bold"
+									>(833)
+									<span style="letter-spacing: 0.07em">PROBAID</span></span
+								><br />
+								<span
+									class="text-primary text-bold"
+									style="
+										display: block;
+										text-align: right;
+										letter-spacing: 0.17em;
+									"
+									>7762243</span
+								>
+							</div>
+						</div>
+						<!-- Website -->
+						<div
+							class="contact-item"
+							style="display: flex; align-items: center; gap: 1rem"
+						>
+							<img
+								src="./svgs/uiw_mail.svg"
+								style="
+									width: 2rem;
+									height: 2rem;
+									flex-shrink: 0;
+									margin-top: 0.15rem;
+								"
+							/>
+							<span class="body-text text-secondary text-bold"
+								>833PROBAID.com</span
+							>
+						</div>
+						<!-- Email -->
+						<div
+							class="contact-item"
+							style="display: flex; align-items: center; gap: 1rem"
+						>
+							<img
+								src="./svgs/globe.svg"
+								style="
+									width: 1.8rem;
+									height: 1.8rem;
+									flex-shrink: 0;
+									margin-top: 0.15rem;
+								"
+							/>
+							<span class="body-text text-secondary text-bold"
+								>Info@833PROBAID.com</span
+							>
+						</div>
+					</div>
+					<p
+						class="body-text text-secondary text-bold"
+						style="margin-top: 1rem"
+					>
+						Because in trust real estate, there's no judge to fix your mistake —
+						only lawsuits to prove you made one.
+					</p>
+				</div>
+			</section>
+		</main>
+	</body>
+</html>

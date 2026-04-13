@@ -1,0 +1,1027 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Your Resource Center &#8212; Buyer &amp; Seller Guides | 833PROBAID</title>
+
+		<link
+			href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@400;700&family=Roboto:wght@400;900&family=League+Spartan:wght@400;700&family=Oswald&family=Poppins&family=Passions+Conflict&family=Sarpanch&display=swap"
+			rel="stylesheet"
+		/>
+
+		<style type="text/css">
+			/* =========================================
+			   1. VARIABLES & RESET
+			   ========================================= */
+			:root {
+				--primary: #0097a7;
+				--primary-dark: #00838f;
+				--primary-light: rgba(0, 151, 167, 0.1);
+				--primary-lighter: rgba(0, 151, 167, 0.05);
+
+				--secondary: #fe7702;
+				--secondary-light: rgba(254, 119, 2, 0.1);
+				--secondary-lighter: rgba(254, 119, 2, 0.05);
+
+				--accent: #ff4444;
+				--teal-soft: #e0f7fa;
+
+				--gray-100: #f3f4f6;
+				--gray-300: #d1d5db;
+				--gray-500: #6b7280;
+				--gray-600: #4b5563;
+				--white: #ffffff;
+				--black: #000000;
+
+				--font-anton: "Anton", sans-serif;
+				--font-montserrat: "Montserrat", sans-serif;
+			}
+
+			* {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
+
+			body {
+				background-color: var(--gray-100);
+				color: var(--black);
+				font-family: var(--font-montserrat);
+				padding: 1.5rem;
+				-webkit-font-smoothing: antialiased;
+			}
+
+			@media (min-width: 768px) {
+				body {
+					padding: 2.5rem;
+				}
+			}
+
+			main {
+				max-width: 80rem;
+				margin-left: auto;
+				margin-right: auto;
+				display: flex;
+				flex-direction: column;
+				gap: 2.5rem;
+			}
+
+			img {
+				display: block;
+				max-width: 100%;
+				height: auto;
+			}
+
+			.section-photo {
+				width: 100%;
+				aspect-ratio: 1200 / 630;
+				margin: 0;
+				border: 4px solid var(--secondary);
+				border-radius: 1rem;
+				overflow: hidden;
+			}
+
+			.section-photo img {
+				display: block;
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				object-position: center;
+			}
+
+			/* =========================================
+			   2. TYPOGRAPHY
+			   ========================================= */
+			h1,
+			h2,
+			h3,
+			h4 {
+				font-family: var(--font-anton);
+				text-transform: uppercase;
+				line-height: 1.2;
+				font-weight: 700;
+				transition: color 0.3s ease;
+			}
+
+			.text-primary {
+				color: var(--primary);
+			}
+
+			.text-primary:hover {
+				color: var(--secondary);
+			}
+
+			.text-secondary {
+				color: var(--secondary);
+			}
+
+			.text-secondary:hover {
+				color: var(--primary);
+			}
+
+			/* Parent hover — swap colors so primary children become secondary */
+			.content-block:hover .text-secondary,
+			.point-item:hover .text-secondary {
+				color: var(--primary);
+				transition: color 0.3s ease;
+			}
+
+			.content-block:hover .text-primary,
+			.point-item:hover .text-primary {
+				color: var(--secondary);
+				transition: color 0.3s ease;
+			}
+
+			.text-gray {
+				color: var(--gray-600);
+			}
+
+			.text-center {
+				text-align: center;
+			}
+
+			.text-bold {
+				font-weight: 700;
+			}
+
+			.italic {
+				font-style: italic;
+			}
+
+			.section-title {
+				font-size: 2rem !important;
+				margin-bottom: 1rem;
+				transition: color 0.3s ease;
+			}
+
+			.section-title.text-primary:hover,
+			.section-title:hover.text-primary {
+				color: var(--secondary) !important;
+			}
+
+			.section-title.text-secondary:hover,
+			.section-title:hover.text-secondary {
+				color: var(--primary) !important;
+			}
+
+			.content-heading {
+				font-size: 1.625rem !important;
+				margin-bottom: 0.75rem;
+				transition: color 0.3s ease;
+			}
+
+			.content-heading.text-primary:hover,
+			.content-heading:hover.text-primary {
+				color: var(--secondary) !important;
+			}
+
+			.content-heading.text-secondary:hover,
+			.content-heading:hover.text-secondary {
+				color: var(--primary) !important;
+			}
+
+			.body-text {
+				font-size: 1.375rem !important;
+				line-height: 1.6;
+				font-weight: 700;
+			}
+
+			.small-text {
+				font-size: 1.125rem !important;
+				font-weight: 700;
+			}
+
+			.main-header {
+				text-align: center;
+			}
+
+			.main-header h1 {
+				font-size: 3.25rem;
+				color: var(--secondary);
+				margin-bottom: 1rem;
+				transition: color 0.3s ease;
+			}
+
+			.main-header h1:hover {
+				color: var(--primary);
+			}
+
+			@media (max-width: 767px) {
+				.section-title {
+					font-size: 1.5rem !important;
+				}
+
+				.content-heading {
+					font-size: 1.25rem !important;
+				}
+
+				.body-text {
+					font-size: 1rem !important;
+				}
+
+				.small-text {
+					font-size: 0.875rem !important;
+				}
+
+				.main-header h1 {
+					font-size: 2rem;
+				}
+			}
+
+			/* =========================================
+			   3. SHADOWS & UTILITIES
+			   ========================================= */
+			.shadow-card {
+				box-shadow:
+					0 8px 12px rgba(0, 0, 0, 0.4),
+					0 -5px 12px 1px rgba(0, 0, 0, 0.4);
+				transition:
+					transform 0.3s ease,
+					box-shadow 0.3s ease;
+			}
+
+			.shadow-card:hover {
+				transform: translateY(-5px);
+				box-shadow:
+					0 12px 20px rgba(0, 0, 0, 0.5),
+					0 -8px 16px 2px rgba(0, 0, 0, 0.5);
+			}
+
+			.bg-white {
+				background-color: var(--white);
+			}
+
+			.rounded-card {
+				border-radius: 1rem;
+			}
+
+			/* =========================================
+			   4. CATEGORY BANNERS
+			   ========================================= */
+			.category-banner {
+				padding: 1.5rem;
+				border-radius: 1rem;
+				border-left: 4px solid;
+				transition:
+					transform 0.3s ease,
+					border-left-width 0.3s ease;
+			}
+
+			.category-banner:hover {
+				transform: translateX(8px);
+				border-left-width: 8px;
+			}
+
+			.category-banner h2 {
+				font-size: 2rem;
+				margin-bottom: 0.5rem;
+				font-weight: 700;
+				transition: color 0.3s ease;
+			}
+
+			.banner-primary {
+				background: linear-gradient(
+					to right,
+					var(--primary-light),
+					var(--primary-lighter)
+				);
+				border-color: var(--primary);
+			}
+
+			.banner-primary h2 {
+				color: var(--primary);
+			}
+
+			.banner-primary h2:hover {
+				color: var(--secondary);
+			}
+
+			.banner-secondary {
+				background: linear-gradient(
+					to right,
+					var(--secondary-light),
+					var(--secondary-lighter)
+				);
+				border-color: var(--secondary);
+			}
+
+			.banner-secondary h2 {
+				color: var(--secondary);
+			}
+
+			.banner-secondary h2:hover {
+				color: var(--primary);
+			}
+
+			/* =========================================
+			   5. CONTENT BLOCKS
+			   ========================================= */
+			.content-block {
+				background-color: var(--white);
+				padding: 0.9rem;
+				border-radius: 1rem;
+				transition: transform 0.3s ease;
+			}
+
+			@media (min-width: 768px) {
+				.content-block {
+					padding: 2.7rem !important;
+				}
+			}
+
+			.points-wrapper {
+				display: flex;
+				flex-direction: column;
+				gap: 1rem;
+			}
+
+			.point-item {
+				display: flex;
+				align-items: flex-start;
+				gap: 1.5rem;
+				background-color: transparent;
+				padding: 0;
+				border-radius: 0;
+				transition: transform 0.2s ease;
+			}
+
+			.point-item:hover {
+				transform: translateX(5px);
+			}
+
+			.point-icon {
+				width: 1.75rem;
+				margin-top: calc((1.375rem * 1.6 - 1.75rem) / 2);
+				flex-shrink: 0;
+				transition: transform 0.3s ease;
+			}
+
+			.point-item:hover .point-icon {
+				transform: scale(1.15) rotate(5deg);
+			}
+
+			.point-item.shadow-card {
+				box-shadow: none !important;
+				background-color: transparent !important;
+				padding: 0 !important;
+			}
+
+			@media (min-width: 768px) {
+				.point-item {
+					background-color: var(--white);
+					padding: 1.5rem;
+					border-radius: 1rem;
+				}
+
+				.point-icon {
+					width: 2.25rem;
+					margin-top: calc((1.375rem * 1.6 - 2.25rem) / 2);
+				}
+
+				.point-item.shadow-card {
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+					background-color: var(--white) !important;
+					padding: 1.5rem !important;
+				}
+			}
+
+			/* =========================================
+			   6. GUIDE DOWNLOAD CARDS
+			   ========================================= */
+			.guide-cards {
+				display: flex;
+				flex-direction: column;
+				gap: 1.5rem;
+				margin-top: 2rem;
+			}
+
+			@media (min-width: 768px) {
+				.guide-cards {
+					flex-direction: row;
+				}
+			}
+
+			.guide-card {
+				flex: 1;
+				background: linear-gradient(
+					135deg,
+					var(--primary-light),
+					var(--primary-lighter)
+				);
+				border: 2px solid var(--primary);
+				border-radius: 1rem;
+				padding: 2rem;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				text-align: center;
+				gap: 1rem;
+				cursor: pointer;
+				transition:
+					transform 0.3s ease,
+					box-shadow 0.3s ease,
+					border-color 0.3s ease,
+					background 0.3s ease;
+				box-shadow:
+					0 8px 12px rgba(0, 0, 0, 0.3),
+					0 -4px 10px rgba(0, 0, 0, 0.2);
+				text-decoration: none;
+			}
+
+			.guide-card:hover {
+				transform: translateY(-6px);
+				border-color: var(--secondary);
+				background: linear-gradient(
+					135deg,
+					var(--secondary-light),
+					var(--secondary-lighter)
+				);
+				box-shadow:
+					0 14px 24px rgba(0, 0, 0, 0.45),
+					0 -6px 14px rgba(0, 0, 0, 0.3);
+			}
+
+			.guide-card svg {
+				width: 3.5rem;
+				height: 3.5rem;
+				flex-shrink: 0;
+				color: var(--primary);
+				transition: color 0.3s ease, transform 0.3s ease;
+			}
+
+			.guide-card:hover svg {
+				color: var(--secondary);
+				transform: scale(1.1);
+			}
+
+			.guide-card h3 {
+				font-size: 1.5rem;
+				color: var(--primary);
+				transition: color 0.3s ease;
+			}
+
+			.guide-card:hover h3 {
+				color: var(--secondary);
+			}
+
+			.guide-card p {
+				font-size: 1rem;
+				font-weight: 700;
+				color: var(--gray-600);
+				line-height: 1.5;
+			}
+
+			.guide-card .download-label {
+				font-family: var(--font-anton);
+				font-size: 1rem;
+				letter-spacing: 0.1em;
+				color: var(--white);
+				background-color: var(--primary);
+				padding: 0.5rem 1.5rem;
+				border-radius: 2rem;
+				transition: background-color 0.3s ease;
+			}
+
+			.guide-card:hover .download-label {
+				background-color: var(--secondary);
+			}
+
+			.btn-primary {
+				background-color: #fe7702;
+				color: white;
+				box-shadow:
+					0px 3.04px 7.39px 0px rgba(0, 0, 0, 0.68),
+					6.07px -6.07px 4.05px 0px rgba(0, 0, 0, 0.25) inset,
+					-4.05px 5.06px 4.05px 0px rgba(255, 255, 255, 0.25) inset,
+					-2.02px -1.01px 4.05px 0px rgba(0, 0, 0, 0.6);
+				padding: 1rem 2rem;
+				border-radius: 1rem;
+				text-transform: uppercase;
+				font-weight: 700;
+				border: none;
+				cursor: pointer;
+				transition: all 0.3s ease;
+				display: inline-block;
+				text-decoration: none;
+			}
+
+			.btn-primary:hover {
+				transform: scale(1.08) translateY(-2px);
+				background-color: #ff8820;
+				box-shadow:
+					0px 6px 15px 0px rgba(0, 0, 0, 0.75),
+					6.07px -6.07px 4.05px 0px rgba(0, 0, 0, 0.3) inset,
+					-4.05px 5.06px 4.05px 0px rgba(255, 255, 255, 0.3) inset,
+					-2.02px -1.01px 4.05px 0px rgba(0, 0, 0, 0.65);
+			}
+
+			.btn-primary:active {
+				transform: scale(1.02) translateY(0);
+			}
+
+			.site-footer {
+				text-align: center;
+				padding: 2rem 0;
+				border-top: 1px solid var(--gray-300);
+				margin-top: 2rem;
+			}
+
+			/* Contact item hover */
+			.contact-item {
+				color: var(--primary);
+				transition:
+					color 0.3s ease,
+					transform 0.3s ease;
+				cursor: default;
+				width: fit-content;
+			}
+
+			/* Block parent content-block hover from bleeding into contact items */
+			.content-block:hover .contact-item .text-secondary {
+				color: var(--secondary);
+			}
+			.content-block:hover .contact-item .text-primary {
+				color: var(--primary);
+			}
+
+			/* Only directly-hovered row changes */
+			.contact-item:hover {
+				color: var(--secondary);
+				transform: scale(1.05);
+				transition:
+					color 0.3s ease,
+					transform 0.3s ease;
+			}
+			.contact-item:hover .text-secondary {
+				color: var(--primary) !important;
+				transition: color 0.3s ease;
+			}
+			.contact-item:hover .text-primary {
+				color: var(--secondary) !important;
+				transition: color 0.3s ease;
+			}
+
+			/* =========================================
+			   PHONE ONLY (max-width: 767px)
+			   Disable all hover animations & transitions
+			   ========================================= */
+			@media (max-width: 767px) {
+				*,
+				*::before,
+				*::after {
+					transition: none !important;
+					animation: none !important;
+				}
+
+				.shadow-card:hover,
+				.step-container:hover,
+				.point-item:hover,
+				.quote-container:hover,
+				.cta-container:hover,
+				.btn-primary:hover,
+				ul.styled-list li:hover {
+					transform: none !important;
+				}
+
+				.category-banner:hover {
+					transform: none !important;
+					border-left-width: 4px !important;
+				}
+
+				.shadow-card {
+					box-shadow: none !important;
+				}
+
+				.content-block.shadow-card:not(.step-body) {
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				.shadow-card:hover {
+					box-shadow: none !important;
+				}
+
+				.point-item:hover .point-icon {
+					transform: none !important;
+				}
+
+				.text-primary:hover {
+					color: var(--primary) !important;
+				}
+
+				.text-secondary:hover {
+					color: var(--secondary) !important;
+				}
+
+				.main-header h1:hover {
+					color: var(--secondary) !important;
+				}
+
+				.section-title.text-primary:hover,
+				.section-title:hover.text-primary {
+					color: var(--primary) !important;
+				}
+
+				.section-title.text-secondary:hover,
+				.section-title:hover.text-secondary {
+					color: var(--secondary) !important;
+				}
+
+				.content-heading.text-primary:hover,
+				.content-heading:hover.text-primary {
+					color: var(--primary) !important;
+				}
+
+				.content-heading.text-secondary:hover,
+				.content-heading:hover.text-secondary {
+					color: var(--secondary) !important;
+				}
+
+				.banner-primary h2:hover {
+					color: var(--primary) !important;
+				}
+
+				.banner-secondary h2:hover {
+					color: var(--secondary) !important;
+				}
+
+				/* Disable parent hover color-swap on phone */
+				.content-block:hover .text-secondary,
+				.point-item:hover .text-secondary {
+					color: var(--secondary) !important;
+				}
+
+				.content-block:hover .text-primary,
+				.point-item:hover .text-primary {
+					color: var(--primary) !important;
+				}
+
+				.guide-card:hover {
+					transform: none !important;
+				}
+
+				/* Disable contact-item hover on mobile */
+				.contact-item:hover {
+					color: var(--primary) !important;
+					transform: none !important;
+				}
+				.contact-item:hover .text-secondary {
+					color: var(--secondary) !important;
+				}
+				.contact-item:hover .text-primary {
+					color: var(--primary) !important;
+				}
+			}
+		</style>
+	</head>
+
+	<body>
+		<main>
+			<!-- INTRO -->
+			<section id="intro">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary" style="margin-bottom: 1.5rem">
+						833PROBAID<sup>®</sup> RESOURCE CENTER
+					</h2>
+
+					<p
+						class="content-heading text-secondary text-bold"
+						style="margin-bottom: 1.5rem"
+					>
+						&#8212; Court Resources, Professional Guides, and Strategic Insight
+					</p>
+
+					<p
+						class="body-text text-primary text-bold"
+						style="margin-bottom: 1.5rem"
+					>
+						Trusted materials and professional resources designed to help
+						families, fiduciaries, and professionals move forward with
+						clarity.
+					</p>
+
+					<p
+						class="body-text text-bold"
+						style="margin-bottom: 1.5rem"
+					>
+						The 833PROBAID<sup>®</sup> Resource Center provides access to
+						trusted materials, court resources, and professional guidance
+						designed to help families, fiduciaries, and professionals
+						navigate Probate, Trust, and Conservatorship matters with greater
+						clarity.
+					</p>
+
+					<p
+						class="body-text text-bold"
+						style="margin-bottom: 1.5rem"
+					>
+						Whether you are preparing for a real estate transaction, locating
+						court information, or seeking direction during a complex estate
+						process, this section provides carefully selected resources to
+						help you move forward with confidence.
+					</p>
+
+					<!-- GUIDE DOWNLOAD CARDS -->
+					<div class="guide-cards">
+						<a
+							href="/books/seller-guide.pdf"
+							target="_blank"
+							class="guide-card shadow-card"
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							>
+								<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+								<polyline points="14 2 14 8 20 8" />
+								<line x1="16" y1="13" x2="8" y2="13" />
+								<line x1="16" y1="17" x2="8" y2="17" />
+								<polyline points="10 9 9 9 8 9" />
+							</svg>
+							<h3>Seller&#8217;s Guide</h3>
+							<p>
+								Everything you need to know to list, negotiate, and close
+								with confidence.
+							</p>
+							<span class="btn-primary">DOWNLOAD FREE</span>
+						</a>
+
+						<a
+							href="/books/buyer-guide.pdf"
+							target="_blank"
+							class="guide-card shadow-card"
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							>
+								<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+								<path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+							</svg>
+							<h3>Buyer&#8217;s Guide</h3>
+							<p>
+								Your step-by-step roadmap to finding, making offers, and
+								securing the right home.
+							</p>
+							<span class="btn-primary">DOWNLOAD FREE</span>
+						</a>
+					</div>
+				</div>
+			</section>
+
+			<section id="california-judicial-resource-portal">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						CALIFORNIA JUDICIAL RESOURCE PORTAL
+					</h2>
+					<p
+						class="content-heading text-secondary text-bold"
+						style="margin-bottom: 1.5rem"
+					>
+						&#8212; Official Court Locations, Judicial Council Forms, and
+						Local Rules
+					</p>
+					<p
+						class="body-text text-bold"
+						style="margin-bottom: 1.5rem"
+					>
+						Probate, Trust, and Conservatorship matters are handled through
+						the Superior Court in the county of jurisdiction. To ensure you
+						are following the correct local procedures and using the most
+						current documentation, we provide direct access to the official
+						Judicial Branch of California website.
+					</p>
+					<p
+						class="body-text text-bold"
+						style="margin-bottom: 1.5rem"
+					>
+						Through this official gateway, you can:
+					</p>
+					<div class="points-wrapper" style="margin-bottom: 1.5rem">
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<p class="body-text text-bold">
+								Locate your county&#8217;s specific Probate Court
+							</p>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<p class="body-text text-bold">
+								Download mandatory Judicial Council Forms (DE and GC series)
+							</p>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<p class="body-text text-bold">
+								Review Local Court Rules and specific filing procedures
+							</p>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<p class="body-text text-bold">
+								Find courthouse addresses and department contact information
+							</p>
+						</div>
+					</div>
+					<div style="text-align: center">
+						<a
+							href="https://www.courts.ca.gov/find-my-court.htm"
+							target="_blank"
+							rel="noopener noreferrer"
+							class="btn-primary"
+						>
+							ACCESS OFFICIAL CALIFORNIA COURTS PORTAL
+						</a>
+					</div>
+				</div>
+			</section>
+					<!-- SECTION PHOTO -->
+			<div class="section-photo shadow-card">
+				<img
+					src="./probate.jpg"
+					alt="Probate case support photo 1"
+					loading="lazy"
+				/>
+			</div>
+
+			<!-- ATTORNEY RESOURCES -->
+			<section id="attorney-resources">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						NEED A PROBATE OR ESTATE PLANNING ATTORNEY?
+					</h2>
+					<p
+						class="body-text text-secondary text-bold"
+						style="margin-bottom: 1.5rem"
+					>
+						Whether you are currently navigating a Probate or Conservatorship
+						case without legal representation or planning ahead to protect your
+						family through Estate Planning, the right legal guidance can make
+						the process far smoother.
+					</p>
+					<p
+						class="body-text text-secondary text-bold"
+						style="margin-bottom: 1.5rem"
+					>
+						Court-supervised matters involve specific filings, timelines, and
+						statutory requirements. At the same time, establishing a proper
+						Trust or estate plan can help families reduce the likelihood of
+						future probate proceedings.
+					</p>
+					<p
+						class="body-text text-secondary text-bold"
+						style="margin-bottom: 1.5rem"
+					>
+						Through the 833PROBAID<sup>®</sup> professional network, we can connect
+						clients with experienced attorneys who regularly assist with:
+					</p>
+					<div class="points-wrapper" style="margin-bottom: 1.5rem">
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									Trusts &amp; Wills
+								</p>
+								<p class="body-text text-secondary text-bold">
+									Estate planning designed to help families minimize future
+									probate exposure
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									Estate &amp; Legacy Planning
+								</p>
+								<p class="body-text text-secondary text-bold">
+									Protecting assets and planning for long-term family security
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									Probate &amp; Conservatorship Administration
+								</p>
+								<p class="body-text text-secondary text-bold">
+									Navigating active court matters and estate settlement
+								</p>
+							</div>
+						</div>
+					</div>
+					<p
+						class="body-text text-secondary text-bold"
+						style="margin-bottom: 1.5rem"
+					>
+						Call <span class="text-primary">(833) PROBAID</span> &#8212; <span class="text-primary">(833) 776-2243</span> for professional resources
+						and introductions to attorneys who may be able to assist with your
+						situation.
+					</p>
+					<div
+						style="
+							display: flex;
+							flex-direction: column;
+							gap: 1rem;
+							margin-bottom: 1.5rem;
+						"
+					>
+						<!-- Phone -->
+						<div
+							class="contact-item"
+							style="display: flex; align-items: flex-start; gap: 1rem"
+						>
+							<img
+								src="./svgs/phone-icon.svg"
+								style="
+									width: 2rem;
+									height: 2rem;
+									flex-shrink: 0;
+									margin-top: 0.15rem;
+								"
+							/>
+							<div class="body-text text-bold" style="line-height: 1.1">
+								<span class="text-secondary text-bold"
+									>(833)
+									<span style="letter-spacing: 0.07em">PROBAID</span></span
+								><br />
+								<span
+									class="text-primary text-bold"
+									style="
+										display: block;
+										text-align: right;
+										letter-spacing: 0.17em;
+									"
+									>7762243</span
+								>
+							</div>
+						</div>
+						<!-- Website -->
+						<div
+							class="contact-item"
+							style="display: flex; align-items: center; gap: 1rem"
+						>
+							<img
+								src="./svgs/uiw_mail.svg"
+								style="
+									width: 2rem;
+									height: 2rem;
+									flex-shrink: 0;
+									margin-top: 0.15rem;
+								"
+							/>
+							<span class="body-text text-secondary text-bold"
+								>833PROBAID.com</span
+							>
+						</div>
+						<!-- Email -->
+						<div
+							class="contact-item"
+							style="display: flex; align-items: center; gap: 1rem"
+						>
+							<img
+								src="./svgs/globe.svg"
+								style="
+									width: 1.8rem;
+									height: 1.8rem;
+									flex-shrink: 0;
+									margin-top: 0.15rem;
+								"
+							/>
+							<span class="body-text text-secondary text-bold"
+								>Info@833PROBAID.com</span
+							>
+						</div>
+					</div>
+					<h2 class="section-title text-primary" style="margin-top: 1.5rem">
+						CONNECT WITH EXPERIENCED ATTORNEYS TODAY.
+					</h2>
+				</div>
+			</section>
+		</main>
+	</body>
+</html>

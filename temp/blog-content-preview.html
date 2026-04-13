@@ -1,0 +1,2113 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Blog Content Preview - Internal CSS</title>
+
+		<link
+			href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@400;700&family=Roboto:wght@400;900&family=League+Spartan:wght@400;700&family=Oswald&family=Poppins&family=Passions+Conflict&family=Sarpanch&display=swap"
+			rel="stylesheet"
+		/>
+
+		<style type="text/css">
+			/* =========================================
+			   1. VARIABLES & RESET
+			   ========================================= */
+			:root {
+				--primary: #0097a7;
+				--primary-dark: #00838f;
+				/* Primary light: 10% opacity and 5% opacity approximations */
+				--primary-light: rgba(0, 151, 167, 0.1);
+				--primary-lighter: rgba(0, 151, 167, 0.05);
+
+				--secondary: #fe7702;
+				/* Secondary light: 10% opacity and 5% opacity approximations */
+				--secondary-light: rgba(254, 119, 2, 0.1);
+				--secondary-lighter: rgba(254, 119, 2, 0.05);
+
+				--accent: #ff4444;
+				--teal-soft: #e0f7fa;
+
+				--gray-100: #f3f4f6;
+				--gray-300: #d1d5db;
+				--gray-500: #6b7280;
+				--gray-600: #4b5563;
+				--white: #ffffff;
+				--black: #000000;
+
+				--font-anton: "Anton", sans-serif;
+				--font-montserrat: "Montserrat", sans-serif;
+			}
+
+			* {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
+
+			body {
+				background-color: var(--gray-100);
+				color: var(--black);
+				font-family: var(--font-montserrat);
+				padding: 1.5rem;
+				-webkit-font-smoothing: antialiased;
+			}
+
+			@media (min-width: 768px) {
+				body {
+					padding: 2.5rem;
+				}
+			}
+
+			main {
+				max-width: 80rem;
+				/* equivalent to max-w-7xl */
+				margin-left: auto;
+				margin-right: auto;
+				display: flex;
+				flex-direction: column;
+				gap: 2.5rem;
+				/* space-y-10 */
+			}
+
+			img {
+				display: block;
+				max-width: 100%;
+				height: auto;
+			}
+
+			/* =========================================
+			   2. TYPOGRAPHY
+			   ========================================= */
+			h1,
+			h2,
+			h3,
+			h4 {
+				font-family: var(--font-anton);
+				text-transform: uppercase;
+				line-height: 1.2;
+				font-weight: 700;
+				transition: color 0.3s ease;
+			}
+
+			/* Helper classes for specific colors used frequently */
+			.text-primary {
+				color: var(--primary);
+			}
+
+			.text-primary:hover {
+				color: var(--secondary);
+			}
+
+			.text-secondary {
+				color: var(--secondary);
+			}
+
+			.text-secondary:hover {
+				color: var(--primary);
+			}
+
+			.text-gray {
+				color: var(--gray-600);
+			}
+
+			.text-center {
+				text-align: center;
+			}
+
+			.text-bold {
+				font-weight: 700;
+			}
+
+			.italic {
+				font-style: italic;
+			}
+
+			/* Fixed Typography Sizes */
+			.section-title {
+				font-size: 2rem !important;
+				margin-bottom: 1rem;
+				transition: color 0.3s ease;
+			}
+
+			.section-title.text-primary:hover,
+			.section-title:hover.text-primary {
+				color: var(--secondary) !important;
+			}
+
+			.section-title.text-secondary:hover,
+			.section-title:hover.text-secondary {
+				color: var(--primary) !important;
+			}
+
+			.content-heading {
+				font-size: 1.625rem !important;
+				margin-bottom: 0.75rem;
+				transition: color 0.3s ease;
+			}
+
+			.content-heading.text-primary:hover,
+			.content-heading:hover.text-primary {
+				color: var(--secondary) !important;
+			}
+
+			.content-heading.text-secondary:hover,
+			.content-heading:hover.text-secondary {
+				color: var(--primary) !important;
+			}
+
+			.body-text {
+				font-size: 1.375rem !important;
+				line-height: 1.6;
+				font-weight: 500;
+			}
+
+			.small-text {
+				font-size: 1.125rem !important;
+				font-weight: 500;
+			}
+
+			/* Header specific */
+			.main-header {
+				text-align: center;
+			}
+
+			.main-header h1 {
+				font-size: 3.25rem;
+				/* text-5xl */
+				color: var(--secondary);
+				margin-bottom: 1rem;
+				transition: color 0.3s ease;
+			}
+
+			.main-header h1:hover {
+				color: var(--primary);
+			}
+
+			/* Mobile Typography Adjustments */
+			@media (max-width: 767px) {
+				.section-title {
+					font-size: 1.5rem !important;
+				}
+
+				.content-heading {
+					font-size: 1.25rem !important;
+				}
+
+				.body-text {
+					font-size: 1rem !important;
+				}
+
+				.small-text {
+					font-size: 0.875rem !important;
+				}
+
+				.main-header h1 {
+					font-size: 2rem;
+				}
+
+				.step-title-text {
+					font-size: clamp(1.25rem, 3.15vw, 3.7rem);
+				}
+			}
+
+			/* =========================================
+			   3. SHADOWS & UTILITIES
+			   ========================================= */
+			.shadow-card {
+				box-shadow:
+					0 8px 12px rgba(0, 0, 0, 0.4),
+					0 -5px 12px 1px rgba(0, 0, 0, 0.4);
+				transition:
+					transform 0.3s ease,
+					box-shadow 0.3s ease;
+			}
+
+			.shadow-card:hover {
+				transform: translateY(-5px);
+				box-shadow:
+					0 12px 20px rgba(0, 0, 0, 0.5),
+					0 -8px 16px 2px rgba(0, 0, 0, 0.5);
+			}
+
+			.bg-white {
+				background-color: var(--white);
+			}
+
+			.rounded-card {
+				border-radius: 1rem;
+			}
+
+			/* =========================================
+			   4. CATEGORY BANNERS
+			   ========================================= */
+			.category-banner {
+				padding: 1.5rem;
+				border-radius: 1rem;
+				border-left: 4px solid;
+				transition:
+					transform 0.3s ease,
+					border-left-width 0.3s ease;
+			}
+
+			.category-banner:hover {
+				transform: translateX(8px);
+				border-left-width: 8px;
+			}
+
+			.category-banner h2 {
+				font-size: 2rem;
+				/* text-3xl */
+				margin-bottom: 0.5rem;
+				font-weight: 700;
+				transition: color 0.3s ease;
+			}
+
+			.banner-primary {
+				background: linear-gradient(
+					to right,
+					var(--primary-light),
+					var(--primary-lighter)
+				);
+				border-color: var(--primary);
+			}
+
+			.banner-primary h2 {
+				color: var(--primary);
+			}
+
+			.banner-primary h2:hover {
+				color: var(--secondary);
+			}
+
+			.banner-secondary {
+				background: linear-gradient(
+					to right,
+					var(--secondary-light),
+					var(--secondary-lighter)
+				);
+				border-color: var(--secondary);
+			}
+
+			.banner-secondary h2 {
+				color: var(--secondary);
+			}
+
+			.banner-secondary h2:hover {
+				color: var(--primary);
+			}
+
+			/* =========================================
+			   5. CONTENT BLOCKS
+			   ========================================= */
+
+			/* Standard Content Card */
+			.content-block {
+				background-color: var(--white);
+				padding: 0.9rem;
+				border-radius: 1rem;
+				transition: transform 0.3s ease;
+			}
+
+			@media (min-width: 768px) {
+				.content-block {
+					padding: 2.7rem !important;
+				}
+			}
+
+			/* Step / Process Section */
+			.step-container {
+				border-radius: 1rem;
+				background-color: var(--white);
+				padding: 1.5rem;
+				transition: transform 0.3s ease;
+			}
+
+			.step-container:hover {
+				transform: scale(1.02);
+			}
+
+			.step-inner {
+				background-color: transparent;
+				padding: 0;
+				display: flex;
+				flex-direction: column;
+				gap: 0;
+			}
+
+			/* Step Circles */
+			.circle-number-lg {
+				display: none;
+				width: 5rem;
+				height: 5rem;
+				background-color: rgba(0, 151, 167, 0.2);
+				/* primary/20 */
+				color: var(--secondary);
+				border-radius: 50%;
+				align-items: center;
+				justify-content: center;
+				font-family: var(--font-anton);
+				font-size: 2.5rem;
+				font-weight: 700;
+				flex-shrink: 0;
+				transition: all 0.3s ease;
+			}
+
+			.step-container:hover .circle-number-lg {
+				background-color: rgba(0, 151, 167, 0.4);
+				transform: rotate(360deg) scale(1.1);
+			}
+
+			.circle-number-sm {
+				display: flex;
+				width: 2.5rem;
+				height: 2.5rem;
+				background-color: rgba(0, 151, 167, 0.2);
+				color: var(--secondary);
+				border-radius: 50%;
+				align-items: center;
+				justify-content: center;
+				font-family: var(--font-anton);
+				font-size: 1.375rem;
+				font-weight: 700;
+				flex-shrink: 0;
+				margin-bottom: 0.75rem;
+				align-self: flex-start;
+				transition: all 0.3s ease;
+			}
+
+			.step-container:hover .circle-number-sm {
+				background-color: rgba(0, 151, 167, 0.4);
+				transform: rotate(360deg) scale(1.1);
+			}
+
+			.step-content {
+				flex: 1;
+			}
+
+			.step-title-row {
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
+				margin-bottom: 0.75rem;
+			}
+
+			.step-title-text {
+				font-size: clamp(1.5rem, 3.15vw, 3.7rem);
+				color: var(--secondary);
+				transition: color 0.3s ease;
+			}
+
+			.step-title-text:hover {
+				color: var(--primary);
+			}
+
+			.step-body {
+				margin-top: 0;
+				padding: 0;
+				background-color: transparent;
+				border-radius: 0;
+			}
+
+			/* Remove all nested shadows and cards on mobile */
+			.step-container .step-inner {
+				box-shadow: none !important;
+				background-color: transparent !important;
+			}
+
+			.step-container .step-body {
+				box-shadow: none !important;
+			}
+
+			.step-container .step-body .content-block {
+				padding: 0 !important;
+				background-color: transparent !important;
+				box-shadow: none !important;
+			}
+
+			@media (min-width: 768px) {
+				.step-container {
+					padding: 2.5rem;
+					border-radius: 1rem;
+				}
+
+				.step-inner {
+					
+					gap: 1.5rem;
+					border-radius: 1rem;
+					background-color: var(--white);
+					flex-direction: row;
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				.circle-number-lg {
+					display: flex;
+				}
+
+				.circle-number-sm {
+					display: none;
+					margin-bottom: 0;
+				}
+
+				.step-title-row {
+					
+					margin-bottom: 0;
+				}
+
+				.step-body {
+					margin-top: 1.5rem;
+					padding: 1.5rem;
+					background-color: var(--white);
+					border-radius: 1rem;
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				.step-body.content-block {
+					padding: 1.5rem !important;
+					background-color: var(--white) !important;
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+			}
+
+			/* Lists */
+			ul.styled-list {
+				margin-left: 1.5rem;
+				list-style-type: disc;
+				display: flex;
+				flex-direction: column;
+				gap: 1rem;
+			}
+
+			ul.styled-list li {
+				transition: transform 0.2s ease;
+			}
+
+			ul.styled-list li:hover {
+				transform: translateX(8px);
+			}
+
+			/* Point Items Wrapper */
+			.points-wrapper {
+				display: flex;
+				flex-direction: column;
+				gap: 1rem;
+			}
+
+			/* Point Items */
+			.point-item {
+				display: flex;
+				align-items: flex-start;
+				gap: 1.5rem;
+				background-color: transparent;
+				padding: 0;
+				border-radius: 0;
+				transition: transform 0.2s ease;
+			}
+
+			.point-item:hover {
+				transform: translateX(5px);
+			}
+
+			.point-icon {
+				width: 1.75rem;
+				margin-top: 0.25rem;
+				flex-shrink: 0;
+				transition: transform 0.3s ease;
+			}
+
+			.point-item:hover .point-icon {
+				transform: scale(1.15) rotate(5deg);
+			}
+
+			/* Remove shadow-card styling on mobile for point-items */
+			.point-item.shadow-card {
+				box-shadow: none !important;
+				background-color: transparent !important;
+				padding: 0 !important;
+			}
+
+			@media (min-width: 768px) {
+				.point-item {
+					background-color: var(--white);
+					padding: 1.5rem;
+					border-radius: 1rem;
+				}
+
+				.point-icon {
+					width: 2.25rem;
+				}
+
+				.point-item.shadow-card {
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+					background-color: var(--white) !important;
+					padding: 1.5rem !important;
+				}
+			}
+
+			/* Callouts */
+			.callout-box {
+				padding: 1rem;
+				border-radius: 1rem;
+			}
+
+			@media (min-width: 768px) {
+				.callout-box {
+					border-radius: 1rem;
+				}
+			}
+
+			.callout-inner {
+				background-color: var(--white);
+				padding: 2rem 1rem;
+				border-radius: 1rem;
+				display: flex;
+				align-items: flex-start;
+				gap: 1.5rem;
+				/* Clip path logic */
+				clip-path: polygon(0 0, 100% 0, 100% 80%, 82% 100%, 0 100%);
+			}
+
+			@media (min-width: 768px) {
+				.callout-inner {
+					clip-path: polygon(0 0, 101% 0, 100% 60%, 94% 100%, 0 100%);
+					padding: 2.5rem;
+					border-radius: 1rem;
+				}
+			}
+
+			.callout-filter {
+				filter: drop-shadow(4px -6px 10px rgba(0, 0, 0, 0.5))
+					drop-shadow(6px 5px 10px rgba(0, 0, 0, 0.5));
+			}
+
+			.bg-primary {
+				background-color: var(--primary);
+			}
+
+			.bg-secondary {
+				background-color: var(--secondary);
+			}
+
+			/* Grids */
+			.grid-2-col {
+				display: grid;
+				grid-template-columns: 1fr;
+				gap: 1.5rem;
+			}
+
+			.grid-3-col {
+				display: grid;
+				grid-template-columns: 1fr;
+				gap: 1.5rem;
+			}
+
+			.grid-complex {
+				display: grid;
+				grid-template-columns: 1fr;
+				gap: 1.5rem;
+			}
+
+			@media (min-width: 768px) {
+				.grid-2-col {
+					grid-template-columns: 1fr 1fr;
+				}
+
+				.grid-3-col {
+					grid-template-columns: 1fr 1fr 1fr;
+				}
+
+				.grid-complex {
+					grid-template-columns: repeat(5, 1fr);
+				}
+
+				.span-3 {
+					grid-column: span 3;
+				}
+
+				.span-2 {
+					grid-column: span 2;
+				}
+			}
+
+			/* Image Grid Columns */
+			.image-column {
+				display: flex;
+				flex-direction: column;
+				gap: 1.5rem;
+				height: 100%;
+			}
+
+			.image-frame {
+				flex: 1;
+				border-radius: 1rem;
+				overflow: hidden;
+				border: 4px solid var(--primary);
+			}
+
+			.image-frame img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+
+			/* Stats Cards */
+			.stat-card {
+				background-color: var(--white);
+				padding: 1.5rem;
+				border-radius: 1rem;
+				text-align: center;
+			}
+
+			.stat-number {
+				font-family: var(--font-anton);
+				color: var(--primary);
+				font-size: 3.25rem;
+				margin-bottom: 0.75rem;
+				transition: color 0.3s ease;
+			}
+
+			.stat-number:hover {
+				color: var(--secondary);
+			}
+
+			/* Blockquote */
+			.quote-container {
+				background-color: var(--white);
+				padding: 2rem;
+				border-radius: 1rem;
+				transition:
+					transform 0.3s ease,
+					box-shadow 0.3s ease;
+			}
+
+			.quote-container:hover {
+				transform: translateX(10px);
+				box-shadow: -5px 5px 15px rgba(0, 0, 0, 0.1);
+			}
+
+			@media (min-width: 768px) {
+				.quote-container {
+					padding: 3rem;
+				}
+			}
+
+			blockquote {
+				border-left: 4px solid var(--secondary);
+				padding-left: 1.5rem;
+				font-weight: 400;
+			}
+
+			/* Buttons */
+			.cta-container {
+				background-color: var(--white);
+				padding: 2rem;
+				border-radius: 1rem;
+				text-align: center;
+				transition:
+					transform 0.3s ease,
+					box-shadow 0.3s ease;
+			}
+
+			.cta-container:hover {
+				transform: translateY(-3px);
+				box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+			}
+
+			.btn-primary {
+				background-color: #fe7702;
+				color: white;
+				box-shadow:
+					0px 3.04px 7.39px 0px rgba(0, 0, 0, 0.68),
+					6.07px -6.07px 4.05px 0px rgba(0, 0, 0, 0.25) inset,
+					-4.05px 5.06px 4.05px 0px rgba(255, 255, 255, 0.25) inset,
+					-2.02px -1.01px 4.05px 0px rgba(0, 0, 0, 0.6);
+				padding: 1rem 2rem;
+				border-radius: 1rem;
+				text-transform: uppercase;
+				font-weight: 700;
+				border: none;
+				cursor: pointer;
+				transition: all 0.3s ease;
+			}
+
+			.btn-primary:hover {
+				transform: scale(1.08) translateY(-2px);
+				background-color: #ff8820;
+				box-shadow:
+					0px 6px 15px 0px rgba(0, 0, 0, 0.75),
+					6.07px -6.07px 4.05px 0px rgba(0, 0, 0, 0.3) inset,
+					-4.05px 5.06px 4.05px 0px rgba(255, 255, 255, 0.3) inset,
+					-2.02px -1.01px 4.05px 0px rgba(0, 0, 0, 0.65);
+			}
+
+			.btn-primary:active {
+				transform: scale(1.02) translateY(0);
+			}
+
+			/* Tables */
+			.table-wrapper {
+				background-color: var(--white);
+				padding: 1.5rem;
+				border-radius: 1rem;
+				overflow-x: auto;
+			}
+
+			table {
+				width: 100%;
+				border-collapse: collapse;
+				font-family: var(--font-montserrat);
+			}
+
+			th {
+				background-color: var(--primary);
+				color: white;
+				padding: 1.5rem;
+				text-align: left;
+				font-weight: 700;
+				font-size: 1.25rem;
+			}
+
+			td {
+				padding: 0.75rem;
+				border-bottom: 1px solid #e5e7eb;
+				font-size: 1.125rem;
+				font-weight: 400;
+			}
+
+			tbody tr:hover td {
+				background-color: var(--primary-lighter);
+			}
+
+			/* Footer */
+			.site-footer {
+				text-align: center;
+				padding: 2rem 0;
+				border-top: 1px solid var(--gray-300);
+				margin-top: 2rem;
+			}
+		</style>
+	</head>
+
+	<body>
+		<main>
+			<header class="main-header">
+				<h1>Complete Blog Content Preview</h1>
+				<p class="body-text text-gray">
+					Demonstrating all available content block types - Organized by
+					Category
+				</p>
+			</header>
+
+			<!-- ========================================
+			     CATEGORY 1: TEXT CONTENT BLOCKS
+			     ======================================== -->
+
+			<!-- Paragraph Block
+			     USE WHEN: Need basic text content with formatting
+			     STRUCTURE: White card containing paragraph(s) with optional bold/italic text
+			     STYLING: Standard content-block with shadow-card
+			     AI GUIDANCE: Use for article body text, introductions, explanations, or any text-heavy content that needs to stand out -->
+			<section>
+				<div class="content-block shadow-card">
+					<p class="body-text">
+						<b class="text-primary text-bold">Important Overview:</b>
+						This design is built using a combination of heavy multi-layered
+						shadows and rounded containers to create a tactile, physical card
+						effect. The paragraph block supports rich text formatting including
+						<b class="text-bold">bold text</b>, <i>italic text</i>, and inline
+						links. This content type is perfect for introducing topics,
+						providing context, or explaining complex concepts in detail.
+					</p>
+				</div>
+			</section>
+
+			<!-- ========================================
+			     CATEGORY 2: STEP/PROCESS BLOCKS
+			     ======================================== -->
+
+			<!-- Step/Process Block - Example 1
+			     USE WHEN: Explaining sequential processes, tutorials, or multi-step instructions
+			     STRUCTURE: Outer container (step-container), inner card (step-inner), circle number, title, and body content
+			     STYLING: Two-layer shadow effect, responsive circle numbers (large on desktop, small on mobile)
+			     AI GUIDANCE: Use for how-to guides, recipes, installation instructions, or any ordered workflow. Can nest lists and other content inside step-body -->
+			<section>
+				<div class="step-container shadow-card">
+					<div class="step-inner shadow-card">
+						<div class="circle-number-lg">01</div>
+
+						<div class="step-content">
+							<div class="step-title-row">
+								<div class="circle-number-sm">01</div>
+								<h3 class="step-title-text">Define Your Strategy</h3>
+							</div>
+
+							<div class="content-block step-body shadow-card">
+								<p class="body-text">
+									Step sections are perfect for tutorials, guides, and
+									processes. They feature prominent numbering and support nested
+									content including lists, paragraphs, and more. Use these when
+									you need to guide users through a sequential process.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Step/Process Block - Example 2
+			     ALTERNATE USAGE: Can be used as direct section element for tighter layouts
+			     NESTED CONTENT: Supports inline styled divs for tips, notes, or highlighted information
+			     FLEXIBILITY: Body content can include paragraphs, lists, or custom styled elements -->
+			<section class="step-container shadow-card">
+				<div class="step-inner shadow-card">
+					<div class="circle-number-lg">02</div>
+
+					<div class="step-content">
+						<div class="step-title-row">
+							<div class="circle-number-sm">02</div>
+							<h3 class="step-title-text">Execute With Precision</h3>
+						</div>
+
+						<div class="content-block step-body shadow-card">
+							<p class="body-text" style="margin-bottom: 1rem">
+								Content goes here for specific step guides.
+							</p>
+
+							<div
+								style="
+									background-color: var(--teal-soft);
+									padding: 1.5rem;
+									border-radius: 1rem;
+								"
+							>
+								<p class="body-text text-bold text-primary">
+									Pro Tip: You can nest additional styled content within step
+									bodies for emphasis or additional information.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Step/Process Block with Nested Point Items
+			     COMBINED USAGE: Step container with multiple point items inside
+			     STRUCTURE: Step/Process Block containing a points-wrapper with 5 point-item cards
+			     AI GUIDANCE: Use when breaking down a step into multiple sub-points or action items. Perfect for detailed guides where each step has multiple considerations -->
+			<section class="step-container shadow-card">
+				<div class="step-inner shadow-card">
+					<div class="circle-number-lg">03</div>
+
+					<div class="step-content">
+						<div class="step-title-row">
+							<div class="circle-number-sm">03</div>
+							<h3 class="step-title-text">Implement Key Actions</h3>
+						</div>
+
+						<div class="content-block step-body shadow-card">
+							<p class="body-text" style="margin-bottom: 1.5rem">
+								This step involves multiple critical action items that must be
+								completed to ensure successful implementation:
+							</p>
+
+							<div class="points-wrapper">
+								<div class="point-item shadow-card">
+									<img
+										src="./svgs/arrow-right.svg"
+										class="point-icon"
+										alt="arrow"
+									/>
+									<div class="body-text" style="flex: 1">
+										<b class="text-primary text-bold"> Document Collection: </b>
+										Gather all necessary legal documents, financial records, and
+										identification materials. Ensure everything is properly
+										organized and easily accessible for review.
+									</div>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img
+										src="./svgs/arrow-right.svg"
+										class="point-icon"
+										alt="arrow"
+									/>
+									<div class="body-text" style="flex: 1">
+										<b class="text-primary text-bold">
+											Stakeholder Communication:
+										</b>
+										Notify all relevant parties including beneficiaries, legal
+										representatives, and financial institutions about the
+										proceeding status and timeline.
+									</div>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img
+										src="./svgs/arrow-right.svg"
+										class="point-icon"
+										alt="arrow"
+									/>
+									<div class="body-text" style="flex: 1">
+										<b class="text-primary text-bold">Asset Valuation:</b>
+										Obtain professional appraisals for all significant assets
+										including real estate, business interests, and valuable
+										personal property to establish fair market values.
+									</div>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img
+										src="./svgs/arrow-right.svg"
+										class="point-icon"
+										alt="arrow"
+									/>
+									<div class="body-text" style="flex: 1">
+										<b class="text-primary text-bold">Debt Settlement:</b>
+										Review all outstanding obligations, verify creditor claims,
+										and prioritize debt payments according to legal requirements
+										and available funds.
+									</div>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img
+										src="./svgs/arrow-right.svg"
+										class="point-icon"
+										alt="arrow"
+									/>
+									<div class="body-text" style="flex: 1">
+										<b class="text-primary text-bold">
+											Compliance Verification:
+										</b>
+										Double-check all filings, deadlines, and legal requirements
+										to ensure full compliance with jurisdictional regulations
+										and avoid costly delays or penalties.
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- ========================================
+			     CATEGORY 3: LIST BLOCKS
+			     ======================================== -->
+
+			<!-- Bullet List Block
+			     USE WHEN: Displaying unordered lists of items, features, or key points
+			     STRUCTURE: ul.styled-list inside content-block with shadow
+			     STYLING: Disc bullets, primary colored labels with black descriptions
+			     AI GUIDANCE: Use for feature lists, key takeaways, benefits, requirements, or any bulleted information. Each li can have bold labels and regular text -->
+			<section>
+				<div class="content-block shadow-card">
+					<ul class="styled-list body-text">
+						<li class="text-primary">
+							<b class="text-primary text-bold">Preparation:</b>
+							<span style="color: black">
+								Gather all necessary documentation before starting the probate
+								process. This includes wills, death certificates, and property
+								titles.
+							</span>
+						</li>
+						<li class="text-primary">
+							<b class="text-primary text-bold">Communication:</b>
+							<span style="color: black">
+								Keep all beneficiaries informed to reduce friction and emotional
+								stress throughout the entire process.
+							</span>
+						</li>
+						<li class="text-primary">
+							<b class="text-primary text-bold">Documentation:</b>
+							<span style="color: black">
+								Maintain detailed records of every transaction, conversation,
+								and decision made during estate administration.
+							</span>
+						</li>
+						<li class="text-primary">
+							<b class="text-primary text-bold">Compliance:</b>
+							<span style="color: black">
+								Stay current with all legal requirements and deadlines to avoid
+								penalties or complications.
+							</span>
+						</li>
+						<li class="text-primary">
+							<b class="text-primary text-bold">Professional Support:</b>
+							<span style="color: black">
+								Don't hesitate to consult with attorneys, accountants, or other
+								specialists when needed.
+							</span>
+						</li>
+					</ul>
+				</div>
+			</section>
+
+			<!-- Point Items Block
+			     USE WHEN: Displaying list items with icons or visual indicators
+			     STRUCTURE: points-wrapper container with multiple point-item cards
+			     STYLING: Each point is a separate white card with icon and text, stacked with gap
+			     AI GUIDANCE: Use for feature highlights, benefits with icons, or any list where each item deserves visual emphasis. Icons should be 1rem SVGs -->
+			<section>
+				<div class="points-wrapper">
+					<div class="point-item shadow-card">
+						<img src="./svgs/arrow-right.svg" class="point-icon" alt="arrow" />
+						<div class="body-text" style="flex: 1">
+							<b class="text-primary text-bold">Automated Workflows:</b> Speed
+							up your internal processes with our new integration tools that
+							connect seamlessly with your existing systems.
+						</div>
+					</div>
+					<div class="point-item shadow-card">
+						<img src="./svgs/arrow-right.svg" class="point-icon" alt="arrow" />
+						<div class="body-text" style="flex: 1">
+							<b class="text-primary text-bold">Expert Support:</b> Access a
+							network of professionals directly through the dashboard whenever
+							you need specialized guidance.
+						</div>
+					</div>
+					<div class="point-item shadow-card">
+						<img src="./svgs/arrow-right.svg" class="point-icon" alt="arrow" />
+						<div class="body-text" style="flex: 1">
+							<b class="text-primary text-bold">Real-Time Updates:</b> Get
+							instant notifications about important changes or required actions
+							in your cases.
+						</div>
+					</div>
+					<div class="point-item shadow-card">
+						<img src="./svgs/arrow-right.svg" class="point-icon" alt="arrow" />
+						<div class="body-text" style="flex: 1">
+							<b class="text-primary text-bold">Secure Document Storage:</b> All
+							files are encrypted and stored with bank-level security standards.
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- ========================================
+			     CATEGORY 4: CALLOUT/ALERT BLOCKS
+			     ======================================== -->
+
+			<!-- Pro Tip Callout
+			     USE WHEN: Highlighting helpful tips, best practices, or expert advice
+			     STRUCTURE: callout-box (bg-primary), callout-filter (shadow), callout-inner (clipped shape)
+			     STYLING: Colored background with angled clip-path design, icon + text layout, drop shadows
+			     AI GUIDANCE: Use bg-primary for tips/info, bg-secondary for warnings/disclaimers. Icon should be 2rem. Callout has unique clipped corner design -->
+			<section>
+				<div class="callout-box bg-primary">
+					<div class="callout-filter">
+						<div class="callout-inner">
+							<img
+								class="point-icon"
+								src="./svgs/info-icon.svg"
+								alt="info"
+								style="width: 2rem"
+							/>
+							<div class="body-text">
+								<b class="text-secondary text-bold">Pro Tip:</b>
+								Always check for the latest tax guidelines before filing your
+								final estate returns to ensure total compliance with federal and
+								state regulations. This can save thousands in penalties.
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Disclaimer Callout
+			     ALTERNATE COLOR: Uses bg-secondary for warnings or disclaimers
+			     SAME STRUCTURE: Identical layout to Pro Tip but with secondary color theme
+			     ICON CHOICE: Use warning/alert icons for disclaimers, info icons for tips -->
+			<section>
+				<div class="callout-box bg-secondary">
+					<div class="callout-filter">
+						<div class="callout-inner">
+							<img
+								class="point-icon"
+								src="./svgs/info-icon.svg"
+								alt="warning"
+								style="width: 2rem"
+							/>
+							<div class="body-text">
+								<b class="text-secondary text-bold">Important Disclaimer:</b>
+								This information is for educational purposes only and does not
+								constitute legal advice. Always consult with a licensed attorney
+								in your jurisdiction before making important legal decisions.
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- ========================================
+			     CATEGORY 5: GRID/LAYOUT BLOCKS
+			     ======================================== -->
+
+			<!-- Two Column Grid
+			     USE WHEN: Displaying side-by-side content, comparisons, or related information
+			     STRUCTURE: grid-2-col container with two content-block children
+			     STYLING: Responsive grid (stacks on mobile, 2 columns on tablet+)
+			     AI GUIDANCE: Use for comparisons, before/after, pros/cons, or any paired content. Each column is independent with own heading and content -->
+			<section>
+				<div class="grid-2-col">
+					<div class="content-block shadow-card">
+						<h3 class="content-heading text-secondary">Left Column Content</h3>
+						<p class="body-text" style="margin-bottom: 1rem">
+							This layout uses the standard grid system to display side-by-side
+							information on larger screens. Perfect for comparisons, feature
+							lists, or related topics.
+						</p>
+						<ul class="styled-list body-text">
+							<li>Responsive design</li>
+							<li>Stacks on mobile</li>
+							<li>Equal height columns</li>
+						</ul>
+					</div>
+					<div class="content-block shadow-card">
+						<h3 class="content-heading text-secondary">Right Column Content</h3>
+						<p class="body-text" style="margin-bottom: 1rem">
+							On mobile devices, these columns will stack automatically for
+							better readability. The grid system ensures consistent spacing and
+							alignment.
+						</p>
+						<ul class="styled-list body-text">
+							<li>Flexible content areas</li>
+							<li>Maintains visual hierarchy</li>
+							<li>Easy to scan</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+
+			<!-- Content with Image Grid (Complex Grid)
+			     USE WHEN: Combining text content with image gallery or media
+			     STRUCTURE: grid-complex with span-3 content block and span-2 image-column
+			     STYLING: 5-column responsive grid, text takes 3 columns, images take 2
+			     AI GUIDANCE: Use for articles with supporting images, tutorials with visuals, or content that benefits from visual examples. Images have primary border -->
+			<section>
+				<div class="grid-complex">
+					<div class="content-block shadow-card span-3">
+						<div style="display: flex; flex-direction: column; gap: 1.5rem">
+							<div>
+								<h3 class="content-heading text-secondary">Active Listening</h3>
+								<div style="display: flex; flex-direction: column; gap: 0.5rem">
+									<p class="body-text">
+										<b class="text-primary text-bold">What it is:</b>
+										<span style="color: black">
+											Giving the speaker your full attention without judgment or
+											interruption.
+										</span>
+									</p>
+									<p class="body-text">
+										<b class="text-primary text-bold">How to Do It:</b>
+										<span style="color: black">
+											Use open-ended questions ("How are you coping?"), reflect
+											back key points for clarity, and offer genuine empathy.
+										</span>
+									</p>
+								</div>
+							</div>
+
+							<div>
+								<h3 class="content-heading text-secondary">Active Listening</h3>
+								<div style="display: flex; flex-direction: column; gap: 0.5rem">
+									<p class="body-text">
+										<b class="text-primary text-bold">What it is:</b>
+										<span style="color: black">
+											Giving the speaker your full attention without judgment or
+											interruption.
+										</span>
+									</p>
+									<p class="body-text">
+										<b class="text-primary text-bold">How to Do It:</b>
+										<span style="color: black">
+											Use open-ended questions ("How are you coping?"), reflect
+											back key points for clarity, and offer genuine empathy.
+										</span>
+									</p>
+								</div>
+							</div>
+							<div>
+								<h3 class="content-heading text-secondary">Active Listening</h3>
+								<div style="display: flex; flex-direction: column; gap: 0.5rem">
+									<p class="body-text">
+										<b class="text-primary text-bold">What it is:</b>
+										<span style="color: black">
+											Giving the speaker your full attention without judgment or
+											interruption.
+										</span>
+									</p>
+									<p class="body-text">
+										<b class="text-primary text-bold">How to Do It:</b>
+										<span style="color: black">
+											Use open-ended questions ("How are you coping?"), reflect
+											back key points for clarity, and offer genuine empathy.
+										</span>
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="image-column span-2">
+						<div class="image-frame shadow-card">
+							<img
+								src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&h=400&fit=crop"
+								alt="Professional communication"
+							/>
+						</div>
+						<div class="image-frame shadow-card">
+							<img
+								src="https://images.unsplash.com/photo-1600880292089-90a7e086ee0c?w=600&h=400&fit=crop"
+								alt="Team collaboration"
+							/>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Three Column Grid / Stats Cards
+			     USE WHEN: Displaying statistics, metrics, or key numbers prominently
+			     STRUCTURE: grid-3-col with stat-card children showing number + heading + description
+			     STYLING: Centered text, large Anton font numbers in primary color
+			     AI GUIDANCE: Use for showcasing metrics, achievements, statistics, or any numerical highlights. Numbers should be impactful (250+, 98%, 24/7, etc.) -->
+			<section>
+				<div class="grid-3-col">
+					<div class="stat-card shadow-card">
+						<div class="stat-number">250+</div>
+						<h4
+							class="text-secondary"
+							style="font-size: 1.25rem; margin-bottom: 0.5rem"
+						>
+							Cases Managed
+						</h4>
+						<p class="small-text">Successfully handled estates</p>
+					</div>
+					<div class="stat-card shadow-card">
+						<div class="stat-number">98%</div>
+						<h4
+							class="text-secondary"
+							style="font-size: 1.25rem; margin-bottom: 0.5rem"
+						>
+							Client Satisfaction
+						</h4>
+						<p class="small-text">Based on recent surveys</p>
+					</div>
+					<div class="stat-card shadow-card">
+						<div class="stat-number">24/7</div>
+						<h4
+							class="text-secondary"
+							style="font-size: 1.25rem; margin-bottom: 0.5rem"
+						>
+							Support Access
+						</h4>
+						<p class="small-text">Always there when you need us</p>
+					</div>
+				</div>
+			</section>
+
+			<!-- ========================================
+			     CATEGORY 6: MEDIA BLOCKS
+			     ======================================== -->
+
+			<!-- Image Block with Caption
+			     USE WHEN: Displaying images with descriptive captions or credits
+			     STRUCTURE: content-block with nested image container and caption paragraph
+			     STYLING: Image has secondary border and rounded corners, caption is italic and centered
+			     AI GUIDANCE: Use for photographs, diagrams, screenshots, or any visual content needing context. Image container uses inline styles for border customization -->
+			<section>
+				<div class="content-block shadow-card">
+					<div
+						class="shadow-card"
+						style="
+							border-radius: 1rem;
+							overflow: hidden;
+							border: 4px solid var(--secondary);
+							margin-bottom: 1rem;
+						"
+					>
+						<img
+							src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800&h=400&fit=crop"
+							alt="Professional workspace"
+							style="width: 100%"
+						/>
+					</div>
+					<p class="small-text text-center text-gray italic">
+						Professional estate planning requires careful documentation and
+						organization
+					</p>
+				</div>
+			</section>
+
+			<!-- ========================================
+			     CATEGORY 7: QUOTE/TESTIMONIAL BLOCKS
+			     ======================================== -->
+
+			<!-- Quote Block / Blockquote
+			     USE WHEN: Highlighting quotes, testimonials, or cited text
+			     STRUCTURE: quote-container with blockquote element, includes quote text and footer attribution
+			     STYLING: Italic text, left border accent in secondary color, generous padding
+			     AI GUIDANCE: Use for customer testimonials, expert quotes, citations, or pull quotes from content. Footer shows attribution/source -->
+			<section>
+				<div class="quote-container shadow-card">
+					<blockquote>
+						<p
+							class="content-heading italic text-gray"
+							style="margin-bottom: 1rem"
+						>
+							"The best time to plan for the future is always today. Proper
+							estate management protects your legacy and provides peace of mind
+							for your loved ones."
+						</p>
+						<footer class="body-text text-gray">
+							— Estate Planning Expert
+						</footer>
+					</blockquote>
+				</div>
+			</section>
+
+			<!-- ========================================
+			     CATEGORY 8: INTERACTIVE/CTA BLOCKS
+			     ======================================== -->
+
+			<!-- Call to Action Block
+			     USE WHEN: Prompting user action like signup, download, or contact
+			     STRUCTURE: cta-container with heading, description paragraph, and btn-primary button
+			     STYLING: Centered content, max-width constraint for readability, prominent button with hover effect
+			     AI GUIDANCE: Use at article end, section conclusions, or anywhere conversion is desired. Keep copy concise and action-oriented -->
+			<section>
+				<div class="cta-container shadow-card">
+					<h3
+						class="text-secondary"
+						style="font-size: 1.875rem; margin-bottom: 1rem"
+					>
+						Ready to Get Started?
+					</h3>
+					<p
+						class="body-text"
+						style="
+							margin-bottom: 1.5rem;
+							max-width: 42rem;
+							margin-left: auto;
+							margin-right: auto;
+						"
+					>
+						Join thousands of satisfied clients who trust our platform for their
+						estate management needs.
+					</p>
+					<button class="btn-primary body-text">Start Free Trial</button>
+				</div>
+			</section>
+
+			<!-- ========================================
+			     CATEGORY 9: DATA DISPLAY BLOCKS
+			     ======================================== -->
+
+			<!-- Table Block
+			     USE WHEN: Displaying structured tabular data, comparisons, or datasets
+			     STRUCTURE: table-wrapper with responsive table (thead + tbody)
+			     STYLING: Primary colored headers, white background, border-bottom on rows, horizontal scroll on mobile
+			     AI GUIDANCE: Use for pricing tables, feature comparisons, schedules, or any data grid. Wrapper enables horizontal scroll on small screens -->
+			<section>
+				<div class="table-wrapper shadow-card">
+					<table>
+						<thead>
+							<tr>
+								<th>Service</th>
+								<th>Timeline</th>
+								<th>Cost Range</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="body-text">Basic Estate Planning</td>
+								<td class="body-text">2-4 weeks</td>
+								<td class="body-text">$500 - $1,500</td>
+							</tr>
+							<tr>
+								<td class="body-text">Probate Administration</td>
+								<td class="body-text">6-12 months</td>
+								<td class="body-text">$3,000 - $10,000</td>
+							</tr>
+							<tr>
+								<td class="body-text">Trust Management</td>
+								<td class="body-text">Ongoing</td>
+								<td class="body-text">$2,000 - $5,000/year</td>
+							</tr>
+							<tr>
+								<td class="body-text">Estate Tax Planning</td>
+								<td class="body-text">4-8 weeks</td>
+								<td class="body-text">$5,000 - $15,000</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</section>
+
+			<!-- ========================================
+			     CATEGORY 10: TESTIMONIAL/REVIEW BLOCKS
+			     ======================================== -->
+
+			<!-- Testimonial Card Block
+			     USE WHEN: Displaying client testimonials, reviews, or user feedback
+			     STRUCTURE: Contains author name, role/company, quote text, and optional avatar
+			     STYLING: White card with shadow, includes quotation styling
+			     AI GUIDANCE: Use for social proof, customer stories, or expert endorsements -->
+			<section>
+				<div class="content-block shadow-card">
+					<div style="display: flex; gap: 1.5rem; align-items: flex-start">
+						<div
+							style="
+								width: 4rem;
+								height: 4rem;
+								background-color: var(--primary);
+								border-radius: 50%;
+								flex-shrink: 0;
+								display: flex;
+								align-items: center;
+								justify-content: center;
+								color: white;
+								font-family: var(--font-anton);
+								font-size: 1.5rem;
+							"
+						>
+							JD
+						</div>
+						<div style="flex: 1">
+							<p
+								class="body-text italic"
+								style="margin-bottom: 1rem; color: var(--gray-600)"
+							>
+								"This platform transformed how we handle estate administration.
+								The tools are intuitive and the support team is incredibly
+								responsive. Highly recommend for any executor or estate
+								attorney."
+							</p>
+							<p class="body-text text-bold text-primary">Jane Doe</p>
+							<p class="small-text text-gray">
+								Estate Attorney, Smith & Associates
+							</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- ========================================
+			     CATEGORY 11: VIDEO/MEDIA EMBED BLOCKS
+			     ======================================== -->
+
+			<!-- Video Embed Block
+			     USE WHEN: Embedding YouTube, Vimeo, or other video content
+			     STRUCTURE: Responsive iframe wrapper with 16:9 aspect ratio
+			     STYLING: White container with shadow, rounded corners, optional caption
+			     AI GUIDANCE: Use for tutorial videos, product demos, testimonial videos, or educational content -->
+			<section>
+				<div class="content-block shadow-card">
+					<div
+						style="
+							position: relative;
+							padding-bottom: 56.25%;
+							height: 0;
+							overflow: hidden;
+							border-radius: 1rem;
+							margin-bottom: 1rem;
+							background-color: var(--gray-300);
+						"
+					>
+						<!-- Replace src with actual video URL -->
+						<iframe
+							style="
+								position: absolute;
+								top: 0;
+								left: 0;
+								width: 100%;
+								height: 100%;
+								border: none;
+							"
+							src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+							title="Video player"
+							allow="
+								accelerometer;
+								autoplay;
+								clipboard-write;
+								encrypted-media;
+								gyroscope;
+								picture-in-picture;
+							"
+							allowfullscreen
+						>
+						</iframe>
+					</div>
+					<h3 class="content-heading text-secondary">
+						Understanding Probate Process
+					</h3>
+					<p class="body-text text-gray">
+						Watch this comprehensive guide to learn the step-by-step probate
+						process and how to navigate estate administration efficiently.
+					</p>
+				</div>
+			</section>
+
+			<!-- ========================================
+			     CATEGORY 12: BADGE/TAG BLOCKS
+			     ======================================== -->
+
+			<!-- Badge/Tag List Block
+			     USE WHEN: Showing categories, tags, skills, features, or labels
+			     STRUCTURE: Flexbox container with wrapped inline badges
+			     STYLING: Small rounded pills with primary/secondary colors
+			     AI GUIDANCE: Use for article tags, skill lists, feature highlights, or categorization -->
+			<section>
+				<div class="content-block shadow-card">
+					<h3
+						class="content-heading text-secondary"
+						style="margin-bottom: 1rem"
+					>
+						Related Topics
+					</h3>
+					<div style="display: flex; flex-wrap: wrap; gap: 0.75rem">
+						<span
+							style="
+								background-color: var(--primary);
+								color: white;
+								padding: 0.5rem 1rem;
+								border-radius: 2rem;
+								font-size: 0.875rem;
+								font-weight: 700;
+							"
+						>
+							Estate Planning
+						</span>
+						<span
+							style="
+								background-color: var(--secondary);
+								color: white;
+								padding: 0.5rem 1rem;
+								border-radius: 2rem;
+								font-size: 0.875rem;
+								font-weight: 700;
+							"
+						>
+							Probate
+						</span>
+						<span
+							style="
+								background-color: var(--primary);
+								color: white;
+								padding: 0.5rem 1rem;
+								border-radius: 2rem;
+								font-size: 0.875rem;
+								font-weight: 700;
+							"
+						>
+							Legal Documents
+						</span>
+						<span
+							style="
+								background-color: var(--secondary);
+								color: white;
+								padding: 0.5rem 1rem;
+								border-radius: 2rem;
+								font-size: 0.875rem;
+								font-weight: 700;
+							"
+						>
+							Executors
+						</span>
+						<span
+							style="
+								background-color: var(--primary);
+								color: white;
+								padding: 0.5rem 1rem;
+								border-radius: 2rem;
+								font-size: 0.875rem;
+								font-weight: 700;
+							"
+						>
+							Wills & Trusts
+						</span>
+					</div>
+				</div>
+			</section>
+
+			<!-- ========================================
+			     CATEGORY 13: TIMELINE/PROCESS BLOCKS
+			     ======================================== -->
+
+			<!-- Vertical Timeline Block
+			     USE WHEN: Showing chronological events, project milestones, or step-by-step processes
+			     STRUCTURE: Vertical line with connected cards showing dates/events
+			     STYLING: Left-aligned timeline with primary color line and white cards
+			     AI GUIDANCE: Use for historical timelines, project roadmaps, or sequential workflows -->
+			<section>
+				<div class="content-block shadow-card">
+					<h3
+						class="content-heading text-secondary"
+						style="margin-bottom: 1.5rem"
+					>
+						Typical Probate Timeline
+					</h3>
+					<div style="position: relative; padding-left: 2.5rem">
+						<!-- Timeline line -->
+						<div
+							style="
+								position: absolute;
+								left: 0.9rem;
+								top: 1rem;
+								bottom: 0;
+								width: 3px;
+								background-color: var(--primary);
+							"
+						></div>
+
+						<!-- Timeline item 1 -->
+						<div style="position: relative; margin-bottom: 2rem">
+							<div
+								style="
+									position: absolute;
+									left: -2rem;
+									top: 0.25rem;
+									width: 1rem;
+									height: 1rem;
+									background-color: var(--secondary);
+									border-radius: 50%;
+									border: 3px solid white;
+									box-shadow: 0 0 0 3px var(--primary);
+								"
+							></div>
+							<p class="small-text text-bold text-primary">Week 1-2</p>
+							<p class="body-text text-bold text-secondary">File Petition</p>
+							<p class="body-text text-gray">
+								Submit initial probate petition to the court and notify all
+								beneficiaries.
+							</p>
+						</div>
+
+						<!-- Timeline item 2 -->
+						<div style="position: relative; margin-bottom: 2rem">
+							<div
+								style="
+									position: absolute;
+									left: -2rem;
+									top: 0.25rem;
+									width: 1rem;
+									height: 1rem;
+									background-color: var(--secondary);
+									border-radius: 50%;
+									border: 3px solid white;
+									box-shadow: 0 0 0 3px var(--primary);
+								"
+							></div>
+							<p class="small-text text-bold text-primary">Month 1-3</p>
+							<p class="body-text text-bold text-secondary">Asset Inventory</p>
+							<p class="body-text text-gray">
+								Compile complete inventory of estate assets and obtain
+								professional appraisals.
+							</p>
+						</div>
+
+						<!-- Timeline item 3 -->
+						<div style="position: relative; margin-bottom: 2rem">
+							<div
+								style="
+									position: absolute;
+									left: -2rem;
+									top: 0.25rem;
+									width: 1rem;
+									height: 1rem;
+									background-color: var(--secondary);
+									border-radius: 50%;
+									border: 3px solid white;
+									box-shadow: 0 0 0 3px var(--primary);
+								"
+							></div>
+							<p class="small-text text-bold text-primary">Month 4-8</p>
+							<p class="body-text text-bold text-secondary">
+								Pay Debts & Taxes
+							</p>
+							<p class="body-text text-gray">
+								Settle all outstanding debts, file tax returns, and resolve any
+								claims.
+							</p>
+						</div>
+
+						<!-- Timeline item 4 -->
+						<div style="position: relative">
+							<div
+								style="
+									position: absolute;
+									left: -2rem;
+									top: 0.25rem;
+									width: 1rem;
+									height: 1rem;
+									background-color: var(--secondary);
+									border-radius: 50%;
+									border: 3px solid white;
+									box-shadow: 0 0 0 3px var(--primary);
+								"
+							></div>
+							<p class="small-text text-bold text-primary">Month 9-12</p>
+							<p class="body-text text-bold text-secondary">
+								Final Distribution
+							</p>
+							<p class="body-text text-gray">
+								Distribute remaining assets to beneficiaries and close the
+								estate.
+							</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- ========================================
+			     CATEGORY 14: FAQ/ACCORDION BLOCKS
+			     ======================================== -->
+
+			<!-- FAQ Item Block
+			     USE WHEN: Displaying frequently asked questions or expandable information
+			     STRUCTURE: Question as heading, answer as expandable content
+			     STYLING: Individual cards for each FAQ item, stacked vertically
+			     AI GUIDANCE: Use for Q&A sections, help documentation, or collapsible information lists -->
+			<section>
+				<div style="display: flex; flex-direction: column; gap: 1rem">
+					<div class="content-block shadow-card">
+						<h3
+							class="content-heading text-secondary"
+							style="margin-bottom: 0.5rem"
+						>
+							What is probate and when is it required?
+						</h3>
+						<p class="body-text text-gray">
+							Probate is the legal process of administering a deceased person's
+							estate. It's typically required when someone dies with assets in
+							their name alone, without beneficiary designations or joint
+							ownership. The process validates the will, appoints an executor,
+							and ensures proper asset distribution.
+						</p>
+					</div>
+
+					<div class="content-block shadow-card">
+						<h3
+							class="content-heading text-secondary"
+							style="margin-bottom: 0.5rem"
+						>
+							How long does the probate process take?
+						</h3>
+						<p class="body-text text-gray">
+							The duration varies significantly based on estate complexity,
+							state laws, and potential disputes. Simple estates may close in
+							6-9 months, while complex estates with litigation can take several
+							years. Most standard cases resolve within 12-18 months.
+						</p>
+					</div>
+
+					<div class="content-block shadow-card">
+						<h3
+							class="content-heading text-secondary"
+							style="margin-bottom: 0.5rem"
+						>
+							Can I avoid probate for my estate?
+						</h3>
+						<p class="body-text text-gray">
+							Yes, several strategies can help avoid probate including
+							establishing living trusts, designating beneficiaries on accounts,
+							creating joint ownership with rights of survivorship, and using
+							transfer-on-death (TOD) designations for investments and real
+							estate.
+						</p>
+					</div>
+				</div>
+			</section>
+
+			<!-- ========================================
+			     CATEGORY 15: AUTHOR/PROFILE BLOCKS
+			     ======================================== -->
+
+			<!-- Author Bio Block
+			     USE WHEN: Displaying article author information or team member profiles
+			     STRUCTURE: Avatar, name, title, bio description, social links
+			     STYLING: Horizontal layout on desktop, stacked on mobile
+			     AI GUIDANCE: Use at the end of articles, in "About the Author" sections, or team pages -->
+			<section>
+				<div class="content-block shadow-card">
+					<div
+						style="
+							display: flex;
+							gap: 1.5rem;
+							flex-wrap: wrap;
+							align-items: center;
+						"
+					>
+						<div
+							style="
+								width: 6rem;
+								height: 6rem;
+								background-color: var(--primary);
+								border-radius: 1rem;
+								flex-shrink: 0;
+								display: flex;
+								align-items: center;
+								justify-content: center;
+								color: white;
+								font-family: var(--font-anton);
+								font-size: 2rem;
+							"
+						>
+							MJ
+						</div>
+						<div style="flex: 1; min-width: 250px">
+							<h3
+								class="content-heading text-secondary"
+								style="margin-bottom: 0.25rem"
+							>
+								Michael Johnson
+							</h3>
+							<p
+								class="body-text text-primary text-bold"
+								style="margin-bottom: 0.75rem"
+							>
+								Senior Estate Planning Attorney
+							</p>
+							<p class="body-text text-gray">
+								With over 15 years of experience in estate planning and probate
+								law, Michael helps families navigate complex legal processes
+								with compassion and expertise. He specializes in high-net-worth
+								estates and trust administration.
+							</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- ========================================
+			     CATEGORY 16: COMPARISON/VS BLOCKS
+			     ======================================== -->
+
+			<!-- Comparison Card Block
+			     USE WHEN: Comparing two options, products, or approaches side-by-side
+			     STRUCTURE: Two-column grid with feature comparisons
+			     STYLING: Split design with contrasting colors or borders
+			     AI GUIDANCE: Use for product comparisons, before/after scenarios, or decision-making guides -->
+			<section>
+				<div class="grid-2-col">
+					<div
+						class="content-block shadow-card"
+						style="border-top: 4px solid var(--primary)"
+					>
+						<h3
+							class="content-heading text-primary"
+							style="text-align: center; margin-bottom: 1rem"
+						>
+							With Professional Help
+						</h3>
+						<ul class="styled-list body-text">
+							<li>Expert legal guidance throughout</li>
+							<li>Reduced risk of errors</li>
+							<li>Faster processing times</li>
+							<li>Court representation included</li>
+							<li>Peace of mind</li>
+						</ul>
+						<div style="margin-top: 1.5rem; text-align: center">
+							<p class="body-text text-bold text-primary">$3,000 - $10,000</p>
+							<p class="small-text text-gray">Average cost</p>
+						</div>
+					</div>
+
+					<div
+						class="content-block shadow-card"
+						style="border-top: 4px solid var(--secondary)"
+					>
+						<h3
+							class="content-heading text-secondary"
+							style="text-align: center; margin-bottom: 1rem"
+						>
+							DIY Probate
+						</h3>
+						<ul class="styled-list body-text">
+							<li>Lower upfront costs</li>
+							<li>Full personal control</li>
+							<li>Learn the process yourself</li>
+							<li>Time-intensive research</li>
+							<li>Higher error risk</li>
+						</ul>
+						<div style="margin-top: 1.5rem; text-align: center">
+							<p class="body-text text-bold text-secondary">$500 - $1,500</p>
+							<p class="small-text text-gray">Average cost</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- ========================================
+			     CATEGORY 17: DOWNLOAD/RESOURCE BLOCKS
+			     ======================================== -->
+
+			<!-- Resource Download Block
+			     USE WHEN: Offering downloadable files, templates, or resources
+			     STRUCTURE: Icon/graphic, title, description, download button
+			     STYLING: Card with prominent call-to-action button
+			     AI GUIDANCE: Use for PDFs, checklists, templates, guides, or any downloadable content -->
+			<section>
+				<div class="content-block shadow-card">
+					<div
+						style="
+							display: flex;
+							gap: 1.5rem;
+							align-items: center;
+							flex-wrap: wrap;
+						"
+					>
+						<div
+							style="
+								width: 4rem;
+								height: 4rem;
+								background-color: var(--primary);
+								border-radius: 1rem;
+								flex-shrink: 0;
+								display: flex;
+								align-items: center;
+								justify-content: center;
+								color: white;
+								font-size: 2rem;
+							"
+						>
+							📄
+						</div>
+						<div style="flex: 1; min-width: 250px">
+							<h3
+								class="content-heading text-secondary"
+								style="margin-bottom: 0.5rem"
+							>
+								Estate Planning Checklist
+							</h3>
+							<p class="body-text text-gray" style="margin-bottom: 1rem">
+								Download our comprehensive 25-point checklist to ensure you
+								haven't missed any critical steps in your estate planning
+								process.
+							</p>
+							<button class="btn-primary body-text">Download Free PDF</button>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- ========================================
+			     CATEGORY 18: NOTIFICATION/ALERT BLOCKS
+			     ======================================== -->
+
+			<!-- Alert/Notification Block
+			     USE WHEN: Showing important updates, warnings, success messages, or info notices
+			     STRUCTURE: Colored left border, icon, heading, message text
+			     STYLING: Light background with colored accent, can be success/warning/info/error
+			     AI GUIDANCE: Use for system messages, important notices, updates, or status indicators -->
+			<section>
+				<div style="display: flex; flex-direction: column; gap: 1rem">
+					<!-- Success Alert -->
+					<div
+						class="content-block shadow-card"
+						style="
+							border-left: 4px solid #22c55e;
+							background: linear-gradient(
+								to right,
+								rgba(34, 197, 94, 0.1),
+								rgba(34, 197, 94, 0.05)
+							);
+						"
+					>
+						<div style="display: flex; gap: 1rem; align-items: flex-start">
+							<span style="font-size: 1.5rem; flex-shrink: 0">✓</span>
+							<div>
+								<p
+									class="body-text text-bold"
+									style="color: #22c55e; margin-bottom: 0.5rem"
+								>
+									Success!
+								</p>
+								<p class="body-text text-gray">
+									Your estate plan has been successfully updated and saved to
+									your account.
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<!-- Warning Alert -->
+					<div
+						class="content-block shadow-card"
+						style="
+							border-left: 4px solid #f59e0b;
+							background: linear-gradient(
+								to right,
+								rgba(245, 158, 11, 0.1),
+								rgba(245, 158, 11, 0.05)
+							);
+						"
+					>
+						<div style="display: flex; gap: 1rem; align-items: flex-start">
+							<span style="font-size: 1.5rem; flex-shrink: 0">⚠</span>
+							<div>
+								<p
+									class="body-text text-bold"
+									style="color: #f59e0b; margin-bottom: 0.5rem"
+								>
+									Important Deadline
+								</p>
+								<p class="body-text text-gray">
+									Your estate tax return is due in 30 days. Schedule a
+									consultation to ensure timely filing.
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<!-- Info Alert -->
+					<div
+						class="content-block shadow-card"
+						style="
+							border-left: 4px solid var(--primary);
+							background: linear-gradient(
+								to right,
+								var(--primary-light),
+								var(--primary-lighter)
+							);
+						"
+					>
+						<div style="display: flex; gap: 1rem; align-items: flex-start">
+							<span style="font-size: 1.5rem; flex-shrink: 0">ℹ</span>
+							<div>
+								<p
+									class="body-text text-bold text-primary"
+									style="margin-bottom: 0.5rem"
+								>
+									New Feature Available
+								</p>
+								<p class="body-text text-gray">
+									We've added automated beneficiary notifications to help keep
+									all parties informed throughout the probate process.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<footer class="site-footer">
+				<p class="body-text text-gray">
+					This preview demonstrates all available content block types for the
+					blog system.
+				</p>
+				<p class="small-text text-gray" style="margin-top: 0.5rem">
+					Generated: February 7, 2026
+				</p>
+			</footer>
+		</main>
+	</body>
+</html>

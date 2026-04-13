@@ -1,0 +1,2924 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Glossary of Probate Terms</title>
+
+		<link
+			href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@400;700&family=Roboto:wght@400;900&family=League+Spartan:wght@400;700&family=Oswald&family=Poppins&family=Passions+Conflict&family=Sarpanch&display=swap"
+			rel="stylesheet"
+		/>
+
+		<style type="text/css">
+			/* =========================================
+			   1. VARIABLES & RESET
+			   ========================================= */
+			:root {
+				--primary: #0097a7;
+				--primary-dark: #00838f;
+				--primary-light: rgba(0, 151, 167, 0.1);
+				--primary-lighter: rgba(0, 151, 167, 0.05);
+
+				--secondary: #fe7702;
+				--secondary-light: rgba(254, 119, 2, 0.1);
+				--secondary-lighter: rgba(254, 119, 2, 0.05);
+
+				--accent: #ff4444;
+				--teal-soft: #e0f7fa;
+
+				--gray-100: #f3f4f6;
+				--gray-300: #d1d5db;
+				--gray-500: #6b7280;
+				--gray-600: #4b5563;
+				--white: #ffffff;
+				--black: #000000;
+
+				--font-anton: "Anton", sans-serif;
+				--font-montserrat: "Montserrat", sans-serif;
+			}
+
+			* {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
+
+			body {
+				background-color: var(--gray-100);
+				color: var(--black);
+				font-family: var(--font-montserrat);
+				padding: 1.5rem;
+				-webkit-font-smoothing: antialiased;
+			}
+
+			@media (min-width: 768px) {
+				body {
+					padding: 2.5rem;
+				}
+			}
+
+			main {
+				max-width: 80rem;
+				margin-left: auto;
+				margin-right: auto;
+				display: flex;
+				flex-direction: column;
+				gap: 2.5rem;
+			}
+
+			img {
+				display: block;
+				max-width: 100%;
+				height: auto;
+			}
+
+			/* =========================================
+			   2. TYPOGRAPHY
+			   ========================================= */
+			h1,
+			h2,
+			h3,
+			h4 {
+				font-family: var(--font-anton);
+				text-transform: uppercase;
+				line-height: 1.2;
+				font-weight: 700;
+				transition: color 0.3s ease;
+			}
+
+			.text-primary {
+				color: var(--primary);
+			}
+
+			.text-primary:hover {
+				color: var(--secondary);
+			}
+
+			.text-secondary {
+				color: var(--secondary);
+			}
+
+			.text-secondary:hover {
+				color: var(--primary);
+			}
+
+			/* Parent hover — swap colors so primary children become secondary */
+			.content-block:hover .text-secondary,
+			.point-item:hover .text-secondary {
+				color: var(--primary);
+				transition: color 0.3s ease;
+			}
+
+			.content-block:hover .text-primary,
+			.point-item:hover .text-primary {
+				color: var(--secondary);
+				transition: color 0.3s ease;
+			}
+
+			.text-gray {
+				color: var(--gray-600);
+			}
+
+			.text-center {
+				text-align: center;
+			}
+
+			.text-bold {
+				font-weight: 700;
+			}
+
+			.italic {
+				font-style: italic;
+			}
+
+			.section-title {
+				font-size: 2rem !important;
+				margin-bottom: 1rem;
+				transition: color 0.3s ease;
+			}
+
+			.section-title.text-primary:hover,
+			.section-title:hover.text-primary {
+				color: var(--secondary) !important;
+			}
+
+			.section-title.text-secondary:hover,
+			.section-title:hover.text-secondary {
+				color: var(--primary) !important;
+			}
+
+			.content-heading {
+				font-size: 1.625rem !important;
+				margin-bottom: 0.75rem;
+				transition: color 0.3s ease;
+			}
+
+			.content-heading.text-primary:hover,
+			.content-heading:hover.text-primary {
+				color: var(--secondary) !important;
+			}
+
+			.content-heading.text-secondary:hover,
+			.content-heading:hover.text-secondary {
+				color: var(--primary) !important;
+			}
+
+			.body-text {
+				font-size: 1.375rem !important;
+				line-height: 1.6;
+				font-weight: 700;
+			}
+
+			.small-text {
+				font-size: 1.125rem !important;
+				font-weight: 700;
+			}
+
+			.main-header {
+				text-align: center;
+			}
+
+			.main-header h1 {
+				font-size: 3.25rem;
+				color: var(--secondary);
+				margin-bottom: 1rem;
+				transition: color 0.3s ease;
+			}
+
+			.main-header h1:hover {
+				color: var(--primary);
+			}
+
+			@media (max-width: 767px) {
+				.section-title {
+					font-size: 1.5rem !important;
+				}
+
+				.content-heading {
+					font-size: 1.25rem !important;
+				}
+
+				.body-text {
+					font-size: 1rem !important;
+				}
+
+				.small-text {
+					font-size: 0.875rem !important;
+				}
+
+				.main-header h1 {
+					font-size: 2rem;
+				}
+
+				.step-title-text {
+					font-size: clamp(1.25rem, 3.15vw, 3.7rem);
+				}
+			}
+
+			/* =========================================
+			   3. SHADOWS & UTILITIES
+			   ========================================= */
+			.shadow-card {
+				box-shadow:
+					0 8px 12px rgba(0, 0, 0, 0.4),
+					0 -5px 12px 1px rgba(0, 0, 0, 0.4);
+				transition:
+					transform 0.3s ease,
+					box-shadow 0.3s ease;
+			}
+
+			.shadow-card:hover {
+				transform: translateY(-5px);
+				box-shadow:
+					0 12px 20px rgba(0, 0, 0, 0.5),
+					0 -8px 16px 2px rgba(0, 0, 0, 0.5);
+			}
+
+			.bg-white {
+				background-color: var(--white);
+			}
+
+			.rounded-card {
+				border-radius: 1rem;
+			}
+
+			/* =========================================
+			   4. CATEGORY BANNERS
+			   ========================================= */
+			.category-banner {
+				padding: 1.5rem;
+				border-radius: 1rem;
+				border-left: 4px solid;
+				transition:
+					transform 0.3s ease,
+					border-left-width 0.3s ease;
+			}
+
+			.category-banner:hover {
+				transform: translateX(8px);
+				border-left-width: 8px;
+			}
+
+			.category-banner h2 {
+				font-size: 2rem;
+				margin-bottom: 0.5rem;
+				font-weight: 700;
+				transition: color 0.3s ease;
+			}
+
+			.banner-primary {
+				background: linear-gradient(
+					to right,
+					var(--primary-light),
+					var(--primary-lighter)
+				);
+				border-color: var(--primary);
+			}
+
+			.banner-primary h2 {
+				color: var(--primary);
+			}
+
+			.banner-primary h2:hover {
+				color: var(--secondary);
+			}
+
+			.banner-secondary {
+				background: linear-gradient(
+					to right,
+					var(--secondary-light),
+					var(--secondary-lighter)
+				);
+				border-color: var(--secondary);
+			}
+
+			.banner-secondary h2 {
+				color: var(--secondary);
+			}
+
+			.banner-secondary h2:hover {
+				color: var(--primary);
+			}
+
+			/* =========================================
+			   5. CONTENT BLOCKS
+			   ========================================= */
+			.content-block {
+				background-color: var(--white);
+				padding: 0.9rem;
+				border-radius: 1rem;
+				transition: transform 0.3s ease;
+			}
+
+			@media (min-width: 768px) {
+				.content-block {
+					padding: 2.7rem !important;
+				}
+			}
+
+			.step-container {
+				border-radius: 1rem;
+				background-color: var(--white);
+				padding: 1.5rem;
+				transition: transform 0.3s ease;
+			}
+
+			.step-container:hover {
+				transform: scale(1.02);
+			}
+
+			.step-inner {
+				background-color: transparent;
+				padding: 0;
+				display: flex;
+				flex-direction: column;
+				gap: 0;
+			}
+
+			.circle-number-lg {
+				display: none;
+				width: 5rem;
+				height: 5rem;
+				background-color: rgba(0, 151, 167, 0.2);
+				color: var(--secondary);
+				border-radius: 50%;
+				align-items: center;
+				justify-content: center;
+				font-family: var(--font-anton);
+				font-size: 2.5rem;
+				font-weight: 700;
+				flex-shrink: 0;
+				transition: all 0.3s ease;
+			}
+
+			.step-container:hover .circle-number-lg {
+				background-color: rgba(0, 151, 167, 0.4);
+				transform: rotate(360deg) scale(1.1);
+			}
+
+			.circle-number-sm {
+				display: flex;
+				width: 2.5rem;
+				height: 2.5rem;
+				background-color: rgba(0, 151, 167, 0.2);
+				color: var(--secondary);
+				border-radius: 50%;
+				align-items: center;
+				justify-content: center;
+				font-family: var(--font-anton);
+				font-size: 1.375rem;
+				font-weight: 700;
+				flex-shrink: 0;
+				margin-bottom: 0.75rem;
+				align-self: flex-start;
+				transition: all 0.3s ease;
+			}
+
+			.step-container:hover .circle-number-sm {
+				background-color: rgba(0, 151, 167, 0.4);
+				transform: rotate(360deg) scale(1.1);
+			}
+
+			.step-content {
+				flex: 1;
+			}
+
+			.step-title-row {
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
+				margin-bottom: 0.75rem;
+			}
+
+			.step-title-text {
+				font-size: clamp(1.5rem, 3.15vw, 3.7rem);
+				color: var(--secondary);
+				transition: color 0.3s ease;
+			}
+
+			.step-title-text:hover {
+				color: var(--primary);
+			}
+
+			.step-body {
+				margin-top: 0;
+				padding: 0;
+				background-color: transparent;
+				border-radius: 0;
+			}
+
+			.step-container .step-inner {
+				box-shadow: none !important;
+				background-color: transparent !important;
+			}
+
+			.step-container .step-body {
+				box-shadow: none !important;
+			}
+
+			.step-container .step-body .content-block {
+				padding: 0 !important;
+				background-color: transparent !important;
+				box-shadow: none !important;
+			}
+
+			@media (min-width: 768px) {
+				.step-container {
+					padding: 2.5rem;
+					border-radius: 1rem;
+				}
+
+				.step-inner {
+					gap: 1.5rem;
+					border-radius: 1rem;
+					background-color: var(--white);
+					flex-direction: row;
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				.circle-number-lg {
+					display: flex;
+				}
+
+				.circle-number-sm {
+					display: none;
+					margin-bottom: 0;
+				}
+
+				.step-title-row {
+					margin-bottom: 0;
+				}
+
+				.step-body {
+					margin-top: 1.5rem;
+					padding: 1.5rem;
+					background-color: var(--white);
+					border-radius: 1rem;
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				.step-body.content-block {
+					padding: 1.5rem !important;
+					background-color: var(--white) !important;
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+			}
+
+			ul.styled-list {
+				margin-left: 1.5rem;
+				list-style-type: disc;
+				display: flex;
+				flex-direction: column;
+				gap: 1rem;
+			}
+
+			ul.styled-list li {
+				transition: transform 0.2s ease;
+			}
+
+			ul.styled-list li:hover {
+				transform: translateX(8px);
+			}
+
+			.points-wrapper {
+				display: flex;
+				flex-direction: column;
+				gap: 1rem;
+			}
+
+			.point-item {
+				display: flex;
+				align-items: flex-start;
+				gap: 1.5rem;
+				background-color: transparent;
+				padding: 0;
+				border-radius: 0;
+				transition: transform 0.2s ease;
+			}
+
+			.point-item:hover {
+				transform: translateX(5px);
+			}
+
+			.point-icon {
+				width: 1.75rem;
+				margin-top: calc((1.375rem * 1.6 - 1.75rem) / 2);
+				flex-shrink: 0;
+				transition: transform 0.3s ease;
+			}
+
+			.point-item:hover .point-icon {
+				transform: scale(1.15) rotate(5deg);
+			}
+
+			.point-item.shadow-card {
+				box-shadow: none !important;
+				background-color: transparent !important;
+				padding: 0 !important;
+			}
+
+			@media (min-width: 768px) {
+				.point-item {
+					background-color: var(--white);
+					padding: 1.5rem;
+					border-radius: 1rem;
+				}
+
+				.point-icon {
+					width: 2.25rem;
+					margin-top: calc((1.375rem * 1.6 - 2.25rem) / 2);
+				}
+
+				.point-item.shadow-card {
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+					background-color: var(--white) !important;
+					padding: 1.5rem !important;
+				}
+			}
+
+			.callout-box {
+				padding: 1rem;
+				border-radius: 1rem;
+			}
+
+			@media (min-width: 768px) {
+				.callout-box {
+					border-radius: 1rem;
+				}
+			}
+
+			.callout-inner {
+				background-color: var(--white);
+				padding: 2rem 1rem;
+				border-radius: 1rem;
+				display: flex;
+				align-items: flex-start;
+				gap: 1.5rem;
+				clip-path: polygon(0 0, 100% 0, 100% 80%, 82% 100%, 0 100%);
+			}
+
+			@media (min-width: 768px) {
+				.callout-inner {
+					clip-path: polygon(0 0, 101% 0, 100% 60%, 94% 100%, 0 100%);
+					padding: 2.5rem;
+					border-radius: 1rem;
+				}
+			}
+
+			.callout-filter {
+				filter: drop-shadow(4px -6px 10px rgba(0, 0, 0, 0.5))
+					drop-shadow(6px 5px 10px rgba(0, 0, 0, 0.5));
+			}
+
+			.bg-primary {
+				background-color: var(--primary);
+			}
+
+			.bg-secondary {
+				background-color: var(--secondary);
+			}
+
+			.grid-2-col {
+				display: grid;
+				grid-template-columns: 1fr;
+				gap: 1.5rem;
+			}
+
+			.grid-3-col {
+				display: grid;
+				grid-template-columns: 1fr;
+				gap: 1.5rem;
+			}
+
+			.grid-complex {
+				display: grid;
+				grid-template-columns: 1fr;
+				gap: 1.5rem;
+			}
+
+			@media (min-width: 768px) {
+				.grid-2-col {
+					grid-template-columns: 1fr 1fr;
+				}
+
+				.grid-3-col {
+					grid-template-columns: 1fr 1fr 1fr;
+				}
+
+				.grid-complex {
+					grid-template-columns: repeat(5, 1fr);
+				}
+
+				.span-3 {
+					grid-column: span 3;
+				}
+
+				.span-2 {
+					grid-column: span 2;
+				}
+			}
+
+			.image-column {
+				display: flex;
+				flex-direction: column;
+				gap: 1.5rem;
+				height: 100%;
+			}
+
+			.image-frame {
+				flex: 1;
+				border-radius: 1rem;
+				overflow: hidden;
+				border: 4px solid var(--primary);
+			}
+
+			.image-frame img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+
+			.section-photo {
+				width: 100%;
+				aspect-ratio: 1200 / 630;
+				margin: 0;
+				border: 4px solid var(--secondary);
+				border-radius: 1rem;
+				overflow: hidden;
+			}
+
+			.section-photo img {
+				display: block;
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				object-position: center;
+			}
+
+			.stat-card {
+				background-color: var(--white);
+				padding: 1.5rem;
+				border-radius: 1rem;
+				text-align: center;
+			}
+
+			.stat-number {
+				font-family: var(--font-anton);
+				color: var(--primary);
+				font-size: 3.25rem;
+				margin-bottom: 0.75rem;
+				transition: color 0.3s ease;
+			}
+
+			.stat-number:hover {
+				color: var(--secondary);
+			}
+
+			.quote-container {
+				background-color: var(--white);
+				padding: 2rem;
+				border-radius: 1rem;
+				transition:
+					transform 0.3s ease,
+					box-shadow 0.3s ease;
+			}
+
+			.quote-container:hover {
+				transform: translateX(10px);
+				box-shadow: -5px 5px 15px rgba(0, 0, 0, 0.1);
+			}
+
+			@media (min-width: 768px) {
+				.quote-container {
+					padding: 3rem;
+				}
+			}
+
+			blockquote {
+				border-left: 4px solid var(--secondary);
+				padding-left: 1.5rem;
+				font-weight: 400;
+			}
+
+			.cta-container {
+				background-color: var(--white);
+				padding: 2rem;
+				border-radius: 1rem;
+				text-align: center;
+				transition:
+					transform 0.3s ease,
+					box-shadow 0.3s ease;
+			}
+
+			.cta-container:hover {
+				transform: translateY(-3px);
+				box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+			}
+
+			.btn-primary {
+				background-color: #fe7702;
+				color: white;
+				box-shadow:
+					0px 3.04px 7.39px 0px rgba(0, 0, 0, 0.68),
+					6.07px -6.07px 4.05px 0px rgba(0, 0, 0, 0.25) inset,
+					-4.05px 5.06px 4.05px 0px rgba(255, 255, 255, 0.25) inset,
+					-2.02px -1.01px 4.05px 0px rgba(0, 0, 0, 0.6);
+				padding: 1rem 2rem;
+				border-radius: 1rem;
+				text-transform: uppercase;
+				font-weight: 700;
+				border: none;
+				cursor: pointer;
+				transition: all 0.3s ease;
+			}
+
+			.btn-primary:hover {
+				transform: scale(1.08) translateY(-2px);
+				background-color: #ff8820;
+				box-shadow:
+					0px 6px 15px 0px rgba(0, 0, 0, 0.75),
+					6.07px -6.07px 4.05px 0px rgba(0, 0, 0, 0.3) inset,
+					-4.05px 5.06px 4.05px 0px rgba(255, 255, 255, 0.3) inset,
+					-2.02px -1.01px 4.05px 0px rgba(0, 0, 0, 0.65);
+			}
+
+			.btn-primary:active {
+				transform: scale(1.02) translateY(0);
+			}
+
+			.table-wrapper {
+				background-color: var(--white);
+				padding: 1.5rem;
+				border-radius: 1rem;
+				overflow-x: auto;
+			}
+
+			table {
+				width: 100%;
+				border-collapse: collapse;
+				font-family: var(--font-montserrat);
+			}
+
+			th {
+				background-color: var(--primary);
+				color: white;
+				padding: 1.5rem;
+				text-align: left;
+				font-weight: 700;
+				font-size: 1.25rem;
+			}
+
+			td {
+				padding: 0.75rem;
+				border-bottom: 1px solid #e5e7eb;
+				font-size: 1.125rem;
+				font-weight: 400;
+			}
+
+			tbody tr:hover td {
+				background-color: var(--primary-lighter);
+			}
+
+			/* =========================================
+			   6. SOLD CTA INLINE HIGHLIGHT
+			   ========================================= */
+			.sold-cta {
+				text-transform: uppercase;
+				text-decoration: underline;
+				cursor: pointer;
+			}
+
+			.site-footer {
+				text-align: center;
+				padding: 2rem 0;
+				border-top: 1px solid var(--gray-300);
+				margin-top: 2rem;
+			}
+
+			/* Letter circle dividers */
+			.letter-circle {
+				display: inline-flex;
+				width: 4rem;
+				height: 4rem;
+				background: var(--primary);
+				color: var(--white);
+				border-radius: 50%;
+				align-items: center;
+				justify-content: center;
+				font-family: var(--font-anton);
+				font-size: 2rem;
+				font-weight: 700;
+				margin-bottom: 1.5rem;
+				border: 2px solid rgba(255, 255, 255, 0.25);
+				box-shadow:
+					0 8px 22px rgba(0, 151, 167, 0.45),
+					0 -3px 10px rgba(0, 0, 0, 0.25),
+					inset 0 1px 0 rgba(255, 255, 255, 0.35),
+					0 0 0 5px rgba(0, 151, 167, 0.15);
+				transition:
+					background 0.3s ease,
+					transform 0.3s ease,
+					box-shadow 0.3s ease;
+				cursor: default;
+			}
+
+			.letter-circle:hover {
+				background: var(--secondary);
+				transform: scale(1.12);
+				box-shadow:
+					0 10px 28px rgba(254, 119, 2, 0.48),
+					0 -3px 10px rgba(0, 0, 0, 0.25),
+					inset 0 1px 0 rgba(255, 255, 255, 0.35),
+					0 0 0 5px rgba(254, 119, 2, 0.15);
+			}
+
+			/* =========================================
+			   PHONE ONLY (max-width: 767px)
+			   Disable all hover animations & transitions
+			   Tablet (768px+) keeps full desktop design
+			   ========================================= */
+			@media (max-width: 767px) {
+				*,
+				*::before,
+				*::after {
+					transition: none !important;
+					animation: none !important;
+				}
+
+				.shadow-card:hover,
+				.step-container:hover,
+				.point-item:hover,
+				.quote-container:hover,
+				.cta-container:hover,
+				.btn-primary:hover,
+				ul.styled-list li:hover {
+					transform: none !important;
+				}
+
+				.category-banner:hover {
+					transform: none !important;
+					border-left-width: 4px !important;
+				}
+
+				.shadow-card {
+					box-shadow: none !important;
+				}
+
+				.step-container.shadow-card,
+				.content-block.shadow-card:not(.step-body) {
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				.step-container.shadow-card:hover,
+				.content-block.shadow-card:not(.step-body):hover {
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				.shadow-card:hover {
+					box-shadow: none !important;
+				}
+
+				.quote-container:hover {
+					box-shadow: none !important;
+				}
+
+				.cta-container:hover {
+					box-shadow: none !important;
+				}
+
+				.step-container:hover .circle-number-lg,
+				.step-container:hover .circle-number-sm {
+					background-color: rgba(0, 151, 167, 0.2) !important;
+					transform: none !important;
+				}
+
+				.point-item:hover .point-icon {
+					transform: none !important;
+				}
+
+				.btn-primary:hover {
+					transform: none !important;
+					background-color: #fe7702 !important;
+					box-shadow:
+						0px 3.04px 7.39px 0px rgba(0, 0, 0, 0.68),
+						6.07px -6.07px 4.05px 0px rgba(0, 0, 0, 0.25) inset,
+						-4.05px 5.06px 4.05px 0px rgba(255, 255, 255, 0.25) inset,
+						-2.02px -1.01px 4.05px 0px rgba(0, 0, 0, 0.6) !important;
+				}
+
+				tbody tr:hover td {
+					background-color: transparent !important;
+				}
+
+				.text-primary:hover {
+					color: var(--primary) !important;
+				}
+
+				.text-secondary:hover {
+					color: var(--secondary) !important;
+				}
+
+				.main-header h1:hover {
+					color: var(--secondary) !important;
+				}
+
+				.section-title.text-primary:hover,
+				.section-title:hover.text-primary {
+					color: var(--primary) !important;
+				}
+
+				.section-title.text-secondary:hover,
+				.section-title:hover.text-secondary {
+					color: var(--secondary) !important;
+				}
+
+				.content-heading.text-primary:hover,
+				.content-heading:hover.text-primary {
+					color: var(--primary) !important;
+				}
+
+				.content-heading.text-secondary:hover,
+				.content-heading:hover.text-secondary {
+					color: var(--secondary) !important;
+				}
+
+				.banner-primary h2:hover {
+					color: var(--primary) !important;
+				}
+
+				.banner-secondary h2:hover {
+					color: var(--secondary) !important;
+				}
+
+				.step-title-text:hover {
+					color: var(--secondary) !important;
+				}
+
+				.stat-number:hover {
+					color: var(--primary) !important;
+				}
+
+				/* Disable parent hover color-swap on phone */
+				.content-block:hover .text-secondary,
+				.point-item:hover .text-secondary {
+					color: var(--secondary) !important;
+				}
+
+				.content-block:hover .text-primary,
+				.point-item:hover .text-primary {
+					color: var(--primary) !important;
+				}
+
+				/* Disable letter-circle hover on mobile */
+				.letter-circle:hover {
+					background: linear-gradient(
+						135deg,
+						var(--primary) 0%,
+						#006978 100%
+					) !important;
+					transform: none !important;
+					box-shadow:
+						0 8px 22px rgba(0, 151, 167, 0.45),
+						0 -3px 10px rgba(0, 0, 0, 0.25),
+						inset 0 1px 0 rgba(255, 255, 255, 0.35),
+						0 0 0 5px rgba(0, 151, 167, 0.15) !important;
+				}
+			}
+		</style>
+	</head>
+
+	<body>
+		<main>
+			<!-- INTRO -->
+			<section id="intro">
+				<div class="content-block shadow-card">
+					<p
+						class="body-text text-secondary text-bold"
+						style="margin-bottom: 1.5rem"
+					>
+						Welcome to the official 833-PROBAID&#8482; glossary &#8212; a
+						practical reference for anyone managing real estate under court
+						supervision. Whether you&#8217;re an executor, conservator, trustee,
+						or heir, this glossary breaks down the terms that matter most in
+						probate, conservatorship, trust administration, and reverse mortgage
+						cases.
+					</p>
+					<p
+						class="body-text text-secondary text-bold"
+						style="margin-bottom: 1.5rem"
+					>
+						Every definition here is built for clarity, execution, and
+						protection of the estate. Understanding these terms ensures better
+						communication with attorneys, fewer delays in escrow, and smarter
+						decisions when the clock is ticking.
+					</p>
+					<p class="body-text text-secondary text-bold">
+						Dive in. Master the process. This glossary was built for cases like
+						yours.
+					</p>
+				</div>
+			</section>
+
+			<!-- A -->
+			<!-- SECTION PHOTO -->
+			<div class="section-photo shadow-card">
+				<img
+					src="./probate.jpg"
+					alt="Probate case support photo 1"
+					loading="lazy"
+				/>
+			</div>
+			<section id="section-a">
+				<div class="content-block shadow-card">
+					<div class="letter-circle">A</div>
+					<div class="points-wrapper">
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									ADMINISTRATOR
+								</p>
+								<p class="body-text">
+									A person or institution appointed by the court (in the absence
+									of a will otherwise naming an Executor) to distribute the
+									assets according to state intestacy laws and to pay creditors
+									and taxes. The intestate Personal Representative.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									AFFIDAVIT
+								</p>
+								<p class="body-text">A written statement made under oath.</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									AFFIDAVIT OF DEATH OF TRUSTEE
+								</p>
+								<p class="body-text">
+									A legal document used to formally record the death of a
+									trustee and establish the successor trustee&#8217;s authority
+									to act. This affidavit is typically required by title and
+									escrow in trust sales when real estate is being
+									<span
+										class="text-primary text-bold sold-cta"
+										onclick="window.open('/books/seller-guide.pdf', '_blank')"
+										>sold</span
+									>
+									after the original trustee (often the Trustor) has passed
+									away. It is recorded with the county recorder&#8217;s office
+									along with a certified copy of the death certificate to clear
+									title and transfer signing authority to the new trustee.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									AGE OF MAJORITY
+								</p>
+								<p class="body-text">
+									The age when a person acquires all the rights and
+									responsibilities of being an adult. In most states, the age of
+									majority is 18.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									ASSIGNMENT
+								</p>
+								<p class="body-text">
+									The transfer of legal rights from one person to another.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									AUTHENTICATION
+								</p>
+								<p class="body-text">
+									The process for verifying that the deceased&#8217;s last will
+									and testament is valid. The probate court typically relies on
+									witness statements when making its determination.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- B -->
+			<!-- SECTION PHOTO -->
+			<div class="section-photo shadow-card">
+				<img
+					src="./probate.jpg"
+					alt="Probate case support photo 2"
+					loading="lazy"
+				/>
+			</div>
+			<section id="section-b">
+				<div class="content-block shadow-card">
+					<div class="letter-circle">B</div>
+					<div class="points-wrapper">
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									BENEFICIARY
+								</p>
+								<p class="body-text">
+									A person who inherits property, money, or other benefits from
+									a will, insurance policy, or trust.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									BLOCKED ACCOUNT
+								</p>
+								<p class="body-text">
+									A court-restricted bank account where funds from a probate,
+									conservatorship, or minor&#8217;s settlement are deposited.
+									Withdrawals require prior court approval. Often used to
+									protect assets that must remain untouched until further order,
+									distribution, or specific use is authorized.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									BOND
+								</p>
+								<p class="body-text">
+									A court-mandated posting bond serves as a guarantee that the
+									executor of the deceased&#8217;s estate will adhere to state
+									laws and the terms of the will or trust.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- C -->
+			<!-- SECTION PHOTO -->
+			<div class="section-photo shadow-card">
+				<img
+					src="./probate.jpg"
+					alt="Probate case support photo 3"
+					loading="lazy"
+				/>
+			</div>
+			<section id="section-c">
+				<div class="content-block shadow-card">
+					<div class="letter-circle">C</div>
+					<div class="points-wrapper">
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									CAPITAL GAIN
+								</p>
+								<p class="body-text">
+									The profit made from the sale of a capital asset, such as real
+									estate, jewelry, or stocks and bonds.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									CAPITAL LOSS
+								</p>
+								<p class="body-text">
+									The loss that results from the sale of a capital asset, such
+									as real estate, jewelry, or stocks and bonds.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									CHAPTER 13 BANKRUPTCY
+								</p>
+								<p class="body-text">
+									A type of bankruptcy in which a person keeps their assets and
+									pays creditors according to an approved plan.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									CHAPTER 7 BANKRUPTCY
+								</p>
+								<p class="body-text">
+									A type of bankruptcy in which a person&#8217;s assets are
+									liquidated (collected and
+									<span
+										class="text-primary text-bold sold-cta"
+										onclick="window.open('/books/seller-guide.pdf', '_blank')"
+										>sold</span
+									>) and the proceeds are distributed to the creditors.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									CODICIL
+								</p>
+								<p class="body-text">An amendment to a will.</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									COMMON-LAW MARRIAGE
+								</p>
+								<p class="body-text">
+									In some states, a couple is considered married if they meet
+									certain requirements, such as living together as spouses for a
+									specific length of time. Such a couple has all the rights and
+									obligations of a traditionally married couple.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									COMMUNITY PROPERTY
+								</p>
+								<p class="body-text">
+									Property acquired by a couple during their marriage. Some
+									states divide everything the couple gains after getting
+									married evenly between them. In the event of divorce or death,
+									the property is split 50-50 with no consideration of which
+									partner paid for the asset or holds it in their name.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									CONSERVATEE
+								</p>
+								<p class="body-text">
+									The person who is under conservatorship, for whom the court
+									has appointed someone to manage financial or personal affairs.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									CONSERVATOR
+								</p>
+								<p class="body-text">
+									A person or institution a court appoints to protect the
+									interests of an incompetent and act on their behalf as a
+									guardian.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									COURT CONFIRMATION
+								</p>
+								<p class="body-text">
+									A legal process required in some probate cases where a judge
+									must approve the real estate sale.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									CONTINGENCY
+								</p>
+								<p class="body-text">
+									A condition in a purchase agreement that must be satisfied
+									before the sale can be completed, such as securing financing
+									or obtaining satisfactory home inspections.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									CONTRACT
+								</p>
+								<p class="body-text">
+									An agreement between two or more parties in which an offer is
+									made and accepted, and each party benefits. The agreement can
+									be formal, informal, written, or oral. Some contracts are
+									required to be in writing in order to be enforced.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									CREDITOR
+								</p>
+								<p class="body-text">
+									A person (or institution) to whom money is owed.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									CREDITORS&#8217; CLAIMS PERIOD
+								</p>
+								<p class="body-text">
+									Specific time frame, as defined by state probate laws, during
+									which creditors can file a claim against a decedent&#8217;s
+									estate.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									CUSTODIAN
+								</p>
+								<p class="body-text">
+									A person who will dispense and manage funds on behalf of a
+									child. This person is not subject to court supervision or
+									accounting requirements under the Uniform Transfers to Minors
+									Act.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- D -->
+			<!-- SECTION PHOTO -->
+			<div class="section-photo shadow-card">
+				<img
+					src="./probate.jpg"
+					alt="Probate case support photo 4"
+					loading="lazy"
+				/>
+			</div>
+			<section id="section-d">
+				<div class="content-block shadow-card">
+					<div class="letter-circle">D</div>
+					<div class="points-wrapper">
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									DATE OF DEATH
+								</p>
+								<p class="body-text">
+									The specific date and time the deceased is declared legally
+									dead by a physician, coroner, or medical examiner. It can also
+									be the date that an individual disappears under
+									life-threatening circumstances.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									DEBTOR
+								</p>
+								<p class="body-text">A person who owes money.</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									DECEDENT
+								</p>
+								<p class="body-text">A person who passed away.</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									DEFAULT
+								</p>
+								<p class="body-text">
+									The failure to fulfill a legal obligation, such as neglecting
+									to pay back a loan on schedule.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									DEMAND LETTER (PAYOFF DEMAND)
+								</p>
+								<p class="body-text">
+									A formal request showing how much is owed on a reverse
+									mortgage, required before a property can be
+									<span
+										class="text-primary text-bold sold-cta"
+										onclick="window.open('/books/seller-guide.pdf', '_blank')"
+										>sold</span
+									>
+									or refinanced.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									DEED
+								</p>
+								<p class="body-text">
+									A legal document that transfers ownership of real estate from
+									one party to another.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									DOCKET NUMBER
+								</p>
+								<p class="body-text">
+									Number designation assigned to each case filed in a particular
+									court.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- E -->
+			<!-- SECTION PHOTO -->
+			<div class="section-photo shadow-card">
+				<img
+					src="./probate.jpg"
+					alt="Probate case support photo 5"
+					loading="lazy"
+				/>
+			</div>
+			<section id="section-e">
+				<div class="content-block shadow-card">
+					<div class="letter-circle">E</div>
+					<div class="points-wrapper">
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									EASEMENT
+								</p>
+								<p class="body-text">
+									An agreement that allows one party access to another&#8217;s
+									property, often used by utilities that must run phone lines or
+									pipes under private property.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									ELECTIVE SHARE
+								</p>
+								<p class="body-text">
+									A probate law enabling a spouse to inherit a specific portion
+									of the estate after their partner&#8217;s death regardless of
+									a will.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									EMANCIPATION
+								</p>
+								<p class="body-text">
+									The point at which a minor becomes independent from their
+									guardians. Emancipation can result from turning 18, proving to
+									be entirely self-supporting, or getting married.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									ENCUMBRANCE
+								</p>
+								<p class="body-text">
+									Any claim or restriction on a property&#8217;s title.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									ESCROW
+								</p>
+								<p class="body-text">
+									Money or documents, such as a deed or title, held by a third
+									party until the conditions of an agreement are met. For
+									instance, pending the completion of a real estate transaction,
+									the deed to the property will be held &#8216;in escrow.&#8217;
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									ESCROW ACCOUNT
+								</p>
+								<p class="body-text">
+									A secure account managed by a neutral third party (like a
+									title or escrow company) where funds and documents are held
+									until all terms of the transaction are met &#8212; most
+									commonly used in real estate sales during probate, trust, or
+									conservatorship.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									ESTATE
+								</p>
+								<p class="body-text">
+									The assets and liabilities left by a decedent.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									EX PARTE
+								</p>
+								<p class="body-text">
+									Latin for &#8216;by or for one party.&#8217; Refers to urgent
+									court requests where only one party is present, usually
+									because immediate relief is needed and waiting for the other
+									side could cause harm or delay.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									EXECUTOR
+								</p>
+								<p class="body-text">
+									A person or institution named in a will and appointed by the
+									court to oversee and manage an estate, including the
+									distribution of assets and satisfaction of creditors and
+									taxes.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- F -->
+			<section id="section-f">
+				<div class="content-block shadow-card">
+					<div class="letter-circle">F</div>
+					<div class="points-wrapper">
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									FAMILY LIMITED PARTNERSHIP
+								</p>
+								<p class="body-text">
+									A legal partnership between members of a family for the
+									management and control of property.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									FIDUCIARY DUTY
+								</p>
+								<p class="body-text">
+									An obligation to act in the best interest of another party.
+									For instance, a corporation&#8217;s board member has a
+									fiduciary duty to the shareholders, a trustee has a fiduciary
+									duty to the trust&#8217;s beneficiaries, and an attorney has a
+									fiduciary duty to a client.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									FORECLOSURE
+								</p>
+								<p class="body-text">
+									When a borrower cannot repay a loan and the lender seeks to
+									sell the property.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- G -->
+			<section id="section-g">
+				<div class="content-block shadow-card">
+					<div class="letter-circle">G</div>
+					<div class="points-wrapper">
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									GENERAL CONSERVATORSHIP
+								</p>
+								<p class="body-text">
+									A broader conservatorship where the court grants full
+									authority to manage the conservatee&#8217;s financial and/or
+									personal affairs.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									GRANTOR
+								</p>
+								<p class="body-text">The person who sets up a trust.</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									GUARDIAN
+								</p>
+								<p class="body-text">
+									A person appointed by the court to take care of minor children
+									or incompetent adults. Sometimes called a conservator.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									GUARDIAN AD LITEM
+								</p>
+								<p class="body-text">
+									Latin for &#8216;guardian at law.&#8217; The person appointed
+									by the court to look out for the best interests of the child
+									during the course of legal proceedings.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- H -->
+			<section id="section-h">
+				<div class="content-block shadow-card">
+					<div class="letter-circle">H</div>
+					<div class="points-wrapper">
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									HECM (HOME EQUITY CONVERSION MORTGAGE)
+								</p>
+								<p class="body-text">
+									The most common type of reverse mortgage, insured by the
+									federal government.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									HECM SERVICER
+								</p>
+								<p class="body-text">
+									The entity managing the reverse mortgage after origination.
+									Often different from the original lender. Crucial for payoff,
+									extensions, or foreclosure prevention.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									HEIR
+								</p>
+								<p class="body-text">
+									A person entitled to inherit property of the decedent.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									HEMS STANDARD
+								</p>
+								<p class="body-text">
+									Stands for &#8216;Health, Education, Maintenance, and
+									Support.&#8217; A standard often written into trusts that
+									limits how funds can be used or distributed to beneficiaries.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									HOLOGRAPHIC WILL
+								</p>
+								<p class="body-text">A handwritten will.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- I -->
+			<section id="section-i">
+				<div class="content-block shadow-card">
+					<div class="letter-circle">I</div>
+					<div class="points-wrapper">
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									IAEA (INDEPENDENT ADMINISTRATION OF ESTATES ACT)
+								</p>
+								<p class="body-text">
+									A California law that allows executors and administrators to
+									manage most estate matters &#8212; including selling real
+									property &#8212; without direct court supervision, depending
+									on the level of authority granted. If the court grants Full
+									Authority, they can sell without court confirmation (with
+									proper notice). If Limited Authority is granted, court
+									approval is still required for any sale. IAEA status is listed
+									in the Letters issued by the probate court.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									INSOLVENT ESTATE
+								</p>
+								<p class="body-text">
+									An estate in which the decedent&#8217;s debts exceed the total
+									value of their assets, making it impossible to pay all
+									creditors in full.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									INVENTORY AND APPRAISAL (I&amp;A)
+								</p>
+								<p class="body-text">
+									A required probate filing listing all estate assets and their
+									appraised value, signed by the referee.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									INTESTATE
+								</p>
+								<p class="body-text">Dying without a legal will.</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									IRREVOCABLE TRUST
+								</p>
+								<p class="body-text">
+									A trust written during a person&#8217;s lifetime that does not
+									allow them to modify its contents.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- J -->
+			<section id="section-j">
+				<div class="content-block shadow-card">
+					<div class="letter-circle">J</div>
+					<div class="points-wrapper">
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									JOINT TENANCY
+								</p>
+								<p class="body-text">
+									A type of ownership arrangement in which two or more
+									individuals own an asset together, with rights of
+									survivorship.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									JUDGMENT
+								</p>
+								<p class="body-text">
+									A decision by a court regarding the rights and obligations of
+									the parties involved in a legal proceeding.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- L -->
+			<section id="section-l">
+				<div class="content-block shadow-card">
+					<div class="letter-circle">L</div>
+					<div class="points-wrapper">
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									LAST WILL AND TESTAMENT
+								</p>
+								<p class="body-text">
+									The legal document that describes how a person wants their
+									property distributed after they die.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									LETTERS OF CONSERVATORSHIP OF THE ESTATE
+								</p>
+								<p class="body-text">
+									A court-issued document giving the conservator legal authority
+									to manage the conservatee&#8217;s financial
+									matters&#8212;including real estate. This is the document
+									attorneys and title companies will reference to confirm the
+									conservator&#8217;s power to list, sell, or manage estate
+									property. Without these letters, no sale should proceed.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									LETTERS OF CONSERVATORSHIP OF THE PERSON
+								</p>
+								<p class="body-text">
+									A court-issued document giving the conservator authority over
+									personal and medical decisions for the conservatee, such as
+									healthcare, living arrangements, and daily needs. This does
+									not grant authority to sell real estate. Only Letters of the
+									Estate permit financial actions.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									LIVING WILL
+								</p>
+								<p class="body-text">
+									A legal document that describes a person&#8217;s wishes
+									regarding medical treatment if they become unable to
+									communicate their preferences.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									LETTER OF INTENT
+								</p>
+								<p class="body-text">
+									A document that explains a person&#8217;s desires regarding
+									the distribution of their estate. It is not legally binding,
+									but it can help guide the executor of the estate.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									LETTERS TESTAMENTARY
+								</p>
+								<p class="body-text">
+									A court document that gives the Executor (the person named in
+									the will) the authority to manage and distribute a deceased
+									person&#8217;s estate.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									LETTERS OF ADMINISTRATION
+								</p>
+								<p class="body-text">
+									A court document that gives the Administrator (appointed by
+									the court when there is no will) the legal authority to manage
+									and distribute a deceased person&#8217;s estate.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									LIMITED CONSERVATORSHIP
+								</p>
+								<p class="body-text">
+									A conservatorship for adults with developmental disabilities
+									that grants the conservator limited powers.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									LIS PENDENS
+								</p>
+								<p class="body-text">
+									A legal notice filed with the county that alerts potential
+									buyers or lienholders that a property is subject to pending
+									litigation. Can block or delay a sale.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- M -->
+			<section id="section-m">
+				<div class="content-block shadow-card">
+					<div class="letter-circle">M</div>
+					<div class="points-wrapper">
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									MARITAL DEDUCTION
+								</p>
+								<p class="body-text">
+									The portion of a decedent&#8217;s estate that can be passed to
+									a surviving spouse tax-free.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									MARKET VALUE
+								</p>
+								<p class="body-text">
+									The estimated price at which a property would sell in the
+									current market, based on factors like location, condition, and
+									comparable sales.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									MINOR
+								</p>
+								<p class="body-text">
+									A person under the age of majority, typically 18.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									MUNIMENT OF TITLE
+								</p>
+								<p class="body-text">
+									A will that serves as a document to prove a title to property.
+									A court may issue a muniment of title if it finds that a will
+									is valid and that no estate administration is necessary.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- N -->
+			<section id="section-n">
+				<div class="content-block shadow-card">
+					<div class="letter-circle">N</div>
+					<div class="points-wrapper">
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									NEGLIGENCE
+								</p>
+								<p class="body-text">
+									A failure to take reasonable care to avoid causing injury or
+									loss to another person.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									NOTICE OF PROPOSED ACTION (NOPA)
+								</p>
+								<p class="body-text">
+									A formal notice sent by a personal representative with full
+									authority under IAEA to notify interested parties (e.g.,
+									heirs, beneficiaries) of an intended action &#8212; such as
+									selling property &#8212; giving them time to object.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- O -->
+			<section id="section-o">
+				<div class="content-block shadow-card">
+					<div class="letter-circle">O</div>
+					<div class="points-wrapper">
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									OVERBID PROCESS
+								</p>
+								<p class="body-text">
+									The court-supervised auction that allows other buyers to make
+									higher offers at the confirmation hearing.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									OVERAGE
+								</p>
+								<p class="body-text">
+									The remaining balance after all debts, taxes, and expenses
+									have been paid from an estate.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- P -->
+			<section id="section-p">
+				<div class="content-block shadow-card">
+					<div class="letter-circle">P</div>
+					<div class="points-wrapper">
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									PARTITION ACTION
+								</p>
+								<p class="body-text">
+									A court proceeding used to force the sale or division of
+									property when multiple owners (often heirs) cannot agree.
+									Common in inherited properties with family disputes.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									PER STIRPES
+								</p>
+								<p class="body-text">
+									A method of distributing an estate whereby descendants inherit
+									the share that their deceased parent would have received.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									POWER OF ATTORNEY
+								</p>
+								<p class="body-text">
+									A legal document that allows one person to act on behalf of
+									another.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									PRELIMINARY TITLE REPORT
+								</p>
+								<p class="body-text">
+									A document issued by a title company during the listing phase
+									showing ownership, liens, encumbrances, and legal conditions
+									that may affect the property sale.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									PROBATE
+								</p>
+								<p class="body-text">
+									The legal process of distributing a decedent&#8217;s assets.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									PROBATE COURT
+								</p>
+								<p class="body-text">
+									A special court that handles matters relating to wills, and
+									estates.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									PROBATE REFEREE
+								</p>
+								<p class="body-text">
+									A court-appointed official in California who provides a
+									valuation of estate assets (especially real estate) for
+									probate cases. Usually conducts a drive-by appraisal unless
+									more details are submitted.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									PROPERTY CONDITION DISCLOSURE
+								</p>
+								<p class="body-text">
+									A document provided by the seller disclosing known defects,
+									damages, or issues affecting the property&#8217;s condition.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									PROOF OF DEATH
+								</p>
+								<p class="body-text">
+									A legal document verifying a person&#8217;s death, such as a
+									death certificate.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Q -->
+			<section id="section-q">
+				<div class="content-block shadow-card">
+					<div class="letter-circle">Q</div>
+					<div class="points-wrapper">
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									QUASI-JUDICIAL
+								</p>
+								<p class="body-text">
+									An entity that has some judicial attributes, such as the power
+									to make decisions or interpret laws, but is not a formal
+									court.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- R -->
+			<section id="section-r">
+				<div class="content-block shadow-card">
+					<div class="letter-circle">R</div>
+					<div class="points-wrapper">
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									RESIDUARY ESTATE
+								</p>
+								<p class="body-text">
+									The part of a decedent&#8217;s estate that remains after all
+									specific bequests and other expenses have been paid.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									REVERSE MORTGAGE
+								</p>
+								<p class="body-text">
+									A type of loan available to homeowners 62 and older that
+									allows them to access home equity without selling. The loan
+									becomes due upon death, sale, or permanent move-out. Often
+									triggers urgent timelines in probate and conservatorship
+									sales.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- S -->
+			<section id="section-s">
+				<div class="content-block shadow-card">
+					<div class="letter-circle">S</div>
+					<div class="points-wrapper">
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									SPOUSAL PRIVILEGE
+								</p>
+								<p class="body-text">
+									A legal concept that protects communications between married
+									couples from being disclosed in court.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									STATUTE OF LIMITATIONS
+								</p>
+								<p class="body-text">
+									A law that sets a maximum time period for parties to initiate
+									legal proceedings.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									STEP-UP IN BASIS
+								</p>
+								<p class="body-text">
+									A tax adjustment that resets the value of inherited property
+									to its market value at the time of the decedent&#8217;s death
+									&#8212; often reducing capital gains taxes when the property
+									is
+									<span
+										class="text-primary text-bold sold-cta"
+										onclick="window.open('/books/seller-guide.pdf', '_blank')"
+										>sold</span
+									>.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									SUCCESSOR TRUSTEE
+								</p>
+								<p class="body-text">
+									A person named in the trust to take over management duties
+									when the original trustee dies, resigns, or becomes
+									incapacitated. The successor trustee has the authority to
+									manage and distribute trust assets according to the
+									trust&#8217;s terms.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- T -->
+			<section id="section-t">
+				<div class="content-block shadow-card">
+					<div class="letter-circle">T</div>
+					<div class="points-wrapper">
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									TESTAMENTARY CAPACITY
+								</p>
+								<p class="body-text">
+									The legal ability of a person to create a valid will.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									TESTAMENTARY TRUST
+								</p>
+								<p class="body-text">
+									A trust created by a will that becomes effective upon the
+									death of the testator.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									TESTATOR
+								</p>
+								<p class="body-text">A person who creates a will.</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									TITLE
+								</p>
+								<p class="body-text">
+									The legal right to ownership of a property, typically
+									evidenced by a deed or other legal documents.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									TITLE SEARCH
+								</p>
+								<p class="body-text">
+									An examination of public records to determine the legal
+									ownership of a property and identify any encumbrances, liens,
+									or other issues affecting the title.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									TRIGGER LETTER / MATURITY EVENT NOTIFICATION
+								</p>
+								<p class="body-text">
+									A notice sent by the reverse mortgage lender informing the
+									estate or borrower that the loan is now due &#8212; typically
+									after death, move-out, or default.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									TRUST
+								</p>
+								<p class="body-text">
+									A legal arrangement in which one party holds property for the
+									benefit of another.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									TRUST ADMINISTRATION
+								</p>
+								<p class="body-text">
+									The process of managing and distributing the trust&#8217;s
+									assets after the settlor dies, including real estate sales,
+									debt payoff, and reporting to beneficiaries.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									TRUST CERTIFICATION
+								</p>
+								<p class="body-text">
+									A legal summary of the trust&#8217;s existence, powers, and
+									authority, used to show that a trustee has the legal right to
+									act. Required in trust sales by title and escrow.
+								</p>
+							</div>
+						</div>
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									TRUSTEE
+								</p>
+								<p class="body-text">
+									A person or institution responsible for managing a trust.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- U -->
+			<section id="section-u">
+				<div class="content-block shadow-card">
+					<div class="letter-circle">U</div>
+					<div class="points-wrapper">
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									UNIFORM PROBATE CODE
+								</p>
+								<p class="body-text">
+									A set of laws that standardizes probate procedures across
+									different jurisdictions.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- V -->
+			<section id="section-v">
+				<div class="content-block shadow-card">
+					<div class="letter-circle">V</div>
+					<div class="points-wrapper">
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									VESTED
+								</p>
+								<p class="body-text">
+									A legal right that is secured or guaranteed.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- W -->
+			<section id="section-w">
+				<div class="content-block shadow-card">
+					<div class="letter-circle">W</div>
+					<div class="points-wrapper">
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" />
+							<div>
+								<p
+									class="body-text text-primary text-bold"
+									style="margin-bottom: 0.5rem"
+								>
+									WILL
+								</p>
+								<p class="body-text">
+									A legal document that expresses a person&#8217;s wishes
+									regarding the distribution of their property after death.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</main>
+	</body>
+</html>

@@ -1,0 +1,1610 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Understanding Conservatorship Real Estate Sales</title>
+
+		<link
+			href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@400;700&family=Roboto:wght@400;900&family=League+Spartan:wght@400;700&family=Oswald&family=Poppins&family=Passions+Conflict&family=Sarpanch&display=swap"
+			rel="stylesheet"
+		/>
+
+		<style type="text/css">
+			/* =========================================
+			   1. VARIABLES & RESET
+			   ========================================= */
+			:root {
+				--primary: #0097a7;
+				--primary-dark: #00838f;
+				/* Primary light: 10% opacity and 5% opacity approximations */
+				--primary-light: rgba(0, 151, 167, 0.1);
+				--primary-lighter: rgba(0, 151, 167, 0.05);
+
+				--secondary: #fe7702;
+				/* Secondary light: 10% opacity and 5% opacity approximations */
+				--secondary-light: rgba(254, 119, 2, 0.1);
+				--secondary-lighter: rgba(254, 119, 2, 0.05);
+
+				--accent: #ff4444;
+				--teal-soft: #e0f7fa;
+
+				--gray-100: #f3f4f6;
+				--gray-300: #d1d5db;
+				--gray-500: #6b7280;
+				--gray-600: #4b5563;
+				--white: #ffffff;
+				--black: #000000;
+
+				--font-anton: "Anton", sans-serif;
+				--font-montserrat: "Montserrat", sans-serif;
+			}
+
+			* {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
+
+			body {
+				background-color: var(--gray-100);
+				color: var(--black);
+				font-family: var(--font-montserrat);
+				padding: 1.5rem;
+				-webkit-font-smoothing: antialiased;
+			}
+
+			@media (min-width: 768px) {
+				body {
+					padding: 2.5rem;
+				}
+			}
+
+			main {
+				max-width: 80rem;
+				/* equivalent to max-w-7xl */
+				margin-left: auto;
+				margin-right: auto;
+				display: flex;
+				flex-direction: column;
+				gap: 2.5rem;
+				/* space-y-10 */
+			}
+
+			img {
+				display: block;
+				max-width: 100%;
+				height: auto;
+			}
+
+			/* =========================================
+			   2. TYPOGRAPHY
+			   ========================================= */
+			h1,
+			h2,
+			h3,
+			h4 {
+				font-family: var(--font-anton);
+				text-transform: uppercase;
+				line-height: 1.2;
+				font-weight: 700;
+				transition: color 0.3s ease;
+			}
+
+			/* Helper classes for specific colors used frequently */
+			.text-primary {
+				color: var(--primary);
+			}
+
+			.text-primary:hover {
+				color: var(--secondary);
+			}
+
+			.text-secondary {
+				color: var(--secondary);
+			}
+
+			.text-secondary:hover {
+				color: var(--primary);
+			}
+
+			/* Parent hover — swap colors so primary children become secondary */
+			.content-block:hover .text-secondary,
+			.point-item:hover .text-secondary {
+				color: var(--primary);
+				transition: color 0.3s ease;
+			}
+
+			.content-block:hover .text-primary,
+			.point-item:hover .text-primary {
+				color: var(--secondary);
+				transition: color 0.3s ease;
+			}
+
+			.text-gray {
+				color: var(--gray-600);
+			}
+
+			.text-center {
+				text-align: center;
+			}
+
+			.text-bold {
+				font-weight: 700;
+			}
+
+			.italic {
+				font-style: italic;
+			}
+
+			/* Fixed Typography Sizes */
+			.section-title {
+				font-size: 2rem !important;
+				margin-bottom: 1rem;
+				transition: color 0.3s ease;
+			}
+
+			.section-title.text-primary:hover,
+			.section-title:hover.text-primary {
+				color: var(--secondary) !important;
+			}
+
+			.section-title.text-secondary:hover,
+			.section-title:hover.text-secondary {
+				color: var(--primary) !important;
+			}
+
+			.content-heading {
+				font-size: 1.625rem !important;
+				margin-bottom: 0.75rem;
+				transition: color 0.3s ease;
+			}
+
+			.content-heading.text-primary:hover,
+			.content-heading:hover.text-primary {
+				color: var(--secondary) !important;
+			}
+
+			.content-heading.text-secondary:hover,
+			.content-heading:hover.text-secondary {
+				color: var(--primary) !important;
+			}
+
+			.body-text {
+				font-size: 1.375rem !important;
+				line-height: 1.6;
+				font-weight: 700;
+			}
+
+			.small-text {
+				font-size: 1.125rem !important;
+				font-weight: 700;
+			}
+
+			/* Header specific */
+			.main-header {
+				text-align: center;
+			}
+
+			.main-header h1 {
+				font-size: 3.25rem;
+				/* text-5xl */
+				color: var(--secondary);
+				margin-bottom: 1rem;
+				transition: color 0.3s ease;
+			}
+
+			.main-header h1:hover {
+				color: var(--primary);
+			}
+
+			/* Mobile Typography Adjustments */
+			@media (max-width: 767px) {
+				.section-title {
+					font-size: 1.5rem !important;
+				}
+
+				.content-heading {
+					font-size: 1.25rem !important;
+				}
+
+				.body-text {
+					font-size: 1rem !important;
+				}
+
+				.small-text {
+					font-size: 0.875rem !important;
+				}
+
+				.main-header h1 {
+					font-size: 2rem;
+				}
+
+				.step-title-text {
+					font-size: clamp(1.25rem, 3.15vw, 3.7rem);
+				}
+			}
+
+			/* =========================================
+			   3. SHADOWS & UTILITIES
+			   ========================================= */
+			.shadow-card {
+				box-shadow:
+					0 8px 12px rgba(0, 0, 0, 0.4),
+					0 -5px 12px 1px rgba(0, 0, 0, 0.4);
+				transition:
+					transform 0.3s ease,
+					box-shadow 0.3s ease;
+			}
+
+			.shadow-card:hover {
+				transform: translateY(-5px);
+				box-shadow:
+					0 12px 20px rgba(0, 0, 0, 0.5),
+					0 -8px 16px 2px rgba(0, 0, 0, 0.5);
+			}
+
+			.bg-white {
+				background-color: var(--white);
+			}
+
+			.rounded-card {
+				border-radius: 1rem;
+			}
+
+			/* =========================================
+			   4. CATEGORY BANNERS
+			   ========================================= */
+			.category-banner {
+				padding: 1.5rem;
+				border-radius: 1rem;
+				border-left: 4px solid;
+				transition:
+					transform 0.3s ease,
+					border-left-width 0.3s ease;
+			}
+
+			.category-banner:hover {
+				transform: translateX(8px);
+				border-left-width: 8px;
+			}
+
+			.category-banner h2 {
+				font-size: 2rem;
+				/* text-3xl */
+				margin-bottom: 0.5rem;
+				font-weight: 700;
+				transition: color 0.3s ease;
+			}
+
+			.banner-primary {
+				background: linear-gradient(
+					to right,
+					var(--primary-light),
+					var(--primary-lighter)
+				);
+				border-color: var(--primary);
+			}
+
+			.banner-primary h2 {
+				color: var(--primary);
+			}
+
+			.banner-primary h2:hover {
+				color: var(--secondary);
+			}
+
+			.banner-secondary {
+				background: linear-gradient(
+					to right,
+					var(--secondary-light),
+					var(--secondary-lighter)
+				);
+				border-color: var(--secondary);
+			}
+
+			.banner-secondary h2 {
+				color: var(--secondary);
+			}
+
+			.banner-secondary h2:hover {
+				color: var(--primary);
+			}
+
+			/* =========================================
+			   5. CONTENT BLOCKS
+			   ========================================= */
+
+			/* Standard Content Card */
+			.content-block {
+				background-color: var(--white);
+				padding: 0.9rem;
+				border-radius: 1rem;
+				transition: transform 0.3s ease;
+			}
+
+			@media (min-width: 768px) {
+				.content-block {
+					padding: 2.7rem !important;
+				}
+			}
+
+			/* Step / Process Section */
+			.step-container {
+				border-radius: 1rem;
+				background-color: var(--white);
+				padding: 1.5rem;
+				transition: transform 0.3s ease;
+			}
+
+			.step-container:hover {
+				transform: scale(1.02);
+			}
+
+			.step-inner {
+				background-color: transparent;
+				padding: 0;
+				display: flex;
+				flex-direction: column;
+				gap: 0;
+			}
+
+			/* Step Circles */
+			.circle-number-lg {
+				display: none;
+				width: 5rem;
+				height: 5rem;
+				background-color: rgba(0, 151, 167, 0.2);
+				/* primary/20 */
+				color: var(--secondary);
+				border-radius: 50%;
+				align-items: center;
+				justify-content: center;
+				font-family: var(--font-anton);
+				font-size: 2.5rem;
+				font-weight: 700;
+				flex-shrink: 0;
+				transition: all 0.3s ease;
+			}
+
+			.step-container:hover .circle-number-lg {
+				background-color: rgba(0, 151, 167, 0.4);
+				transform: rotate(360deg) scale(1.1);
+			}
+
+			.circle-number-sm {
+				display: flex;
+				width: 2.5rem;
+				height: 2.5rem;
+				background-color: rgba(0, 151, 167, 0.2);
+				color: var(--secondary);
+				border-radius: 50%;
+				align-items: center;
+				justify-content: center;
+				font-family: var(--font-anton);
+				font-size: 1.375rem;
+				font-weight: 700;
+				flex-shrink: 0;
+				margin-bottom: 0.75rem;
+				align-self: flex-start;
+				transition: all 0.3s ease;
+			}
+
+			.step-container:hover .circle-number-sm {
+				background-color: rgba(0, 151, 167, 0.4);
+				transform: rotate(360deg) scale(1.1);
+			}
+
+			.step-content {
+				flex: 1;
+			}
+
+			.step-title-row {
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
+				margin-bottom: 0.75rem;
+			}
+
+			.step-title-text {
+				font-size: clamp(1.5rem, 3.15vw, 3.7rem);
+				color: var(--secondary);
+				transition: color 0.3s ease;
+			}
+
+			.step-title-text:hover {
+				color: var(--primary);
+			}
+
+			.step-body {
+				margin-top: 0;
+				padding: 0;
+				background-color: transparent;
+				border-radius: 0;
+			}
+
+			/* Remove all nested shadows and cards on mobile */
+			.step-container .step-inner {
+				box-shadow: none !important;
+				background-color: transparent !important;
+			}
+
+			.step-container .step-body {
+				box-shadow: none !important;
+			}
+
+			.step-container .step-body .content-block {
+				padding: 0 !important;
+				background-color: transparent !important;
+				box-shadow: none !important;
+			}
+
+			@media (min-width: 768px) {
+				.step-container {
+					padding: 2.5rem;
+					border-radius: 1rem;
+				}
+
+				.step-inner {
+					
+					gap: 1.5rem;
+					border-radius: 1rem;
+					background-color: var(--white);
+					flex-direction: row;
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				.circle-number-lg {
+					display: flex;
+				}
+
+				.circle-number-sm {
+					display: none;
+					margin-bottom: 0;
+				}
+
+				.step-title-row {
+					
+					margin-bottom: 0;
+				}
+
+				.step-body {
+					margin-top: 1.5rem;
+					padding: 1.5rem;
+					background-color: var(--white);
+					border-radius: 1rem;
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				.step-body.content-block {
+					padding: 1.5rem !important;
+					background-color: var(--white) !important;
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+			}
+
+			/* Lists */
+			ul.styled-list {
+				margin-left: 1.5rem;
+				list-style-type: disc;
+				display: flex;
+				flex-direction: column;
+				gap: 1rem;
+			}
+
+			ul.styled-list li {
+				transition: transform 0.2s ease;
+			}
+
+			ul.styled-list li:hover {
+				transform: translateX(8px);
+			}
+
+			/* Point Items Wrapper */
+			.points-wrapper {
+				display: flex;
+				flex-direction: column;
+				gap: 1rem;
+			}
+
+			/* Point Items */
+			.point-item {
+				display: flex;
+				align-items: flex-start;
+				gap: 1.5rem;
+				background-color: transparent;
+				padding: 0;
+				border-radius: 0;
+				transition: transform 0.2s ease;
+			}
+
+			.point-item:hover {
+				transform: translateX(5px);
+			}
+
+			.point-icon {
+				width: 1.75rem;
+				margin-top: calc((1.375rem * 1.6 - 1.75rem) / 2);
+				flex-shrink: 0;
+				transition: transform 0.3s ease;
+			}
+
+			.point-item:hover .point-icon {
+				transform: scale(1.15) rotate(5deg);
+			}
+
+			/* Remove shadow-card styling on mobile for point-items */
+			.point-item.shadow-card {
+				box-shadow: none !important;
+				background-color: transparent !important;
+				padding: 0 !important;
+			}
+
+			@media (min-width: 768px) {
+				.point-item {
+					background-color: var(--white);
+					padding: 1.5rem;
+					border-radius: 1rem;
+				}
+
+				.point-icon {
+					width: 2.25rem;
+					margin-top: calc((1.375rem * 1.6 - 2.25rem) / 2);
+				}
+
+				.point-item.shadow-card {
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+					background-color: var(--white) !important;
+					padding: 1.5rem !important;
+				}
+			}
+
+			/* Callouts */
+			.callout-box {
+				padding: 1rem;
+				border-radius: 1rem;
+			}
+
+			@media (min-width: 768px) {
+				.callout-box {
+					border-radius: 1rem;
+				}
+			}
+
+			.callout-inner {
+				background-color: var(--white);
+				padding: 2rem 1rem;
+				border-radius: 1rem;
+				display: flex;
+				align-items: flex-start;
+				gap: 1.5rem;
+				/* Clip path logic */
+				clip-path: polygon(0 0, 100% 0, 100% 80%, 82% 100%, 0 100%);
+			}
+
+			@media (min-width: 768px) {
+				.callout-inner {
+					clip-path: polygon(0 0, 101% 0, 100% 60%, 94% 100%, 0 100%);
+					padding: 2.5rem;
+					border-radius: 1rem;
+				}
+			}
+
+			.callout-filter {
+				filter: drop-shadow(4px -6px 10px rgba(0, 0, 0, 0.5))
+					drop-shadow(6px 5px 10px rgba(0, 0, 0, 0.5));
+			}
+
+			.bg-primary {
+				background-color: var(--primary);
+			}
+
+			.bg-secondary {
+				background-color: var(--secondary);
+			}
+
+			/* Grids */
+			.grid-2-col {
+				display: grid;
+				grid-template-columns: 1fr;
+				gap: 1.5rem;
+			}
+
+			.grid-3-col {
+				display: grid;
+				grid-template-columns: 1fr;
+				gap: 1.5rem;
+			}
+
+			.grid-complex {
+				display: grid;
+				grid-template-columns: 1fr;
+				gap: 1.5rem;
+			}
+
+			@media (min-width: 768px) {
+				.grid-2-col {
+					grid-template-columns: 1fr 1fr;
+				}
+
+				.grid-3-col {
+					grid-template-columns: 1fr 1fr 1fr;
+				}
+
+				.grid-complex {
+					grid-template-columns: repeat(5, 1fr);
+				}
+
+				.span-3 {
+					grid-column: span 3;
+				}
+
+				.span-2 {
+					grid-column: span 2;
+				}
+			}
+
+			/* Image Grid Columns */
+			.image-column {
+				display: flex;
+				flex-direction: column;
+				gap: 1.5rem;
+				height: 100%;
+			}
+
+			.image-frame {
+				flex: 1;
+				border-radius: 1rem;
+				overflow: hidden;
+				border: 4px solid var(--primary);
+			}
+
+			.image-frame img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+
+			.section-photo {
+				width: 100%;
+				aspect-ratio: 1200 / 630;
+				margin: 0;
+				border: 4px solid var(--secondary);
+				border-radius: 1rem;
+				overflow: hidden;
+			}
+
+			.section-photo img {
+				display: block;
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				object-position: center;
+			}
+
+			/* Stats Cards */
+			.stat-card {
+				background-color: var(--white);
+				padding: 1.5rem;
+				border-radius: 1rem;
+				text-align: center;
+			}
+
+			.stat-number {
+				font-family: var(--font-anton);
+				color: var(--primary);
+				font-size: 3.25rem;
+				margin-bottom: 0.75rem;
+				transition: color 0.3s ease;
+			}
+
+			.stat-number:hover {
+				color: var(--secondary);
+			}
+
+			/* Blockquote */
+			.quote-container {
+				background-color: var(--white);
+				padding: 2rem;
+				border-radius: 1rem;
+				transition:
+					transform 0.3s ease,
+					box-shadow 0.3s ease;
+			}
+
+			.quote-container:hover {
+				transform: translateX(10px);
+				box-shadow: -5px 5px 15px rgba(0, 0, 0, 0.1);
+			}
+
+			@media (min-width: 768px) {
+				.quote-container {
+					padding: 3rem;
+				}
+			}
+
+			blockquote {
+				border-left: 4px solid var(--secondary);
+				padding-left: 1.5rem;
+				font-weight: 400;
+			}
+
+			/* Buttons */
+			.cta-container {
+				background-color: var(--white);
+				padding: 2rem;
+				border-radius: 1rem;
+				text-align: center;
+				transition:
+					transform 0.3s ease,
+					box-shadow 0.3s ease;
+			}
+
+			.cta-container:hover {
+				transform: translateY(-3px);
+				box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+			}
+
+			.btn-primary {
+				background-color: #fe7702;
+				color: white;
+				box-shadow:
+					0px 3.04px 7.39px 0px rgba(0, 0, 0, 0.68),
+					6.07px -6.07px 4.05px 0px rgba(0, 0, 0, 0.25) inset,
+					-4.05px 5.06px 4.05px 0px rgba(255, 255, 255, 0.25) inset,
+					-2.02px -1.01px 4.05px 0px rgba(0, 0, 0, 0.6);
+				padding: 1rem 2rem;
+				border-radius: 1rem;
+				text-transform: uppercase;
+				font-weight: 700;
+				border: none;
+				cursor: pointer;
+				transition: all 0.3s ease;
+			}
+
+			.btn-primary:hover {
+				transform: scale(1.08) translateY(-2px);
+				background-color: #ff8820;
+				box-shadow:
+					0px 6px 15px 0px rgba(0, 0, 0, 0.75),
+					6.07px -6.07px 4.05px 0px rgba(0, 0, 0, 0.3) inset,
+					-4.05px 5.06px 4.05px 0px rgba(255, 255, 255, 0.3) inset,
+					-2.02px -1.01px 4.05px 0px rgba(0, 0, 0, 0.65);
+			}
+
+			.btn-primary:active {
+				transform: scale(1.02) translateY(0);
+			}
+
+			/* Tables */
+			.table-wrapper {
+				background-color: var(--white);
+				padding: 1.5rem;
+				border-radius: 1rem;
+				overflow-x: auto;
+			}
+
+			table {
+				width: 100%;
+				border-collapse: collapse;
+				font-family: var(--font-montserrat);
+			}
+
+			th {
+				background-color: var(--primary);
+				color: white;
+				padding: 1.5rem;
+				text-align: left;
+				font-weight: 700;
+				font-size: 1.25rem;
+			}
+
+			td {
+				padding: 0.75rem;
+				border-bottom: 1px solid #e5e7eb;
+				font-size: 1.125rem;
+				font-weight: 400;
+			}
+
+			tbody tr:hover td {
+				background-color: var(--primary-lighter);
+			}
+
+			/* =========================================
+			   6. SOLD CTA INLINE HIGHLIGHT
+			   ========================================= */
+			.sold-cta {
+				text-transform: uppercase;
+				text-decoration: underline;
+				cursor: pointer;
+			}
+
+			/* Footer */
+			.site-footer {
+				text-align: center;
+				padding: 2rem 0;
+				border-top: 1px solid var(--gray-300);
+				margin-top: 2rem;
+			}
+
+			/* =========================================
+			   PHONE ONLY (max-width: 767px)
+			   Disable all hover animations & transitions
+			   Tablet (768px+) keeps full desktop design
+			   ========================================= */
+			@media (max-width: 767px) {
+				/* Kill all transitions and animations */
+				*,
+				*::before,
+				*::after {
+					transition: none !important;
+					animation: none !important;
+				}
+
+				/* Reset transform-based hovers */
+				.shadow-card:hover,
+				.step-container:hover,
+				.point-item:hover,
+				.quote-container:hover,
+				.cta-container:hover,
+				.btn-primary:hover,
+				ul.styled-list li:hover {
+					transform: none !important;
+				}
+
+				.category-banner:hover {
+					transform: none !important;
+					border-left-width: 4px !important;
+				}
+
+				/* Remove resting shadow from ALL shadow-card on phone */
+				.shadow-card {
+					box-shadow: none !important;
+				}
+
+				/* Keep resting shadow on step-container and content-block on phone, but no hover change */
+				.step-container.shadow-card,
+				.content-block.shadow-card:not(.step-body) {
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				.step-container.shadow-card:hover,
+				.content-block.shadow-card:not(.step-body):hover {
+					box-shadow:
+						0 8px 12px rgba(0, 0, 0, 0.4),
+						0 -5px 12px 1px rgba(0, 0, 0, 0.4) !important;
+				}
+
+				/* Reset shadow hovers */
+				.shadow-card:hover {
+					box-shadow: none !important;
+				}
+
+				.quote-container:hover {
+					box-shadow: none !important;
+				}
+
+				.cta-container:hover {
+					box-shadow: none !important;
+				}
+
+				/* Reset circle spin hovers */
+				.step-container:hover .circle-number-lg,
+				.step-container:hover .circle-number-sm {
+					background-color: rgba(0, 151, 167, 0.2) !important;
+					transform: none !important;
+				}
+
+				/* Reset point icon hover */
+				.point-item:hover .point-icon {
+					transform: none !important;
+				}
+
+				/* Reset button hover */
+				.btn-primary:hover {
+					transform: none !important;
+					background-color: #fe7702 !important;
+					box-shadow:
+						0px 3.04px 7.39px 0px rgba(0, 0, 0, 0.68),
+						6.07px -6.07px 4.05px 0px rgba(0, 0, 0, 0.25) inset,
+						-4.05px 5.06px 4.05px 0px rgba(255, 255, 255, 0.25) inset,
+						-2.02px -1.01px 4.05px 0px rgba(0, 0, 0, 0.6) !important;
+				}
+
+				/* Reset table row hover */
+				tbody tr:hover td {
+					background-color: transparent !important;
+				}
+
+				/* Reset all color-change hovers */
+				.text-primary:hover {
+					color: var(--primary) !important;
+				}
+
+				.text-secondary:hover {
+					color: var(--secondary) !important;
+				}
+
+				/* Disable parent hover color-swap on phone */
+				.content-block:hover .text-secondary,
+				.point-item:hover .text-secondary {
+					color: var(--secondary) !important;
+				}
+
+				.content-block:hover .text-primary,
+				.point-item:hover .text-primary {
+					color: var(--primary) !important;
+				}
+
+				.main-header h1:hover {
+					color: var(--secondary) !important;
+				}
+
+				.section-title.text-primary:hover,
+				.section-title:hover.text-primary {
+					color: var(--primary) !important;
+				}
+
+				.section-title.text-secondary:hover,
+				.section-title:hover.text-secondary {
+					color: var(--secondary) !important;
+				}
+
+				.content-heading.text-primary:hover,
+				.content-heading:hover.text-primary {
+					color: var(--primary) !important;
+				}
+
+				.content-heading.text-secondary:hover,
+				.content-heading:hover.text-secondary {
+					color: var(--secondary) !important;
+				}
+
+				.banner-primary h2:hover {
+					color: var(--primary) !important;
+				}
+
+				.banner-secondary h2:hover {
+					color: var(--secondary) !important;
+				}
+
+				.step-title-text:hover {
+					color: var(--secondary) !important;
+				}
+
+				.stat-number:hover {
+					color: var(--primary) !important;
+				}
+			}
+		</style>
+	</head>
+
+	<body>
+		<main>
+			<section id="intro">
+				<div class="content-block shadow-card">
+					<p class="body-text text-secondary text-bold">
+						Conservatorship sales operate under an entirely different set of
+						rules than standard real estate transactions. Every decision must be
+						backed by court authority, and nothing moves forward without judicial
+						oversight. If real property is involved, the Conservator can't
+						simply list and sell—it must be handled through a regulated legal
+						framework. Below is a step-by-step breakdown of how that process
+						works and what must happen before escrow can close.
+					</p>
+				</div>
+			</section>
+			<!-- SECTION PHOTO -->
+			<div class="section-photo shadow-card">
+				<img
+					src="./probate.jpg"
+					alt="Probate case support photo 1"
+					loading="lazy"
+				/>
+			</div>
+
+			<section id="what-is">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						WHAT IS A CONSERVATORSHIP SALE?
+					</h2>
+					<p class="body-text" style="margin-bottom: 1.5rem">
+						When an individual is unable to manage their own financial affairs
+						due to incapacity—whether from illness, disability, or mental
+						decline—the court steps in to protect their interests by appointing
+						a Conservatorship of the Estate. This court-appointed representative
+						gains legal authority to manage the conservatee's assets, including
+						real estate. When real property is part of the estate, its sale may
+						become necessary to fund the conservatee's care, reduce financial
+						strain, or prevent deterioration of the property.
+					</p>
+					<p class="body-text">
+						But unlike a standard real estate sale, every step is under court
+						supervision. California Probate Code governs this process, and the
+						Independent Administration of Estates Act (IAEA) does not apply.
+						This means every action requires court approval—there is no cutting
+						corners.
+					</p>
+				</div>
+			</section>
+			<!-- SECTION PHOTO -->
+			<div class="section-photo shadow-card">
+				<img
+					src="./probate.jpg"
+					alt="Probate case support photo 2"
+					loading="lazy"
+				/>
+			</div>
+
+			<section id="why-sell">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						WHY SELL UNDER CONSERVATORSHIP?
+					</h2>
+					<p class="body-text" style="margin-bottom: 1.5rem">
+						A Conservator may initiate a sale for several critical reasons:
+					</p>
+					<div class="points-wrapper">
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" alt="" />
+							<div class="body-text point-text" style="flex: 1">
+								<b class="text-primary text-bold point-title">Vacancy Costs</b><br />
+								An empty property racks up maintenance, taxes, and insurance
+								expenses.
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" alt="" />
+							<div class="body-text point-text" style="flex: 1">
+								<b class="text-primary text-bold point-title">Medical &amp; Long-Term Care Needs</b><br />
+								Liquidity is often required to fund the conservatee's health and
+								living costs.
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" alt="" />
+							<div class="body-text point-text" style="flex: 1">
+								<b class="text-primary text-bold point-title">Financial Stability</b><br />
+								Selling the property may be necessary to prevent the estate from
+								going underwater.
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" alt="" />
+							<div class="body-text point-text" style="flex: 1">
+								<b class="text-primary text-bold point-title">Court-Approved Financial Plan</b><br />
+								If the court determines liquidation is the best move, the
+								conservator must follow that directive.
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<!-- SECTION PHOTO -->
+			<div class="section-photo shadow-card">
+				<img
+					src="./probate.jpg"
+					alt="Probate case support photo 3"
+					loading="lazy"
+				/>
+			</div>
+
+			<section id="process-intro">
+				<div class="content-block shadow-card">
+					<h3 class="step-title-text">
+						STEP-BY-STEP PROCESS FOR SELLING REAL ESTATE UNDER CONSERVATORSHIP
+					</h3>
+				</div>
+			</section>
+
+			<section id="step-1" class="step-container shadow-card">
+				<div class="step-inner shadow-card">
+					<div class="step-content">
+						<div class="step-title-row">
+							<h3 class="step-title-text">
+								COURT APPOINTMENT AND AUTHORITY – SECURE LEGAL POWER
+							</h3>
+						</div>
+						<div class="content-block step-body shadow-card">
+							<p class="body-text step-intro" style="margin-bottom: 1.5rem">
+								Before any action can be taken, the court must appoint a
+								<span class="text-primary text-bold">Conservatorship of the Estate</span> and issue Letters of
+								Conservatorship (GC-350).
+							</p>
+
+							<div class="points-wrapper" style="margin-bottom: 1.5rem">
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" alt="" />
+									<div class="body-text point-text" style="flex: 1">
+										<b class="text-primary text-bold point-title">Letters of Conservatorship (GC-350)</b><br />
+										These Letters are the official documents that give the conservator
+										legal authority to access and manage the conservatee's assets.
+									</div>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" alt="" />
+									<div class="body-text point-text" style="flex: 1">
+										<b class="text-primary text-bold point-title">Sale Authority Is NOT Automatic</b><br />
+										That authority does NOT automatically include the right to
+										sell real estate.
+									</div>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" alt="" />
+									<div class="body-text point-text" style="flex: 1">
+										<b class="text-primary text-bold point-title">Sale Requires Court Petition</b><br />
+										To move forward with a sale, a petition is typically filed
+										asking the court for specific authority to sell the property.
+										The sale cannot proceed until the court grants that petition
+										and issues a <span class="text-primary text-bold">signed order confirming authority to sell</span>.
+									</div>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" alt="" />
+									<div class="body-text point-text" style="flex: 1">
+										<b class="text-primary text-bold point-title">Pre-Authorization in Attachment 3e</b><br />
+										In rare cases, the judge may pre-authorize real estate powers
+										when the Letters are issued. This is sometimes noted in
+										Attachment 3e of the Letters of Conservatorship (GC-350). If
+										that section is blank (as it usually is), the court will
+										generally require a separate signed order before the property
+										can be listed or
+										<span class="text-primary text-bold sold-cta">sold</span>.
+									</div>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" alt="" />
+									<div class="body-text point-text" style="flex: 1">
+										<b class="text-primary text-bold point-title">Confirm Through Signed Court Order</b><br />
+										Even if sale powers appear to be granted, that checkbox alone
+										isn't enough. Authority should be confirmed through:
+										<div class="points-wrapper" style="margin-top: 0.75rem">
+											<div class="point-item shadow-card">
+												<img src="./images/arrow.png" class="point-icon" alt="" />
+												<div class="body-text point-text" style="flex: 1">The signed Minute Order</div>
+											</div>
+											<div class="point-item shadow-card">
+												<img src="./images/arrow.png" class="point-icon" alt="" />
+												<div class="body-text point-text" style="flex: 1">Any attached court language or exhibits related to real estate authority</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="point-item shadow-card">
+								<img src="./images/arrow.png" class="point-icon" alt="" />
+								<div class="body-text point-text" style="flex: 1">
+									<b class="text-primary text-bold point-title">Required Documents to Close</b><br />
+									Escrow and title will require both the Letters of
+									Conservatorship (GC-350) and a signed court order confirming
+									sale authority—often in the form of a minute order or formal
+									written order—before the transaction can close.
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section id="step-2" class="step-container shadow-card">
+				<div class="step-inner shadow-card">
+					<div class="step-content">
+						<div class="step-title-row">
+							<h3 class="step-title-text">
+								PETITIONING FOR SALE APPROVAL – LOCK IN THE GREEN LIGHT
+							</h3>
+						</div>
+						<div class="content-block step-body shadow-card">
+							<p class="body-text step-intro" style="margin-bottom: 1.5rem">
+								The Conservator, usually through legal representation, must file
+								a <span class="text-primary text-bold">Petition for Authority to Sell Real Property</span> with the court.
+								This petition must include:
+							</p>
+
+							<div class="points-wrapper" style="margin-bottom: 1.5rem">
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" alt="" />
+									<div class="body-text point-text" style="flex: 1">
+										<b class="text-primary text-bold point-title">Reason for the Sale</b><br />
+										Why it is in the conservatee's best interest.
+									</div>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" alt="" />
+									<div class="body-text point-text" style="flex: 1">
+										<b class="text-primary text-bold point-title">Market Analysis or Appraisal</b><br />
+										Demonstrating the property's fair market value.
+									</div>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" alt="" />
+									<div class="body-text point-text" style="flex: 1">
+										<b class="text-primary text-bold point-title">Evidence of Need</b><br />
+										Proving that liquidating the property is necessary to fund
+										the conservatee's care or maintain financial stability.
+									</div>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" alt="" />
+									<div class="body-text point-text" style="flex: 1">
+										<b class="text-primary text-bold point-title">Conservatee's Living Situation</b><br />
+										Current status and care needs, supporting the justification
+										for selling the property.
+									</div>
+								</div>
+							</div>
+
+							<div class="point-item shadow-card">
+								<img src="./images/arrow.png" class="point-icon" alt="" />
+								<div class="body-text point-text" style="flex: 1">
+									<b class="text-primary text-bold point-title">Court Hearing Scheduled</b><br />
+									A court hearing is then scheduled where the judge reviews the
+									petition. If approved, the court issues an Order Authorizing
+									Sale of Real Property.
+									<div class="points-wrapper" style="margin-top: 0.75rem">
+										<div class="point-item shadow-card">
+											<img src="./images/arrow.png" class="point-icon" alt="" />
+											<div class="body-text point-text" style="flex: 1">This can be in the form of a <span class="text-primary text-bold">Minute Order</span> or a formal written ruling from the court.</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section id="step-3" class="step-container shadow-card">
+				<div class="step-inner shadow-card">
+					<div class="step-content">
+						<div class="step-title-row">
+							<h3 class="step-title-text">
+								PROPERTY VALUATION – KNOW YOUR ASSET'S TRUE WORTH
+							</h3>
+						</div>
+						<div class="content-block step-body shadow-card">
+							<p class="body-text step-intro" style="margin-bottom: 1.5rem">
+								Before listing, the property must be valued accurately. The
+								court typically requires:
+							</p>
+
+							<div class="points-wrapper" style="margin-bottom: 1.5rem">
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" alt="" />
+									<div class="body-text point-text" style="flex: 1">
+										<b class="text-primary text-bold point-title">Independent Appraisal</b><br />
+										Conducted by a licensed appraiser to establish market value.
+									</div>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" alt="" />
+									<div class="body-text point-text" style="flex: 1">
+										<b class="text-primary text-bold point-title">Comparative Market Analysis (CMA)</b><br />
+										A real-time look at local market conditions and comparable
+										properties.
+									</div>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" alt="" />
+									<div class="body-text point-text" style="flex: 1">
+										<b class="text-primary text-bold point-title">Court-Appointed Probate Referee</b><br />
+										May be assigned to validate the appraisal or provide a
+										secondary valuation.
+									</div>
+								</div>
+							</div>
+
+							<p class="body-text step-closing">
+								These valuations are crucial, as the sale must reflect fair market
+								value to protect the conservatee's interests.
+							</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section id="step-4" class="step-container shadow-card">
+				<div class="step-inner shadow-card">
+					<div class="step-content">
+						<div class="step-title-row">
+							<h3 class="step-title-text">
+								LISTING THE PROPERTY – MAKE IT MARKET-READY
+							</h3>
+						</div>
+						<div class="content-block step-body shadow-card">
+							<p class="body-text step-intro" style="margin-bottom: 1.5rem">
+								Once the court issues its order, the conservator can move
+								forward with listing the property.
+							</p>
+
+							<div class="points-wrapper" style="margin-bottom: 1.5rem">
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" alt="" />
+									<div class="body-text point-text" style="flex: 1">
+										<b class="text-primary text-bold point-title">Engage a Probate-Experienced Real Estate Agent</b><br />
+										Not just any agent—someone who understands court protocol and
+										legal compliance. (If you're reading this, you already know
+										who to call.)
+									</div>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" alt="" />
+									<div class="body-text point-text" style="flex: 1">
+										<b class="text-primary text-bold point-title">Effective Marketing Strategy</b><br />
+										The property must be marketed aggressively to attract
+										qualified buyers—MLS, probate platforms, and
+										direct-to-investor networks.
+									</div>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" alt="" />
+									<div class="body-text point-text" style="flex: 1">
+										<b class="text-primary text-bold point-title">Compliance-Ready Disclosures</b><br />
+										All state and court-required disclosures must be completed
+										before going live.
+									</div>
+								</div>
+							</div>
+
+							<p class="body-text step-closing">
+								Every listing detail is handled with court compliance in mind—no
+								shortcuts, no oversights.
+							</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section id="step-5" class="step-container shadow-card">
+				<div class="step-inner shadow-card">
+					<div class="step-content">
+						<div class="step-title-row">
+							<h3 class="step-title-text">
+								REVIEWING OFFERS AND ESCROW COORDINATION – EXECUTE WITH
+								PRECISION
+							</h3>
+						</div>
+						<div class="content-block step-body shadow-card">
+							<p class="body-text step-intro" style="margin-bottom: 1.5rem">
+								Every offer is scrutinized to ensure it serves the conservatee's
+								best interests.
+							</p>
+
+							<div class="points-wrapper" style="margin-bottom: 1.5rem">
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" alt="" />
+									<div class="body-text point-text" style="flex: 1">
+										<b class="text-primary text-bold point-title">Terms of the Offer</b><br />
+										Must align with court expectations and market value.
+									</div>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" alt="" />
+									<div class="body-text point-text" style="flex: 1">
+										<b class="text-primary text-bold point-title">Buyer Qualifications</b><br />
+										Only serious, financially stable buyers are considered.
+									</div>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" alt="" />
+									<div class="body-text point-text" style="flex: 1">
+										<b class="text-primary text-bold point-title">Contingencies Managed</b><br />
+										Inspections, financing, and other contingencies are reviewed
+										carefully to prevent any delays.
+									</div>
+								</div>
+							</div>
+
+							<p class="body-text step-closing">
+								When the right offer is accepted, escrow is opened. All
+								necessary legal documents are prepared for the next step:
+								court confirmation.
+							</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section id="step-6" class="step-container shadow-card">
+				<div class="step-inner shadow-card">
+					<div class="step-content">
+						<div class="step-title-row">
+							<h3 class="step-title-text">
+								FINAL COURT CONFIRMATION – SEAL THE DEAL
+							</h3>
+						</div>
+						<div class="content-block step-body shadow-card">
+							<p class="body-text step-intro" style="margin-bottom: 1.5rem">
+								The sale is not final until the court confirms it. Here's how it
+								goes down:
+							</p>
+
+							<div class="points-wrapper" style="margin-bottom: 1.5rem">
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" alt="" />
+									<div class="body-text point-text" style="flex: 1">
+										<b class="text-primary text-bold point-title">Court Hearing</b><br />
+										The judge reviews the sale terms and evaluates any objections.
+									</div>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" alt="" />
+									<div class="body-text point-text" style="flex: 1">
+										<b class="text-primary text-bold point-title">Objections Heard</b><br />
+										Family members or interested parties can contest the sale,
+										which the judge will address.
+									</div>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" alt="" />
+									<div class="body-text point-text" style="flex: 1">
+										<b class="text-primary text-bold point-title">Approval Granted</b><br />
+										If the sale price reflects fair market value and there are no
+										valid objections, the court issues an Order Confirming Sale
+										of Real Property.
+									</div>
+								</div>
+							</div>
+
+							<p class="body-text step-closing">
+								This is the legal green light to close escrow.
+							</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section id="step-7" class="step-container shadow-card">
+				<div class="step-inner shadow-card">
+					<div class="step-content">
+						<div class="step-title-row">
+							<h3 class="step-title-text">
+								CLOSING THE SALE – COMPLETE THE TRANSFER
+							</h3>
+						</div>
+						<div class="content-block step-body shadow-card">
+							<p class="body-text step-intro" style="margin-bottom: 1.5rem">
+								After court confirmation, the final steps are executed with
+								absolute precision.
+							</p>
+
+							<div class="points-wrapper" style="margin-bottom: 1.5rem">
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" alt="" />
+									<div class="body-text point-text" style="flex: 1">
+										<b class="text-primary text-bold point-title">Final Documents Executed</b><br />
+										Grant Deed, Escrow Instructions, and Title Transfers are
+										completed.
+									</div>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" alt="" />
+									<div class="body-text point-text" style="flex: 1">
+										<b class="text-primary text-bold point-title">Proceeds Distributed</b><br />
+										Funds are typically placed into a court-monitored or blocked
+										account, or managed according to the conservatee's financial
+										plan, depending on the court's instructions.
+									</div>
+								</div>
+
+								<div class="point-item shadow-card">
+									<img src="./images/arrow.png" class="point-icon" alt="" />
+									<div class="body-text point-text" style="flex: 1">
+										<b class="text-primary text-bold point-title">Final Accounting</b><br />
+										A detailed report is submitted to the court, showing all
+										transactions and distributions.
+									</div>
+								</div>
+							</div>
+
+
+						</div>
+					</div>
+				</div>
+			</section>
+			<!-- SECTION PHOTO -->
+			<div class="section-photo shadow-card">
+				<img
+					src="./probate.jpg"
+					alt="Probate case support photo 4"
+					loading="lazy"
+				/>
+			</div>
+
+			<section id="key-considerations">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">KEY CONSIDERATIONS</h2>
+					<div class="points-wrapper">
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" alt="" />
+							<div class="body-text point-text" style="flex: 1">
+								<b class="text-primary text-bold point-title">Court Oversight</b><br />
+								Every action is monitored and approved by the court.
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" alt="" />
+							<div class="body-text point-text" style="flex: 1">
+								<b class="text-primary text-bold point-title">No Automatic Overbidding Required</b><br />
+								Unlike probate, conservatorship sales do not have <span class="text-primary text-bold">automatic
+								overbids</span> during confirmation. However, the judge can allow
+								overbidding at their discretion.
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" alt="" />
+							<div class="body-text point-text" style="flex: 1">
+								<b class="text-primary text-bold point-title">Timelines</b><br />
+								Court schedules dictate timing, so proactive management is
+								essential.
+							</div>
+						</div>
+
+						<div class="point-item shadow-card">
+							<img src="./images/arrow.png" class="point-icon" alt="" />
+							<div class="body-text point-text" style="flex: 1">
+								<b class="text-primary text-bold point-title">Transparency and Compliance</b><br />
+								Any misstep can delay or jeopardize the sale.
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<!-- SECTION PHOTO -->
+			<div class="section-photo shadow-card">
+				<img
+					src="./probate.jpg"
+					alt="Probate case support photo 5"
+					loading="lazy"
+				/>
+			</div>
+
+			<section id="outro">
+				<div class="content-block shadow-card">
+					<h2 class="section-title text-primary">
+						MASTERING CONSERVATORSHIP SALES WITH PRECISION
+					</h2>
+					<p class="body-text text-secondary text-bold">
+						Selling real estate under conservatorship is not just about
+						paperwork—it's about executing flawlessly under court scrutiny. With
+						the right strategy and strict adherence to legal standards, the
+						process can be managed seamlessly, ensuring the conservatee's best
+						interests are protected at every step.
+					</p>
+				</div>
+			</section>
+		</main>
+	</body>
+</html>
