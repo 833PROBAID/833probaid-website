@@ -3,16 +3,18 @@
 "use client";
 
 import { useState } from "react";
-import Footer from "../components/Footer";
+import dynamic from "next/dynamic";
 import Hero from "../components/Home/Hero";
-import HomeCard from "../components/HomeCard";
-import HomeCardBig from "../components/HomeCardBig";
 import Navbar from "../components/Navbar";
-import ToolsCard from "../components/ToolsCard";
-import TrustCard from "../components/TrustCard";
-import ReadyToGetStart from "@/components/ReadyToGetStart";
 import { SectionLoading } from "../components/LoadingState";
 import AnimatedText from "../components/AnimatedText";
+
+const Footer = dynamic(() => import("../components/Footer"));
+const HomeCard = dynamic(() => import("../components/HomeCard"));
+const HomeCardBig = dynamic(() => import("../components/HomeCardBig"));
+const ToolsCard = dynamic(() => import("../components/ToolsCard"));
+const TrustCard = dynamic(() => import("../components/TrustCard"));
+const ReadyToGetStart = dynamic(() => import("@/components/ReadyToGetStart"));
 
 export default function HomePageClient({ initialHomeCardData = [] }) {
 	const homeCardData = Array.isArray(initialHomeCardData)
