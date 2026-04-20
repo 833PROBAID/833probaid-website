@@ -10,6 +10,7 @@ import Navbar from "../../components/Navbar";
 import blogsApi from "../lib/api/blogs";
 import { SectionLoading } from "../../components/LoadingState";
 import AnimatedText from "../../components/AnimatedText";
+import Image from "next/image";
 
 const BlogsPageClient = ({ initialBlogs = [], initialPagination = {} }) => {
 	const hasSSRInitialData =
@@ -227,10 +228,12 @@ const BlogsPageClient = ({ initialBlogs = [], initialPagination = {} }) => {
 						placeholder='Search Articles....'
 					/>
 					<button type='submit' className='ml-1 cursor-pointer sm:ml-4'>
-						<img
+						<Image
 							src='/search.svg'
 							alt='Search'
 							className='w-auto h-auto transition-transform duration-300 hover:scale-110'
+							width={100}
+							height={100}
 						/>
 					</button>
 				</form>

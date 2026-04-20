@@ -25,6 +25,8 @@ const Hero = () => {
 								src='/svgs/hero-left-banner.svg'
 								className='w-full transition-transform duration-500 ease-out hover:scale-105'
 								alt='hero text'
+								loading='eager'
+								fetchPriority='high'
 							/>
 
 							<div className='font-montserrat my-6 space-y-3 font-bold lg:my-8 lg:space-y-4 lg:text-xl xl:text-2xl'>
@@ -66,6 +68,8 @@ const Hero = () => {
 								src='/images/hero-person.png'
 								className='relative z-10 h-auto w-full max-w-[450px] object-contain sm:max-w-[650px] lg:max-w-[750px] transition-transform duration-700 ease-out hover:scale-105 cursor-pointer'
 								alt='hero-person'
+								loading='eager'
+								fetchPriority='high'
 							/>
 						</div>
 					</div>

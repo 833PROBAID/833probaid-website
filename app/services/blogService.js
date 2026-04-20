@@ -2,6 +2,23 @@ import connectToDatabase from "../utils/db.js";
 import Blog from "../models/Blog.js";
 import { unstable_cache } from "next/cache";
 
+function serializeBlogForClient(blog) {
+	if (!blog) return blog;
+
+	return {
+		...blog,
+		_id: blog?._id?.toString?.() || blog?._id || "",
+		publishedDate: blog?.publishedDate
+			? new Date(blog.publishedDate).toISOString()
+			: null,
+		modifiedDate: blog?.modifiedDate
+			? new Date(blog.modifiedDate).toISOString()
+			: null,
+		createdAt: blog?.createdAt ? new Date(blog.createdAt).toISOString() : null,
+		updatedAt: blog?.updatedAt ? new Date(blog.updatedAt).toISOString() : null,
+	};
+}
+
 const getPublishedBlogsFirstPageCached = unstable_cache(
 	async () => {
 		await connectToDatabase();
@@ -16,7 +33,7 @@ const getPublishedBlogsFirstPageCached = unstable_cache(
 		]);
 
 		return {
-			blogs,
+			blogs: blogs.map(serializeBlogForClient),
 			pagination: {
 				page,
 				limit,

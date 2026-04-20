@@ -2,8 +2,12 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
+import dynamic from "next/dynamic";
 import { AuthProvider } from "../contexts/AuthContext";
-import AIChatbot from "./AIChatbot";
+
+const AIChatbot = dynamic(() => import("./AIChatbot"), {
+	ssr: false,
+});
 
 export default function AppClientShell({ children }) {
 	const route = usePathname() || "";

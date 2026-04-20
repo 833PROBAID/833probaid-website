@@ -11,6 +11,7 @@ import {
 	incrementBlogViews,
 } from "@/app/services/blogService";
 import { notFound } from "next/navigation";
+import Image from "next/image";
 
 export const revalidate = 300;
 
@@ -205,10 +206,12 @@ export default async function BlogPage({ params }) {
 							className='flex cursor-pointer items-center gap-2 transition-opacity hover:opacity-80'
 							title={previousBlog.title || previousBlog.slug}
 							aria-label={`Previous blog: ${previousBlog.title || previousBlog.slug}`}>
-							<img
+							<Image
 								className='w-8 lg:w-12'
 								src='/images/arrow_prev.png'
 								alt='Previous blog'
+								width={100}
+								height={100}
 							/>
 							<span className='text-secondary hover:text-primary'>Previous</span>
 						</Link>
@@ -216,10 +219,12 @@ export default async function BlogPage({ params }) {
 						<span
 							className='flex cursor-not-allowed items-center gap-2 opacity-40'
 							aria-disabled='true'>
-							<img
+							<Image
 								className='w-8 lg:w-12'
 								src='/images/arrow_prev.png'
 								alt='No previous blog'
+								width={100}
+								height={100}
 							/>
 							<span className='text-secondary'>Previous</span>
 						</span>
@@ -236,6 +241,8 @@ export default async function BlogPage({ params }) {
 								className='w-8 lg:w-12'
 								src='/images/arrow.png'
 								alt='Next blog'
+								width={100}
+								height={100}
 							/>
 						</Link>
 					) : (
@@ -243,10 +250,12 @@ export default async function BlogPage({ params }) {
 							className='flex cursor-not-allowed items-center gap-2 opacity-40'
 							aria-disabled='true'>
 							<span className='text-secondary'>Next</span>
-							<img
+							<Image
 								className='w-8 lg:w-12'
 								src='/images/arrow.png'
 								alt='No next blog'
+								width={100}
+								height={100}
 							/>
 						</span>
 					)}
