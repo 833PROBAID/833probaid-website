@@ -5,9 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "echo 'Linting skipped'"
+    "build": "next build --no lint",
+    "start": "next start"
   },
   "dependencies": {
     "@grapesjs/react": "^2.0.0",
