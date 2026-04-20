@@ -7,6 +7,7 @@ const nextConfig = {
 		"bcryptjs",
 		"jsonwebtoken",
 		"nodemailer",
+		"resend",
 		"sanitize-html",
 		"postcss",
 	],

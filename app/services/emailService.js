@@ -1,38 +1,28 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
-let transporter;
+let resendClient;
 
-function getTransporter() {
-	if (transporter) {
-		return transporter;
+function getResendClient() {
+	if (resendClient) {
+		return resendClient;
 	}
 
-	const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD, SMTP_SECURE } =
-		process.env;
-
-	if (!SMTP_HOST || !SMTP_PORT || !SMTP_USER || !SMTP_PASSWORD) {
-		throw new Error("SMTP configuration is incomplete");
+	const apiKey = process.env.RESEND_API_KEY;
+	if (!apiKey) {
+		throw new Error("RESEND_API_KEY is not set");
 	}
 
-	transporter = nodemailer.createTransport({
-		host: SMTP_HOST,
-		port: Number(SMTP_PORT),
-		secure: SMTP_SECURE === "true",
-		auth: {
-			user: SMTP_USER,
-			pass: SMTP_PASSWORD,
-		},
-		tls: {
-			rejectUnauthorized: true,
-		},
-	});
-
-	return transporter;
+	resendClient = new Resend(apiKey);
+	return resendClient;
 }
 
 export async function sendOtpEmail({ to, code, subject, templateData = {} }) {
 	try {
-		const mailTransporter = getTransporter();
+		const resend = getResendClient();
+		const from =
+			process.env.RESEND_FROM_EMAIL ||
+			process.env.SMTP_FROM ||
+			"833 PROBAID <onboarding@resend.dev>";
 
 		const htmlContent = `
 		<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #1f2933;">
@@ -46,17 +36,18 @@ export async function sendOtpEmail({ to, code, subject, templateData = {} }) {
 		</div>
 	`;
 
-		const info = await mailTransporter.sendMail({
-			from: process.env.SMTP_FROM || `833 PROBAID <${process.env.SMTP_USER}>`,
+		const info = await resend.emails.send({
+			from,
 			to,
 			subject,
 			html: htmlContent,
 		});
 
-		console.log("✅ Email sent successfully:", info.messageId);
+		console.log("✅ Email sent successfully:", info?.data?.id || info?.id);
 		return info;
 	} catch (error) {
-		console.error("❌ Failed to send email:", error.message);
-		throw new Error(`Email delivery failed: ${error.message}`);
+		const message = error?.message || "Unknown email error";
+		console.error("❌ Failed to send email:", message);
+		throw new Error(`Email delivery failed: ${message}`);
 	}
 }
