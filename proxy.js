@@ -10,9 +10,6 @@ const getSecretKey = () => {
 	return new TextEncoder().encode(JWT_SECRET);
 };
 
-// In-memory log for blocked access attempts
-const accessAttempts = new Map();
-
 /**
  * 🔒 SECURITY: Add security headers to response
  * Protects against common web vulnerabilities
@@ -188,16 +185,6 @@ export async function proxy(request) {
 				ip: clientIP,
 				userAgent: request.headers.get("user-agent"),
 			});
-
-			// Track repeated attempts
-			const attemptKey = `${clientIP}:${pathname}`;
-			const attempts = accessAttempts.get(attemptKey) || 0;
-			accessAttempts.set(attemptKey, attempts + 1);
-
-			// Clean up old entries every 100 attempts
-			if (accessAttempts.size > 1000) {
-				accessAttempts.clear();
-			}
 
 			return NextResponse.redirect(loginUrl);
 		}

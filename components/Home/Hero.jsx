@@ -34,24 +34,20 @@ const Hero = () => {
 
 							<div className='font-montserrat my-6 space-y-3 font-bold lg:my-8 lg:space-y-4 lg:text-xl xl:text-2xl'>
 								<div className='flex items-center gap-3 lg:gap-4 group cursor-pointer'>
-									<Image
+									<img
 										src='/icons/trust-icon.svg'
 										alt='trust icon'
-										width={64}
-										height={64}
-										className='h-auto w-10 flex-shrink-0 transition-transform duration-500 ease-out group-hover:rotate-12 group-hover:scale-110 sm:w-12 lg:w-16'
+										className='h-auto w-10 shrink-0 transition-transform duration-500 ease-out group-hover:rotate-12 group-hover:scale-110 sm:w-12 lg:w-16'
 									/>
 									<p className='transition-transform duration-300 ease-out group-hover:translate-x-2'>
 										Trusted by attorneys
 									</p>
 								</div>
 								<div className='flex items-center gap-3 lg:gap-4 group cursor-pointer'>
-									<Image
+									<img
 										src='/icons/group-icon.svg'
 										alt='group icon'
-										width={64}
-										height={64}
-										className='h-auto w-10 flex-shrink-0 transition-transform duration-500 ease-out group-hover:rotate-12 group-hover:scale-110 sm:w-12 lg:w-16'
+										className='h-auto w-10 shrink-0 transition-transform duration-500 ease-out group-hover:rotate-12 group-hover:scale-110 sm:w-12 lg:w-16'
 									/>
 									<p className='transition-transform duration-300 ease-out group-hover:translate-x-2'>
 										Relied on by families

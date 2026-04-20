@@ -1,28 +1,10 @@
 @import "tailwindcss";
 
-* {
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-}
-
-html {
-	-webkit-overflow-scrolling: touch;
-	scroll-behavior: auto;
-}
 
 section {
 	contain: layout style;
 }
 
-input,
-textarea {
-	-webkit-user-select: text;
-	-moz-user-select: text;
-	-ms-user-select: text;
-	user-select: text;
-}
 
 @theme {
 	--font-anton: "Anton", sans-serif;

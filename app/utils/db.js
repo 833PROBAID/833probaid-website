@@ -2,10 +2,12 @@ import mongoose from "mongoose";
 
 const connectionState = {
 	isConnected: 0,
+	promise: null,
 };
 
 export default async function connectToDatabase() {
-	if (connectionState.isConnected) {
+	if (mongoose.connection.readyState === 1) {
+		connectionState.isConnected = 1;
 		return;
 	}
 
@@ -15,12 +17,9 @@ export default async function connectToDatabase() {
 		throw new Error("MONGODB_URI is not set");
 	}
 
-	if (mongoose.connections.length > 0) {
-		connectionState.isConnected = mongoose.connections[0].readyState;
-		if (connectionState.isConnected === 1) {
-			return;
-		}
-		await mongoose.disconnect();
+	if (connectionState.promise) {
+		await connectionState.promise;
+		return;
 	}
 
 	const options = {
@@ -30,6 +29,13 @@ export default async function connectToDatabase() {
 		serverSelectionTimeoutMS: 5000,
 	};
 
-	const db = await mongoose.connect(uri, options);
-	connectionState.isConnected = db.connections[0].readyState;
+	connectionState.promise = mongoose.connect(uri, options);
+
+	try {
+		const db = await connectionState.promise;
+		connectionState.isConnected = db.connections[0].readyState;
+		connectionState.isConnected = mongoose.connection.readyState;
+	} finally {
+		connectionState.promise = null;
+	}
 }

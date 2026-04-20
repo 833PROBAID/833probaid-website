@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 export default function LogoCard() {
 	return (
 		<div className='flex w-full justify-center'>
@@ -70,13 +68,11 @@ export default function LogoCard() {
 							xmlns='http://www.w3.org/1999/xhtml'
 							className='flex h-full w-full flex-col items-center justify-center px-2'>
 							<div className='-mb-20 flex flex-col items-center justify-center'>
-								<Image
+								<img
 									src='/images/footer-logo.png'
 									alt='Footer logo'
-									width={325}
-									height={82}
-									className='h-auto'
-									style={{ marginBottom: "28px" }}
+									style={{ width: "100%", height: "auto", marginBottom: "28px" }}
+									className='h-auto w-full'
 								/>
 								<p
 									className='text-center font-bold'

@@ -107,7 +107,7 @@ export default async function HomeBookDetailPage({ params }) {
 	incrementHomeBookViews(homeBook._id.toString()).catch(() => {});
 
 	const heroData = homeBook.content?.hero || {
-		bannerImage: homeBook.image || "/images/home-book.jpg",
+		bannerImage: homeBook.image || "/images/footer-logo.png",
 		title: homeBook.title || "Untitled",
 		subtitle: homeBook.subtitle || "A comprehensive guide",
 	};
