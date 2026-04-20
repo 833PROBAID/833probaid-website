@@ -15,7 +15,9 @@ const TrustCard = dynamic(() => import("../components/TrustCard"));
 const ReadyToGetStart = dynamic(() => import("@/components/ReadyToGetStart"));
 
 export default function HomePageClient({ initialHomeCardData = [] }) {
-  const homeCardData = Array.isArray(initialHomeCardData) ? initialHomeCardData : [];
+  const homeCardData = Array.isArray(initialHomeCardData)
+    ? initialHomeCardData
+    : [];
   const sectionContainerClass =
     "mx-auto w-full max-w-7xl px-4 sm:px-5 md:px-6 lg:px-8 xl:px-10 2xl:px-0";
   return (
@@ -91,13 +93,19 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
 
           <div className="mt-4 md:mt-6 lg:mt-8 xl:mt-10">
             <p className="font-montserrat text-center font-medium text-[15.8px] md:text-xl lg:text-2xl">
-              <AnimatedText text="Attorneys, fiduciaries, and executors rely on" animate={false} />
+              <AnimatedText
+                text="Attorneys, fiduciaries, and executors rely on"
+                animate={false}
+              />
               <AnimatedText
                 text=" 833PROBAID® "
                 className="text-primary font-extrabold"
                 animate={false}
               />
-              <AnimatedText text="for one reason — consistency that outperforms the industry. Files stay clean. Communication stays tight. Deadlines are honored. Documentation is complete. And every case moves forward with a level of organization most agents can't replicate, don't understand, and wouldn't know how to implement even if they tried. This is disciplined execution in its purest form — the standard every court-supervised sale should have, but almost none do." animate={false} />
+              <AnimatedText
+                text="for one reason — consistency that outperforms the industry. Files stay clean. Communication stays tight. Deadlines are honored. Documentation is complete. And every case moves forward with a level of organization most agents can't replicate, don't understand, and wouldn't know how to implement even if they tried. This is disciplined execution in its purest form — the standard every court-supervised sale should have, but almost none do."
+                animate={false}
+              />
             </p>
           </div>
           <div className="mt-10 text-white sm:mt-16">
@@ -186,8 +194,8 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
               style={{ willChange: "transform" }}
               loading="lazy"
               alt="house"
-			  width={1000}
-			  height={1000}
+              width={1000}
+              height={1000}
               sizes="(max-width: 768px) 100vw, 50vw"
             />
             <div>
@@ -213,7 +221,10 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
               </h4>
               <div className="mt-3">
                 <p className="font-montserrat text-center font-medium text-[15.8px] md:text-xl lg:text-2xl">
-                  <AnimatedText text="Whether you're navigating probate, managing a trust, or dealing with conservatorship property, we understand that you've got a lot on your plate. Let us help you get your property" animate={false} />{" "}
+                  <AnimatedText
+                    text="Whether you're navigating probate, managing a trust, or dealing with conservatorship property, we understand that you've got a lot on your plate. Let us help you get your property"
+                    animate={false}
+                  />{" "}
                   <Link
                     href="/books/seller-guide.pdf"
                     target="_blank"
@@ -222,7 +233,10 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
                   >
                     SOLD
                   </Link>{" "}
-                  <AnimatedText text="quickly and at the best price. Whether you need cash fast, or you want to get top dollar with a traditional sale, we've got you covered." animate={false} />
+                  <AnimatedText
+                    text="quickly and at the best price. Whether you need cash fast, or you want to get top dollar with a traditional sale, we've got you covered."
+                    animate={false}
+                  />
                 </p>
                 <h4 className="font-montserrat text-primary text-center text-lg font-extrabold xl:text-3xl mt-4">
                   <AnimatedText text="Fast" />
