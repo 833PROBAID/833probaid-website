@@ -1,7 +1,4 @@
 const nextConfig = {
-	plugins: {
-		autoprefixer: {},
-	},
 	serverExternalPackages: [
 		"mongoose",
 		"bcryptjs",

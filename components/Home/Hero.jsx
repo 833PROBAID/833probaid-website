@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 const Hero = () => {
 	return (
 		<>
@@ -21,30 +23,35 @@ const Hero = () => {
 					<div className='mx-auto flex max-w-7xl px-5 md:px-9 lg:px-0 flex-col items-center lg:grid lg:grid-cols-2 lg:items-end'>
 						{/* Left Content Section */}
 						<div className='relative z-20 flex flex-col justify-center py-8 w-[110%]'>
-							<img
+							<Image
 								src='/svgs/hero-left-banner.svg'
-								className='w-full transition-transform duration-500 ease-out hover:scale-105'
 								alt='hero text'
-								loading='eager'
-								fetchPriority='high'
+								width={900}
+								height={450}
+								priority
+								className='h-auto w-full transition-transform duration-500 ease-out hover:scale-105'
 							/>
 
 							<div className='font-montserrat my-6 space-y-3 font-bold lg:my-8 lg:space-y-4 lg:text-xl xl:text-2xl'>
 								<div className='flex items-center gap-3 lg:gap-4 group cursor-pointer'>
-									<img
+									<Image
 										src='/icons/trust-icon.svg'
-										className='w-10 flex-shrink-0 sm:w-12 lg:w-16 transition-transform duration-500 ease-out group-hover:rotate-12 group-hover:scale-110'
 										alt='trust icon'
+										width={64}
+										height={64}
+										className='h-auto w-10 flex-shrink-0 transition-transform duration-500 ease-out group-hover:rotate-12 group-hover:scale-110 sm:w-12 lg:w-16'
 									/>
 									<p className='transition-transform duration-300 ease-out group-hover:translate-x-2'>
 										Trusted by attorneys
 									</p>
 								</div>
 								<div className='flex items-center gap-3 lg:gap-4 group cursor-pointer'>
-									<img
+									<Image
 										src='/icons/group-icon.svg'
-										className='w-10 flex-shrink-0 sm:w-12 lg:w-16 transition-transform duration-500 ease-out group-hover:rotate-12 group-hover:scale-110'
 										alt='group icon'
+										width={64}
+										height={64}
+										className='h-auto w-10 flex-shrink-0 transition-transform duration-500 ease-out group-hover:rotate-12 group-hover:scale-110 sm:w-12 lg:w-16'
 									/>
 									<p className='transition-transform duration-300 ease-out group-hover:translate-x-2'>
 										Relied on by families
@@ -64,12 +71,13 @@ const Hero = () => {
 						{/* Right Image Section - Hero Person */}
 						<div className='relative flex items-end justify-end overflow-hidden'>
 							{/* Hero Person - Aligned to Bottom */}
-							<img
+							<Image
 								src='/images/hero-person.png'
-								className='relative z-10 h-auto w-full max-w-[450px] object-contain sm:max-w-[650px] lg:max-w-[750px] transition-transform duration-700 ease-out hover:scale-105 cursor-pointer'
 								alt='hero-person'
-								loading='eager'
-								fetchPriority='high'
+								width={750}
+								height={900}
+								priority
+								className='relative z-10 h-auto w-full max-w-[450px] cursor-pointer object-contain transition-transform duration-700 ease-out hover:scale-105 sm:max-w-[650px] lg:max-w-[750px]'
 							/>
 						</div>
 					</div>

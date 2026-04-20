@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import "react-quill-new/dist/quill.snow.css";
 import ProtectedRoute from "../../components/ProtectedRoute";
 import DashboardSidebar from "../../components/DashboardSidebar";
 import { useAuth } from "../../contexts/AuthContext";

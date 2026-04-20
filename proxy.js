@@ -100,7 +100,7 @@ function isOriginAllowed(origin) {
 		const url = new URL(origin);
 		baseOrigin = `${url.protocol}//${url.host}`;
 	} catch (error) {
-		console.warn("🔒 MIDDLEWARE: Failed to parse origin URL:", origin);
+		console.warn("🔒 PROXY: Failed to parse origin URL:", origin);
 		return false;
 	}
 
@@ -153,7 +153,7 @@ async function verifyToken(request) {
 	}
 }
 
-export async function middleware(request) {
+export async function proxy(request) {
 	// Get the pathname of the request
 	const pathname = request.nextUrl.pathname;
 
@@ -184,13 +184,10 @@ export async function middleware(request) {
 				request.headers.get("x-real-ip") ||
 				"unknown";
 
-			console.warn(
-				`🔒 SECURITY: Blocked unauthenticated access to ${pathname}`,
-				{
-					ip: clientIP,
-					userAgent: request.headers.get("user-agent"),
-				},
-			);
+			console.warn(`🔒 SECURITY: Blocked unauthenticated access to ${pathname}`, {
+				ip: clientIP,
+				userAgent: request.headers.get("user-agent"),
+			});
 
 			// Track repeated attempts
 			const attemptKey = `${clientIP}:${pathname}`;
@@ -353,7 +350,7 @@ export async function middleware(request) {
 	return NextResponse.next();
 }
 
-// 🔒 Middleware configuration
+// 🔒 Proxy configuration
 export const config = {
 	matcher: ["/api/:path*", "/dashboard/:path*"],
 };

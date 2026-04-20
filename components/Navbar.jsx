@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -62,12 +63,15 @@ export default function Navbar() {
 					{/* Logo */}
 					<div className='flex-shrink-0'>
 						<Link href='/'>
-							<img
+							<Image
 								src='/images/footer-logo.png'
 								alt='833PROBAID Logo'
-								className={`transition-all duration-300 ${
-									isScrolled 
-										? "w-32 md:w-32 lg:w-40 xl:w-44" 
+								width={240}
+								height={60}
+								priority
+								className={`h-auto transition-all duration-300 ${
+									isScrolled
+										? "w-32 md:w-32 lg:w-40 xl:w-44"
 										: "w-44 md:w-40 lg:w-52 xl:w-60"
 								}`}
 							/>
@@ -118,12 +122,14 @@ export default function Navbar() {
 							target='_blank'
 							rel='noopener noreferrer'
 							className='transition-all duration-300 hover:opacity-80 hover:scale-110'>
-							<img
+							<Image
 								src='/icons/instagram.png'
 								alt='Instagram'
+								width={64}
+								height={64}
 								className={`transition-all duration-300 ${
-									isScrolled 
-										? "h-8 w-8 lg:h-10 lg:w-10 xl:h-12 xl:w-12" 
+									isScrolled
+										? "h-8 w-8 lg:h-10 lg:w-10 xl:h-12 xl:w-12"
 										: "h-10 w-10 lg:h-14 lg:w-14 xl:h-16 xl:w-16"
 								}`}
 							/>
@@ -133,12 +139,14 @@ export default function Navbar() {
 							target='_blank'
 							rel='noopener noreferrer'
 							className='transition-all duration-300 hover:opacity-80 hover:scale-110'>
-							<img
+							<Image
 								src='/icons/facebook.png'
 								alt='Facebook'
+								width={64}
+								height={64}
 								className={`transition-all duration-300 ${
-									isScrolled 
-										? "h-8 w-8 lg:h-10 lg:w-10 xl:h-12 xl:w-12" 
+									isScrolled
+										? "h-8 w-8 lg:h-10 lg:w-10 xl:h-12 xl:w-12"
 										: "h-10 w-10 lg:h-14 lg:w-14 xl:h-16 xl:w-16"
 								}`}
 							/>
@@ -148,12 +156,14 @@ export default function Navbar() {
 							target='_blank'
 							rel='noopener noreferrer'
 							className='transition-all duration-300 hover:opacity-80 hover:scale-110'>
-							<img
+							<Image
 								src='/icons/linkedin.png'
 								alt='LinkedIn'
+								width={64}
+								height={64}
 								className={`transition-all duration-300 ${
-									isScrolled 
-										? "h-8 w-8 lg:h-10 lg:w-10 xl:h-12 xl:w-12" 
+									isScrolled
+										? "h-8 w-8 lg:h-10 lg:w-10 xl:h-12 xl:w-12"
 										: "h-10 w-10 lg:h-14 lg:w-14 xl:h-16 xl:w-16"
 								}`}
 							/>
@@ -161,13 +171,15 @@ export default function Navbar() {
 						<a
 							href='tel:8337762243'
 							className='transition-all duration-300 hover:opacity-90 hover:scale-110'>
-							<img
+							<Image
 								src='/icons/phone-call.png'
 								alt='Call (833) PROBAID 7762243'
-								className={`transition-all duration-300 ${
-									isScrolled 
-										? "h-8 w-auto lg:h-10 xl:h-12" 
-										: "h-10 w-auto lg:h-14 xl:h-16"
+								width={200}
+								height={64}
+								className={`w-auto transition-all duration-300 ${
+									isScrolled
+										? "h-8 lg:h-10 xl:h-12"
+										: "h-10 lg:h-14 xl:h-16"
 								}`}
 							/>
 						</a>
@@ -223,10 +235,12 @@ export default function Navbar() {
 						{/* Header inside menu */}
 						<div className='flex items-center justify-between border-b border-gray-200 p-4'>
 							<Link href='/' onClick={() => toggleMenu()}>
-								<img
+								<Image
 									src='/images/footer-logo.png'
 									alt='833PROBAID Logo'
-									className='w-32'
+									width={128}
+									height={32}
+									className='h-auto w-32'
 								/>
 							</Link>
 							<button
@@ -288,10 +302,12 @@ export default function Navbar() {
 								target='_blank'
 								rel='noopener noreferrer'
 								className='flex justify-center transition-opacity hover:opacity-80'>
-								<img
+								<Image
 									src='/icons/instagram.png'
 									alt='Instagram'
-									className='mx-auto h-12 w-12'
+									width={48}
+									height={48}
+									className='h-12 w-12'
 								/>
 							</a>
 							<a
@@ -299,10 +315,12 @@ export default function Navbar() {
 								target='_blank'
 								rel='noopener noreferrer'
 								className='flex justify-center transition-opacity hover:opacity-80'>
-								<img
+								<Image
 									src='/icons/facebook.png'
 									alt='Facebook'
-									className='mx-auto h-12 w-12'
+									width={48}
+									height={48}
+									className='h-12 w-12'
 								/>
 							</a>
 							<a
@@ -310,10 +328,12 @@ export default function Navbar() {
 								target='_blank'
 								rel='noopener noreferrer'
 								className='flex justify-center transition-opacity hover:opacity-80'>
-								<img
+								<Image
 									src='/icons/linkedin.png'
 									alt='LinkedIn'
-									className='mx-auto h-12 w-12'
+									width={48}
+									height={48}
+									className='h-12 w-12'
 								/>
 							</a>
 						</div>
@@ -321,10 +341,12 @@ export default function Navbar() {
 							<a
 								href='tel:8337762243'
 								className='flex justify-center transition-opacity hover:opacity-90'>
-								<img
+								<Image
 									src='/icons/phone-call.png'
 									alt='Call (833) PROBAID 7762243'
-									className='mx-auto h-12 w-auto'
+									width={200}
+									height={48}
+									className='h-12 w-auto'
 								/>
 							</a>
 						</div>
