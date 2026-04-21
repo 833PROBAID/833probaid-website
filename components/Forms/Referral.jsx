@@ -466,17 +466,17 @@ const Form = ({ readOnly = false, initialData = null }) => {
 									<div className='col-span-3 bg-white pr-12 py-2 pl-4 flex items-center'>
 										<img
 											src='/images/footer-logo.png'
-											alt=''
+											alt='footer logo'
 											className='w-full h-auto'
 										/>
 									</div>
-									<div className='bg-[#FD7702] -ml-9 border-[21px] border-r-0 border-[#0097A7] text-white px-6 py-4 font-bold text-[3.7rem] uppercase col-span-4 rounded-l-full flex items-center justify-center'>
+									<div className='bg-[#FD7702] -ml-9 border-21 border-r-0 border-[#0097A7] text-white px-6 py-4 font-bold text-[3.7rem] uppercase col-span-4 rounded-l-full flex items-center justify-center'>
 										Referral Form
 									</div>
 								</div>
 							</div>
 
-							<form className='relative mt-4 mx-1 px-1 mx-5'>
+							<form className='relative mt-4 mx-1 px-1 md:mx-5'>
 								<fieldset
 									disabled={readOnly}
 									style={{

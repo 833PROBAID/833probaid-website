@@ -141,6 +141,7 @@ export default function DashboardLayout({ children }) {
 											alt='833PROBAID logo'
 											width={34}
 											height={34}
+											style={{ width: 'auto' }}
 											className='h-8 w-auto object-contain'
 										/>
 									</div>

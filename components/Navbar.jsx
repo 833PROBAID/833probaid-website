@@ -71,11 +71,13 @@ export default function Navbar() {
                 alt="833PROBAID Logo"
                 width={240}
                 height={60}
+                sizes="(max-width: 768px) 176px, (max-width: 1280px) 208px, 240px"
                 priority
+                style={{ height: 'auto' }}
                 className={`transition-all duration-300 ${
                   isScrolled
-                    ? "w-32 md:w-32 lg:w-40 xl:w-44"
-                    : "w-44 md:w-40 lg:w-52 xl:w-60"
+                    ? "h-auto w-32 md:w-32 lg:w-40 xl:w-44"
+                    : "h-auto w-44 md:w-40 lg:w-52 xl:w-60"
                 }`}
               />
             </Link>
@@ -252,6 +254,7 @@ export default function Navbar() {
                   alt="833PROBAID Logo"
                   width={128}
                   height={32}
+                  sizes="128px"
                   style={{ height: "auto" }}
                   className="h-auto w-32"
                 />

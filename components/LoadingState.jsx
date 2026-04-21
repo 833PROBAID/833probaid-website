@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 
 function BrandLogo({ size = "md" }) {
 	const logoClass =
@@ -11,12 +12,15 @@ function BrandLogo({ size = "md" }) {
 				: "h-14 sm:h-16 w-auto";
 
 	return (
-		<img
+		<Image
 			src='/images/footer-logo.png'
 			alt='833PROBAID'
+			width={240}
+			height={60}
+			sizes={size === "sm" ? "192px" : size === "lg" ? "320px" : "256px"}
+			priority
+			style={{ width: 'auto' }}
 			className={`mx-auto ${logoClass} drop-shadow-[0_10px_18px_rgba(0,0,0,0.25)]`}
-			loading='eager'
-			decoding='async'
 		/>
 	);
 }

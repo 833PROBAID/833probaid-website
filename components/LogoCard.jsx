@@ -71,7 +71,6 @@ export default function LogoCard() {
 								<img
 									src='/images/footer-logo.png'
 									alt='Footer logo'
-									style={{ width: "100%", height: "auto", marginBottom: "28px" }}
 									className='h-auto w-full'
 								/>
 								<p

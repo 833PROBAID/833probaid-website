@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -330,7 +332,7 @@ export const TextInput = React.forwardRef(
 							if (onBlur) onBlur(e);
 						}}
 						autoComplete='off'
-						className={`w-full h-10 ${borderSize} border-[#0097A7] ${padding} bg-gray-200 focus:outline-none focus:ring-2 focus:ring-[#FD7702] focus:ring-offset-0 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-bold ${textStyle} ${inputClass}`}
+						className={`w-full ${borderSize} border-[#0097A7] ${padding} bg-gray-200 focus:outline-[#FD7702] transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${textStyle} ${inputClass}`}
 						{...props}
 					/>
 					{/* Loading indicator */}
@@ -704,7 +706,7 @@ export const TextArea = React.forwardRef(
 							e.target.style.height = "auto";
 							e.target.style.height = e.target.scrollHeight + "px";
 						}}
-						className={`w-full ${borderSize} border-[#0097A7] ${padding} bg-gray-200 focus:outline-none focus:ring-2 focus:ring-[#FD7702] focus:ring-offset-0 transition-colors disabled:opacity-50 disabled:cursor-not-allowed resize-none overflow-hidden leading-relaxed font-bold ${textStyle} ${inputClass}`}
+						className={`w-full ${borderSize} border-[#0097A7] ${padding} bg-gray-200 focus:outline-[#FD7702] transition-colors disabled:opacity-50 disabled:cursor-not-allowed resize-none overflow-hidden leading-relaxed ${textStyle} ${inputClass}`}
 						{...props}
 					/>
 					{isLoadingSuggestions && showDropdown && (
@@ -806,15 +808,6 @@ export const DateSelector = ({
 				disabled ? "pointer-events-none cursor-not-allowed" : ""
 			}`}
 			style={widthConfig.style || {}}>
-			<style>{`
-				.probaid-datepicker { font-size: 0.6rem !important; }
-				.probaid-datepicker .react-datepicker__header { padding: 2px 0 !important; }
-				.probaid-datepicker .react-datepicker__current-month { font-size: 0.65rem !important; margin-bottom: 1px !important; }
-				.probaid-datepicker .react-datepicker__day-name,
-				.probaid-datepicker .react-datepicker__day { width: 1.1rem !important; line-height: 1.1rem !important; margin: 1px !important; }
-				.probaid-datepicker .react-datepicker__navigation { top: 3px !important; }
-				.probaid-datepicker .react-datepicker__month { margin: 2px !important; }
-			`}</style>
 			{label && (
 				<label
 					className={`block font-bold ${labelSize} mb-1 whitespace-nowrap min-w-max`}>
@@ -830,12 +823,12 @@ export const DateSelector = ({
 				required={required}
 				dateFormat='MM-dd-yyyy'
 				highlightDates={[]}
-				calendarClassName='no-today-highlight probaid-datepicker'
+				calendarClassName='no-today-highlight'
 				customInput={
 					<input
 						inputMode='numeric'
 						pattern='\d{2}-\d{2}-\d{4}'
-						className={`w-full h-10 ${borderSize} border-[#0097A7] ${padding} bg-gray-200 focus:outline-none focus:ring-2 focus:ring-[#FD7702] focus:ring-offset-0 transition-colors cursor-pointer font-bold ${textStyle}`}
+						className={`w-full ${borderSize} border-[#0097A7] ${padding} bg-gray-200 focus:outline-[#FD7702] transition-colors cursor-pointer ${textStyle}`}
 					/>
 				}
 				{...props}
@@ -853,30 +846,16 @@ export const FileUpload = ({
 	containerClass = "",
 	disabled = false,
 	multiple = false,
-	value = null,
-	inputKey,
 }) => {
 	const widthConfig = getWidthStyles(width);
-	const fileName =
-		value instanceof File
-			? value.name
-			: value && typeof value === "object"
-				? value.originalName || value.name || null
-				: null;
-	const hasFile = !!fileName;
 
 	return (
-		<label
-			className={`block h-10 border-[3.5px] px-2 py-1 cursor-pointer transition-colors font-bold ${
-				hasFile
-					? "border-green-500 bg-green-50 text-green-700 hover:bg-green-100"
-					: "border-[#0097A7] bg-gray-200 text-[#FD7702] hover:text-[#0097A7]"
-			} ${widthConfig.className || ""} ${containerClass} ${
-				disabled ? "opacity-50 cursor-not-allowed pointer-events-none" : ""
-			}`}
+		<div
+			className={`border-[3.5px] border-[#0097A7] px-2 py-2 text-[#FD7702] bg-gray-200 hover:text-[#0097A7] cursor-pointer transition-colors font-bold ${
+				widthConfig.className || ""
+			} ${containerClass} ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
 			style={widthConfig.style || {}}>
 			<input
-				key={inputKey}
 				type='file'
 				name={name}
 				onChange={onChange}
@@ -885,13 +864,11 @@ export const FileUpload = ({
 				disabled={disabled}
 				multiple={multiple}
 			/>
-			<div className='flex items-center justify-center gap-2 overflow-hidden'>
-				<i className={hasFile ? "fas fa-check-circle flex-shrink-0" : "fas fa-paperclip flex-shrink-0"}></i>
-				<span className='truncate' title={fileName || label}>
-					{fileName || label}
-				</span>
+			<div className='flex items-center justify-center gap-2'>
+				<i className='fas fa-paperclip'></i>
+				{label}
 			</div>
-		</label>
+		</div>
 	);
 };
 
@@ -951,7 +928,7 @@ export const RadioButton = ({
 			}}>
 			<div className='relative cursor-pointer'>
 				<div
-					className={`h-8 w-8 -mr-3 z-50 rounded-full border-2 bg-white focus:ring-2 transition-all ${borderClass} ${focusRingClass}`}>
+					className={`h-8 w-8 -mr-2.5 z-50 rounded-full border-2 bg-white focus:ring-2 transition-all ${borderClass} ${focusRingClass}`}>
 					{isSelected && (
 						<div
 							className='absolute top-1.5 left-1.5 h-5 w-5 rounded-full z-40'
@@ -965,9 +942,13 @@ export const RadioButton = ({
 			</div>
 
 			<span
-				className={`pr-2.5 pl-4 py-1 rounded font-bold uppercase text-sm text-[15px] line-height-6 w-full border ${
-					color === "orange" ? "border-[#FD7702]" : "border-[#0097A7]"
-				} ${bgColor} text-white`}>
+				className={`pr-2.5 pl-4 py-1 rounded font-bold uppercase text-sm text-[15px] line-height-6 w-full ${
+					isSelected
+						? `${bgColor} text-white`
+						: `${bgColor} text-white border ${
+								color === "orange" ? "border-[#FD7702]" : "border-[#0097A7]"
+						  }`
+				}`}>
 				{label}
 			</span>
 		</div>
@@ -1056,7 +1037,8 @@ export const FormSection = ({
 			{...rest}>
 			<div className='relative bg-[#0097A7] py-2 pl-16 text-white font-semibold text-3xl uppercase'>
 				<div className='absolute left-4 top-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[4rem] h-[4rem] rounded-full bg-[#FD7702] flex items-center justify-center z-10 border-[6px] border-[#0097A7]'>
-					<i className={`fas ${icon} text-2xl`}></i>
+					<i
+						className={`fas ${icon} flex items-center justify-center w-6 h-6`}></i>
 				</div>
 				{title}
 			</div>

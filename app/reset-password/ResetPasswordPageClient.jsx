@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../../contexts/AuthContext";
@@ -73,7 +74,15 @@ export default function ResetPasswordPage() {
 			<div className='w-full max-w-md'>
 				<div className='mb-8 text-center'>
 					<Link href='/'>
-						<img src='/images/footer-logo.png' alt='Logo' className='mx-auto mb-4 h-16' />
+						<Image
+							src='/images/footer-logo.png'
+							alt='Logo'
+							width={240}
+							height={60}
+							sizes='240px'
+							style={{ width: 'auto' }}
+							className='mx-auto mb-4 h-16 w-auto'
+						/>
 					</Link>
 					<h1 className='font-anton text-3xl text-gray-800'>Reset Password</h1>
 					<p className='font-montserrat mt-2 text-gray-600'>Securely recover access to your account</p>

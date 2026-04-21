@@ -33,7 +33,6 @@ export default async function connectToDatabase() {
 
 	try {
 		const db = await connectionState.promise;
-		connectionState.isConnected = db.connections[0].readyState;
 		connectionState.isConnected = mongoose.connection.readyState;
 	} finally {
 		connectionState.promise = null;

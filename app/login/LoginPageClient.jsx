@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../../contexts/AuthContext";
@@ -71,10 +72,14 @@ export default function LoginPage() {
 			<div className='w-full max-w-md'>
 				<div className='mb-8 text-center'>
 					<Link href='/'>
-						<img
+						<Image
 							src='/images/footer-logo.png'
 							alt='Logo'
-							className='mx-auto mb-4 h-16'
+							width={240}
+							height={60}
+							sizes='240px'
+							style={{ width: 'auto' }}
+							className='mx-auto mb-4 h-16 w-auto'
 						/>
 					</Link>
 					<h1 className='font-anton text-3xl text-gray-800'>Welcome Back</h1>
@@ -205,11 +210,11 @@ export default function LoginPage() {
 						className='font-montserrat block text-sm text-gray-600 hover:text-primary'>
 							Forgot password? Reset it
 					</Link>
-					<Link
+					{/* <Link
 						href='/signup'
 						className='font-montserrat block text-sm text-gray-600 hover:text-primary'>
 							Need an account? Sign up
-					</Link>
+					</Link> */}
 					<Link
 						href='/'
 						className='font-montserrat block text-sm text-gray-600 hover:text-primary'>
