@@ -3,6 +3,11 @@ import { jwtVerify } from "jose";
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
+const ALLOWED_CORS_ORIGINS = new Set([
+	"https://833probaid.com",
+	"https://833probate.com",
+]);
+
 const getSecretKey = () => {
 	if (!JWT_SECRET) {
 		throw new Error("JWT_SECRET is not set");
@@ -78,31 +83,31 @@ function addSecurityHeaders(response, options = {}) {
 	return response;
 }
 
-function isOriginAllowed(origin) {
-	const allowedOrigins = [process.env.FRONTEND_URL];
-
-	// Add development origins only in development mode
-	if (process.env.NODE_ENV === "development") {
-		allowedOrigins.push("http://localhost:3000", "http://localhost:3001");
-	}
-
-	// If no origin provided, only allow in development
-	if (!origin || origin === "null" || origin === "undefined") {
-		return process.env.NODE_ENV === "development";
-	}
-
-	// Parse and normalize origin URL
-	let baseOrigin = origin;
+function normalizeOrigin(origin) {
+	if (!origin || origin === "null" || origin === "undefined") return null;
 	try {
 		const url = new URL(origin);
-		baseOrigin = `${url.protocol}//${url.host}`;
-	} catch (error) {
-		console.warn("🔒 PROXY: Failed to parse origin URL:", origin);
-		return false;
+		return `${url.protocol}//${url.host}`;
+	} catch {
+		return null;
+	}
+}
+
+function isAllowedCorsOrigin(origin) {
+	const normalizedOrigin = normalizeOrigin(origin);
+	if (!normalizedOrigin) return false;
+
+	// Keep local development workable without opening production CORS.
+	if (process.env.NODE_ENV === "development") {
+		if (
+			normalizedOrigin === "http://localhost:3000" ||
+			normalizedOrigin === "http://localhost:3001"
+		) {
+			return true;
+		}
 	}
 
-	const isAllowed = allowedOrigins.includes(baseOrigin);
-	return isAllowed;
+	return ALLOWED_CORS_ORIGINS.has(normalizedOrigin);
 }
 
 /**
@@ -211,46 +216,30 @@ export async function proxy(request) {
 		return response;
 	}
 
-	// Handle CORS for API routes
+	// Handle API routes
 	if (pathname.startsWith("/api/")) {
-		const origin = request.headers.get("Origin");
-		const mobileApiKey = request.headers.get("X-Mobile-API-Key");
-		const isMobileApp = !!mobileApiKey;
+		const origin = request.headers.get("origin");
+		const isAllowedOrigin = isAllowedCorsOrigin(origin);
 
-		// For preflight requests
+		// Handle CORS preflight requests for allowed origins only.
 		if (request.method === "OPTIONS") {
-			// Mobile app preflight
-			if (isMobileApp) {
-				return new NextResponse(null, {
-					status: 200,
-					headers: {
-						"Access-Control-Allow-Origin": "*",
-						"Access-Control-Allow-Methods":
-							"GET, POST, PUT, DELETE, OPTIONS, PATCH",
-						"Access-Control-Allow-Headers":
-							"Content-Type, Authorization, X-API-Key, X-Mobile-API-Key",
-						"Access-Control-Allow-Credentials": "false",
-						"Access-Control-Max-Age": "86400",
-					},
-				});
-			}
-			// Web app preflight
-			else if (origin && isOriginAllowed(origin)) {
-				return new NextResponse(null, {
-					status: 200,
-					headers: {
-						"Access-Control-Allow-Origin": origin,
-						"Access-Control-Allow-Methods":
-							"GET, POST, PUT, DELETE, OPTIONS, PATCH",
-						"Access-Control-Allow-Headers":
-							"Content-Type, Authorization, X-API-Key, X-CSRF-Token, X-TOTP-Code, X-Wallet-Address",
-						"Access-Control-Allow-Credentials": "true",
-						"Access-Control-Max-Age": "86400",
-					},
-				});
-			} else {
+			if (!isAllowedOrigin) {
 				return new NextResponse(null, { status: 403 });
 			}
+
+			return new NextResponse(null, {
+				status: 204,
+				headers: {
+					"Access-Control-Allow-Origin": normalizeOrigin(origin),
+					"Access-Control-Allow-Methods":
+						"GET, POST, PUT, PATCH, DELETE, OPTIONS",
+					"Access-Control-Allow-Headers":
+						"Content-Type, Authorization, X-API-Key, X-CSRF-Token, X-TOTP-Code, X-Wallet-Address, X-Mobile-API-Key",
+					"Access-Control-Allow-Credentials": "true",
+					"Access-Control-Max-Age": "86400",
+					Vary: "Origin",
+				},
+			});
 		}
 
 		// For admin API routes, add additional security headers
@@ -263,31 +252,10 @@ export async function proxy(request) {
 				strictCache: false,
 			});
 
-			// Mobile app CORS
-			if (isMobileApp) {
-				response.headers.set("Access-Control-Allow-Origin", "*");
-				response.headers.set("Access-Control-Allow-Credentials", "false");
-				response.headers.set(
-					"Access-Control-Allow-Methods",
-					"GET, POST, PUT, DELETE, OPTIONS, PATCH",
-				);
-				response.headers.set(
-					"Access-Control-Allow-Headers",
-					"Content-Type, Authorization, X-API-Key, X-Mobile-API-Key",
-				);
-			}
-			// Web app CORS
-			else if (origin && isOriginAllowed(origin)) {
-				response.headers.set("Access-Control-Allow-Origin", origin);
+			if (isAllowedOrigin) {
+				response.headers.set("Access-Control-Allow-Origin", normalizeOrigin(origin));
 				response.headers.set("Access-Control-Allow-Credentials", "true");
-				response.headers.set(
-					"Access-Control-Allow-Methods",
-					"GET, POST, PUT, DELETE, OPTIONS, PATCH",
-				);
-				response.headers.set(
-					"Access-Control-Allow-Headers",
-					"Content-Type, Authorization, X-API-Key, X-CSRF-Token, X-TOTP-Code, X-Wallet-Address",
-				);
+				response.headers.set("Vary", "Origin");
 			}
 
 			return response;
@@ -303,32 +271,10 @@ export async function proxy(request) {
 			strictCache: false,
 		});
 
-		// CORS: Set CORS headers with all required methods and headers
-		// This ensures CORS works even if routes don't explicitly set headers
-		if (isMobileApp) {
-			response.headers.set("Access-Control-Allow-Origin", "*");
-			response.headers.set("Access-Control-Allow-Credentials", "false");
-			response.headers.set(
-				"Access-Control-Allow-Methods",
-				"GET, POST, PUT, DELETE, OPTIONS, PATCH",
-			);
-			response.headers.set(
-				"Access-Control-Allow-Headers",
-				"Content-Type, Authorization, X-API-Key, X-Mobile-API-Key",
-			);
-		}
-		// Web app CORS
-		else if (origin && isOriginAllowed(origin)) {
-			response.headers.set("Access-Control-Allow-Origin", origin);
+		if (isAllowedOrigin) {
+			response.headers.set("Access-Control-Allow-Origin", normalizeOrigin(origin));
 			response.headers.set("Access-Control-Allow-Credentials", "true");
-			response.headers.set(
-				"Access-Control-Allow-Methods",
-				"GET, POST, PUT, DELETE, OPTIONS, PATCH",
-			);
-			response.headers.set(
-				"Access-Control-Allow-Headers",
-				"Content-Type, Authorization, X-API-Key, X-CSRF-Token, X-TOTP-Code, X-Wallet-Address",
-			);
+			response.headers.set("Vary", "Origin");
 		}
 
 		return response;
