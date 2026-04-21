@@ -51,15 +51,15 @@ export default function Navbar() {
 
   return (
     <header
-      className={`sticky top-0 z-50 transition-all duration-300 ${
+      className={`sticky top-0 z-50 transition-colors duration-300 ${
         isScrolled
-          ? "bg-white/70 backdrop-blur-md shadow-xl"
-          : "bg-white/80 backdrop-blur-sm shadow-lg"
+          ? "bg-white/95 shadow-xl"
+          : "bg-white/95 shadow-lg"
       }`}
     >
       <div className="container mx-auto px-4">
         <div
-          className={`flex items-center justify-between transition-all duration-300 ${
+          className={`flex items-center justify-between transition-[padding] duration-300 ${
             isScrolled ? "py-2" : "py-4"
           }`}
         >
@@ -74,7 +74,7 @@ export default function Navbar() {
                 sizes="(max-width: 768px) 176px, (max-width: 1280px) 208px, 240px"
                 priority
                 style={{ height: 'auto' }}
-                className={`transition-all duration-300 ${
+                className={`transition-[width] duration-300 ${
                   isScrolled
                     ? "h-auto w-32 md:w-32 lg:w-40 xl:w-44"
                     : "h-auto w-44 md:w-40 lg:w-52 xl:w-60"
@@ -87,7 +87,7 @@ export default function Navbar() {
           <nav className="hidden items-center space-x-8 md:flex">
             <Link
               href="/"
-              className={`font-bold transition-all duration-300 ${
+              className={`font-bold transition-[color,font-size] duration-300 ${
                 isScrolled ? "text-xl lg:text-2xl" : "text-2xl lg:text-3xl"
               } ${
                 pathname === "/"
@@ -99,7 +99,7 @@ export default function Navbar() {
             </Link>
             <Link
               href="/blogs"
-              className={`font-bold transition-all duration-300 ${
+              className={`font-bold transition-[color,font-size] duration-300 ${
                 isScrolled ? "text-xl lg:text-2xl" : "text-2xl lg:text-3xl"
               } ${
                 pathname.startsWith("/blogs")
@@ -111,7 +111,7 @@ export default function Navbar() {
             </Link>
             <Link
               href="/videos"
-              className={`font-bold transition-all duration-300 ${
+              className={`font-bold transition-[color,font-size] duration-300 ${
                 isScrolled ? "text-xl lg:text-2xl" : "text-2xl lg:text-3xl"
               } ${
                 pathname.startsWith("/videos")
@@ -129,14 +129,14 @@ export default function Navbar() {
               href="https://instagram.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="transition-all duration-300 hover:opacity-80 hover:scale-110"
+              className="transition-[transform,opacity] duration-300 hover:opacity-80 hover:scale-110"
             >
               <Image
                 src="/icons/instagram.png"
                 alt="Instagram"
                 width={64}
                 height={64}
-                className={`transition-all duration-300 ${
+                className={`transition-[width,height] duration-300 ${
                   isScrolled
                     ? "h-8 w-8 lg:h-10 lg:w-10 xl:h-12 xl:w-12"
                     : "h-10 w-10 lg:h-14 lg:w-14 xl:h-16 xl:w-16"
@@ -147,14 +147,14 @@ export default function Navbar() {
               href="https://facebook.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="transition-all duration-300 hover:opacity-80 hover:scale-110"
+              className="transition-[transform,opacity] duration-300 hover:opacity-80 hover:scale-110"
             >
               <Image
                 src="/icons/facebook.png"
                 alt="Facebook"
                 width={64}
                 height={64}
-                className={`transition-all duration-300 ${
+                className={`transition-[width,height] duration-300 ${
                   isScrolled
                     ? "h-8 w-8 lg:h-10 lg:w-10 xl:h-12 xl:w-12"
                     : "h-10 w-10 lg:h-14 lg:w-14 xl:h-16 xl:w-16"
@@ -165,14 +165,14 @@ export default function Navbar() {
               href="https://linkedin.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="transition-all duration-300 hover:opacity-80 hover:scale-110"
+              className="transition-[transform,opacity] duration-300 hover:opacity-80 hover:scale-110"
             >
               <Image
                 src="/icons/linkedin.png"
                 alt="LinkedIn"
                 width={64}
                 height={64}
-                className={`transition-all duration-300 ${
+                className={`transition-[width,height] duration-300 ${
                   isScrolled
                     ? "h-8 w-8 lg:h-10 lg:w-10 xl:h-12 xl:w-12"
                     : "h-10 w-10 lg:h-14 lg:w-14 xl:h-16 xl:w-16"
@@ -181,14 +181,14 @@ export default function Navbar() {
             </a>
             <a
               href="tel:8337762243"
-              className="transition-all duration-300 hover:opacity-90 hover:scale-110"
+              className="transition-[transform,opacity] duration-300 hover:opacity-90 hover:scale-110"
             >
               <Image
                 src="/icons/phone-call.png"
                 alt="Call (833) PROBAID 7762243"
                 width={200}
                 height={100}
-                className={`w-auto transition-all duration-300 ${
+                className={`w-auto transition-[height] duration-300 ${
                   isScrolled ? "h-8 lg:h-10 xl:h-12" : "h-10 lg:h-14 xl:h-16"
                 }`}
               />
@@ -198,14 +198,14 @@ export default function Navbar() {
           {/* Mobile Menu Button */}
           <button
             onClick={toggleMenu}
-            className={`rounded-lg p-2 transition-all duration-300 hover:bg-gray-100 md:hidden ${
+            className={`rounded-lg p-2 transition-[background-color,transform] duration-300 hover:bg-gray-100 md:hidden ${
               isScrolled ? "scale-90" : "scale-100"
             }`}
             aria-label="Toggle menu"
           >
             {isMenuOpen ? (
               <svg
-                className={`text-primary font-bold transition-all duration-300 ${
+                className={`text-primary font-bold transition-[width,height] duration-300 ${
                   isScrolled ? "h-7 w-7" : "h-8 w-8"
                 }`}
                 fill="none"
@@ -221,7 +221,7 @@ export default function Navbar() {
               </svg>
             ) : (
               <svg
-                className={`text-primary font-bold transition-all duration-300 ${
+                className={`text-primary font-bold transition-[width,height] duration-300 ${
                   isScrolled ? "h-7 w-7" : "h-8 w-8"
                 }`}
                 fill="none"
@@ -242,7 +242,7 @@ export default function Navbar() {
         {/* Mobile Menu */}
         {(isMenuOpen || isClosing) && (
           <div
-            className={`fixed top-0 left-0 z-50 h-screen w-full bg-white transition-all duration-300 md:hidden ${
+            className={`fixed top-0 left-0 z-50 h-screen w-full bg-white transition-transform duration-300 md:hidden ${
               isClosing ? "animate-slideOut" : "animate-slideIn"
             }`}
           >

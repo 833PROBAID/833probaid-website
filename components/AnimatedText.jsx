@@ -51,7 +51,6 @@ export default function AnimatedText({
 				.animated-text-word {
 					animation: floatAnimation 2.5s ease-in-out infinite;
 					display: inline-block;
-					will-change: transform;
 				}
 			`}</style>
 			<Component className={className} {...props}>
