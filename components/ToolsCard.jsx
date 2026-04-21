@@ -1,10 +1,18 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import AnimatedText from "./AnimatedText";
 
 export default function ToolsCard({ id, icon, title, description, href }) {
 	const router = useRouter();
+	const [isSafariBrowser, setIsSafariBrowser] = useState(false);
+
+	useEffect(() => {
+		if (typeof window === "undefined") return;
+		const ua = window.navigator.userAgent || "";
+		setIsSafariBrowser(/^((?!chrome|android).)*safari/i.test(ua));
+	}, []);
 
 	const handleClick = (e) => {
 		if (!href) return;
@@ -28,7 +36,17 @@ export default function ToolsCard({ id, icon, title, description, href }) {
 					viewBox='0 0 397 497'
 					fill='none'
 					xmlns='http://www.w3.org/2000/svg'
-					className='h-auto w-full'>
+					className='h-auto w-full'
+					style={
+						isSafariBrowser
+							? {
+									transform: "translateZ(0)",
+									WebkitTransform: "translateZ(0)",
+									backfaceVisibility: "hidden",
+									WebkitBackfaceVisibility: "hidden",
+								}
+							: undefined
+					}>
 					<style>{`
 						.tc-icon-float {
 							animation: tcFloat 2.5s ease-in-out infinite;

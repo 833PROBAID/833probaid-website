@@ -141,14 +141,18 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
           <HomeBooksMobileShowcaseClient homeCardData={homeCardData} />
 
           {/* Desktop: Always show all */}
-          <div className="mx-auto hidden grid-cols-2 gap-14 sm:gap-16 md:gap-24 sm:grid lg:gap-20">
+          <div
+            className="mx-auto hidden grid-cols-2 gap-14 sm:gap-16 md:gap-24 sm:grid lg:gap-20"
+            style={{ contain: "layout paint" }}
+          >
             {homeCardData.length === 0 ? (
               <div className="col-span-2 py-12 text-center text-gray-500">
                 <p>No home books available at the moment.</p>
               </div>
             ) : (
               homeCardData
-                .slice(1, homeCardData.length > 1 ? -1 : homeCardData.length)
+              // .slice(1, homeCardData.length > 1 ? -1 : homeCardData.length)
+                .slice(1)
                 .map((item, i) => (
                   <HomeCard
                     key={item.id}
@@ -166,7 +170,7 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
           </div>
 
           {/* Desktop: Always show last big card */}
-          <div className="mt-4 hidden text-white sm:mt-10 md:mt-14 sm:block">
+          {/* <div className="mt-4 hidden text-white sm:mt-10 md:mt-14 sm:block">
             {homeCardData.length > 1 && (
               <div className="flex w-full justify-center">
                 <div className="w-full">
@@ -184,7 +188,7 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
                 </div>
               </div>
             )}
-          </div>
+          </div> */}
         </section>
         <section className={sectionContainerClass}>
           <div className="my-8 grid grid-cols-1 items-center gap-4 md:grid-cols-2 md:my-10 md:flex-row lg:my-14 lg:gap-8 xl:my-16">

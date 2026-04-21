@@ -1,6 +1,7 @@
 "use client";
 
-// Reusable component for animated text with word-by-word hover
+const supStyle = { verticalAlign: "super", fontSize: "0.7em", lineHeight: "1" };
+
 export default function AnimatedText({
 	text,
 	className = "",
@@ -8,18 +9,12 @@ export default function AnimatedText({
 	animate = false,
 	...props
 }) {
-	// When not animating, render plain text to avoid hundreds of extra DOM nodes
-	// which cause Safari scroll jank
 	if (!animate) {
 		const rendered = text.includes("®")
 			? text.split("®").reduce((acc, part, i) => (
 					i === 0
 						? [part]
-						: [
-								...acc,
-								<span key={i} style={{ verticalAlign: "super", fontSize: "0.7em", lineHeight: "0" }}>®</span>,
-								part,
-						  ]
+						: [...acc, <span key={i} style={supStyle}>®</span>, part]
 			  ), [])
 			: text;
 		return <Component className={className} {...props}>{rendered}</Component>;
@@ -33,7 +28,7 @@ export default function AnimatedText({
 			return (
 				<>
 					{parts[0]}
-					<span style={{ verticalAlign: "super", fontSize: "0.7em", lineHeight: "0" }}>®</span>
+					<span style={supStyle}>®</span>
 					{parts[1]}
 				</>
 			);
@@ -42,29 +37,22 @@ export default function AnimatedText({
 	};
 
 	return (
-		<>
-			<style>{`
-				@keyframes floatAnimation {
-					0%, 100% { transform: translateY(0px); }
-					50% { transform: translateY(-8px); }
-				}
-				.animated-text-word {
-					animation: floatAnimation 2.5s ease-in-out infinite;
-					display: inline-block;
-				}
-			`}</style>
-			<Component className={className} {...props}>
-				{words.map((word, index) => (
-					<span key={index}>
-						<span
-						className='animated-text-word cursor-default transition-transform duration-300 ease-out md:hover:scale-110 md:hover:-translate-y-1'
+		<Component className={className} {...props}>
+			{words.map((word, index) => (
+				<span key={index}>
+					{/* Outer span owns the float animation; inner span owns the hover transform.
+					    Splitting them prevents Safari from dropping one transform when both
+					    target the same element. */}
+					<span
+						className="animated-word-outer cursor-default"
 						style={{ animationDelay: `${index * 0.1}s` }}>
+						<span className="animated-word-inner transition-transform duration-300 ease-out md:hover:scale-110 md:hover:-translate-y-1">
 							{renderWord(word)}
 						</span>
-						{index < words.length - 1 && " "}
 					</span>
-				))}
-			</Component>
-		</>
+					{index < words.length - 1 && " "}
+				</span>
+			))}
+		</Component>
 	);
 }

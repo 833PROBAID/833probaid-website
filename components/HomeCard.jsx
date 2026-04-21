@@ -3,7 +3,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useId, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useState } from "react";
 
 export default function HomeCard({
 	id: legacyId,
@@ -19,6 +19,7 @@ export default function HomeCard({
 }) {
 	const reactId = useId();
 	const [isOpening, setIsOpening] = useState(false);
+	const [isSafariBrowser, setIsSafariBrowser] = useState(false);
 	const computedAlignIndex =
 		typeof alignIndex === "number" && Number.isFinite(alignIndex)
 			? alignIndex
@@ -43,6 +44,12 @@ export default function HomeCard({
 	const bookLayerClass = `hc-book-layer ${pageSideClass} ${pageAnimClass}`;
 
 	const router = useRouter();
+
+	useEffect(() => {
+		if (typeof window === "undefined") return;
+		const ua = window.navigator.userAgent || "";
+		setIsSafariBrowser(/^((?!chrome|android).)*safari/i.test(ua));
+	}, []);
 
 	const runAction = () => {
 		if (slug) {
@@ -91,224 +98,18 @@ export default function HomeCard({
 					xmlns='http://www.w3.org/2000/svg'
 					className='h-auto w-full overflow-visible'
 					preserveAspectRatio='xMidYMid meet'
-					style={{ position: "relative", zIndex: 3 }}>
-					<style>{`
-						.hc-card-wrapper {
-							filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15));
-							transform: translateZ(0);
-							will-change: filter;
-							backface-visibility: hidden;
-							-webkit-transform: translateZ(0);
-							-webkit-backface-visibility: hidden;
-						}
-						.hc-book-layer {
-							transform-box: fill-box;
-							will-change: transform;
-						}
-						.hc-content-clip {
-							overflow: hidden;
-						}
-						.hc-content-clip foreignObject {
-							overflow: hidden;
-						}
-						.hc-icon-float {
-							animation: hcIconFloat 2.5s ease-in-out infinite;
-							transform-box: fill-box;
-							transform-origin: center center;
-							overflow: visible;
-						}
-						.hc-icon-wrapper {
-							transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-							transform-box: fill-box;
-							transform-origin: center center;
-							overflow: visible;
-						}
-						.hc-card-wrapper:hover .hc-icon-wrapper,
-						.hc-card-wrapper:has(.hc-button-float:hover) .hc-icon-wrapper {
-							transform: rotate(-15deg) scale(1.1);
-						}
-						@keyframes hcIconFloat {
-							0%, 100% {
-								transform: translateY(0px);
-							}
-							50% {
-								transform: translateY(-8px);
-							}
-						}
-						.hc-title-wrapper {
-						}
-						.hc-subtitle-wrapper {
-						}
-						.hc-description-wrapper {
-						}
-						.hc-title-text {
-							font-family: "Montserrat", sans-serif;
-							font-size: 27px;
-							font-weight: 700;
-							color: white;
-							text-transform: uppercase;
-							line-height: 1.2;
-							padding: 0 40px;
-							text-shadow: 2px 2px 4px rgba(0,0,0,0.5), 0px 4px 8px rgba(0,0,0,0.3);
-							letter-spacing: 2.5px;
-							-webkit-font-smoothing: antialiased;
-							-moz-osx-font-smoothing: grayscale;
-						}
-						.hc-subtitle-text {
-							font-family: "Montserrat", sans-serif;
-							font-size: 25px;
-							font-weight: 900;
-							color: white;
-							line-height: 1.3;
-							padding: 0 40px;
-							text-shadow: 2px 2px 4px rgba(0,0,0,0.4), 0px 2px 6px rgba(0,0,0,0.3);
-							letter-spacing: 2.5px;
-							-webkit-font-smoothing: antialiased;
-							-moz-osx-font-smoothing: grayscale;
-						}
-						.hc-desc-text {
-							font-family: "Montserrat", sans-serif;
-							font-size: 25px;
-							font-weight: 600;
-							color: white;
-							line-height: 1.3;
-							padding: 0 50px;
-							text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
-							letter-spacing: 2.7px;
-							-webkit-font-smoothing: antialiased;
-							-moz-osx-font-smoothing: grayscale;
-						}
-						.hc-button-float {
-							animation: hcIconFloat 2.5s ease-in-out infinite;
-							transform-box: fill-box;
-							transform-origin: center center;
-							outline: none;
-						}
-						.hc-button-wrapper {
-							transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-							transform-box: fill-box;
-							transform-origin: center center;
-						}
-						.hc-button-float:hover .hc-button-wrapper {
-							transform: rotate(-2deg) scale(1.08);
-						}
-						.hc-holder-lip-layer { transform-box: fill-box; will-change: transform; }
-						.hc-holder-lip-left { transform-origin: 100% 50%; }
-						.hc-holder-lip-right { transform-origin: 0% 50%; }
-						.hc-holder-lip-open-left { animation: hcHolderLipLeft 0.5s ease-in-out forwards; }
-						.hc-holder-lip-open-right { animation: hcHolderLipRight 0.5s ease-in-out forwards; }
-						.hc-holder-layer { transform-box: fill-box; will-change: opacity; }
-						.hc-holder-shade { opacity: 0; }
-						.hc-holder-open { animation: hcHolderDepth 0.5s ease-in-out forwards; }
-						.hc-holder-shade-open { animation: hcHolderShade 0.5s ease-in-out forwards; }
-						.hc-spine-round { opacity: 0; transform-box: fill-box; will-change: opacity, transform; }
-						.hc-spine-round-open { animation: hcSpineRound 0.5s ease-in-out forwards; }
-						.hc-page-left { transform-origin: 0% 50%; }
-						.hc-page-right { transform-origin: 100% 50%; }
-						.hc-page-shadow { opacity: 0; }
-						.hc-thickness {
-							opacity: 0;
-							transform-box: fill-box;
-							will-change: transform, opacity;
-						}
-						.hc-thickness-left { transform-origin: left center; transform: scaleX(0.08); }
-						.hc-thickness-right { transform-origin: right center; transform: scaleX(0.08); }
-						.hc-thickness-open-left { animation: hcThicknessLeft 0.5s ease-in-out forwards; }
-						.hc-thickness-open-right { animation: hcThicknessRight 0.5s ease-in-out forwards; }
-						.hc-open-left { animation: hcBookOpenLeft 0.5s ease-in-out forwards; }
-						.hc-open-right { animation: hcBookOpenRight 0.5s ease-in-out forwards; }
-						.hc-shadow-open-left { animation: hcShadowLeft 0.5s ease-in-out forwards; }
-						.hc-shadow-open-right { animation: hcShadowRight 0.5s ease-in-out forwards; }
-						@media (prefers-reduced-motion: reduce) {
-							.hc-open-left, .hc-open-right,
-							.hc-shadow-open-left, .hc-shadow-open-right,
-							.hc-thickness-open-left, .hc-thickness-open-right,
-							.hc-holder-lip-open-left, .hc-holder-lip-open-right {
-								animation: none !important;
-							}
-						}
-						@media (max-width: 767px) {
-							.hc-card-wrapper:hover .hc-icon-wrapper,
-							.hc-card-wrapper:has(.hc-button-float:hover) .hc-icon-wrapper {
-								transform: none !important;
-							}
-							.hc-button-float:hover .hc-button-wrapper {
-								transform: none !important;
-							}
-						}
-						@keyframes hcBookOpenLeft {
-							0%   { transform: translateY(0%)     skewY(0deg)   scaleX(1);    }
-							10%  { transform: translateY(-0.05%) skewY(-10deg)  scaleX(0.92); }
-							25%  { transform: translateY(-0.15%) skewY(-30deg)  scaleX(0.70); }
-							45%  { transform: translateY(-0.28%) skewY(-57deg)  scaleX(0.40); }
-							65%  { transform: translateY(-0.33%) skewY(-74deg)  scaleX(0.22); }
-							82%  { transform: translateY(-0.35%) skewY(-83deg)  scaleX(0.14); }
-							100% { transform: translateY(-0.35%) skewY(-87deg)  scaleX(0.12); }
-						}
-						@keyframes hcBookOpenRight {
-							0%   { transform: translateY(0%)     skewY(0deg)  scaleX(1);    }
-							10%  { transform: translateY(-0.05%) skewY(10deg)  scaleX(0.92); }
-							25%  { transform: translateY(-0.15%) skewY(30deg)  scaleX(0.70); }
-							45%  { transform: translateY(-0.28%) skewY(57deg)  scaleX(0.40); }
-							65%  { transform: translateY(-0.33%) skewY(74deg)  scaleX(0.22); }
-							82%  { transform: translateY(-0.35%) skewY(83deg)  scaleX(0.14); }
-							100% { transform: translateY(-0.35%) skewY(87deg)  scaleX(0.12); }
-						}
-						@keyframes hcShadowLeft {
-							0%   { opacity: 0; }
-							100% { opacity: 0.10; }
-						}
-						@keyframes hcShadowRight {
-							0%   { opacity: 0; }
-							100% { opacity: 0.10; }
-						}
-						@keyframes hcThicknessLeft {
-							0%   { opacity: 0;    transform: scaleX(0.20); }
-							25%  { opacity: 0.25; transform: scaleX(0.55); }
-							60%  { opacity: 0.50; transform: scaleX(0.85); }
-							100% { opacity: 0.65; transform: scaleX(1); }
-						}
-						@keyframes hcThicknessRight {
-							0%   { opacity: 0;    transform: scaleX(0.20); }
-							25%  { opacity: 0.25; transform: scaleX(0.55); }
-							60%  { opacity: 0.50; transform: scaleX(0.85); }
-							100% { opacity: 0.65; transform: scaleX(1); }
-						}
-						@keyframes hcHolderDepth {
-							0%   { opacity: 1; }
-							35%  { opacity: 1; }
-							100% { opacity: 1; }
-						}
-						@keyframes hcHolderShade {
-							0%   { opacity: 0; }
-							35%  { opacity: 0.08; }
-							100% { opacity: 0.05; }
-						}
-						@keyframes hcSpineRound {
-							0%   { opacity: 0; transform: scaleX(0.70); }
-							35%  { opacity: 0.55; transform: scaleX(1); }
-							100% { opacity: 0.40; transform: scaleX(1); }
-						}
-						@keyframes hcHolderLipLeft {
-							0%   { transform: translateY(0%) skewY(0deg) scaleX(1); }
-							100% { transform: translateY(-0.15%) skewY(-16deg) scaleX(0.92); }
-						}
-						@keyframes hcHolderLipRight {
-							0%   { transform: translateY(0%) skewY(0deg) scaleX(1); }
-							100% { transform: translateY(-0.15%) skewY(16deg) scaleX(0.92); }
-						}
-						.hc-book-text {
-							opacity: 0;
-							will-change: opacity;
-						}
-						.hc-book-text-open {
-							animation: hcBookTextFade 0.5s ease-in-out forwards;
-						}
-						@keyframes hcBookTextFade {
-							0%   { opacity: 1; }
-							100% { opacity: 1; }
-						}
-					`}</style>
+					style={{
+						position: "relative",
+						zIndex: 3,
+						...(isSafariBrowser
+							? {
+									transform: "translateZ(0)",
+									WebkitTransform: "translateZ(0)",
+									backfaceVisibility: "hidden",
+									WebkitBackfaceVisibility: "hidden",
+								}
+							: {}),
+					}}>
 					<defs>
 						<linearGradient
 							id={`hc_shadow_left_${id}`}
@@ -561,6 +362,8 @@ export default function HomeCard({
 									<img
 										src={bannerImage || "/images/hero.jpg"}
 										alt='Banner'
+										loading='lazy'
+										decoding='async'
 										className='my-5'
 									/>
 									<div
