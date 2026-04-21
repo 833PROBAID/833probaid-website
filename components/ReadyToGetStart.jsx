@@ -9,10 +9,10 @@ const ReadyToGetStart = () => {
   const router = useRouter();
   const [isSafariBrowser, setIsSafariBrowser] = useState(false);
   const headingSizeClass = isSafariBrowser
-    ? "text-[36px] absolute left-24 top-18"
+    ? "md:text-[36px] md:absolute left-24 top-18"
     : "text-5xl";
   const subHeadingSizeClass = isSafariBrowser
-    ? "text-[36px]  absolute left-40 top-30"
+    ? "md:text-[36px]  md:absolute left-40 top-30"
     : "mt-6 text-5xl";
 
   useEffect(() => {
