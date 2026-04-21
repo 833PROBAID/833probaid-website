@@ -19,10 +19,7 @@ function getResendClient() {
 export async function sendOtpEmail({ to, code, subject, templateData = {} }) {
   try {
     const resend = getResendClient();
-    const from =
-      process.env.RESEND_FROM_EMAIL ||
-      process.env.SMTP_FROM ||
-      "833 PROBAID <onboarding@833probate.com>";
+    const from = "833 PROBAID <info@833probate.com>";
 
     const htmlContent = `
 		<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #1f2933;">
