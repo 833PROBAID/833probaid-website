@@ -1,8 +1,14 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { flushSync } from "react-dom";
 import { Typography } from "@material-tailwind/react";
-import { useParams, useRouter, usePathname, useSearchParams } from "next/navigation";
+import {
+  useParams,
+  useRouter,
+  usePathname,
+  useSearchParams,
+} from "next/navigation";
 import Swal from "sweetalert2";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
@@ -18,6 +24,169 @@ import {
   DEFAULT_INVOICE_NUMBER,
   deriveNextInvoiceNumber,
 } from "../utils/invoiceNumber";
+
+const PDF_COLOR_PROPERTIES = [
+  "color",
+  "backgroundColor",
+  "borderColor",
+  "borderTopColor",
+  "borderRightColor",
+  "borderBottomColor",
+  "borderLeftColor",
+  "outlineColor",
+  "textDecorationColor",
+  "columnRuleColor",
+  "caretColor",
+  "fill",
+  "stroke",
+  "webkitTextFillColor",
+  "webkitTextStrokeColor",
+];
+
+const PDF_UNSUPPORTED_COLOR_REGEX = /\b(?:lab|lch|oklab|oklch|color)\s*(?:\(|["'])/i;
+const PDF_UNSUPPORTED_COLOR_FUNCTION_GLOBAL_REGEX =
+  /(?:oklch|oklab|lab|lch|color)\((?:[^)(]+|\((?:[^)(]+|\([^)(]*\))*\))*\)/gi;
+
+const normalizePdfColor = (rawValue, canvasContext) => {
+  if (!rawValue || typeof rawValue !== "string") return rawValue;
+  const value = rawValue.trim();
+  if (!value || value === "initial" || value === "inherit") return value;
+  if (!PDF_UNSUPPORTED_COLOR_REGEX.test(value)) return value;
+  if (!canvasContext) return value;
+
+  const previous = canvasContext.fillStyle;
+  canvasContext.fillStyle = "#000000";
+  canvasContext.fillStyle = value;
+  const normalized = canvasContext.fillStyle;
+  canvasContext.fillStyle = previous;
+  return normalized || value;
+};
+
+const prepareClonedDocumentForPdf = (clonedDoc, isMac, aggressive = false) => {
+  const clonedWindow = clonedDoc.defaultView;
+  if (!clonedWindow) return;
+  const colorCanvas = clonedDoc.createElement("canvas");
+  const canvasContext = colorCanvas.getContext("2d");
+
+  const elements = clonedDoc.querySelectorAll("*");
+  elements.forEach((el) => {
+    const computedStyle = clonedWindow.getComputedStyle(el);
+
+    PDF_COLOR_PROPERTIES.forEach((property) => {
+      const value = normalizePdfColor(computedStyle[property], canvasContext);
+      if (value && value !== "initial" && value !== "inherit") {
+        el.style[property] = value;
+      }
+    });
+
+    if (aggressive) {
+      el.style.boxShadow = "none";
+      el.style.textShadow = "none";
+      el.style.filter = "none";
+      if (
+        computedStyle.backgroundImage &&
+        computedStyle.backgroundImage !== "none"
+      ) {
+        el.style.backgroundImage = "none";
+      }
+    }
+
+    if (isMac) {
+      const numericWeight = Number.parseInt(computedStyle.fontWeight, 10);
+      el.style.fontWeight =
+        numericWeight >= 500
+          ? "900"
+          : numericWeight >= 400
+            ? "700"
+            : computedStyle.fontWeight;
+      el.style.webkitFontSmoothing = "antialiased";
+      el.style.mozOsxFontSmoothing = "grayscale";
+    }
+  });
+};
+
+const sanitizeUnsupportedColorFunctionsInCss = (cssText) => {
+  if (!cssText || typeof cssText !== "string") return cssText;
+  return cssText.replace(
+    PDF_UNSUPPORTED_COLOR_FUNCTION_GLOBAL_REGEX,
+    "rgb(0, 0, 0)",
+  );
+};
+
+const sanitizeClonedStylesheetsForPdf = (clonedDoc) => {
+  const styleTags = clonedDoc.querySelectorAll("style");
+  styleTags.forEach((styleEl) => {
+    if (!styleEl.textContent) return;
+    styleEl.textContent = sanitizeUnsupportedColorFunctionsInCss(
+      styleEl.textContent,
+    );
+  });
+
+  const styledElements = clonedDoc.querySelectorAll("[style]");
+  styledElements.forEach((el) => {
+    const inlineStyle = el.getAttribute("style");
+    if (!inlineStyle) return;
+    el.setAttribute(
+      "style",
+      sanitizeUnsupportedColorFunctionsInCss(inlineStyle),
+    );
+  });
+};
+
+const inlineComputedStylesForPdf = (clonedDoc) => {
+  const clonedWindow = clonedDoc.defaultView;
+  if (!clonedWindow) return;
+
+  const colorCanvas = clonedDoc.createElement("canvas");
+  const canvasContext = colorCanvas.getContext("2d");
+  const elements = clonedDoc.querySelectorAll("*");
+
+  elements.forEach((el) => {
+    const computedStyle = clonedWindow.getComputedStyle(el);
+    for (let i = 0; i < computedStyle.length; i += 1) {
+      const property = computedStyle[i];
+      const rawValue = computedStyle.getPropertyValue(property);
+      const value = normalizePdfColor(rawValue, canvasContext);
+      if (value) {
+        el.style.setProperty(property, value);
+      }
+    }
+  });
+
+  clonedDoc
+    .querySelectorAll("style, link[rel='stylesheet']")
+    .forEach((node) => {
+      node.remove();
+    });
+};
+
+const captureCanvasForPdf = async (target, options, isMac) => {
+  try {
+    return await html2canvas(target, {
+      ...options,
+      onclone: (clonedDoc) => {
+        prepareClonedDocumentForPdf(clonedDoc, isMac, false);
+      },
+    });
+  } catch (error) {
+    const message = String(error?.message || "");
+    if (!PDF_UNSUPPORTED_COLOR_REGEX.test(message)) {
+      throw error;
+    }
+
+    console.warn(
+      "[PDF] Unsupported CSS color detected. Retrying with fallback sanitization...",
+    );
+    return html2canvas(target, {
+      ...options,
+      onclone: (clonedDoc) => {
+        sanitizeClonedStylesheetsForPdf(clonedDoc);
+        inlineComputedStylesForPdf(clonedDoc);
+        prepareClonedDocumentForPdf(clonedDoc, isMac, true);
+      },
+    });
+  }
+};
 
 const InvoiceForm = () => {
   const [showBorder, setShowBorder] = useState(false);
@@ -58,7 +227,7 @@ const InvoiceForm = () => {
           if (options?.state) {
             sessionStorage.setItem(
               "invoiceFormNavState",
-              JSON.stringify(options.state)
+              JSON.stringify(options.state),
             );
           } else {
             sessionStorage.removeItem("invoiceFormNavState");
@@ -68,7 +237,7 @@ const InvoiceForm = () => {
       if (options?.replace) router.replace(path);
       else router.push(path);
     },
-    [router]
+    [router],
   );
   const [zoomLevel, setZoomLevel] = useState(1);
   const printRef = useRef(null);
@@ -387,9 +556,12 @@ const InvoiceForm = () => {
       }
       setIsViewMode(true);
       if (createdInvoiceId) {
-        navigate(`/dashboard/invoice-management/invoice-form/${createdInvoiceId}`, {
-          state: { viewMode: true },
-        });
+        navigate(
+          `/dashboard/invoice-management/invoice-form/${createdInvoiceId}`,
+          {
+            state: { viewMode: true },
+          },
+        );
       }
       // Scroll to top after saving
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -416,7 +588,6 @@ const InvoiceForm = () => {
   const handleResetZoom = () => {
     setZoomLevel(1);
   };
-  console.log(viewBorder);
 
   // Temporarily shifts text downward inside tall inputs so html2canvas captures centered values
   const adjustInputPaddingForPdf = (rootElement) => {
@@ -452,18 +623,79 @@ const InvoiceForm = () => {
     };
   };
 
+  const triggerNativePrintPdfFallback = async () => {
+    const printableContent = document.getElementById("printable-content");
+    if (!printableContent) {
+      throw new Error("Invoice content not found for print fallback.");
+    }
+
+    const printWindow = window.open("", "_blank", "noopener,noreferrer");
+    if (!printWindow) {
+      throw new Error("Pop-up blocked. Please allow pop-ups and try again.");
+    }
+
+    const inheritedStyles = Array.from(
+      document.querySelectorAll("style, link[rel='stylesheet']"),
+    )
+      .map((node) => node.outerHTML)
+      .join("\n");
+
+    const printMarkup = `
+      <!doctype html>
+      <html>
+        <head>
+          <meta charset="utf-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <title>Invoice_${formData.invoiceNumber || Date.now()}</title>
+          ${inheritedStyles}
+          <style>
+            html, body { margin: 0; padding: 0; background: #fff; }
+            #printable-content { margin: 0 auto; }
+            @page { size: letter; margin: 6mm; }
+          </style>
+        </head>
+        <body>
+          ${printableContent.outerHTML}
+        </body>
+      </html>
+    `;
+
+    printWindow.document.open();
+    printWindow.document.write(printMarkup);
+    printWindow.document.close();
+
+    await new Promise((resolve) => {
+      let settled = false;
+      const done = () => {
+        if (settled) return;
+        settled = true;
+        resolve();
+      };
+      printWindow.onload = done;
+      setTimeout(done, 700);
+    });
+
+    printWindow.focus();
+    printWindow.print();
+    setTimeout(() => {
+      try {
+        printWindow.close();
+      } catch {}
+    }, 600);
+  };
+
   const handleDownloadPdf = async () => {
-    setViewBorder(false);
-    //wait for 500 ms to let border disappear
-    new Promise((resolve) => setTimeout(resolve, 500));
+    const isMac = /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);
+
+    flushSync(() => {
+      setViewBorder(false);
+    });
 
     const content = document.getElementById("printable-content");
     const actionButtons = document.getElementById("invoice-action-buttons");
 
-    // Store original showDashedBorders state
     const originalShowDashedBorders = showDashedBorders;
 
-    // Initialize restoration tracking
     let originalDisplayValues = new Map();
     let resetInputPadding = () => {};
     let pageHeader = null;
@@ -481,12 +713,12 @@ const InvoiceForm = () => {
     let originalFormTransform = "";
     let originalFormMaxWidth = "";
 
-    // Temporarily enable showDashedBorders to capture header/footer
     if (!showDashedBorders) {
-      setShowDashedBorders(true);
-      // Wait for state update to render the elements
-      await new Promise((resolve) => setTimeout(resolve, 250));
-      setViewBorder(false);
+      flushSync(() => {
+        setShowDashedBorders(true);
+        setViewBorder(false);
+      });
+      await new Promise((resolve) => requestAnimationFrame(resolve));
     }
 
     // Intelligent element selection using data attributes
@@ -511,11 +743,6 @@ const InvoiceForm = () => {
       return !isMainHeader && !isMainFooter && hasZ30 && hasRelativeClass;
     });
 
-    console.log(`[PDF] Found header: ${!!pageHeader}, footer: ${!!pageFooter}`);
-    console.log(
-      `[PDF] Found ${middlePageBreaks.length} middle page breaks to hide`,
-    );
-
     const paymentMethodSection = document.querySelector(
       '[data-section="payment-method"]',
     );
@@ -537,16 +764,11 @@ const InvoiceForm = () => {
     const currentScrollX = window.scrollX;
     const currentScrollY = window.scrollY;
 
-    // Store original styles to restore later
     largeDivContent = document.querySelector(".large-div-content");
     formCanvas = document.querySelector(".form-canvas");
 
-    // Find elements marked to hide in PDF
     hideInPdfElements = formCanvas.querySelectorAll(
       "[data-hide-in-pdf='true']",
-    );
-    console.log(
-      `[PDF] Found ${hideInPdfElements.length} elements with data-hide-in-pdf`,
     );
 
     originalTransform = largeDivContent?.style.transform || "";
@@ -593,24 +815,20 @@ const InvoiceForm = () => {
         actionButtons.style.display = "none";
       }
 
-      // Reset scaling and set fixed letter-size width for PDF capture
-      // US Letter size is 8.5 x 11 inches = 816 x 1056 pixels at 96 DPI
       const letterWidthPx = 816;
-      setPdfWidth(letterWidthPx);
+      flushSync(() => {
+        setPdfWidth(letterWidthPx);
+      });
       if (largeDivContent) {
         largeDivContent.style.transform = "none";
         largeDivContent.style.transformOrigin = "top left";
         largeDivContent.style.transition = "none";
         largeDivContent.style.marginBottom = "0";
       }
-
-      // Force form canvas to letter width and disable all transforms
       if (formCanvas) {
         formCanvas.style.transform = "none";
       }
-
-      // Wait for styles to apply
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      await new Promise((resolve) => requestAnimationFrame(resolve));
 
       // Update loading message
       Swal.update({
@@ -625,34 +843,19 @@ const InvoiceForm = () => {
       let headerCanvas = null;
       let headerHeight = 0;
       if (pageHeader) {
-        console.log("Capturing header...");
-        // Detect if Mac device
-        const isMac = /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);
-        headerCanvas = await html2canvas(pageHeader, {
-          scale: 1.5,
-          useCORS: true,
-          allowTaint: true,
-          logging: false,
-          backgroundColor: "#0097A7",
-          letterRendering: true,
-          onclone: (clonedDoc) => {
-            // Make fonts bolder for Mac devices
-            if (isMac) {
-              const elements = clonedDoc.querySelectorAll("*");
-              elements.forEach((el) => {
-                const weight = window.getComputedStyle(el).fontWeight;
-                el.style.fontWeight =
-                  weight >= 500 ? "900" : weight >= 400 ? "700" : weight;
-                el.style.webkitFontSmoothing = "antialiased";
-                el.style.mozOsxFontSmoothing = "grayscale";
-              });
-            }
+        headerCanvas = await captureCanvasForPdf(
+          pageHeader,
+          {
+            scale: 1.5,
+            useCORS: true,
+            allowTaint: true,
+            logging: false,
+            backgroundColor: "#0097A7",
+            letterRendering: true,
           },
-        });
+          isMac,
+        );
         headerHeight = headerCanvas.height;
-        console.log("Header captured, height:", headerHeight);
-      } else {
-        console.warn("Page header not found!");
       }
 
       // Hide elements marked with data-hide-in-pdf before capturing footer
@@ -661,15 +864,12 @@ const InvoiceForm = () => {
       );
       const footerHiddenElements = [];
       if (hideInPdfInFooter) {
-        hideInPdfInFooter.forEach((element, index) => {
+        hideInPdfInFooter.forEach((element) => {
           footerHiddenElements.push({
             element,
             originalDisplay: element.style.display,
           });
           element.style.display = "none";
-          console.log(
-            `[PDF] Hidden footer element #${index + 1} before capture`,
-          );
         });
       }
 
@@ -677,81 +877,49 @@ const InvoiceForm = () => {
       let footerCanvas = null;
       let footerHeight = 0;
       if (pageFooter) {
-        console.log("Capturing footer...");
-        // Detect if Mac device
-        const isMac = /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);
-        footerCanvas = await html2canvas(pageFooter, {
-          scale: 1.5,
-          useCORS: true,
-          allowTaint: true,
-          logging: false,
-          backgroundColor: "#0097A7",
-          letterRendering: true,
-          onclone: (clonedDoc) => {
-            // Make fonts bolder for Mac devices
-            if (isMac) {
-              const elements = clonedDoc.querySelectorAll("*");
-              elements.forEach((el) => {
-                const weight = window.getComputedStyle(el).fontWeight;
-                el.style.fontWeight =
-                  weight >= 500 ? "900" : weight >= 400 ? "700" : weight;
-                el.style.webkitFontSmoothing = "antialiased";
-                el.style.mozOsxFontSmoothing = "grayscale";
-              });
-            }
+        footerCanvas = await captureCanvasForPdf(
+          pageFooter,
+          {
+            scale: 1.5,
+            useCORS: true,
+            allowTaint: true,
+            logging: false,
+            backgroundColor: "#0097A7",
+            letterRendering: true,
           },
-        });
+          isMac,
+        );
         footerHeight = footerCanvas.height;
-        console.log("Footer captured, height:", footerHeight);
-      } else {
-        console.warn("Page footer not found!");
       }
 
-      // Restore footer elements after capture
       if (footerHiddenElements.length > 0) {
         footerHiddenElements.forEach(({ element, originalDisplay }) => {
           element.style.display = originalDisplay;
         });
-        console.log("[PDF] Restored footer elements after capture");
       }
 
-      // Now hide all page guide elements from main content capture
-      console.log("[PDF] Hiding page guide elements...");
-
-      // Store original display values for restoration
       originalDisplayValues = new Map();
 
       if (pageHeader) {
         originalDisplayValues.set(pageHeader, pageHeader.style.display);
         pageHeader.style.display = "none";
-        console.log("[PDF] Hidden main header");
       }
       if (pageFooter) {
         originalDisplayValues.set(pageFooter, pageFooter.style.display);
         pageFooter.style.display = "none";
-        console.log("[PDF] Hidden main footer");
       }
 
-      // Hide middle page break sections
-      middlePageBreaks.forEach((section, index) => {
+      middlePageBreaks.forEach((section) => {
         originalDisplayValues.set(section, section.style.display);
         section.style.display = "none";
-        console.log(`[PDF] Hidden middle page break #${index + 1}`);
       });
 
-      // Hide elements marked with data-hide-in-pdf
-      hideInPdfElements.forEach((element, index) => {
+      hideInPdfElements.forEach((element) => {
         originalDisplayValues.set(element, element.style.display);
         element.style.display = "none";
-        console.log(`[PDF] Hidden data-hide-in-pdf element #${index + 1}`);
       });
 
-      console.log(
-        `[PDF] Total ${originalDisplayValues.size} elements hidden for clean content capture`,
-      );
-
-      // Wait a moment for the DOM to update after hiding elements
-      await new Promise((resolve) => setTimeout(resolve, 150));
+      await new Promise((resolve) => requestAnimationFrame(resolve));
 
       // Update loading message for calculation
       Swal.update({
@@ -769,15 +937,8 @@ const InvoiceForm = () => {
         const bufferPixels = 10 * 2;
         paymentSectionTop =
           (sectionRect.top - contentRect.top) * 2 - bufferPixels;
-        console.log(
-          "Payment section found at (after hiding header/footer):",
-          paymentSectionTop,
-        );
-      } else {
-        console.log("Payment section NOT found");
       }
 
-      // Get the position where disclaimer section starts
       let disclaimerSectionTop = 0;
       let disclaimerSectionHeight = 0;
       if (disclaimerSection) {
@@ -785,43 +946,23 @@ const InvoiceForm = () => {
         const disclaimerRect = disclaimerSection.getBoundingClientRect();
         disclaimerSectionTop = (disclaimerRect.top - contentRect.top) * 2;
         disclaimerSectionHeight = disclaimerRect.height * 2;
-        console.log(
-          "Disclaimer section found at:",
-          disclaimerSectionTop,
-          "height:",
-          disclaimerSectionHeight,
-        );
-      } else {
-        console.log("Disclaimer section NOT found");
       }
 
-      // Capture full content (without header and footer)
       resetInputPadding = adjustInputPaddingForPdf(content);
-      // Detect if Mac device
-      const isMac = /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);
-      const canvas = await html2canvas(content, {
-        scale: 1.5,
-        useCORS: true,
-        allowTaint: true,
-        logging: false,
-        backgroundColor: "#ffffff",
-        letterRendering: true,
-        scrollX: -currentScrollX,
-        scrollY: -currentScrollY,
-        onclone: (clonedDoc) => {
-          // Make fonts bolder for Mac devices
-          if (isMac) {
-            const elements = clonedDoc.querySelectorAll("*");
-            elements.forEach((el) => {
-              const weight = window.getComputedStyle(el).fontWeight;
-              el.style.fontWeight =
-                weight >= 500 ? "900" : weight >= 400 ? "700" : weight;
-              el.style.webkitFontSmoothing = "antialiased";
-              el.style.mozOsxFontSmoothing = "grayscale";
-            });
-          }
+      const canvas = await captureCanvasForPdf(
+        content,
+        {
+          scale: 1.5,
+          useCORS: true,
+          allowTaint: true,
+          logging: false,
+          backgroundColor: "#ffffff",
+          letterRendering: true,
+          scrollX: -currentScrollX,
+          scrollY: -currentScrollY,
         },
-      });
+        isMac,
+      );
 
       // Create PDF with US Letter size (8.5 x 11 inches)
       const pdf = new jsPDF("p", "mm", "letter");
@@ -885,8 +1026,7 @@ const InvoiceForm = () => {
         totalPages++;
       }
 
-      // Always use 2 pages
-      const pagesToGenerate = 2;
+      const pagesToGenerate = totalPages;
 
       // Update loading message for generation
       Swal.update({
@@ -1037,34 +1177,44 @@ const InvoiceForm = () => {
       window.scrollTo(currentScrollX, currentScrollY);
     } catch (error) {
       console.error("[PDF] Error generating PDF:", error);
+      const errorMessage = String(error?.message || "");
+      if (PDF_UNSUPPORTED_COLOR_REGEX.test(errorMessage)) {
+        try {
+          await triggerNativePrintPdfFallback();
+          await Swal.fire({
+            icon: "success",
+            title: "Print Ready",
+            text: "Opened native Print dialog as PDF fallback. Choose 'Save as PDF' to download.",
+            confirmButtonColor: "#0097A7",
+          });
+          if (autoDownload) {
+            navigate("/dashboard/invoice-management");
+            return;
+          }
+          return;
+        } catch (fallbackError) {
+          console.error("[PDF] Native print fallback failed:", fallbackError);
+        }
+      }
       await Swal.fire({
         icon: "error",
         title: "Error",
-        text: `Failed to generate PDF: ${error.message || "Please try again."}`,
+        text: `Failed to generate PDF: ${errorMessage || "Please try again."}`,
         confirmButtonColor: "#0097A7",
       });
     } finally {
-      console.log("[PDF] Cleanup - restoring original state...");
-
-      // Restore all hidden elements using the stored display values
       if (originalDisplayValues && originalDisplayValues.size > 0) {
         originalDisplayValues.forEach((displayValue, element) => {
           if (element) {
             element.style.display = displayValue;
           }
         });
-        console.log(`[PDF] Restored ${originalDisplayValues.size} elements`);
       }
 
-      // Restore showDashedBorders state
-      setShowDashedBorders(originalShowDashedBorders);
-
-      // Restore action buttons
       if (actionButtons) {
         actionButtons.style.display = "";
       }
 
-      // Restore original styles
       if (largeDivContent) {
         largeDivContent.style.transform = originalTransform;
         largeDivContent.style.transformOrigin = originalTransformOrigin;
@@ -1073,29 +1223,28 @@ const InvoiceForm = () => {
         largeDivContent.style.width = originalWidth;
       }
 
-      // Restore form canvas styles
       if (formCanvas) {
         formCanvas.style.width = originalFormWidth;
         formCanvas.style.maxWidth = originalFormMaxWidth;
         formCanvas.style.transform = originalFormTransform;
       }
 
-      // Remove black overlay
       const existingOverlay = document.getElementById("pdf-generation-overlay");
       if (existingOverlay) {
         existingOverlay.remove();
       }
 
       resetInputPadding();
-      setPdfWidth(null);
+      flushSync(() => {
+        setPdfWidth(null);
+      });
       window.scrollTo(currentScrollX, currentScrollY);
 
-      // wait a moment before finishing
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      setShowDashedBorders(true);
-      setViewBorder(true);
-
-      console.log("[PDF] Restoration complete - PDF generation finished");
+      await new Promise((resolve) => requestAnimationFrame(resolve));
+      flushSync(() => {
+        setShowDashedBorders(true);
+        setViewBorder(true);
+      });
     }
   };
 
@@ -1383,7 +1532,7 @@ const InvoiceForm = () => {
                     />
                   </div>
                   <div className="bg-[#FD7702] -ml-9 border-[21px] border-r-0 border-[#0097A7] text-white px-6 py-4 font-bold text-[3.5rem] uppercase col-span-4 rounded-l-full flex items-center justify-end">
-                    833PROBAID® - Invoice
+                    833PROBAID<sup>®</sup>- Invoice
                   </div>
                 </div>
               </div>
@@ -1531,7 +1680,7 @@ const InvoiceForm = () => {
                             <i className="fas fa-phone-volume text-4xl text-[#FD7702] group-hover:text-white mr-3"></i>
                             <div className="flex flex-col items-end leading-tight">
                               <div className="tracking-wide">(833) PROBAID</div>
-                              <div className="tracking-wider lowercase -mt-1 w-max">
+                              <div className="tracking-wider lowercase -mt-1 w-max ml-px text-[27px]">
                                 7762243
                               </div>
                             </div>
@@ -2039,7 +2188,7 @@ const InvoiceForm = () => {
                             <i className="fas fa-phone-volume text-4xl text-[#FD7702] group-hover:text-white mr-3"></i>
                             <div className="flex flex-col items-end leading-tight">
                               <div className="tracking-wide">(833) PROBAID</div>
-                              <div className="tracking-wider lowercase -mt-1 w-max">
+                              <div className="tracking-wider lowercase -mt-1 w-max ml-px text-[27px]">
                                 7762243
                               </div>
                             </div>
@@ -2540,7 +2689,7 @@ const InvoiceForm = () => {
                         <i className="fas fa-phone-volume text-4xl text-[#FD7702] group-hover:text-white mr-3"></i>
                         <div className="flex flex-col items-end leading-tight">
                           <div className="tracking-wide">(833) PROBAID</div>
-                          <div className="tracking-wider lowercase -mt-1 w-max">
+                          <div className="tracking-wider lowercase -mt-1 w-max ml-px text-[27px]">
                             7762243
                           </div>
                         </div>

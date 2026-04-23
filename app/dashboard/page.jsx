@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useAuth } from "../../contexts/AuthContext";
 
 export default function DashboardPage() {
@@ -249,7 +250,7 @@ export default function DashboardPage() {
 								Invite Team
 							</p>
 						</button>
-						<button className='rounded-lg border border-gray-200 bg-white p-4 text-left shadow-sm transition-all hover:border-primary hover:shadow-md'>
+						<Link href="/dashboard/settings" className='rounded-lg border border-gray-200 bg-white p-4 text-left shadow-sm transition-all hover:border-primary hover:shadow-md'>
 							<svg
 								className='mb-2 h-6 w-6 text-primary'
 								fill='none'
@@ -271,7 +272,7 @@ export default function DashboardPage() {
 							<p className='font-montserrat text-sm font-semibold text-gray-900'>
 								Settings
 							</p>
-						</button>
+						</Link>
 					</div>
 				</div>
 			</div>
