@@ -1,5 +1,6 @@
-import InvoiceManagement from "./components/InvoiceManagement";
-
 export default function InvoicesPage() {
-  return <InvoiceManagement />;
+  if (typeof window !== "undefined") {
+    window.location.href = "https://833probaid-website-n4gz.vercel.app";
+  }
+  return null;
 }
