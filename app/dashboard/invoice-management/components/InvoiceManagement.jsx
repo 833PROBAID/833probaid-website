@@ -1,6 +1,6 @@
 "use client";
 
-import  { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Typography } from "@material-tailwind/react";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
@@ -10,6 +10,24 @@ import {
 	DEFAULT_INVOICE_NUMBER,
 	deriveNextInvoiceNumber,
 } from "../utils/invoiceNumber";
+
+const STATUS_COLORS = {
+	draft: "#6B7280",
+	sent: "#3B82F6",
+	paid: "#10B981",
+	overdue: "#EF4444",
+	cancelled: "#374151",
+};
+
+function getVisiblePageNumbers(currentPage, totalPages) {
+	const count = Math.min(5, totalPages);
+	return Array.from({ length: count }, (_, i) => {
+		if (totalPages <= 5) return i + 1;
+		if (currentPage <= 3) return i + 1;
+		if (currentPage >= totalPages - 2) return totalPages - 4 + i;
+		return currentPage - 2 + i;
+	});
+}
 
 const InvoiceManagement = () => {
 	const [invoices, setInvoices] = useState([]);
@@ -39,7 +57,7 @@ const InvoiceManagement = () => {
 		sortOrder: "desc",
 	});
 	const router = useRouter();
-	const navigate = (path, options = {}) => {
+	const navigate = useCallback((path, options = {}) => {
 		if (typeof window !== "undefined") {
 			try {
 				if (options?.state) {
@@ -51,12 +69,16 @@ const InvoiceManagement = () => {
 		}
 		if (options?.replace) router.replace(path);
 		else router.push(path);
-	};
+	}, [router]);
 	const searchTimeoutRef = useRef(null);
+	const filtersRef = useRef(filters);
+	useEffect(() => {
+		filtersRef.current = filters;
+	}, [filters]);
 
 	// Fetch invoices from API
 	const fetchInvoices = useCallback(
-		async (page = 1, search = "", filterParams = filters) => {
+		async (page = 1, search = "", filterParams = filtersRef.current) => {
 			try {
 				setError(null);
 				const params = {
@@ -86,7 +108,7 @@ const InvoiceManagement = () => {
 				setIsSearching(false);
 			}
 		},
-		[itemsPerPage, filters],
+		[itemsPerPage],
 	);
 
 	// Fetch stats
@@ -369,21 +391,6 @@ const InvoiceManagement = () => {
 
 	return (
 		<div className='w-full bg-gray-50 min-h-screen'>
-			<style>{`
-				@keyframes fade-in {
-					from {
-						opacity: 0;
-						transform: translateY(10px);
-					}
-					to {
-						opacity: 1;
-						transform: translateY(0);
-					}
-				}
-				.animate-fade-in {
-					animation: fade-in 0.5s ease-out;
-				}
-			`}</style>
 			<div className=''>
 				{/* Stats Cards */}
 				<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6'>
@@ -708,13 +715,7 @@ const InvoiceManagement = () => {
 													}
 													className='px-3 py-1 rounded-full text-sm font-semibold border-2 focus:outline-none focus:ring-2 focus:ring-colorTeal cursor-pointer'
 													style={{
-														backgroundColor: {
-															draft: "#6B7280",
-															sent: "#3B82F6",
-															paid: "#10B981",
-															overdue: "#EF4444",
-															cancelled: "#374151",
-														}[invoice.status || "draft"],
+														backgroundColor: STATUS_COLORS[invoice.status || "draft"],
 														color: "white",
 														borderColor: "transparent",
 													}}>
@@ -780,33 +781,18 @@ const InvoiceManagement = () => {
 
 										{/* Page Numbers */}
 										<div className='flex gap-1'>
-											{Array.from(
-												{ length: Math.min(5, totalPages) },
-												(_, i) => {
-													let pageNum;
-													if (totalPages <= 5) {
-														pageNum = i + 1;
-													} else if (currentPage <= 3) {
-														pageNum = i + 1;
-													} else if (currentPage >= totalPages - 2) {
-														pageNum = totalPages - 4 + i;
-													} else {
-														pageNum = currentPage - 2 + i;
-													}
-													return (
-														<button
-															key={pageNum}
-															onClick={() => handlePageChange(pageNum)}
-															className={`px-4 py-2 rounded transition-colors ${
-																currentPage === pageNum
-																	? "bg-colorTeal text-white"
-																	: "bg-gray-200 text-gray-700 hover:bg-gray-300"
-															}`}>
-															{pageNum}
-														</button>
-													);
-												},
-											)}
+											{getVisiblePageNumbers(currentPage, totalPages).map((pageNum) => (
+												<button
+													key={pageNum}
+													onClick={() => handlePageChange(pageNum)}
+													className={`px-4 py-2 rounded transition-colors ${
+														currentPage === pageNum
+															? "bg-colorTeal text-white"
+															: "bg-gray-200 text-gray-700 hover:bg-gray-300"
+													}`}>
+													{pageNum}
+												</button>
+											))}
 										</div>
 
 										<button

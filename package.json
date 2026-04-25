@@ -11,6 +11,7 @@
   "dependencies": {
     "@grapesjs/react": "^2.0.0",
     "@material-tailwind/react": "^2.1.10",
+    "@react-pdf/renderer": "^4.5.1",
     "bcryptjs": "^2.4.3",
     "grapesjs": "^0.22.14",
     "grapesjs-blocks-basic": "^1.0.2",

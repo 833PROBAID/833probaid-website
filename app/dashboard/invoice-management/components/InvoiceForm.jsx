@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
-import { flushSync } from "react-dom";
+import { pdf } from "@react-pdf/renderer";
 import { Typography } from "@material-tailwind/react";
 import {
   useParams,
@@ -10,8 +10,6 @@ import {
   useSearchParams,
 } from "next/navigation";
 import Swal from "sweetalert2";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
 import {
   DateSelector,
   FormSection,
@@ -24,174 +22,13 @@ import {
   DEFAULT_INVOICE_NUMBER,
   deriveNextInvoiceNumber,
 } from "../utils/invoiceNumber";
+import InvoicePDF from "./InvoicePDF";
 
-const PDF_COLOR_PROPERTIES = [
-  "color",
-  "backgroundColor",
-  "borderColor",
-  "borderTopColor",
-  "borderRightColor",
-  "borderBottomColor",
-  "borderLeftColor",
-  "outlineColor",
-  "textDecorationColor",
-  "columnRuleColor",
-  "caretColor",
-  "fill",
-  "stroke",
-  "webkitTextFillColor",
-  "webkitTextStrokeColor",
-];
-
-const PDF_UNSUPPORTED_COLOR_REGEX = /\b(?:lab|lch|oklab|oklch|color)\s*(?:\(|["'])/i;
-const PDF_UNSUPPORTED_COLOR_FUNCTION_GLOBAL_REGEX =
-  /(?:oklch|oklab|lab|lch|color)\((?:[^)(]+|\((?:[^)(]+|\([^)(]*\))*\))*\)/gi;
-
-const normalizePdfColor = (rawValue, canvasContext) => {
-  if (!rawValue || typeof rawValue !== "string") return rawValue;
-  const value = rawValue.trim();
-  if (!value || value === "initial" || value === "inherit") return value;
-  if (!PDF_UNSUPPORTED_COLOR_REGEX.test(value)) return value;
-  if (!canvasContext) return value;
-
-  const previous = canvasContext.fillStyle;
-  canvasContext.fillStyle = "#000000";
-  canvasContext.fillStyle = value;
-  const normalized = canvasContext.fillStyle;
-  canvasContext.fillStyle = previous;
-  return normalized || value;
-};
-
-const prepareClonedDocumentForPdf = (clonedDoc, isMac, aggressive = false) => {
-  const clonedWindow = clonedDoc.defaultView;
-  if (!clonedWindow) return;
-  const colorCanvas = clonedDoc.createElement("canvas");
-  const canvasContext = colorCanvas.getContext("2d");
-
-  const elements = clonedDoc.querySelectorAll("*");
-  elements.forEach((el) => {
-    const computedStyle = clonedWindow.getComputedStyle(el);
-
-    PDF_COLOR_PROPERTIES.forEach((property) => {
-      const value = normalizePdfColor(computedStyle[property], canvasContext);
-      if (value && value !== "initial" && value !== "inherit") {
-        el.style[property] = value;
-      }
-    });
-
-    if (aggressive) {
-      el.style.boxShadow = "none";
-      el.style.textShadow = "none";
-      el.style.filter = "none";
-      if (
-        computedStyle.backgroundImage &&
-        computedStyle.backgroundImage !== "none"
-      ) {
-        el.style.backgroundImage = "none";
-      }
-    }
-
-    if (isMac) {
-      const numericWeight = Number.parseInt(computedStyle.fontWeight, 10);
-      el.style.fontWeight =
-        numericWeight >= 500
-          ? "900"
-          : numericWeight >= 400
-            ? "700"
-            : computedStyle.fontWeight;
-      el.style.webkitFontSmoothing = "antialiased";
-      el.style.mozOsxFontSmoothing = "grayscale";
-    }
-  });
-};
-
-const sanitizeUnsupportedColorFunctionsInCss = (cssText) => {
-  if (!cssText || typeof cssText !== "string") return cssText;
-  return cssText.replace(
-    PDF_UNSUPPORTED_COLOR_FUNCTION_GLOBAL_REGEX,
-    "rgb(0, 0, 0)",
-  );
-};
-
-const sanitizeClonedStylesheetsForPdf = (clonedDoc) => {
-  const styleTags = clonedDoc.querySelectorAll("style");
-  styleTags.forEach((styleEl) => {
-    if (!styleEl.textContent) return;
-    styleEl.textContent = sanitizeUnsupportedColorFunctionsInCss(
-      styleEl.textContent,
-    );
-  });
-
-  const styledElements = clonedDoc.querySelectorAll("[style]");
-  styledElements.forEach((el) => {
-    const inlineStyle = el.getAttribute("style");
-    if (!inlineStyle) return;
-    el.setAttribute(
-      "style",
-      sanitizeUnsupportedColorFunctionsInCss(inlineStyle),
-    );
-  });
-};
-
-const inlineComputedStylesForPdf = (clonedDoc) => {
-  const clonedWindow = clonedDoc.defaultView;
-  if (!clonedWindow) return;
-
-  const colorCanvas = clonedDoc.createElement("canvas");
-  const canvasContext = colorCanvas.getContext("2d");
-  const elements = clonedDoc.querySelectorAll("*");
-
-  elements.forEach((el) => {
-    const computedStyle = clonedWindow.getComputedStyle(el);
-    for (let i = 0; i < computedStyle.length; i += 1) {
-      const property = computedStyle[i];
-      const rawValue = computedStyle.getPropertyValue(property);
-      const value = normalizePdfColor(rawValue, canvasContext);
-      if (value) {
-        el.style.setProperty(property, value);
-      }
-    }
-  });
-
-  clonedDoc
-    .querySelectorAll("style, link[rel='stylesheet']")
-    .forEach((node) => {
-      node.remove();
-    });
-};
-
-const captureCanvasForPdf = async (target, options, isMac) => {
-  try {
-    return await html2canvas(target, {
-      ...options,
-      onclone: (clonedDoc) => {
-        prepareClonedDocumentForPdf(clonedDoc, isMac, false);
-      },
-    });
-  } catch (error) {
-    const message = String(error?.message || "");
-    if (!PDF_UNSUPPORTED_COLOR_REGEX.test(message)) {
-      throw error;
-    }
-
-    console.warn(
-      "[PDF] Unsupported CSS color detected. Retrying with fallback sanitization...",
-    );
-    return html2canvas(target, {
-      ...options,
-      onclone: (clonedDoc) => {
-        sanitizeClonedStylesheetsForPdf(clonedDoc);
-        inlineComputedStylesForPdf(clonedDoc);
-        prepareClonedDocumentForPdf(clonedDoc, isMac, true);
-      },
-    });
-  }
-};
+const INVOICE_FORM_NAV_STATE_KEY = "invoiceFormNavState";
+const INVOICE_MANAGEMENT_ROUTE = "/dashboard/invoice-management";
 
 const InvoiceForm = () => {
-  const [showBorder, setShowBorder] = useState(false);
   const [showDashedBorders, setShowDashedBorders] = useState(false);
-  const [pdfWidth, setPdfWidth] = useState(null);
   const routeParams = useParams();
   const id = routeParams?.id;
   const router = useRouter();
@@ -204,7 +41,7 @@ const InvoiceForm = () => {
   const navState = useMemo(() => {
     if (typeof window === "undefined") return {};
     try {
-      const raw = sessionStorage.getItem("invoiceFormNavState");
+      const raw = sessionStorage.getItem(INVOICE_FORM_NAV_STATE_KEY);
       return raw ? JSON.parse(raw) : {};
     } catch {
       return {};
@@ -212,9 +49,14 @@ const InvoiceForm = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
+  const locationSearch = useMemo(() => {
+    const queryString = searchParams?.toString();
+    return queryString ? `?${queryString}` : "";
+  }, [searchParams]);
+
   const location = {
     state: navState,
-    search: typeof window !== "undefined" ? window.location.search : "",
+    search: locationSearch,
     pathname,
   };
 
@@ -226,11 +68,11 @@ const InvoiceForm = () => {
         try {
           if (options?.state) {
             sessionStorage.setItem(
-              "invoiceFormNavState",
+              INVOICE_FORM_NAV_STATE_KEY,
               JSON.stringify(options.state),
             );
           } else {
-            sessionStorage.removeItem("invoiceFormNavState");
+            sessionStorage.removeItem(INVOICE_FORM_NAV_STATE_KEY);
           }
         } catch {}
       }
@@ -238,6 +80,10 @@ const InvoiceForm = () => {
       else router.push(path);
     },
     [router],
+  );
+  const goToInvoiceManagement = useCallback(
+    (options = {}) => navigate(INVOICE_MANAGEMENT_ROUTE, options),
+    [navigate],
   );
   const [zoomLevel, setZoomLevel] = useState(1);
   const printRef = useRef(null);
@@ -251,7 +97,6 @@ const InvoiceForm = () => {
       ? location.state.viewMode
       : id && id !== "new",
   );
-  const [viewBorder, setViewBorder] = useState(false);
   const [autoDownload, setAutoDownload] = useState(
     location.state?.autoDownload || false,
   );
@@ -429,7 +274,7 @@ const InvoiceForm = () => {
           if (isCancelled) return;
           console.error("Error loading invoice:", error);
           Swal.fire("Error", error.message || "Invoice not found", "error");
-          navigate("/dashboard/invoice-management", { replace: true });
+          goToInvoiceManagement({ replace: true });
         } finally {
           if (isCancelled) return;
           setIsLoading(false);
@@ -447,26 +292,19 @@ const InvoiceForm = () => {
     return () => {
       isCancelled = true;
     };
-  }, [id, navigate, derivedInvoiceNumber]);
+  }, [id, goToInvoiceManagement, derivedInvoiceNumber]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleDateChange = (date) => {
+  const handleDateFieldChange = useCallback((fieldName, date) => {
     setFormData((prev) => ({
       ...prev,
-      date: date ? date.toISOString().split("T")[0] : "",
+      [fieldName]: date ? date.toISOString().split("T")[0] : "",
     }));
-  };
-
-  const handleServiceDateChange = (date) => {
-    setFormData((prev) => ({
-      ...prev,
-      serviceDate: date ? date.toISOString().split("T")[0] : "",
-    }));
-  };
+  }, []);
 
   const formatPhoneNumber = (value) => {
     const cleaned = value.replace(/\D/g, "");
@@ -525,7 +363,7 @@ const InvoiceForm = () => {
   };
 
   const handleCancel = () => {
-    navigate("/dashboard/invoice-management");
+    goToInvoiceManagement();
   };
 
   const handleSubmit = async (e) => {
@@ -543,28 +381,14 @@ const InvoiceForm = () => {
 
     setIsSaving(true);
     try {
-      let createdInvoiceId = null;
       if (id && id !== "new") {
-        // Update existing invoice
         await invoiceAPI.update(id, formData);
         Swal.fire("Success!", "Invoice updated successfully.", "success");
       } else {
-        // Create new invoice
-        const res = await invoiceAPI.create(formData);
+        await invoiceAPI.create(formData);
         Swal.fire("Success!", "Invoice created successfully.", "success");
-        createdInvoiceId = res?._id || null;
       }
-      setIsViewMode(true);
-      if (createdInvoiceId) {
-        navigate(
-          `/dashboard/invoice-management/invoice-form/${createdInvoiceId}`,
-          {
-            state: { viewMode: true },
-          },
-        );
-      }
-      // Scroll to top after saving
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      goToInvoiceManagement();
     } catch (error) {
       console.error("Error saving invoice:", error);
       const message =
@@ -589,661 +413,48 @@ const InvoiceForm = () => {
     setZoomLevel(1);
   };
 
-  // Temporarily shifts text downward inside tall inputs so html2canvas captures centered values
-  const adjustInputPaddingForPdf = (rootElement) => {
-    if (!rootElement) return () => {};
-    const selectors =
-      'input:not([type="checkbox"]):not([type="radio"]):not([type="file"]), textarea';
-    const fields = rootElement.querySelectorAll(selectors);
-    if (!fields.length) return () => {};
-    const adjustments = [];
-    const adjustPixels = 4;
-    fields.forEach((field) => {
-      const computed = window.getComputedStyle(field);
-      const topPadding = parseFloat(computed.paddingTop) || 0;
-      const bottomPadding = parseFloat(computed.paddingBottom) || 0;
-      if (topPadding === 0 && bottomPadding === 0) return;
-      const usableAdjustment = Math.min(adjustPixels, bottomPadding);
-      adjustments.push({
-        element: field,
-        paddingTop: field.style.paddingTop,
-        paddingBottom: field.style.paddingBottom,
-      });
-      field.style.paddingTop = `${topPadding + usableAdjustment}px`;
-      field.style.paddingBottom = `${Math.max(
-        bottomPadding - usableAdjustment,
-        0,
-      )}px`;
-    });
-    return () => {
-      adjustments.forEach(({ element, paddingTop, paddingBottom }) => {
-        element.style.paddingTop = paddingTop;
-        element.style.paddingBottom = paddingBottom;
-      });
-    };
-  };
 
-  const triggerNativePrintPdfFallback = async () => {
-    const printableContent = document.getElementById("printable-content");
-    if (!printableContent) {
-      throw new Error("Invoice content not found for print fallback.");
-    }
-
-    const printWindow = window.open("", "_blank", "noopener,noreferrer");
-    if (!printWindow) {
-      throw new Error("Pop-up blocked. Please allow pop-ups and try again.");
-    }
-
-    const inheritedStyles = Array.from(
-      document.querySelectorAll("style, link[rel='stylesheet']"),
-    )
-      .map((node) => node.outerHTML)
-      .join("\n");
-
-    const printMarkup = `
-      <!doctype html>
-      <html>
-        <head>
-          <meta charset="utf-8" />
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <title>Invoice_${formData.invoiceNumber || Date.now()}</title>
-          ${inheritedStyles}
-          <style>
-            html, body { margin: 0; padding: 0; background: #fff; }
-            #printable-content { margin: 0 auto; }
-            @page { size: letter; margin: 6mm; }
-          </style>
-        </head>
-        <body>
-          ${printableContent.outerHTML}
-        </body>
-      </html>
-    `;
-
-    printWindow.document.open();
-    printWindow.document.write(printMarkup);
-    printWindow.document.close();
-
-    await new Promise((resolve) => {
-      let settled = false;
-      const done = () => {
-        if (settled) return;
-        settled = true;
-        resolve();
-      };
-      printWindow.onload = done;
-      setTimeout(done, 700);
-    });
-
-    printWindow.focus();
-    printWindow.print();
-    setTimeout(() => {
-      try {
-        printWindow.close();
-      } catch {}
-    }, 600);
-  };
 
   const handleDownloadPdf = async () => {
-    const isMac = /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);
-
-    flushSync(() => {
-      setViewBorder(false);
+    Swal.fire({
+      title: "Generating PDF...",
+      text: "Please wait while we prepare your invoice",
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      didOpen: () => Swal.showLoading(),
     });
-
-    const content = document.getElementById("printable-content");
-    const actionButtons = document.getElementById("invoice-action-buttons");
-
-    const originalShowDashedBorders = showDashedBorders;
-
-    let originalDisplayValues = new Map();
-    let resetInputPadding = () => {};
-    let pageHeader = null;
-    let pageFooter = null;
-    let middlePageBreaks = [];
-    let hideInPdfElements = [];
-    let largeDivContent = null;
-    let formCanvas = null;
-    let originalTransform = "";
-    let originalTransformOrigin = "";
-    let originalTransition = "";
-    let originalMarginBottom = "";
-    let originalWidth = "";
-    let originalFormWidth = "";
-    let originalFormTransform = "";
-    let originalFormMaxWidth = "";
-
-    if (!showDashedBorders) {
-      flushSync(() => {
-        setShowDashedBorders(true);
-        setViewBorder(false);
-      });
-      await new Promise((resolve) => requestAnimationFrame(resolve));
-    }
-
-    // Intelligent element selection using data attributes
-    pageHeader = document.querySelector("[data-pdf-header='true']");
-    pageFooter = document.querySelector("[data-pdf-footer='true']");
-
-    // Get all middle page break sections intelligently
-    // These are teal sections with z-30 class (middle sections) that are NOT header/footer
-    const allTealSections = Array.from(
-      document.querySelectorAll("#printable-content .bg-\\[\\#0097A7\\]"),
-    );
-
-    middlePageBreaks = allTealSections.filter((section) => {
-      const isMainHeader = section.hasAttribute("data-pdf-header");
-      const isMainFooter = section.hasAttribute("data-pdf-footer");
-      const hasZ30 = section.classList.contains("z-30");
-      const hasRelativeClass = section.classList.contains("relative");
-
-      // It's a middle page break if:
-      // 1. Not the main header or footer
-      // 2. Has z-30 and relative classes (characteristic of middle sections)
-      return !isMainHeader && !isMainFooter && hasZ30 && hasRelativeClass;
-    });
-
-    const paymentMethodSection = document.querySelector(
-      '[data-section="payment-method"]',
-    );
-    const disclaimerSection = document.querySelector(
-      '[data-section="disclaimer"]',
-    );
-
-    if (!content) {
-      setShowDashedBorders(originalShowDashedBorders);
-      await Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Could not find invoice content",
-        confirmButtonColor: "#0097A7",
-      });
-      return;
-    }
-
-    const currentScrollX = window.scrollX;
-    const currentScrollY = window.scrollY;
-
-    largeDivContent = document.querySelector(".large-div-content");
-    formCanvas = document.querySelector(".form-canvas");
-
-    hideInPdfElements = formCanvas.querySelectorAll(
-      "[data-hide-in-pdf='true']",
-    );
-
-    originalTransform = largeDivContent?.style.transform || "";
-    originalTransformOrigin = largeDivContent?.style.transformOrigin || "";
-    originalTransition = largeDivContent?.style.transition || "";
-    originalMarginBottom = largeDivContent?.style.marginBottom || "";
-    originalWidth = largeDivContent?.style.width || "";
-    originalFormWidth = formCanvas?.style.width || "";
-    originalFormTransform = formCanvas?.style.transform || "";
-    originalFormMaxWidth = formCanvas?.style.maxWidth || "";
-
-    // Create black overlay
-    const overlay = document.createElement("div");
-    overlay.id = "pdf-generation-overlay";
-    overlay.style.cssText = `
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100vw;
-		height: 100vh;
-		background-color: rgba(0, 0, 0, 0.8);
-		z-index: 9998;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	`;
-    document.body.appendChild(overlay);
-
     try {
-      // Show initial loading
-      Swal.fire({
-        icon: "info",
-        title: "Preparing invoice...",
-        text: "Please wait while we prepare your invoice for PDF generation",
-        allowOutsideClick: false,
-        showConfirmButton: false,
-        didOpen: () => {
-          Swal.showLoading();
-        },
-      });
-
-      // Hide action buttons before capturing
-      if (actionButtons) {
-        actionButtons.style.display = "none";
-      }
-
-      const letterWidthPx = 816;
-      flushSync(() => {
-        setPdfWidth(letterWidthPx);
-      });
-      if (largeDivContent) {
-        largeDivContent.style.transform = "none";
-        largeDivContent.style.transformOrigin = "top left";
-        largeDivContent.style.transition = "none";
-        largeDivContent.style.marginBottom = "0";
-      }
-      if (formCanvas) {
-        formCanvas.style.transform = "none";
-      }
-      await new Promise((resolve) => requestAnimationFrame(resolve));
-
-      // Update loading message
-      Swal.update({
-        icon: "info",
-        title: "Capturing invoice...",
-        html: '<div style="font-size: 16px; margin-top: 10px;">Rendering invoice content for PDF</div>',
-      });
-
-      window.scrollTo(0, 0);
-
-      // Capture header separately if it exists
-      let headerCanvas = null;
-      let headerHeight = 0;
-      if (pageHeader) {
-        headerCanvas = await captureCanvasForPdf(
-          pageHeader,
-          {
-            scale: 1.5,
-            useCORS: true,
-            allowTaint: true,
-            logging: false,
-            backgroundColor: "#0097A7",
-            letterRendering: true,
-          },
-          isMac,
-        );
-        headerHeight = headerCanvas.height;
-      }
-
-      // Hide elements marked with data-hide-in-pdf before capturing footer
-      const hideInPdfInFooter = pageFooter?.querySelectorAll(
-        "[data-hide-in-pdf='true']",
-      );
-      const footerHiddenElements = [];
-      if (hideInPdfInFooter) {
-        hideInPdfInFooter.forEach((element) => {
-          footerHiddenElements.push({
-            element,
-            originalDisplay: element.style.display,
-          });
-          element.style.display = "none";
-        });
-      }
-
-      // Capture footer separately if it exists
-      let footerCanvas = null;
-      let footerHeight = 0;
-      if (pageFooter) {
-        footerCanvas = await captureCanvasForPdf(
-          pageFooter,
-          {
-            scale: 1.5,
-            useCORS: true,
-            allowTaint: true,
-            logging: false,
-            backgroundColor: "#0097A7",
-            letterRendering: true,
-          },
-          isMac,
-        );
-        footerHeight = footerCanvas.height;
-      }
-
-      if (footerHiddenElements.length > 0) {
-        footerHiddenElements.forEach(({ element, originalDisplay }) => {
-          element.style.display = originalDisplay;
-        });
-      }
-
-      originalDisplayValues = new Map();
-
-      if (pageHeader) {
-        originalDisplayValues.set(pageHeader, pageHeader.style.display);
-        pageHeader.style.display = "none";
-      }
-      if (pageFooter) {
-        originalDisplayValues.set(pageFooter, pageFooter.style.display);
-        pageFooter.style.display = "none";
-      }
-
-      middlePageBreaks.forEach((section) => {
-        originalDisplayValues.set(section, section.style.display);
-        section.style.display = "none";
-      });
-
-      hideInPdfElements.forEach((element) => {
-        originalDisplayValues.set(element, element.style.display);
-        element.style.display = "none";
-      });
-
-      await new Promise((resolve) => requestAnimationFrame(resolve));
-
-      // Update loading message for calculation
-      Swal.update({
-        icon: "info",
-        title: "Calculating pages...",
-        html: '<div style="font-size: 16px; margin-top: 10px;">Analyzing invoice content</div>',
-      });
-
-      // Get the position where payment method section starts (after hiding header/footer)
-      let paymentSectionTop = 0;
-      if (paymentMethodSection) {
-        const contentRect = content.getBoundingClientRect();
-        const sectionRect = paymentMethodSection.getBoundingClientRect();
-
-        const bufferPixels = 10 * 2;
-        paymentSectionTop =
-          (sectionRect.top - contentRect.top) * 2 - bufferPixels;
-      }
-
-      let disclaimerSectionTop = 0;
-      let disclaimerSectionHeight = 0;
-      if (disclaimerSection) {
-        const contentRect = content.getBoundingClientRect();
-        const disclaimerRect = disclaimerSection.getBoundingClientRect();
-        disclaimerSectionTop = (disclaimerRect.top - contentRect.top) * 2;
-        disclaimerSectionHeight = disclaimerRect.height * 2;
-      }
-
-      resetInputPadding = adjustInputPaddingForPdf(content);
-      const canvas = await captureCanvasForPdf(
-        content,
-        {
-          scale: 1.5,
-          useCORS: true,
-          allowTaint: true,
-          logging: false,
-          backgroundColor: "#ffffff",
-          letterRendering: true,
-          scrollX: -currentScrollX,
-          scrollY: -currentScrollY,
-        },
-        isMac,
-      );
-
-      // Create PDF with US Letter size (8.5 x 11 inches)
-      const pdf = new jsPDF("p", "mm", "letter");
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
-
-      // Define print margins (in mm) - margins around the entire content
-      const printMarginLeft = 3; // 5mm left margin
-      const printMarginRight = 3; // 5mm right margin
-      const printMarginTop = 3; // 5mm top margin
-      const printMarginBottom = 3; // 5mm bottom margin
-
-      // Calculate available space after margins
-      const availableWidth = pdfWidth - printMarginLeft - printMarginRight;
-      const availableHeight = pdfHeight - printMarginTop - printMarginBottom;
-
-      // Calculate scaling
-      const imgWidth = canvas.width;
-      const imgHeight = canvas.height;
-      const ratio = availableWidth / imgWidth; // Scale to fit within margins
-      const scaledWidth = availableWidth;
-      const scaledHeaderHeight = headerHeight * ratio;
-      const scaledFooterHeight = footerHeight * ratio;
-
-      // Define padding in mm for spacing from header and footer
-      const topPadding = 0; // Small margin below header
-      const bottomPadding = 0; // No padding above footer
-
-      // Multi-page handling with header and footer
-      const headerImgData = headerCanvas
-        ? headerCanvas.toDataURL("image/jpeg", 0.85)
-        : null;
-      const footerImgData = footerCanvas
-        ? footerCanvas.toDataURL("image/jpeg", 0.85)
-        : null;
-
-      // Calculate how much content we've processed in pixels (on the canvas)
-      // Since we hid header and footer, start from 0
-      let processedHeight = 0; // Start from beginning since header/footer are hidden
-      let pageNumber = 0;
-      // Track the content area (full content since header/footer are hidden)
-      const contentEndHeight = imgHeight;
-
-      // First pass: calculate total number of pages
-      let tempProcessedHeight = 0;
-      let totalPages = 0;
-      const availableContentHeightForCalc =
-        availableHeight -
-        scaledHeaderHeight -
-        scaledFooterHeight -
-        topPadding -
-        bottomPadding;
-      while (tempProcessedHeight < contentEndHeight) {
-        const contentHeightInCanvasPixelsTemp =
-          availableContentHeightForCalc / ratio;
-        const heightToCaptureTemp = Math.min(
-          contentHeightInCanvasPixelsTemp,
-          contentEndHeight - tempProcessedHeight,
-        );
-        tempProcessedHeight += heightToCaptureTemp;
-        totalPages++;
-      }
-
-      const pagesToGenerate = totalPages;
-
-      // Update loading message for generation
-      Swal.update({
-        title: "Generating PDF",
-        html: `<div style="font-size: 16px; margin-top: 10px;">Creating <strong>${pagesToGenerate}</strong> of <strong>${totalPages}</strong> page(s)</div>`,
-        allowOutsideClick: false,
-        showConfirmButton: false,
-        didOpen: () => {
-          Swal.showLoading();
-        },
-      });
-
-      while (
-        processedHeight < contentEndHeight &&
-        pageNumber < pagesToGenerate
-      ) {
-        if (pageNumber > 0) {
-          pdf.addPage();
-        }
-
-        // Add header to every page
-        if (headerImgData) {
-          pdf.addImage(
-            headerImgData,
-            "JPEG",
-            printMarginLeft,
-            printMarginTop,
-            scaledWidth,
-            scaledHeaderHeight,
-          );
-        }
-
-        // Calculate available height for content on this page (account for header, footer, and padding)
-        const availableContentHeight =
-          availableHeight -
-          scaledHeaderHeight -
-          scaledFooterHeight -
-          topPadding -
-          bottomPadding;
-
-        // Use same calculation for all pages
-        const contentHeightInCanvasPixels = availableContentHeight / ratio;
-        const heightToCapture = Math.min(
-          contentHeightInCanvasPixels,
-          contentEndHeight - processedHeight,
-        );
-
-        // Create a temporary canvas for this page's content slice
-        const pageCanvas = document.createElement("canvas");
-        pageCanvas.width = imgWidth;
-        pageCanvas.height = heightToCapture;
-        const pageCtx = pageCanvas.getContext("2d");
-
-        // Draw the specific portion of the original canvas (skipping header/footer)
-        pageCtx.drawImage(
-          canvas,
-          0,
-          processedHeight, // Source position (x, y) - starts after header
-          imgWidth,
-          heightToCapture, // Source size (width, height)
-          0,
-          0, // Destination position (x, y)
-          imgWidth,
-          heightToCapture, // Destination size (width, height)
-        );
-        // Convert to image and add to PDF
-        const pageImgData = pageCanvas.toDataURL("image/jpeg", 0.85);
-        const yPosition = printMarginTop + scaledHeaderHeight + topPadding; // Add margins and top padding after header
-        const scaledContentHeight = heightToCapture * ratio;
-
-        pdf.addImage(
-          pageImgData,
-          "JPEG",
-          printMarginLeft,
-          yPosition,
-          scaledWidth,
-          scaledContentHeight,
-        );
-
-        // Add footer to every page (with bottom padding and margins)
-        if (footerImgData) {
-          const footerLeftOffset = 6.4;
-          pdf.addImage(
-            footerImgData,
-            "JPEG",
-            printMarginLeft + footerLeftOffset,
-            printMarginTop + availableHeight - scaledFooterHeight,
-            scaledWidth - footerLeftOffset,
-            scaledFooterHeight,
-          );
-
-          // Add page number inside the footer on the right side
-          pdf.setFontSize(20);
-          pdf.setFont(undefined, "bold");
-          pdf.setTextColor(255, 255, 255); // White color for visibility on teal background
-          const pageText = `${pageNumber + 1}`;
-          const textWidth = pdf.getTextWidth(pageText);
-          pdf.text(
-            pageText,
-            printMarginLeft + availableWidth - textWidth - 5, // 5mm from right edge (considering margin)
-            printMarginTop + availableHeight - scaledFooterHeight / 2 + 2, // Vertically centered in footer
-          );
-        }
-
-        // Draw border only if enabled
-        if (showBorder) {
-          const hairline = 0.0015;
-          pdf.setLineWidth(hairline);
-          //teal border color
-          pdf.setDrawColor(0, 128, 128);
-          const bx = printMarginLeft;
-          const by = printMarginTop;
-          const bw = availableWidth;
-          const bh = availableHeight;
-          pdf.setLineWidth(0.0015); // Thicker border (2.5mm)
-          pdf.line(bx, by, bx + bw, by); // top
-          pdf.line(bx + bw, by, bx + bw, by + bh); // right
-          pdf.line(bx + bw, by + bh, bx, by + bh); // bottom
-          pdf.line(bx, by + bh, bx, by); // left
-        }
-
-        // Move to next section
-        processedHeight += heightToCapture;
-        pageNumber++;
-      }
-
-      const fileName = `Invoice_${formData.invoiceNumber || Date.now()}.pdf`;
-
-      // Save the PDF
-      pdf.save(fileName);
-
-      // Show success message
+      const logoUrl = `${window.location.origin}/833PROBAID-logo.png`;
+      const bannerUrl = `${window.location.origin}/banner2.png`;
+      const blob = await pdf(
+        <InvoicePDF data={formData} logoUrl={logoUrl} bannerUrl={bannerUrl} />,
+      ).toBlob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `Invoice_${formData.invoiceNumber || Date.now()}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 100);
       await Swal.fire({
         icon: "success",
-        title: "Success!",
-        html: `<div style="font-size: 16px; margin-top: 10px;">Invoice <strong>${fileName}</strong> downloaded successfully!</div>`,
+        title: "Downloaded!",
+        html: `<div>Invoice <strong>Invoice_${formData.invoiceNumber || Date.now()}.pdf</strong> downloaded.</div>`,
         confirmButtonColor: "#0097A7",
         timer: 3000,
         timerProgressBar: true,
       });
-
-      // If this was an auto-download from the list, navigate back to the list
       if (autoDownload) {
-        navigate("/dashboard/invoice-management");
-        return;
+        goToInvoiceManagement();
       }
-
-      window.scrollTo(currentScrollX, currentScrollY);
-    } catch (error) {
-      console.error("[PDF] Error generating PDF:", error);
-      const errorMessage = String(error?.message || "");
-      if (PDF_UNSUPPORTED_COLOR_REGEX.test(errorMessage)) {
-        try {
-          await triggerNativePrintPdfFallback();
-          await Swal.fire({
-            icon: "success",
-            title: "Print Ready",
-            text: "Opened native Print dialog as PDF fallback. Choose 'Save as PDF' to download.",
-            confirmButtonColor: "#0097A7",
-          });
-          if (autoDownload) {
-            navigate("/dashboard/invoice-management");
-            return;
-          }
-          return;
-        } catch (fallbackError) {
-          console.error("[PDF] Native print fallback failed:", fallbackError);
-        }
-      }
-      await Swal.fire({
+    } catch (err) {
+      console.error("[PDF] Error generating PDF:", err);
+      Swal.fire({
         icon: "error",
         title: "Error",
-        text: `Failed to generate PDF: ${errorMessage || "Please try again."}`,
+        text: err.message || "Failed to generate PDF. Please try again.",
         confirmButtonColor: "#0097A7",
-      });
-    } finally {
-      if (originalDisplayValues && originalDisplayValues.size > 0) {
-        originalDisplayValues.forEach((displayValue, element) => {
-          if (element) {
-            element.style.display = displayValue;
-          }
-        });
-      }
-
-      if (actionButtons) {
-        actionButtons.style.display = "";
-      }
-
-      if (largeDivContent) {
-        largeDivContent.style.transform = originalTransform;
-        largeDivContent.style.transformOrigin = originalTransformOrigin;
-        largeDivContent.style.transition = originalTransition;
-        largeDivContent.style.marginBottom = originalMarginBottom;
-        largeDivContent.style.width = originalWidth;
-      }
-
-      if (formCanvas) {
-        formCanvas.style.width = originalFormWidth;
-        formCanvas.style.maxWidth = originalFormMaxWidth;
-        formCanvas.style.transform = originalFormTransform;
-      }
-
-      const existingOverlay = document.getElementById("pdf-generation-overlay");
-      if (existingOverlay) {
-        existingOverlay.remove();
-      }
-
-      resetInputPadding();
-      flushSync(() => {
-        setPdfWidth(null);
-      });
-      window.scrollTo(currentScrollX, currentScrollY);
-
-      await new Promise((resolve) => requestAnimationFrame(resolve));
-      flushSync(() => {
-        setShowDashedBorders(true);
-        setViewBorder(true);
       });
     }
   };
@@ -1353,7 +564,7 @@ const InvoiceForm = () => {
           {/* Back Button - Always visible */}
           <div className="flex justify-start mb-3">
             <button
-              onClick={() => navigate("/dashboard/invoice-management")}
+              onClick={() => goToInvoiceManagement()}
               className="bg-gray-500 text-white font-bold px-3 py-2 rounded-lg hover:bg-gray-600 transition-colors flex items-center gap-2 text-sm sm:text-base sm:px-4 sm:py-2"
             >
               <i className="fas fa-arrow-left"></i>
@@ -1399,7 +610,7 @@ const InvoiceForm = () => {
               )}
 
               {id && id !== "new" && isViewMode && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div className="flex flex-row items-center gap-3">
                   <button
                     type="button"
                     onClick={handleDownloadPdf}
@@ -1409,27 +620,14 @@ const InvoiceForm = () => {
                     <span className="hidden sm:inline">Download PDF</span>
                     <span className="sm:hidden">PDF</span>
                   </button>
-                  <div className="flex flex-row justify-center items-center gap-2">
-                    <Checkbox
-                      type="checkbox"
-                      checked={showBorder}
-                      onChange={(e) => setShowBorder(e.target.checked)}
-                      className="mr-1 accent-[#0097A7]"
-                      style={{ width: 16, height: 16 }}
-                      label="Page Border"
-                    />
-                    <Checkbox
-                      type="checkbox"
-                      checked={showDashedBorders}
-                      onChange={(e) => {
-                        setShowDashedBorders(e.target.checked);
-                        setViewBorder(e.target.checked);
-                      }}
-                      className="mr-1 accent-[#FD7702]"
-                      style={{ width: 16, height: 16 }}
-                      label="Page Guides"
-                    />
-                  </div>
+                  <Checkbox
+                    type="checkbox"
+                    checked={showDashedBorders}
+                    onChange={(e) => setShowDashedBorders(e.target.checked)}
+                    className="mr-1 accent-[#FD7702]"
+                    style={{ width: 16, height: 16 }}
+                    label="Page Guides"
+                  />
                 </div>
               )}
             </div>
@@ -1441,10 +639,7 @@ const InvoiceForm = () => {
                   <Checkbox
                     type="checkbox"
                     checked={showDashedBorders}
-                    onChange={(e) => {
-                      setShowDashedBorders(e.target.checked);
-                      setViewBorder(e.target.checked);
-                    }}
+                    onChange={(e) => setShowDashedBorders(e.target.checked)}
                     className="mr-1 accent-[#FD7702]"
                     style={{ width: 16, height: 16 }}
                     label="Page Guides"
@@ -1510,7 +705,6 @@ const InvoiceForm = () => {
               printRef.current && zoomLevel < 1
                 ? `${printRef.current.offsetHeight * (zoomLevel - 1)}px`
                 : 0,
-            width: pdfWidth,
           }}
         >
           <div
@@ -1519,7 +713,7 @@ const InvoiceForm = () => {
           >
             <div
               className="w-full bg-white border border-gray-200 shadow-md form-canvas"
-              style={{ margin: "0 auto", width: pdfWidth, maxWidth: pdfWidth }}
+              style={{ margin: "0 auto" }}
             >
               {/* page header */}
               <div className="w-full bg-[#0097A7]" data-pdf-header="true">
@@ -1545,18 +739,12 @@ const InvoiceForm = () => {
                 className="my-4 px-2 mr-2.5 ml-5"
               >
                 <div className={`relative`}>
-                  {showDashedBorders && viewBorder ? (
+                  {showDashedBorders ? (
                     <>
                       <div className="absolute left-[0.65rem] top-10 bottom-0 w-[6px] h-[347mm] bg-[#FD7702]"></div>
                       <div className="absolute left-[0.65rem] top-[470mm] bottom-0 w-[6px] h-[347mm] bg-[#FD7702]"></div>
                     </>
                   ) : (
-                    <>
-                      <div className="absolute left-[0.65rem] top-10 bottom-0 w-[6px] h-[343mm] bg-[#FD7702]"></div>
-                      <div className="absolute left-[0.65rem] top-[370mm] bottom-0 w-[6px] h-[343mm] bg-[#FD7702]"></div>
-                    </>
-                  )}
-                  {!showDashedBorders && !viewBorder && (
                     <div className="absolute left-[0.65rem] top-10 bottom-0 w-[6px] bg-[#FD7702]"></div>
                   )}
                   <FormSection
@@ -1573,7 +761,7 @@ const InvoiceForm = () => {
                               ? new Date(formData.serviceDate)
                               : null
                           }
-                          onChange={handleServiceDateChange}
+                          onChange={(date) => handleDateFieldChange("serviceDate", date)}
                           width="317px"
                           disabled={isViewMode}
                           variant="invoice"
@@ -1584,7 +772,7 @@ const InvoiceForm = () => {
                           selected={
                             formData.date ? new Date(formData.date) : null
                           }
-                          onChange={handleDateChange}
+                          onChange={(date) => handleDateFieldChange("date", date)}
                           width="295px"
                           disabled={isViewMode}
                           variant="invoice"
