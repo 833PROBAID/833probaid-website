@@ -1,7 +1,5 @@
 "use client";
-
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
-import { pdf } from "@react-pdf/renderer";
 import { Typography } from "@material-tailwind/react";
 import {
   useParams,
@@ -10,6 +8,8 @@ import {
   useSearchParams,
 } from "next/navigation";
 import Swal from "sweetalert2";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 import {
   DateSelector,
   FormSection,
@@ -17,27 +17,26 @@ import {
   TextArea,
   Checkbox,
 } from "./SharedComponents";
-import { invoiceAPI } from "../lib/api";
 import {
   DEFAULT_INVOICE_NUMBER,
   deriveNextInvoiceNumber,
 } from "../utils/invoiceNumber";
-import InvoicePDF from "./InvoicePDF";
+import invoiceAPI from "../lib/api";
 
 const INVOICE_FORM_NAV_STATE_KEY = "invoiceFormNavState";
 const INVOICE_MANAGEMENT_ROUTE = "/dashboard/invoice-management";
+const INVOICE_FORM_ROUTE_BASE = "/dashboard/invoice-management/invoice-form";
 
 const InvoiceForm = () => {
+  const [showBorder, setShowBorder] = useState(false);
   const [showDashedBorders, setShowDashedBorders] = useState(false);
+  const [pdfWidth, setPdfWidth] = useState(null);
   const routeParams = useParams();
   const id = routeParams?.id;
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  // Shim to emulate react-router `location` object.
-  // Navigation `state` in Next.js is carried through sessionStorage under the key
-  // "invoiceFormNavState" by the callers (see InvoiceManagement.jsx).
   const navState = useMemo(() => {
     if (typeof window === "undefined") return {};
     try {
@@ -46,7 +45,6 @@ const InvoiceForm = () => {
     } catch {
       return {};
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
   const locationSearch = useMemo(() => {
@@ -60,8 +58,6 @@ const InvoiceForm = () => {
     pathname,
   };
 
-  // navigate(path, options) - matches react-router call signature.
-  // options.state is stashed in sessionStorage so the next page can read it.
   const navigate = useCallback(
     (path, options = {}) => {
       if (typeof window !== "undefined") {
@@ -81,10 +77,7 @@ const InvoiceForm = () => {
     },
     [router],
   );
-  const goToInvoiceManagement = useCallback(
-    (options = {}) => navigate(INVOICE_MANAGEMENT_ROUTE, options),
-    [navigate],
-  );
+
   const [zoomLevel, setZoomLevel] = useState(1);
   const printRef = useRef(null);
   const formContainerRef = useRef(null);
@@ -97,6 +90,7 @@ const InvoiceForm = () => {
       ? location.state.viewMode
       : id && id !== "new",
   );
+  const [viewBorder, setViewBorder] = useState(false);
   const [autoDownload, setAutoDownload] = useState(
     location.state?.autoDownload || false,
   );
@@ -136,7 +130,7 @@ const InvoiceForm = () => {
     notes:
       "THE GREATEST COMPLIMENT we can receive is your REFERRAL of an Estate, Trust, or Conservatorship client in need of Real Estate Guidance and Support.",
     disclaimer:
-      "This invoice is issued by 833PROBAID® for services rendered by Tigran Mkrtchian, as outlined above. Payment is respectfully due upon receipt. For any questions regarding this invoice or services provided, please contact our office at your earliest convenience. No legal or tax advice is provided or implied. All services are strictly real estate related. Clients should consult their attorney or tax professional for legal or financial matters.",
+      "This invoice is issued by 833PROBAID<sup>®</sup> for services rendered by Tigran Mkrtchian, as outlined above. Payment is respectfully due upon receipt. For any questions regarding this invoice or services provided, please contact our office at your earliest convenience. No legal or tax advice is provided or implied. All services are strictly real estate related. Clients should consult their attorney or tax professional for legal or financial matters.",
     serviceDate: new Date().toISOString().split("T")[0],
     descriptions: [
       "Subject Property: 419 N. Howard St. Glendale, CA 91206",
@@ -219,14 +213,11 @@ const InvoiceForm = () => {
 
   // Load invoice data if editing
   useEffect(() => {
-    let isCancelled = false;
-
     const loadInvoice = async () => {
       if (id && id !== "new") {
         setIsLoading(true);
         try {
           const invoice = await invoiceAPI.getById(id);
-          if (isCancelled) return;
 
           // Migrate old format to new array format if needed
           const migratedInvoice = { ...invoice };
@@ -271,12 +262,10 @@ const InvoiceForm = () => {
 
           setFormData(migratedInvoice);
         } catch (error) {
-          if (isCancelled) return;
           console.error("Error loading invoice:", error);
           Swal.fire("Error", error.message || "Invoice not found", "error");
-          goToInvoiceManagement({ replace: true });
+          navigate(INVOICE_MANAGEMENT_ROUTE);
         } finally {
-          if (isCancelled) return;
           setIsLoading(false);
         }
       } else if (id === "new") {
@@ -289,22 +278,26 @@ const InvoiceForm = () => {
       }
     };
     loadInvoice();
-    return () => {
-      isCancelled = true;
-    };
-  }, [id, goToInvoiceManagement, derivedInvoiceNumber]);
+  }, [id, navigate, derivedInvoiceNumber]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleDateFieldChange = useCallback((fieldName, date) => {
+  const handleDateChange = (date) => {
     setFormData((prev) => ({
       ...prev,
-      [fieldName]: date ? date.toISOString().split("T")[0] : "",
+      date: date ? date.toISOString().split("T")[0] : "",
     }));
-  }, []);
+  };
+
+  const handleServiceDateChange = (date) => {
+    setFormData((prev) => ({
+      ...prev,
+      serviceDate: date ? date.toISOString().split("T")[0] : "",
+    }));
+  };
 
   const formatPhoneNumber = (value) => {
     const cleaned = value.replace(/\D/g, "");
@@ -363,7 +356,7 @@ const InvoiceForm = () => {
   };
 
   const handleCancel = () => {
-    goToInvoiceManagement();
+    navigate(INVOICE_MANAGEMENT_ROUTE);
   };
 
   const handleSubmit = async (e) => {
@@ -381,14 +374,25 @@ const InvoiceForm = () => {
 
     setIsSaving(true);
     try {
+      let createdInvoiceId = null;
       if (id && id !== "new") {
+        // Update existing invoice
         await invoiceAPI.update(id, formData);
         Swal.fire("Success!", "Invoice updated successfully.", "success");
       } else {
-        await invoiceAPI.create(formData);
+        // Create new invoice
+        const res = await invoiceAPI.create(formData);
         Swal.fire("Success!", "Invoice created successfully.", "success");
+        createdInvoiceId = res?._id || null;
       }
-      goToInvoiceManagement();
+      setIsViewMode(true);
+      if (createdInvoiceId) {
+        navigate(`${INVOICE_FORM_ROUTE_BASE}/${createdInvoiceId}`, {
+          state: { viewMode: true },
+        });
+      }
+      // Scroll to top after saving
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (error) {
       console.error("Error saving invoice:", error);
       const message =
@@ -412,50 +416,698 @@ const InvoiceForm = () => {
   const handleResetZoom = () => {
     setZoomLevel(1);
   };
+  console.log(viewBorder);
 
-
+  // Temporarily shifts text downward inside tall inputs so html2canvas captures centered values
+  const adjustInputPaddingForPdf = (rootElement) => {
+    if (!rootElement) return () => {};
+    const selectors =
+      'input:not([type="checkbox"]):not([type="radio"]):not([type="file"]), textarea';
+    const fields = rootElement.querySelectorAll(selectors);
+    if (!fields.length) return () => {};
+    const adjustments = [];
+    const adjustPixels = 4;
+    fields.forEach((field) => {
+      const computed = window.getComputedStyle(field);
+      const topPadding = parseFloat(computed.paddingTop) || 0;
+      const bottomPadding = parseFloat(computed.paddingBottom) || 0;
+      if (topPadding === 0 && bottomPadding === 0) return;
+      const usableAdjustment = Math.min(adjustPixels, bottomPadding);
+      adjustments.push({
+        element: field,
+        paddingTop: field.style.paddingTop,
+        paddingBottom: field.style.paddingBottom,
+      });
+      field.style.paddingTop = `${topPadding + usableAdjustment}px`;
+      field.style.paddingBottom = `${Math.max(
+        bottomPadding - usableAdjustment,
+        0,
+      )}px`;
+    });
+    return () => {
+      adjustments.forEach(({ element, paddingTop, paddingBottom }) => {
+        element.style.paddingTop = paddingTop;
+        element.style.paddingBottom = paddingBottom;
+      });
+    };
+  };
 
   const handleDownloadPdf = async () => {
-    Swal.fire({
-      title: "Generating PDF...",
-      text: "Please wait while we prepare your invoice",
-      allowOutsideClick: false,
-      showConfirmButton: false,
-      didOpen: () => Swal.showLoading(),
+    setViewBorder(false);
+    //wait for 500 ms to let border disappear
+    new Promise((resolve) => setTimeout(resolve, 500));
+    document.body.classList.add("pdf-export-mode");
+
+    const content = document.getElementById("printable-content");
+    const actionButtons = document.getElementById("invoice-action-buttons");
+
+    // Store original showDashedBorders state
+    const originalShowDashedBorders = showDashedBorders;
+
+    // Initialize restoration tracking
+    let originalDisplayValues = new Map();
+    let resetInputPadding = () => {};
+    let pageHeader = null;
+    let pageFooter = null;
+    let middlePageBreaks = [];
+    let hideInPdfElements = [];
+    let largeDivContent = null;
+    let formCanvas = null;
+    let originalTransform = "";
+    let originalTransformOrigin = "";
+    let originalTransition = "";
+    let originalMarginBottom = "";
+    let originalWidth = "";
+    let originalFormWidth = "";
+    let originalFormTransform = "";
+    let originalFormMaxWidth = "";
+
+    // Temporarily enable showDashedBorders to capture header/footer
+    if (!showDashedBorders) {
+      setShowDashedBorders(true);
+      // Wait for state update to render the elements
+      await new Promise((resolve) => setTimeout(resolve, 250));
+      setViewBorder(false);
+    }
+
+    // Intelligent element selection using data attributes
+    pageHeader = document.querySelector("[data-pdf-header='true']");
+    pageFooter = document.querySelector("[data-pdf-footer='true']");
+
+    // Get all middle page break sections intelligently
+    // These are teal sections with z-30 class (middle sections) that are NOT header/footer
+    const allTealSections = Array.from(
+      document.querySelectorAll("#printable-content .bg-\\[\\#0097A7\\]"),
+    );
+
+    middlePageBreaks = allTealSections.filter((section) => {
+      const isMainHeader = section.hasAttribute("data-pdf-header");
+      const isMainFooter = section.hasAttribute("data-pdf-footer");
+      const hasZ30 = section.classList.contains("z-30");
+      const hasRelativeClass = section.classList.contains("relative");
+
+      // It's a middle page break if:
+      // 1. Not the main header or footer
+      // 2. Has z-30 and relative classes (characteristic of middle sections)
+      return !isMainHeader && !isMainFooter && hasZ30 && hasRelativeClass;
     });
+
+    console.log(`[PDF] Found header: ${!!pageHeader}, footer: ${!!pageFooter}`);
+    console.log(
+      `[PDF] Found ${middlePageBreaks.length} middle page breaks to hide`,
+    );
+
+    const paymentMethodSection = document.querySelector(
+      '[data-section="payment-method"]',
+    );
+    const disclaimerSection = document.querySelector(
+      '[data-section="disclaimer"]',
+    );
+
+    if (!content) {
+      setShowDashedBorders(originalShowDashedBorders);
+      document.body.classList.remove("pdf-export-mode");
+      await Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Could not find invoice content",
+        confirmButtonColor: "#0097A7",
+      });
+      return;
+    }
+
+    const currentScrollX = window.scrollX;
+    const currentScrollY = window.scrollY;
+
+    // Store original styles to restore later
+    largeDivContent = document.querySelector(".large-div-content");
+    formCanvas = document.querySelector(".form-canvas");
+
+    // Find elements marked to hide in PDF
+    hideInPdfElements = formCanvas.querySelectorAll(
+      "[data-hide-in-pdf='true']",
+    );
+    console.log(
+      `[PDF] Found ${hideInPdfElements.length} elements with data-hide-in-pdf`,
+    );
+
+    originalTransform = largeDivContent?.style.transform || "";
+    originalTransformOrigin = largeDivContent?.style.transformOrigin || "";
+    originalTransition = largeDivContent?.style.transition || "";
+    originalMarginBottom = largeDivContent?.style.marginBottom || "";
+    originalWidth = largeDivContent?.style.width || "";
+    originalFormWidth = formCanvas?.style.width || "";
+    originalFormTransform = formCanvas?.style.transform || "";
+    originalFormMaxWidth = formCanvas?.style.maxWidth || "";
+
+    // Do not create a blocking overlay here; Swal already handles loading UI.
+
     try {
-      const logoUrl = `${window.location.origin}/833PROBAID-logo.png`;
-      const bannerUrl = `${window.location.origin}/banner2.png`;
-      const blob = await pdf(
-        <InvoicePDF data={formData} logoUrl={logoUrl} bannerUrl={bannerUrl} />,
-      ).toBlob();
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `Invoice_${formData.invoiceNumber || Date.now()}.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      setTimeout(() => URL.revokeObjectURL(url), 100);
+      // Show initial loading
+      Swal.fire({
+        icon: "info",
+        title: "Preparing invoice...",
+        text: "Please wait while we prepare your invoice for PDF generation",
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+
+      // Hide action buttons before capturing
+      if (actionButtons) {
+        actionButtons.style.display = "none";
+      }
+
+      // Reset scaling and set fixed letter-size width for PDF capture
+      // US Letter size is 8.5 x 11 inches = 816 x 1056 pixels at 96 DPI
+      const letterWidthPx = 816;
+      setPdfWidth(letterWidthPx);
+      if (largeDivContent) {
+        largeDivContent.style.transform = "none";
+        largeDivContent.style.transformOrigin = "top left";
+        largeDivContent.style.transition = "none";
+        largeDivContent.style.marginBottom = "0";
+      }
+
+      // Force form canvas to letter width and disable all transforms
+      if (formCanvas) {
+        formCanvas.style.transform = "none";
+      }
+
+      // Wait for styles to apply
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      // Update loading message
+      Swal.update({
+        icon: "info",
+        title: "Capturing invoice...",
+        html: '<div style="font-size: 16px; margin-top: 10px;">Rendering invoice content for PDF</div>',
+      });
+
+      window.scrollTo(0, 0);
+
+      // Capture header separately if it exists
+      let headerCanvas = null;
+      let headerHeight = 0;
+      if (pageHeader) {
+        console.log("Capturing header...");
+        // Detect if Mac device
+        const isMac = /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);
+        headerCanvas = await html2canvas(pageHeader, {
+          scale: 1.5,
+          useCORS: true,
+          allowTaint: true,
+          logging: false,
+          backgroundColor: "#0097A7",
+          letterRendering: true,
+          onclone: (clonedDoc) => {
+            // Make fonts bolder for Mac devices
+            if (isMac) {
+              const elements = clonedDoc.querySelectorAll("*");
+              elements.forEach((el) => {
+                const weight = window.getComputedStyle(el).fontWeight;
+                el.style.fontWeight =
+                  weight >= 500 ? "900" : weight >= 400 ? "700" : weight;
+                el.style.webkitFontSmoothing = "antialiased";
+                el.style.mozOsxFontSmoothing = "grayscale";
+              });
+            }
+          },
+        });
+        headerHeight = headerCanvas.height;
+        console.log("Header captured, height:", headerHeight);
+      } else {
+        console.warn("Page header not found!");
+      }
+
+      // Hide elements marked with data-hide-in-pdf before capturing footer
+      const hideInPdfInFooter = pageFooter?.querySelectorAll(
+        "[data-hide-in-pdf='true']",
+      );
+      const footerHiddenElements = [];
+      if (hideInPdfInFooter) {
+        hideInPdfInFooter.forEach((element, index) => {
+          footerHiddenElements.push({
+            element,
+            originalDisplay: element.style.display,
+          });
+          element.style.display = "none";
+          console.log(
+            `[PDF] Hidden footer element #${index + 1} before capture`,
+          );
+        });
+      }
+
+      // Capture footer separately if it exists
+      let footerCanvas = null;
+      let footerHeight = 0;
+      if (pageFooter) {
+        console.log("Capturing footer...");
+        // Detect if Mac device
+        const isMac = /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);
+        footerCanvas = await html2canvas(pageFooter, {
+          scale: 1.5,
+          useCORS: true,
+          allowTaint: true,
+          logging: false,
+          backgroundColor: "#0097A7",
+          letterRendering: true,
+          onclone: (clonedDoc) => {
+            // Make fonts bolder for Mac devices
+            if (isMac) {
+              const elements = clonedDoc.querySelectorAll("*");
+              elements.forEach((el) => {
+                const weight = window.getComputedStyle(el).fontWeight;
+                el.style.fontWeight =
+                  weight >= 500 ? "900" : weight >= 400 ? "700" : weight;
+                el.style.webkitFontSmoothing = "antialiased";
+                el.style.mozOsxFontSmoothing = "grayscale";
+              });
+            }
+          },
+        });
+        footerHeight = footerCanvas.height;
+        console.log("Footer captured, height:", footerHeight);
+      } else {
+        console.warn("Page footer not found!");
+      }
+
+      // Restore footer elements after capture
+      if (footerHiddenElements.length > 0) {
+        footerHiddenElements.forEach(({ element, originalDisplay }) => {
+          element.style.display = originalDisplay;
+        });
+        console.log("[PDF] Restored footer elements after capture");
+      }
+
+      // Now hide all page guide elements from main content capture
+      console.log("[PDF] Hiding page guide elements...");
+
+      // Store original display values for restoration
+      originalDisplayValues = new Map();
+
+      if (pageHeader) {
+        originalDisplayValues.set(pageHeader, pageHeader.style.display);
+        pageHeader.style.display = "none";
+        console.log("[PDF] Hidden main header");
+      }
+      if (pageFooter) {
+        originalDisplayValues.set(pageFooter, pageFooter.style.display);
+        pageFooter.style.display = "none";
+        console.log("[PDF] Hidden main footer");
+      }
+
+      // Hide middle page break sections
+      middlePageBreaks.forEach((section, index) => {
+        originalDisplayValues.set(section, section.style.display);
+        section.style.display = "none";
+        console.log(`[PDF] Hidden middle page break #${index + 1}`);
+      });
+
+      // Hide elements marked with data-hide-in-pdf
+      hideInPdfElements.forEach((element, index) => {
+        originalDisplayValues.set(element, element.style.display);
+        element.style.display = "none";
+        console.log(`[PDF] Hidden data-hide-in-pdf element #${index + 1}`);
+      });
+
+      console.log(
+        `[PDF] Total ${originalDisplayValues.size} elements hidden for clean content capture`,
+      );
+
+      // Wait a moment for the DOM to update after hiding elements
+      await new Promise((resolve) => setTimeout(resolve, 150));
+
+      // Update loading message for calculation
+      Swal.update({
+        icon: "info",
+        title: "Calculating pages...",
+        html: '<div style="font-size: 16px; margin-top: 10px;">Analyzing invoice content</div>',
+      });
+
+      // Get the position where payment method section starts (after hiding header/footer)
+      let paymentSectionTop = 0;
+      if (paymentMethodSection) {
+        const contentRect = content.getBoundingClientRect();
+        const sectionRect = paymentMethodSection.getBoundingClientRect();
+
+        const bufferPixels = 10 * 2;
+        paymentSectionTop =
+          (sectionRect.top - contentRect.top) * 2 - bufferPixels;
+        console.log(
+          "Payment section found at (after hiding header/footer):",
+          paymentSectionTop,
+        );
+      } else {
+        console.log("Payment section NOT found");
+      }
+
+      // Get the position where disclaimer section starts
+      let disclaimerSectionTop = 0;
+      let disclaimerSectionHeight = 0;
+      if (disclaimerSection) {
+        const contentRect = content.getBoundingClientRect();
+        const disclaimerRect = disclaimerSection.getBoundingClientRect();
+        disclaimerSectionTop = (disclaimerRect.top - contentRect.top) * 2;
+        disclaimerSectionHeight = disclaimerRect.height * 2;
+        console.log(
+          "Disclaimer section found at:",
+          disclaimerSectionTop,
+          "height:",
+          disclaimerSectionHeight,
+        );
+      } else {
+        console.log("Disclaimer section NOT found");
+      }
+
+      // Capture full content (without header and footer)
+      resetInputPadding = adjustInputPaddingForPdf(content);
+      // Detect if Mac device
+      const isMac = /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);
+      const canvas = await html2canvas(content, {
+        scale: 1.5,
+        useCORS: true,
+        allowTaint: true,
+        logging: false,
+        backgroundColor: "#ffffff",
+        letterRendering: true,
+        scrollX: -currentScrollX,
+        scrollY: -currentScrollY,
+        onclone: (clonedDoc) => {
+          // Make fonts bolder for Mac devices
+          if (isMac) {
+            const elements = clonedDoc.querySelectorAll("*");
+            elements.forEach((el) => {
+              const weight = window.getComputedStyle(el).fontWeight;
+              el.style.fontWeight =
+                weight >= 500 ? "900" : weight >= 400 ? "700" : weight;
+              el.style.webkitFontSmoothing = "antialiased";
+              el.style.mozOsxFontSmoothing = "grayscale";
+            });
+          }
+        },
+      });
+
+      // Create PDF with US Letter size (8.5 x 11 inches)
+      const pdf = new jsPDF("p", "mm", "letter");
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+
+      // Define print margins (in mm) - margins around the entire content
+      const printMarginLeft = 3; // 5mm left margin
+      const printMarginRight = 3; // 5mm right margin
+      const printMarginTop = 3; // 5mm top margin
+      const printMarginBottom = 3; // 5mm bottom margin
+
+      // Calculate available space after margins
+      const availableWidth = pdfWidth - printMarginLeft - printMarginRight;
+      const availableHeight = pdfHeight - printMarginTop - printMarginBottom;
+
+      // Calculate scaling
+      const imgWidth = canvas.width;
+      const imgHeight = canvas.height;
+      const ratio = availableWidth / imgWidth; // Scale to fit within margins
+      const scaledWidth = availableWidth;
+      const scaledHeaderHeight = headerHeight * ratio;
+      const scaledFooterHeight = footerHeight * ratio;
+
+      // Define padding in mm for spacing from header and footer.
+      // Non-zero values prevent content from visually bleeding under bands.
+      const topPadding = 0;
+      const bottomPadding = 0;
+
+      // Multi-page handling with header and footer
+      const headerImgData = headerCanvas
+        ? headerCanvas.toDataURL("image/jpeg", 0.85)
+        : null;
+      const footerImgData = footerCanvas
+        ? footerCanvas.toDataURL("image/jpeg", 0.85)
+        : null;
+
+      // Calculate how much content we've processed in pixels (on the canvas)
+      // Since we hid header and footer, start from 0
+      let processedHeight = 2; // Start from beginning since header/footer are hidden
+      let pageNumber = 0;
+      // Track the content area (full content since header/footer are hidden)
+      const contentEndHeight = imgHeight;
+
+      // First pass: calculate total number of pages
+      let tempProcessedHeight = 0;
+      let totalPages = 0;
+      const availableContentHeightForCalc =
+        availableHeight -
+        scaledHeaderHeight -
+        scaledFooterHeight -
+        topPadding -
+        bottomPadding;
+      while (tempProcessedHeight < contentEndHeight) {
+        const contentHeightInCanvasPixelsTemp =
+          availableContentHeightForCalc / ratio;
+        const heightToCaptureTemp = Math.min(
+          contentHeightInCanvasPixelsTemp,
+          contentEndHeight - tempProcessedHeight,
+        );
+        tempProcessedHeight += heightToCaptureTemp;
+        totalPages++;
+      }
+
+      // Always use 2 pages
+      const pagesToGenerate = 2;
+
+      // Update loading message for generation
+      Swal.update({
+        title: "Generating PDF",
+        html: `<div style="font-size: 16px; margin-top: 10px;">Creating <strong>${pagesToGenerate}</strong> of <strong>${totalPages}</strong> page(s)</div>`,
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+
+      while (
+        processedHeight < contentEndHeight &&
+        pageNumber < pagesToGenerate
+      ) {
+        if (pageNumber > 0) {
+          pdf.addPage();
+        }
+
+        // Paint solid backgrounds so no content can appear under header/footer.
+        pdf.setFillColor(255, 255, 255);
+        pdf.rect(
+          printMarginLeft,
+          printMarginTop,
+          availableWidth,
+          availableHeight,
+          "F",
+        );
+        pdf.setFillColor(0, 151, 167);
+        pdf.rect(
+          printMarginLeft,
+          printMarginTop,
+          scaledWidth,
+          scaledHeaderHeight,
+          "F",
+        );
+        pdf.rect(
+          printMarginLeft,
+          printMarginTop + availableHeight - scaledFooterHeight,
+          scaledWidth,
+          scaledFooterHeight,
+          "F",
+        );
+
+        // Add header to every page
+        if (headerImgData) {
+          pdf.addImage(
+            headerImgData,
+            "JPEG",
+            printMarginLeft,
+            printMarginTop,
+            scaledWidth,
+            scaledHeaderHeight,
+          );
+        }
+
+        // Calculate available height for content on this page (account for header, footer, and padding)
+        const availableContentHeight =
+          availableHeight -
+          scaledHeaderHeight -
+          scaledFooterHeight -
+          topPadding -
+          bottomPadding;
+
+        // Use same calculation for all pages
+        const contentHeightInCanvasPixels = availableContentHeight / ratio;
+        const heightToCapture = Math.min(
+          contentHeightInCanvasPixels,
+          contentEndHeight - processedHeight,
+        );
+
+        // Create a temporary canvas for this page's content slice
+        const pageCanvas = document.createElement("canvas");
+        pageCanvas.width = imgWidth;
+        pageCanvas.height = heightToCapture;
+        const pageCtx = pageCanvas.getContext("2d");
+
+        // Draw the specific portion of the original canvas (skipping header/footer)
+        pageCtx.drawImage(
+          canvas,
+          0,
+          processedHeight, // Source position (x, y) - starts after header
+          imgWidth,
+          heightToCapture, // Source size (width, height)
+          0,
+          0, // Destination position (x, y)
+          imgWidth,
+          heightToCapture, // Destination size (width, height)
+        );
+        // Convert to image and add to PDF
+        const pageImgData = pageCanvas.toDataURL("image/jpeg", 0.85);
+        const yPosition = printMarginTop + scaledHeaderHeight + topPadding; // Add margins and top padding after header
+        const scaledContentHeight = heightToCapture * ratio;
+
+        pdf.addImage(
+          pageImgData,
+          "JPEG",
+          printMarginLeft,
+          yPosition,
+          scaledWidth,
+          scaledContentHeight,
+        );
+
+        // Add footer to every page (with bottom padding and margins)
+        if (footerImgData) {
+          const footerLeftOffset = 6.4;
+          pdf.addImage(
+            footerImgData,
+            "JPEG",
+            printMarginLeft + footerLeftOffset,
+            printMarginTop + availableHeight - scaledFooterHeight,
+            scaledWidth - footerLeftOffset,
+            scaledFooterHeight,
+          );
+
+          // Add page number inside the footer on the right side
+          pdf.setFontSize(20);
+          pdf.setFont(undefined, "bold");
+          pdf.setTextColor(255, 255, 255); // White color for visibility on teal background
+          const pageText = `${pageNumber + 1}`;
+          const textWidth = pdf.getTextWidth(pageText);
+          pdf.text(
+            pageText,
+            printMarginLeft + availableWidth - textWidth - 5, // 5mm from right edge (considering margin)
+            printMarginTop + availableHeight - scaledFooterHeight / 2 + 2, // Vertically centered in footer
+          );
+        }
+
+        // Draw border only if enabled
+        if (showBorder) {
+          const hairline = 0.0015;
+          pdf.setLineWidth(hairline);
+          //teal border color
+          pdf.setDrawColor(0, 128, 128);
+          const bx = printMarginLeft;
+          const by = printMarginTop;
+          const bw = availableWidth;
+          const bh = availableHeight;
+          pdf.setLineWidth(0.0015); // Thicker border (2.5mm)
+          pdf.line(bx, by, bx + bw, by); // top
+          pdf.line(bx + bw, by, bx + bw, by + bh); // right
+          pdf.line(bx + bw, by + bh, bx, by + bh); // bottom
+          pdf.line(bx, by + bh, bx, by); // left
+        }
+
+        // Move to next section
+        processedHeight += heightToCapture;
+        pageNumber++;
+      }
+
+      const fileName = `Invoice_${formData.invoiceNumber || Date.now()}.pdf`;
+
+      // Save the PDF
+      pdf.save(fileName);
+
+      // Show success message
       await Swal.fire({
         icon: "success",
-        title: "Downloaded!",
-        html: `<div>Invoice <strong>Invoice_${formData.invoiceNumber || Date.now()}.pdf</strong> downloaded.</div>`,
+        title: "Success!",
+        html: `<div style="font-size: 16px; margin-top: 10px;">Invoice <strong>${fileName}</strong> downloaded successfully!</div>`,
         confirmButtonColor: "#0097A7",
         timer: 3000,
         timerProgressBar: true,
       });
+
+      // If this was an auto-download from the list, navigate back to the list
       if (autoDownload) {
-        goToInvoiceManagement();
+        navigate(INVOICE_MANAGEMENT_ROUTE);
+        return;
       }
-    } catch (err) {
-      console.error("[PDF] Error generating PDF:", err);
-      Swal.fire({
+
+      window.scrollTo(currentScrollX, currentScrollY);
+    } catch (error) {
+      console.error("[PDF] Error generating PDF:", error);
+      await Swal.fire({
         icon: "error",
         title: "Error",
-        text: err.message || "Failed to generate PDF. Please try again.",
+        text: `Failed to generate PDF: ${error.message || "Please try again."}`,
         confirmButtonColor: "#0097A7",
       });
+    } finally {
+      console.log("[PDF] Cleanup - restoring original state...");
+
+      // Restore all hidden elements using the stored display values
+      if (originalDisplayValues && originalDisplayValues.size > 0) {
+        originalDisplayValues.forEach((displayValue, element) => {
+          if (element) {
+            element.style.display = displayValue;
+          }
+        });
+        console.log(`[PDF] Restored ${originalDisplayValues.size} elements`);
+      }
+
+      // Restore showDashedBorders state
+      setShowDashedBorders(originalShowDashedBorders);
+
+      // Restore action buttons
+      if (actionButtons) {
+        actionButtons.style.display = "";
+      }
+
+      // Restore original styles
+      if (largeDivContent) {
+        largeDivContent.style.transform = originalTransform;
+        largeDivContent.style.transformOrigin = originalTransformOrigin;
+        largeDivContent.style.transition = originalTransition;
+        largeDivContent.style.marginBottom = originalMarginBottom;
+        largeDivContent.style.width = originalWidth;
+      }
+
+      // Restore form canvas styles
+      if (formCanvas) {
+        formCanvas.style.width = originalFormWidth;
+        formCanvas.style.maxWidth = originalFormMaxWidth;
+        formCanvas.style.transform = originalFormTransform;
+      }
+
+      // Remove any old overlay if present and clear PDF mode class.
+      const existingOverlay = document.getElementById("pdf-generation-overlay");
+      if (existingOverlay) existingOverlay.remove();
+      document.body.classList.remove("pdf-export-mode");
+
+      resetInputPadding();
+      setPdfWidth(null);
+      window.scrollTo(currentScrollX, currentScrollY);
+
+      // wait a moment before finishing
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      setShowDashedBorders(true);
+      setViewBorder(true);
+
+      console.log("[PDF] Restoration complete - PDF generation finished");
     }
   };
 
@@ -551,6 +1203,10 @@ const InvoiceForm = () => {
 				* {
 					font-family: "Poppins", sans-serif;
 				}
+				/* PDF capture tweak: html2canvas renders FontAwesome icons lower than browser. */
+				.pdf-export-mode .form-section-icon {
+					margin-bottom: 0.75rem;
+				}
 				.form-canvas input:disabled,
 				.form-canvas textarea:disabled,
 				.form-canvas select:disabled {
@@ -564,7 +1220,7 @@ const InvoiceForm = () => {
           {/* Back Button - Always visible */}
           <div className="flex justify-start mb-3">
             <button
-              onClick={() => goToInvoiceManagement()}
+              onClick={() => navigate(INVOICE_MANAGEMENT_ROUTE)}
               className="bg-gray-500 text-white font-bold px-3 py-2 rounded-lg hover:bg-gray-600 transition-colors flex items-center gap-2 text-sm sm:text-base sm:px-4 sm:py-2"
             >
               <i className="fas fa-arrow-left"></i>
@@ -610,7 +1266,7 @@ const InvoiceForm = () => {
               )}
 
               {id && id !== "new" && isViewMode && (
-                <div className="flex flex-row items-center gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   <button
                     type="button"
                     onClick={handleDownloadPdf}
@@ -620,14 +1276,27 @@ const InvoiceForm = () => {
                     <span className="hidden sm:inline">Download PDF</span>
                     <span className="sm:hidden">PDF</span>
                   </button>
-                  <Checkbox
-                    type="checkbox"
-                    checked={showDashedBorders}
-                    onChange={(e) => setShowDashedBorders(e.target.checked)}
-                    className="mr-1 accent-[#FD7702]"
-                    style={{ width: 16, height: 16 }}
-                    label="Page Guides"
-                  />
+                  <div className="flex flex-row justify-center items-center gap-2">
+                    <Checkbox
+                      type="checkbox"
+                      checked={showBorder}
+                      onChange={(e) => setShowBorder(e.target.checked)}
+                      className="mr-1 accent-[#0097A7]"
+                      style={{ width: 16, height: 16 }}
+                      label="Page Border"
+                    />
+                    <Checkbox
+                      type="checkbox"
+                      checked={showDashedBorders}
+                      onChange={(e) => {
+                        setShowDashedBorders(e.target.checked);
+                        setViewBorder(e.target.checked);
+                      }}
+                      className="mr-1 accent-[#FD7702]"
+                      style={{ width: 16, height: 16 }}
+                      label="Page Guides"
+                    />
+                  </div>
                 </div>
               )}
             </div>
@@ -639,7 +1308,10 @@ const InvoiceForm = () => {
                   <Checkbox
                     type="checkbox"
                     checked={showDashedBorders}
-                    onChange={(e) => setShowDashedBorders(e.target.checked)}
+                    onChange={(e) => {
+                      setShowDashedBorders(e.target.checked);
+                      setViewBorder(e.target.checked);
+                    }}
                     className="mr-1 accent-[#FD7702]"
                     style={{ width: 16, height: 16 }}
                     label="Page Guides"
@@ -705,6 +1377,7 @@ const InvoiceForm = () => {
               printRef.current && zoomLevel < 1
                 ? `${printRef.current.offsetHeight * (zoomLevel - 1)}px`
                 : 0,
+            width: pdfWidth,
           }}
         >
           <div
@@ -713,7 +1386,7 @@ const InvoiceForm = () => {
           >
             <div
               className="w-full bg-white border border-gray-200 shadow-md form-canvas"
-              style={{ margin: "0 auto" }}
+              style={{ margin: "0 auto", width: pdfWidth, maxWidth: pdfWidth }}
             >
               {/* page header */}
               <div className="w-full bg-[#0097A7]" data-pdf-header="true">
@@ -726,7 +1399,7 @@ const InvoiceForm = () => {
                     />
                   </div>
                   <div className="bg-[#FD7702] -ml-9 border-[21px] border-r-0 border-[#0097A7] text-white px-6 py-4 font-bold text-[3.5rem] uppercase col-span-4 rounded-l-full flex items-center justify-end">
-                    833PROBAID<sup>®</sup>- Invoice
+                    833PROBAID<sup>®</sup> - Invoice
                   </div>
                 </div>
               </div>
@@ -739,16 +1412,22 @@ const InvoiceForm = () => {
                 className="my-4 px-2 mr-2.5 ml-5"
               >
                 <div className={`relative`}>
-                  {showDashedBorders ? (
+                  {showDashedBorders && viewBorder ? (
                     <>
                       <div className="absolute left-[0.65rem] top-10 bottom-0 w-[6px] h-[347mm] bg-[#FD7702]"></div>
                       <div className="absolute left-[0.65rem] top-[470mm] bottom-0 w-[6px] h-[347mm] bg-[#FD7702]"></div>
                     </>
                   ) : (
+                    <>
+                      <div className="absolute left-[0.65rem] top-10 bottom-0 w-[6px] h-[343mm] bg-[#FD7702]"></div>
+                      <div className="absolute left-[0.65rem] top-[370mm] bottom-0 w-[6px] h-[343mm] bg-[#FD7702]"></div>
+                    </>
+                  )}
+                  {!showDashedBorders && !viewBorder && (
                     <div className="absolute left-[0.65rem] top-10 bottom-0 w-[6px] bg-[#FD7702]"></div>
                   )}
                   <FormSection
-                    title="833PROBAID® - Invoice"
+                    title="833PROBAID<sup>®</sup>- Invoice"
                     icon="fa-file-invoice"
                   >
                     <div className="space-y-3.5">
@@ -761,7 +1440,7 @@ const InvoiceForm = () => {
                               ? new Date(formData.serviceDate)
                               : null
                           }
-                          onChange={(date) => handleDateFieldChange("serviceDate", date)}
+                          onChange={handleServiceDateChange}
                           width="317px"
                           disabled={isViewMode}
                           variant="invoice"
@@ -772,7 +1451,7 @@ const InvoiceForm = () => {
                           selected={
                             formData.date ? new Date(formData.date) : null
                           }
-                          onChange={(date) => handleDateFieldChange("date", date)}
+                          onChange={handleDateChange}
                           width="295px"
                           disabled={isViewMode}
                           variant="invoice"
@@ -801,7 +1480,7 @@ const InvoiceForm = () => {
                         />
                       </div>
 
-                      <div className="flex flex-row justify-between items-center my-3.5 gap-0">
+                      <div className="flex flex-row justify-between items-center my-3 gap-0">
                         <Typography
                           variant="h3"
                           className="font-semibold bg-colorTeal text-white w-max px-2 py-1 uppercase"
@@ -816,7 +1495,7 @@ const InvoiceForm = () => {
                         </Typography>
                       </div>
 
-                      <div className="grid grid-cols-1 gap-3.5">
+                      <div className="grid grid-cols-1 gap-3">
                         <TextInput
                           name="billingContact"
                           label={renderLabel("Billing Contact :")}
@@ -858,7 +1537,7 @@ const InvoiceForm = () => {
                           variant="invoice"
                         />
                       </div>
-                      <div className="bg-[#0097A7] text-white py-2 mt-3.5">
+                      <div className="bg-[#0097A7] text-white py-2 mt-3">
                         <div className="flex gap-3 justify-evenly text-2xl font-bold">
                           {/* Phone Section */}
                           <a
@@ -870,7 +1549,7 @@ const InvoiceForm = () => {
                               <div className="tracking-wide">(833) PROBAID</div>
                               <div className="tracking-wider lowercase -mt-1 w-max ml-px text-[27px]">
                                 7762243
-                              </div>
+                              </div>{" "}
                             </div>
                           </a>
                           <div className="border-r-2 border-white"></div>
@@ -915,15 +1594,15 @@ const InvoiceForm = () => {
                           </a>
                         </div>
                       </div>
-                      <div className="mt-3.5">
+                      <div className="mt-3">
                         <Typography
                           variant="h3"
-                          className="font-semibold bg-colorTeal text-white w-max px-2 py-1 uppercase"
+                          className="font-semibold bg-colorTeal text-white w-max px-2 uppercase"
                         >
                           To
                         </Typography>
                       </div>
-                      <div className="grid grid-cols-1 gap-3.5">
+                      <div className="grid grid-cols-1 gap-2">
                         <TextInput
                           name="companyName"
                           label={renderLabel("Name / Company :")}
@@ -1032,7 +1711,7 @@ const InvoiceForm = () => {
                     title="Description of Services"
                     icon="fa-clipboard-list"
                   >
-                    <div className="space-y-3.5">
+                    <div className="space-y-3">
                       {(formData.descriptions || [""]).map(
                         (description, index) => {
                           // If in view mode and description is empty or just whitespace, show empty space
@@ -1378,7 +2057,7 @@ const InvoiceForm = () => {
                               <div className="tracking-wide">(833) PROBAID</div>
                               <div className="tracking-wider lowercase -mt-1 w-max ml-px text-[27px]">
                                 7762243
-                              </div>
+                              </div>{" "}
                             </div>
                           </a>
                           <div className="border-r-2 border-white"></div>
@@ -1435,14 +2114,14 @@ const InvoiceForm = () => {
                             />
                           </div>
                           <div className="bg-[#FD7702] -ml-9 border-[21px] border-r-0 border-[#0097A7] text-white px-6 py-4 font-bold text-[3.4rem] uppercase col-span-4 rounded-l-full flex items-center justify-end">
-                            833PROBAID® - Invoice
+                            833PROBAID<sup>®</sup> - Invoice
                           </div>
                         </div>
                       </div>
                     </>
                   )}
                   <FormSection title="Service Summary" icon="fa-calculator">
-                    <div className="space-y-3.5">
+                    <div className="space-y-3">
                       <div className="flex justify-between">
                         <div className="flex items-center gap-2 bg-colorTeal text-white px-2 py-1">
                           <div className="flex justify-center items-center px-2 py-1 w-full bg-colorTeal">
@@ -1879,7 +2558,7 @@ const InvoiceForm = () => {
                           <div className="tracking-wide">(833) PROBAID</div>
                           <div className="tracking-wider lowercase -mt-1 w-max ml-px text-[27px]">
                             7762243
-                          </div>
+                          </div>{" "}
                         </div>
                       </a>
                       <div className="border-r-2 border-white"></div>

@@ -1,5 +1,5 @@
 import { Anton, Montserrat } from "next/font/google";
-import "./globals.css";
+import "./global.css";
 import AppClientShell from "../components/AppClientShell";
 
 const anton = Anton({
