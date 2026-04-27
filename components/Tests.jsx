@@ -15,7 +15,7 @@ export default function TEST() {
 
       {/* Content */}
       <div className="absolute inset-0 z-20 flex items-center justify-center text-center text-black px-20">
-        <div className="flex flex-col items-center justify-center">
+        <div className="flex flex-col items-center justify-cente">
           <Image
             src="/images/footer-logo.png"
             alt="Footer logo"
