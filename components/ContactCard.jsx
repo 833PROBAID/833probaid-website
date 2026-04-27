@@ -16,7 +16,7 @@ export default function TEST() {
       {/* Content */}
       <div className="absolute inset-0 z-20 flex items-center justify-center text-center text-black px-20">
         <div>
-          <div className="relative">
+          <div className="relative max-w-[350px]">
             <h2 className="text-secondary text-center text-[33px] font-bold floating-text">
               Contact Us
             </h2>
@@ -26,10 +26,7 @@ export default function TEST() {
                 style={{ width: "28px", marginTop: "4px" }}
                 alt="Location"
               />
-              <p
-                className="font-bold text-left"
-                style={{ fontSize: "17px", lineHeight: "1.6" }}
-              >
+              <p className="font-bold text-left text-sm md:text-[17px]">
                 311 N. Robertson Blvd #444, Beverly Hills, CA 90211
               </p>
             </div>
@@ -39,16 +36,13 @@ export default function TEST() {
                 style={{ width: "28px" }}
                 alt="Phone"
               />
-              <div
-                className="flex flex-row items-start justify-start"
-                style={{ fontSize: "30px" }}
-              >
-                <b className="text-secondary font-bold">(833)&nbsp;</b>
+              <div className="flex flex-row items-start justify-start text-xl  md:text-3xl">
+                <b className="text-secondary font-bold ">(833)&nbsp;</b>
                 <div className="flex flex-col gap-3">
-                  <b className="text-secondary tracking-[0.1rem] font-bold">
+                  <b className="text-secondary tracking-[0.1rem] font-bold ">
                     PROBAID
                   </b>
-                  <b className="text-primary leading-0.5 tracking-[0.28rem] font-bold">
+                  <b className="text-primary leading-0.5 tracking-[0.28rem] font-bold ml-2 md:ml-1">
                     7762243
                   </b>
                 </div>
@@ -64,9 +58,7 @@ export default function TEST() {
                 style={{ width: "28px" }}
                 alt="Email"
               />
-              <p className="font-bold" style={{ fontSize: "20px" }}>
-                Info@833probaid.com
-              </p>
+              <p className="font-bold md:text-xl">Info@833probaid.com</p>
             </a>
 
             <a
@@ -79,9 +71,7 @@ export default function TEST() {
                 style={{ width: "25px" }}
                 alt="Website"
               />
-              <p className="ml-0.5 font-bold" style={{ fontSize: "20px" }}>
-                www.833probaid.com
-              </p>
+              <p className="ml-0.5 font-bold md:text-xl">www.833probaid.com</p>
             </a>
           </div>
         </div>{" "}

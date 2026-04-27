@@ -96,7 +96,7 @@ export default function Footer() {
       <div className="max-w-[1400px]  mx-auto">
         <div className="py-8">
           <div className="font-montserrat">
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-1">
+            <div className="grid grid-cols-1 gap-0  lg:grid-cols-3 md:gap-1">
               <LogoCard />
               <ContactCard />
               <NewsletterCard />

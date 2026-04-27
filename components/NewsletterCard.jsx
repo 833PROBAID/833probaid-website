@@ -58,20 +58,13 @@ export default function NewsletterCard() {
 
         {/* Content */}
         <div className="absolute inset-0 z-20 flex items-center justify-center text-center text-black px-14">
-          <div className="">
-            <h2 className="text-[#0097A7] text-center text-[30px] font-bold floating-text pl-6 font-roboto">
+          <div className="-mt-6 max-w-[350px]">
+            <h2 className="text-[#0097A7] text-center text-xl md:text-[30px] font-bold floating-text pl-6 font-roboto">
               Join Our Newsletter
             </h2>
 
             <div className="flex flex-col gap-3">
-              <p
-                className="font-bold pl-2"
-                style={{
-                  fontSize: "17px",
-                  textAlign: "center",
-                  lineHeight: "1.6",
-                }}
-              >
+              <p className="font-bold pl-2 text-sm md:text-[17px]">
                 Stay up to date with the latest news and updates from{" "}
                 <b className="text-primary">
                   833PROBAID
@@ -87,13 +80,7 @@ export default function NewsletterCard() {
                 </b>
                 .
               </p>
-              <span
-                className="font-bold"
-                style={{
-                  fontSize: "17px",
-                  textAlign: "center",
-                }}
-              >
+              <span className="font-bold text-sm md:text-[17px]">
                 Subscribe to our newsletter.
               </span>
               <form onSubmit={handleOpen}>

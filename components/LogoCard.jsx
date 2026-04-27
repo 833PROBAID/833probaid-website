@@ -23,7 +23,7 @@ export default function TEST() {
             height={1000}
             className="h-[111px] w-full object-contain px-6 -mt-16"
           />
-          <p className="text-left font-bold mt-4 font-montserrat text-[#2A2A2A] pl-6 text-[16px] leading-tight">
+          <p className="text-left font-bold md:mt-4 font-montserrat text-[#2A2A2A] pl-6 text-sm md:text-[16px] leading-tight max-w-[350px]">
             Expert Probate, Conservatorship, and Trust Real Estate Services
             handled personally from start to finish. Trusted by attorneys.
             Relied on by families. Built to keep the process moving, even when
