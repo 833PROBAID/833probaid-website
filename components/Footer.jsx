@@ -1,8 +1,6 @@
 import ContactCard from "./ContactCard";
 import LogoCard from "./LogoCard";
 import NewsletterCard from "./NewsletterCard";
-import TEST from "./Test";
-import TESTS from "./Tests";
 
 const MARQUEE_ITEMS = [
   "PROBATE",

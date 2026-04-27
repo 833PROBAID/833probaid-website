@@ -16,11 +16,11 @@ export default function TEST() {
       {/* Content */}
       <div className="absolute inset-0 z-20 flex items-center justify-center text-center text-black px-20">
         <div>
-          <div className="relative max-w-[350px]">
-            <h2 className="text-secondary text-center text-[33px] font-bold floating-text">
+          <div className="relative max-w-[350px] -mt-10">
+            <h2 className="text-secondary text-center text-[30px] font-bold floating-text">
               Contact Us
             </h2>
-            <div className="mb-4 mt-2 flex items-start gap-3 ">
+            <div className="mb-4 mt-1 flex items-start gap-3 ">
               <img
                 src="/svgs/location-pin.svg"
                 style={{ width: "28px", marginTop: "4px" }}
