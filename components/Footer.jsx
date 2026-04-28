@@ -2,99 +2,25 @@ import ContactCard from "./ContactCard";
 import LogoCard from "./LogoCard";
 import NewsletterCard from "./NewsletterCard";
 
-const MARQUEE_ITEMS = [
-  "PROBATE",
-  "TRUST",
-  "CONSERVATORSHIP",
-  "SUCCESSOR IN INTEREST",
-  "PROBATE",
-  "TRUST",
-  "CONSERVATORSHIP",
-  "SUCCESSOR IN INTEREST",
-  "PROBATE",
-  "TRUST",
-  "CONSERVATORSHIP",
-  "SUCCESSOR IN INTEREST",
-  "PROBATE",
-  "TRUST",
-  "CONSERVATORSHIP",
-  "SUCCESSOR IN INTEREST",
-  "PROBATE",
-  "TRUST",
-  "CONSERVATORSHIP",
-  "SUCCESSOR IN INTEREST",
-  "PROBATE",
-  "TRUST",
-  "CONSERVATORSHIP",
-  "SUCCESSOR IN INTEREST",
-  "PROBATE",
-  "TRUST",
-  "CONSERVATORSHIP",
-  "SUCCESSOR IN INTEREST",
-  "PROBATE",
-  "TRUST",
-  "CONSERVATORSHIP",
-  "SUCCESSOR IN INTEREST",
-  "PROBATE",
-  "TRUST",
-  "CONSERVATORSHIP",
-  "SUCCESSOR IN INTEREST",
-  "PROBATE",
-  "TRUST",
-  "CONSERVATORSHIP",
-  "SUCCESSOR IN INTEREST",
-  "PROBATE",
-  "TRUST",
-  "CONSERVATORSHIP",
-  "SUCCESSOR IN INTEREST",
-  "PROBATE",
-  "TRUST",
-  "CONSERVATORSHIP",
-  "SUCCESSOR IN INTEREST",
-  "PROBATE",
-  "TRUST",
-  "CONSERVATORSHIP",
-  "SUCCESSOR IN INTEREST",
-  "PROBATE",
-  "TRUST",
-  "CONSERVATORSHIP",
-  "SUCCESSOR IN INTEREST",
-  "PROBATE",
-  "TRUST",
-  "CONSERVATORSHIP",
-  "SUCCESSOR IN INTEREST",
-];
+const MARQUEE_TEXT =
+  " PROBATE · TRUST · CONSERVATORSHIP · SUCCESSOR IN INTEREST ·  PROBATE · TRUST · CONSERVATORSHIP · SUCCESSOR IN INTEREST · PROBATE · TRUST · CONSERVATORSHIP · SUCCESSOR IN INTEREST ·  PROBATE · TRUST · CONSERVATORSHIP · SUCCESSOR IN INTEREST ·   ";
 export default function Footer() {
   return (
     <footer className="bg-primary/35 border-primary mt-8 border-y-2 md:mt-12">
-      <div className="bg-secondary shadow-[0_-8px_12.7px_rgba(0,0,0,0.63),0_10px_12.2px_0px_rgba(0,0,0,0.63)] mt-0.5">
-        <div className="footer-marquee">
-          <div className="footer-marquee__track font-montserrat font-bold text-white text-[40px] lg:text-[60px] xl:text-[82px]">
-            <div className="footer-marquee__group">
-              {MARQUEE_ITEMS.map((item, index) => (
-                <span key={item + index} className="footer-marquee__item">
-                  {item}
-                </span>
-              ))}
-            </div>
-            <div className="footer-marquee__group" aria-hidden="true">
-              {MARQUEE_ITEMS.map((item, index) => (
-                <span
-                  key={`${item + index}-copy`}
-                  className="footer-marquee__item"
-                >
-                  {item}
-                </span>
-              ))}
-            </div>
+      <div className="bg-secondary  shadow-[0_4px_4.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)] mt-0.5">
+        <div className="overflow-hidden">
+          <div className="animate-marquee font-montserrat font-bold text-white text-[40px] lg:text-[60px] xl:text-[90px]">
+            <span className="[text-shadow:0_4px_4.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
+              {MARQUEE_TEXT}
+            </span>
+            <span className="ml-4 [text-shadow:0_4px_4.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]"></span>
           </div>
         </div>
       </div>
-
       <div className="max-w-[1400px]  mx-auto">
         <div className="py-8">
           <div className="font-montserrat">
-            <div className="grid grid-cols-1 gap-0  lg:grid-cols-3 md:gap-1">
+            <div className="grid grid-cols-1 gap-0 xl:grid-cols-3 md:gap-1">
               <LogoCard />
               <ContactCard />
               <NewsletterCard />

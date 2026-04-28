@@ -251,7 +251,7 @@ function ClockIcon() {
   );
 }
 
-function LearnMoreButton({ orange, edge }) {
+ function LearnMoreButton({ orange, edge }) {
   return (
     <button
       type="button"

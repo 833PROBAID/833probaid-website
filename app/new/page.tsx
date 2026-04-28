@@ -1,6 +1,7 @@
 "use client";
 import "./card.css";
 import ProBaidCard from "./Card";
+import Image from "next/image";
 /**
  * CardsGrid
  * Drop this anywhere in your home page:
@@ -42,16 +43,35 @@ export default function CardsGrid({ items = CARDS, onCardClick }: { items: typeo
             <h3 className="text-2xl font-bold">{c.title}</h3>
             <p className="font-semibold">{c.subtitle}</p>
             <p>{c.body}</p>
-            <button
-              type="button"
-              onClick={() => onCardClick?.(c)}
-              className="rounded-md bg-primary px-4 py-2 font-semibold text-white"
-            >
-              {c.ctaLabel}
-            </button>
+            <LearnMoreButton />
           </div>
         </ProBaidCard>
       ))}
     </section>
+  );
+}
+
+function LearnMoreButton() {
+  return (
+    <button
+      type="button"
+      className="group relative floating-text flex cursor-pointer items-center gap-3 [webkit-text-stroke:0.91px_#924705] rounded-[13px] px-4
+      border-b-[3px] border-b-[#B85500] bg-[#FE7702] py-4 pl-6 shadow-[0_6px_10px_rgba(0,0,0,0.40),inset_0_1px_0_rgba(255,255,255,0.30)] 
+      [text-shadow:0_0_6px_rgba(255,255,255,0.25),inset_0_0_6px_rgba(255,255,255,0.25)] transition-transform duration-350 hover:animate-none hover:scale-105 hover:-rotate-3" onClick={() => {
+      }}
+    >
+      <span className="text-[30px] font-poppins font-extrabold tracking-tight  uppercase  text-white [text-shadow:0_1px_1px_rgba(0,0,0)]">
+        Learn More
+      </span>
+
+      {/* arrow badge */}
+      <Image
+        src={"/arrow-right.svg"}
+        alt="Arrow right"
+        width={42}
+        height={42}
+        className="h-[42px] w-[42px] object-contain ml-2"
+      />
+    </button>
   );
 }

@@ -569,7 +569,7 @@ section {
   width: max-content;
   white-space: nowrap;
   will-change: transform;
-  animation: footerMarqueeScroll 35s linear infinite;
+  animation: footerMarqueeScroll 110s linear infinite;
 }
 
 .footer-marquee {
@@ -1057,6 +1057,8 @@ body {
 
 /* Apply this class to any text */
 .floating-text {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   animation: floatBounce 3s ease-in-out infinite;
 }

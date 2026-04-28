@@ -45,8 +45,8 @@ export default function NewsletterCard() {
   };
 
   return (
-    <>
-      <div className="relative w-full h-[500px] overflow-hidden">
+    <div>
+      <div className="relative  h-[500px] overflow-hidden sm:w-[450px] w-[350px] mx-auto ">
         {/* Background Image */}
         <Image
           src={"/newsLetter.png"}
@@ -56,15 +56,31 @@ export default function NewsletterCard() {
           className="object-contain z-0 p-1"
         />
 
+        <Image
+          src={"/right-dark.png"}
+          alt="Right Dark"
+          width={400}
+          height={200}
+          priority
+          className="absolute z-20 h-[80px] object-contain right-[7%] top-[15%] w-[16%]  sm:right-[3%] sm:top-[8%] sm:w-[26%]"
+        />
+        <Image
+          src={"/new.png"}
+          alt="Left Stable Footer"
+          width={400}
+          height={200}
+          priority
+          className="absolute z-20 h-[80px] object-contain right-[6%] top-[15%] w-[18%] sm:right-[8%] md:top-[7.5%] sm:w-[15%]"
+        />
         {/* Content */}
-        <div className="absolute inset-0 z-20 flex items-center justify-center text-left text-black px-14">
-          <div className="-mt-6 max-w-[350px]">
-            <h2 className="text-[#0097A7] text-center text-xl md:text-[30px] font-bold floating-text pl-6 font-roboto">
+        <div className="absolute inset-0 z-20 flex items-center justify-center text-left text-black sm:px-14 ">
+          <div className="-mt-6 ">
+            <h2 className="text-[#0097A7] text-center text-xl md:text-[30px] font-bold floating-text pl-8 font-roboto">
               Join Our Newsletter
             </h2>
 
             <div className="flex flex-col gap-3 text-left pl-4">
-              <p className="font-bold pl-2 text-sm md:text-[17px]">
+              <p className="font-bold pl-6 sm:pl-2 text-xs md:text-[17px]">
                 Stay up to date with the latest news and updates from{" "}
                 <b className="text-primary">
                   833PROBAID
@@ -80,11 +96,11 @@ export default function NewsletterCard() {
                 </b>
                 .
               </p>
-              <p className="font-bold text-sm md:text-[17px] pl-2">
+              <p className="font-bold text-sm md:text-[17px] sm:pl-2 pl-6">
                 Subscribe to our newsletter.
               </p>
               <form onSubmit={handleOpen}>
-                <div className="border-secondary mx-auto mt-2 mb-5 w-[90%] border-b-3">
+                <div className="border-secondary mx-auto mt-2 mb-5 w-[80%] sm:w-[95%] border-b-3">
                   <input
                     type="email"
                     placeholder="Enter your E-mail"
@@ -93,7 +109,7 @@ export default function NewsletterCard() {
                       setNewsletterEmail(event.target.value);
                       if (subscriptionNotice) setSubscriptionNotice("");
                     }}
-                    className="placeholder-secondary bg-transparent pt-1 pr-24 text-[18px] font-semibold outline-none placeholder:font-extrabold"
+                    className="placeholder-secondary bg-transparent pt-2 text-[18px] font-semibold outline-none placeholder:font-extrabold"
                   />
                 </div>
                 <style>{`
@@ -120,19 +136,18 @@ export default function NewsletterCard() {
 								50% { transform: translateY(-8px); }
 							}
 						`}</style>
-                <div className="mt-2 flex justify-center">
+                <div className="mt-2 flex justify-center mx-auto items-center">
                   <button
                     type="submit"
-                    className="footer-btn-float"
+                    className="footer-btn-float w-full mx-auto mr-8 sm:mr-0"
                     aria-label="Subscribe"
                     disabled={isOpen}
                   >
                     <img
                       src="/svgs/subscribe.svg"
                       alt="Subscribe"
-                      width={200}
-                      height={67}
-                      className="footer-subscribe-btn"
+                      fill
+                      className="footer-subscribe-btn w-[120px] sm:w-[200px] mx-auto"
                     />
                   </button>
                 </div>
@@ -152,6 +167,6 @@ export default function NewsletterCard() {
         }}
         onSuccess={handleSuccess}
       />
-    </>
+    </div>
   );
 }
