@@ -47,7 +47,6 @@ export default function NewsletterCard() {
   return (
     <div>
       <div className="relative  h-[500px] overflow-hidden sm:w-[450px] w-[350px] mx-auto ">
-        {/* Background Image */}
         <Image
           src={"/newsLetter.png"}
           alt="Background"
