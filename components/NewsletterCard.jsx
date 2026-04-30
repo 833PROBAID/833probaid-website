@@ -70,7 +70,7 @@ export default function NewsletterCard() {
           width={400}
           height={200}
           priority
-          className="absolute z-20 h-[80px] object-contain right-[6%] top-[15%] w-[18%] sm:right-[8%] md:top-[7.5%] sm:w-[15%]"
+          className="absolute z-20 h-[80px] object-contain right-[6%] top-[15%] w-[18%] sm:right-[5.5%] sm:top-[7%] sm:w-[20%]"
         />
         {/* Content */}
         <div className="absolute inset-0 z-20 flex items-center justify-center text-left text-black sm:px-14 ">
