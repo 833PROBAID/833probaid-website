@@ -1044,15 +1044,28 @@ body {
 
 /* Floating / bouncing animation */
 @keyframes floatBounce {
-  0% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px); /* moves up */
-  }
-  100% {
-    transform: translateY(0); /* back down */
-  }
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
+}
+
+/* BookCard — book idle float */
+@keyframes bookFloat {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-6px); }
+}
+
+/* BookCard — Learn More button hover (normal) */
+@keyframes btnHoverIn {
+  0%   { transform: scale(1)    rotate(0deg);  }
+  60%  { transform: scale(1.09) rotate(-4deg); }
+  100% { transform: scale(1.07) rotate(-3deg); }
+}
+/* BookCard — Learn More button hover (mirrored) */
+@keyframes btnHoverInMirror {
+  0%   { transform: scale(1)    rotate(0deg); }
+  60%  { transform: scale(1.09) rotate(4deg); }
+  100% { transform: scale(1.07) rotate(3deg); }
 }
 
 /* Apply this class to any text */

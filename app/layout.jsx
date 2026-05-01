@@ -1,4 +1,4 @@
-import { Anton, Montserrat } from "next/font/google";
+import { Anton, Montserrat, Poppins } from "next/font/google";
 import "./global.css";
 import AppClientShell from "../components/AppClientShell";
 
@@ -11,6 +11,12 @@ const anton = Anton({
 const montserrat = Montserrat({
   weight: ["400", "500", "600", "700"],
   variable: "--font-montserrat",
+  subsets: ["latin"],
+});
+
+const poppins = Poppins({
+  weight: ["400", "500", "600", "700", "800", "900"],
+  variable: "--font-poppins",
   subsets: ["latin"],
 });
 
@@ -37,7 +43,7 @@ export default function RootLayout({ children }) {
       </head>
       <body
         suppressHydrationWarning
-        className={`${anton.variable} ${montserrat.variable} antialiased`}
+        className={`${anton.variable} ${montserrat.variable} ${poppins.variable} antialiased`}
       >
         <AppClientShell>{children}</AppClientShell>
       </body>
