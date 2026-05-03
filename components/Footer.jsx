@@ -6,8 +6,8 @@ const MARQUEE_TEXT =
   " PROBATE · TRUST · CONSERVATORSHIP · SUCCESSOR IN INTEREST ·  PROBATE · TRUST · CONSERVATORSHIP · SUCCESSOR IN INTEREST · PROBATE · TRUST · CONSERVATORSHIP · SUCCESSOR IN INTEREST ·  PROBATE · TRUST · CONSERVATORSHIP · SUCCESSOR IN INTEREST ·   ";
 export default function Footer() {
   return (
-    <footer className="bg-primary/35 border-primary mt-8 border-y-2 md:mt-12">
-      <div className="bg-secondary  shadow-[0_4px_4.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)] mt-0.5">
+    <footer className="bg-primary/35 border-primary mt-8 border-y-2 md:mt-12 pt-12">
+      <div className="bg-secondary mt-0.5" style={{ boxShadow: "0 4px 4.6px rgba(0,0,0,0.62), 0 0 6px rgba(255,255,255,0.25), 0px 10px 12.7px 0px #000000A1, 0px -8px 12.7px 0px #000000A1" }}>
         <div className="overflow-hidden">
           <div className="animate-marquee font-montserrat font-bold text-white text-[40px] lg:text-[60px] xl:text-[90px]">
             <span className="[text-shadow:0_4px_4.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">

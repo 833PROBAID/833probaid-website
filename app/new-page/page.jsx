@@ -1,6 +1,7 @@
 import BookCard, { BookCardDefs } from "./BookCard";
 import { getPublishedHomeBooksForHomepage } from "@/app/services/homeBookService";
 import Image from "next/image";
+import Footer from "@/components/Footer";
 
 // ══════════════════════════════════════════════════════════════════════
 //  Static fallback cards — shown when the DB returns nothing.
@@ -80,7 +81,7 @@ export default async function NewPage() {
     <main className="min-h-screen bg-[#e8f0f2] py-20">
       <BookCardDefs />
       <section className="mx-auto w-full max-w-7xl px-4 sm:px-5 md:px-6 lg:px-8 xl:px-10 2xl:px-0 grid grid-cols-1 lg:grid-cols-2 gap-16 place-items-center">
-        {cards.slice(1, 18).map((card, index) => (
+        {cards.slice(1, 7).map((card, index) => (
           <BookCard
             key={card.id}
             title={card.title}
@@ -102,9 +103,8 @@ export default async function NewPage() {
         {/* ── Layer 1: outermost teal frame── */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 items-center justify-center">
           <div
-            className="relative mx-auto w-full max-w-4xl overflow-hidden rounded-[13px] bg-[#129fb0] p-[20px] h-[500px]"
+            className="relative mx-auto w-full max-w-4xl rounded-[13px] bg-[#129fb0] p-[20px] h-[500px]"
             style={{
-              transformStyle: "preserve-3d",
               boxShadow: `
               inset 0 0 0 1px #014E57,
               inset 0px 6px 4px rgba(255,255,255,0.25),
@@ -114,26 +114,19 @@ export default async function NewPage() {
             `,
             }}
           >
-            {/* ── Layer 2: inner teal frame
-                render outside the clip-path boundary (box-shadow is clipped). ── */}
-            <div
-              className="w-full h-full flex items-center justify-center"
-              style={{
-                filter:
-                  "drop-shadow(1.02px 4px 12.06px #000) drop-shadow(3px 0px 3.7px #00000099) drop-shadow(0px -5px 8.06px #00000090) drop-shadow(-7px 0px 6.7px #00000066)",
-              }}
-            >
+            {/* ── Layer 2: drop-shadow applied directly on clip-path element for Safari ── */}
+            <div className="w-full h-full flex items-center justify-center">
               <div
                 className="relative bg-[#0b8fa0] h-full w-full"
                 style={{
-                  transformStyle: "preserve-3d",
-                  boxShadow: `
-                inset 0 0 0 1px #014E57,
-                inset 0px 6px 4px rgba(255,255,255,0.25),
-                inset -5px -6px 4px rgba(0,0,0,0.25)
-              `,
                   clipPath:
                     "polygon(8% 0, 100% 0, 100% 90%, 90% 100%, 0 100%, 0 8%)",
+                  WebkitClipPath:
+                    "polygon(8% 0, 100% 0, 100% 90%, 90% 100%, 0 100%, 0 8%)",
+                  filter:
+                    "drop-shadow(1.02px 4px 12.06px #000) drop-shadow(3px 0px 3.7px #00000099) drop-shadow(0px -5px 8.06px #00000090) drop-shadow(-7px 0px 6.7px #00000066)",
+                  WebkitFilter:
+                    "drop-shadow(1.02px 4px 12.06px #000) drop-shadow(3px 0px 3.7px #00000099) drop-shadow(0px -5px 8.06px #00000090) drop-shadow(-7px 0px 6.7px #00000066)",
                 }}
               >
                 {/* Orange left-edge accent stripe — #FE7702 */}
@@ -485,6 +478,7 @@ export default async function NewPage() {
           </div>
         </div>
       </footer>
+      <Footer />
 
       {/* ══════════════════════════════════════════════════════════════
           Contact Us section — same 3-layer card structure.

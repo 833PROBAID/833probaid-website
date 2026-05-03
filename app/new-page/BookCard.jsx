@@ -117,8 +117,8 @@ export function LearnMoreButton({
     padding: `${pad}px ${Math.round(pad * 0.9)}px ${pad}px ${Math.round(pad * 1.2)}px`,
     background: D.orange,
     border: "mixed solid #924705",
-    borderRadius: 12,
-    height: "60px",
+    borderRadius: 8,
+    height: "65px",
     cursor: "pointer",
     textDecoration: "none",
     boxShadow:
@@ -134,7 +134,7 @@ export function LearnMoreButton({
 
   const inner = (
     <>
-      <span className="font-poppins font-black text-[26px] uppercase text-white tracking-tight [text-shadow:0px_3.59px_3.59px_#000000] [-webkit-text-stroke:0.91px_#924705]">
+      <span className="font-poppins font-black text-[26px] uppercase text-white  [text-shadow:0_3px_1px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
         {label}
       </span>
       <Image
@@ -304,21 +304,21 @@ function BookCardInner({
           style={{
             position: "absolute",
             ...stapleEdge,
-            top: "0",
+            top: "1px",
             width: "20px",
             height: "180px",
             transform: "translateZ(5px)",
             background: "#FE7702",
             borderRadius: 2,
             boxShadow:
-              "inset 0 1px 0 rgba(255,255,255,0.3), 1px 1px 2px rgba(0,0,0,0.25), 4px 0px 4.22px 0px #0000009C, -4px 0px 4.22px 0px #0000009C, inset 0px 5px 4.6px 0px #00000060",
+              "inset 0 -1px 0 rgba(255,255,255,0.3), 1px -1px 2px rgba(0,0,0,0.25), 4px 0px 4.22px 0px #0000009C, -4px 0px 4.22px 0px #0000009C, inset 0px 5px 4.6px 0px #00000080",
           }}
         />
         <div
           style={{
             position: "absolute",
             ...stapleEdge,
-            bottom: "0%",
+            bottom: "1.5px",
             width: "20px",
             height: "180px",
             transform: "translateZ(5px)",
