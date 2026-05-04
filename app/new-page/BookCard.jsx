@@ -268,17 +268,21 @@ function BookCardInner({
         style={{
           position: "relative",
           width: "100%",
-          maxWidth: width, // 450px default
-          aspectRatio: `${width} / ${height}`, // 450/700 = 0.643
+          maxWidth: width,
+          aspectRatio: `${width} / ${height}`,
           transformStyle: "preserve-3d",
+          WebkitTransformStyle: "preserve-3d",
         }}
       >
         {/* ── BASE SHELL: always visible teal frame ── */}
         <div
           style={{
             position: "absolute",
-            inset: 0,
-            borderRadius: "1.8%", // 8/450
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+            borderRadius: "1.8%",
             transform: "translateZ(-4px)",
             background: `linear-gradient(135deg, ${D.tealDark}, ${D.tealDeep})`,
             boxShadow: `
@@ -338,9 +342,12 @@ function BookCardInner({
           <div
             style={{
               position: "absolute",
-              inset: 0,
+              top: 0,
+              right: 0,
+              bottom: 0,
+              left: 0,
               background: `linear-gradient(135deg, ${D.paper} 0%, #f5ecd9 100%)`,
-              borderRadius: "1.1%", // 4/373
+              borderRadius: "1.1%",
               boxShadow: innerBoxShadow,
               overflow: "hidden",
             }}
@@ -352,6 +359,7 @@ function BookCardInner({
                 display: "flex",
                 flexDirection: "column",
                 gap: "clamp(8px,2vw,14px)",
+                rowGap: "clamp(8px,2vw,14px)",
                 boxSizing: "border-box",
               }}
             >
@@ -393,6 +401,7 @@ function BookCardInner({
             bottom: P.coverPadV,
             ...hingeEdge,
             transformOrigin,
+            WebkitTransformOrigin: transformOrigin,
             transformStyle: "preserve-3d",
             WebkitTransformStyle: "preserve-3d",
             borderRadius: "3%",
@@ -409,7 +418,10 @@ function BookCardInner({
           <div
             style={{
               position: "absolute",
-              inset: 0,
+              top: 0,
+              right: 0,
+              bottom: 0,
+              left: 0,
               transform: "translate3d(0, 0, 0.02px)",
               WebkitTransform: "translate3d(0, 0, 0.02px)",
               backfaceVisibility: "hidden",
@@ -424,7 +436,10 @@ function BookCardInner({
               preserveAspectRatio="none"
               style={{
                 position: "absolute",
-                inset: 0,
+                top: 0,
+                right: 0,
+                bottom: 0,
+                left: 0,
                 width: "100%",
                 height: "100%",
                 overflow: "visible",
@@ -452,13 +467,18 @@ function BookCardInner({
             <div
               style={{
                 position: "absolute",
-                inset: 0,
+                top: 0,
+                right: 0,
+                bottom: 0,
+                left: 0,
                 zIndex: 1,
                 background: "#0097A7",
                 borderRadius: "3%",
                 clipPath,
                 WebkitClipPath: clipPath,
                 overflow: "hidden",
+                transform: "translateZ(0.01px)",
+                WebkitTransform: "translateZ(0.01px)",
               }}
             >
               {/* ORANGE BAND */}
@@ -489,11 +509,13 @@ function BookCardInner({
                 className="absolute top-2 left-0 right-0 h-[36%] flex flex-col items-center justify-start"
                 style={{ paddingTop: "3.6%" }}
               >
-                <div className="bc-icon relative md:w-[50px] lg:w-[80px] xl:w-[90px] aspect-square">
+                <div className="bc-icon md:w-[50px] lg:w-[80px] xl:w-[90px]">
                   <Image
                     src={icon}
                     alt={title}
-                    fill
+                    width={120}
+                    height={120}
+                    style={{ width: "100%", height: "auto", display: "block" }}
                     className={`object-contain floating-text cursor-pointer hover:scale-[1.1] transition-all duration-300 hover:rotate-3 ${icon === "/icons/card-icon-7.png" ? "scale-120" : ""}`}
                   />
                 </div>

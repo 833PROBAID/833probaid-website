@@ -1,4 +1,4 @@
-export default function LogoCard() {
+export default function ContactCard() {
   return (
     <div className="flex w-full justify-center">
       <div className="w-full">
@@ -66,7 +66,7 @@ export default function LogoCard() {
             height="320"
             className="overflow-visible"
           >
-            <div className="flex flex-col items-center justify-center h-full -mt-4 md:-mt-4">
+            <div className="flex flex-col items-center justify-center h-full pt-10 w-full">
               <h2 className="text-secondary text-center text-[30px] font-bold">
                 Contact Us
               </h2>
@@ -77,7 +77,7 @@ export default function LogoCard() {
                     style={{ width: "28px", marginTop: "4px" }}
                     alt="Location"
                   />
-                  <p className="font-bold text-left  md:text-[17px]">
+                  <p className="font-bold text-left  sm:text-[18px]">
                     311 N. Robertson Blvd #444, Beverly Hills, CA 90211
                   </p>
                 </div>

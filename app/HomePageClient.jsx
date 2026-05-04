@@ -154,7 +154,7 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
             ) : (
               homeCardData
                 // .slice(1, homeCardData.length > 1 ? -1 : homeCardData.length)
-                .slice(0, 0)
+                .slice(1)
                 .map((item, i) => (
                   <HomeCard
                     key={item.id}

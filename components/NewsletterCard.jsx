@@ -104,8 +104,8 @@ export default function NewsletterCard() {
               height="370"
               className="overflow-visible"
             >
-              <div className="flex flex-col items-center justify-center">
-                <div className="flex flex-col items-center justify-center pt-8 h-full md:-mt-1 -mt-6">
+              <div className="flex flex-col items-center justify-center h-full w-full">
+                <div className="flex flex-col items-center justify-center -mt-10">
                   <h2 className="text-[#0097A7] text-center text-[30px] font-bold  font-roboto mb-6 md:mb-0 pl-6">
                     Join Our Newsletter
                   </h2>

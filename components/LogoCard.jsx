@@ -1,7 +1,6 @@
 import Image from "next/image";
-import AnimatedText from "./AnimatedText";
 
-export default function ContactCard() {
+export default function LogoCard() {
   return (
     <div className="flex w-full justify-center">
       <div className="w-full">
@@ -69,8 +68,14 @@ export default function ContactCard() {
             d="M45.6001 58.5996V115.6L131.6 30.5996H73.7638L45.6001 58.5996Z"
             fill="#0097A7"
           />
-          <foreignObject x="85" y="70" width="390" height="370">
-            <div className="flex flex-col items-center justify-center pt-20 ">
+          <foreignObject
+            x="85"
+            y="70"
+            width="370"
+            height="320"
+            className="overflow-visible"
+          >
+            <div className="flex flex-col items-center justify-center pt-16 h-full ">
               <Image
                 src="/images/footer-logo.png"
                 alt="Footer logo"
@@ -79,7 +84,7 @@ export default function ContactCard() {
                 className="h-[111px] w-full object-contain px-6 sm:-mt-16 -mt-10"
               />
 
-              <p className="text-left font-bold  mt-4 font-montserrat text-[#2A2A2A] pl-6 text-[16px] leading-tight max-w-[350px]">
+              <p className="text-left font-bold  mt-6 font-montserrat text-[#2A2A2A] pl-6 text-[16px] leading-tight max-w-[350px]">
                 Expert Probate, Conservatorship, and Trust Real Estate Services
                 handled personally from start to finish. Trusted by attorneys.
                 Relied on by families. Built to keep the process moving, even
