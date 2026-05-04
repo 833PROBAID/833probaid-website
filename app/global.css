@@ -1045,7 +1045,7 @@ body {
 /* Floating / bouncing animation */
 @keyframes floatBounce {
   0%   { transform: translateY(0); }
-  50%  { transform: translateY(-10px); }
+  50%  { transform: translateY(-5px); }
   100% { transform: translateY(0); }
 }
 

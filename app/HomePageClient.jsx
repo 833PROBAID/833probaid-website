@@ -6,6 +6,8 @@ import { toolsCardData, trustCardData } from "../public/data/Tools";
 import Image from "next/image";
 import Link from "next/link";
 import HomeBooksMobileShowcaseClient from "@/components/HomeBooksMobileShowcaseClient";
+import BookCard, { BookCardDefs } from "./new-page/BookCard";
+import BookCardBig from "./new-page/BookCardBig";
 
 const Footer = dynamic(() => import("../components/Footer"));
 const HomeCard = dynamic(() => import("../components/HomeCard"));
@@ -151,8 +153,8 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
               </div>
             ) : (
               homeCardData
-              // .slice(1, homeCardData.length > 1 ? -1 : homeCardData.length)
-                .slice(1)
+                // .slice(1, homeCardData.length > 1 ? -1 : homeCardData.length)
+                .slice(0, 0)
                 .map((item, i) => (
                   <HomeCard
                     key={item.id}

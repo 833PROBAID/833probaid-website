@@ -14,8 +14,8 @@ import "./book-card.css";
 // ══════════════════════════════════════════════════════════════════
 const D = {
   // Card max size (px) — used only for maxWidth and aspect-ratio
-  w: 460,
-  h: 700,
+  w: 1008,
+  h: 444,
 
   // Teal palette (cover, base, shadows)
   teal: "#14b3c2",
@@ -44,13 +44,13 @@ const D = {
 // Vertical   % → relative to card height (700px)
 const P = {
   // Inner/cover page insets
-  coverPadV: "5%", // 35/700 — top & bottom gap from card edge
+  coverPadV: "8%", // 35/700 — top & bottom gap from card edge
   hingeH: "9.33%", // (22+20)/450 — staple side inset
-  openH: "7.78%", // 35/450 — open-corner side inset
+  openH: "4%", // 35/450 — open-corner side inset
 
   // Staples
-  stapleW: "4.2%", // 20/450
-  stapleH: "23%", // 180/700
+  stapleW: "1.7%", // 20/450
+  stapleH: "30%", // 180/700
 
   // Orange band (height relative to cover panel = 90% × 700 = 630px)
   bandH: "19.37%", // 122/630
@@ -62,7 +62,7 @@ const P = {
 // ── Percentage-safe padding for the inner content column ────────
 // The inner content div's containing block width ≈ 450 × (1 - 9.33% - 7.78%) = 373px
 // CSS % padding is always relative to the element's own width (373px here)
-const INNER_PAD_NORMAL = "5%"; // 28 26 28 52 px
+const INNER_PAD_NORMAL = "8%"; // 28 26 28 52 px
 const INNER_PAD_MIRRORED = "5%";
 
 // ──────────────────────────────────────────────────────────────────
@@ -100,8 +100,8 @@ export function BookCardDefs() {
 }
 
 // Clip-paths stay in percentage units — they already are ✓
-const COVER_CLIP_PATH = "polygon(0 0, 100% 0, 100% 88%, 86% 100%, 0 100%)";
-const COVER_SHADOW_POLYGON_POINTS = "0,0 96.5,0 100,3.5 100,88 86,100 0,100";
+const COVER_CLIP_PATH = "polygon(0 0, 100% 0, 100% 75%, 90% 100%, 0 100%)";
+const COVER_SHADOW_POLYGON_POINTS = "0,0 96.5,0 100,3.5 100,75 90,100 0,100";
 const COVER_CLIP_PATH_MIRROR =
   "polygon(0 0, 100% 0, 100% 100%, 14% 100%, 0 88%)";
 const COVER_SHADOW_POLYGON_POINTS_MIRROR =
@@ -111,30 +111,6 @@ const COVER_SHADOW_POLYGON_POINTS_MIRROR =
 // All sizes use clamp() so the button scales with the card.
 // Arrow/gap values kept as numbers (px) for the layout math but overridden
 // visually via style on the <Image>.
-const BTN_SIZE = {
-  lg: {
-    textClass: "text-[12px] md:text-[18px] lg:text-[28px] xl:text-[40px]",
-    heightClass: "h-10 lg:h-14 xl:h-[65px]",
-    arrowClass: "w-6 md:w-7 lg:w-8 xl:w-[42px]",
-    gapClass: "gap-1.5 md:gap-2 lg:gap-2.5",
-    pxClass: "px-2 md:px-3 lg:px-3.5",
-  },
-  md: {
-    textClass:
-      "text-[11px] md:text-[13px] lg:text-[18px] xl:text-[22px] 2xl:text-[25px]",
-    heightClass: "h-8 md:h-[38px] lg:h-14 xl:h-[65px]",
-    arrowClass: "w-[14px] md:w-[18px] lg:w-7 xl:w-8",
-    gapClass: "gap-1.5 md:gap-2",
-    pxClass: "px-2 md:px-2.5",
-  },
-  sm: {
-    textClass: "text-[10px] md:text-xs lg:text-base xl:text-[18px]",
-    heightClass: "h-[30px] md:h-9 lg:h-10",
-    arrowClass: "w-3.5 md:w-4 lg:w-5 xl:w-6",
-    gapClass: "gap-1 md:gap-1.5",
-    pxClass: "px-1.5 md:px-2",
-  },
-};
 
 export function LearnMoreButton({
   onClick,
@@ -166,7 +142,7 @@ export function LearnMoreButton({
         WebkitTextStroke: "0.91px #924705",
       }}
     >
-      <span className="bc-btn-text font-poppins font-black sm:text-[13px] lg:text-[18px] xl:text-[22px] uppercase text-white tracking-wide [text-shadow:0px_4px_0px_rgba(0,0,0,0.4)] [-webkit-text-stroke:0.91px_#924705]">
+      <span className="bc-btn-text font-poppins font-black sm:text-[13px] lg:text-[18px] xl:text-[24px] uppercase text-white tracking-wide [text-shadow:0px_4px_0px_rgba(0,0,0,0.4)] [-webkit-text-stroke:0.91px_#924705]">
         {" "}
         {label}
       </span>
@@ -175,7 +151,7 @@ export function LearnMoreButton({
         alt=""
         width={100}
         height={100}
-        className="bc-btn-arrow object-contain sm:h-[18px] sm:w-[18px] lg:h-[40px] lg:w-[40px]"
+        className="bc-btn-arrow object-contain sm:h-[18px] sm:w-[18px] lg:h-[45px] lg:w-[45px]"
       />
     </button>
   );
@@ -219,13 +195,16 @@ function BookCardInner({
     ? COVER_SHADOW_POLYGON_POINTS_MIRROR
     : COVER_SHADOW_POLYGON_POINTS;
 
-  // Hinge/page edges — now pure percentages
+  // Hinge/page edges — aligned to the staple position so the cover
+  // edge sits flush against the spine and the flip rotates on the spine axis.
+  // stapleEdge for non-mirrored = left:"3%", mirrored = right:"7%"
+  const hingeH = mirrored ? "7%" : "4%";
   const hingeEdge = mirrored
-    ? { right: P.hingeH, left: P.openH }
-    : { left: P.hingeH, right: P.openH };
+    ? { right: hingeH, left: P.openH }
+    : { left: hingeH, right: P.openH };
   const innerPageEdge = mirrored
-    ? { right: P.hingeH, left: P.openH }
-    : { left: P.hingeH, right: P.openH };
+    ? { right: hingeH, left: P.openH }
+    : { left: hingeH, right: P.openH };
   const innerPadding = mirrored ? INNER_PAD_MIRRORED : INNER_PAD_NORMAL;
 
   const transformOrigin = mirrored ? "right center" : "left center";
@@ -234,7 +213,7 @@ function BookCardInner({
     ? "translate(-1.35 -1.15)"
     : "translate(1.35 -1.15)";
   const shadowBotTx = mirrored ? "translate(0.55 1.2)" : "translate(-0.55 1.2)";
-  const stapleEdge = mirrored ? { right: "7%" } : { left: "7%" }; // 22/450
+  const stapleEdge = mirrored ? { right: "7%" } : { left: "3.5%" }; // 22/450
   const innerBoxShadow = mirrored
     ? "inset 0 0 0 1px rgba(0,0,0,0.07), inset 0px 6px 6px rgba(255,255,255,0.14), inset 0px -6px 10px rgba(0,0,0,0.18), inset 4px 0 10px rgba(0,0,0,0.12), inset -2px 0 8px rgba(180,160,120,0.18)"
     : "inset 0 0 0 1px rgba(0,0,0,0.07), inset 0px 6px 6px rgba(255,255,255,0.14), inset 0px -6px 10px rgba(0,0,0,0.18), inset -4px 0 10px rgba(0,0,0,0.12), inset 2px 0 8px rgba(180,160,120,0.18)";
@@ -255,7 +234,7 @@ function BookCardInner({
     // ── STAGE: perspective wrapper, fluid width, height driven by aspect-ratio ──
     <div
       ref={stageRef}
-      className={`relative flex items-center w-full box-border py-[4%] ${mirrored ? "justify-center md:justify-start" : "justify-center md:justify-end"}`}
+      className={`relative flex items-center w-full box-border py-[4%] justify-center`}
       style={{
         // perspective scales with the card: 2200/450 * 100 ≈ 489vw, capped at max
         perspective: "clamp(1400px, 489vw, 2200px)",
@@ -455,7 +434,7 @@ function BookCardInner({
                 inset: 0,
                 zIndex: 1,
                 background: "#0097A7",
-                borderRadius: "3%",
+                borderRadius: "2%",
                 clipPath,
                 WebkitClipPath: clipPath,
                 overflow: "hidden",
@@ -479,15 +458,15 @@ function BookCardInner({
                   zIndex: 3,
                 }}
               >
-                <p className="bc-band-text text-white text-center tracking-wider font-black font-poppins leading-[1.3] sm:text-[10px] lg:text-sm xl:text-lg 2xl:text-xl px-[6%] sm:px-[7%] [text-shadow:0px_4px_4px_#00000099]">
+                <p className="bc-band-text text-white text-center tracking-wider font-black font-poppins leading-[1.3] sm:text-[10px] lg:text-sm xl:text-lg px-[6%] sm:px-[7%] [text-shadow:0px_4px_4px_#00000099]">
                   {subtitle}
                 </p>
               </div>
 
               {/* UPPER HALF — icon + title */}
               <div
-                className="absolute top-2 left-0 right-0 h-[36%] flex flex-col items-center justify-start"
-                style={{ paddingTop: "3.6%" }}
+                className="absolute top-0 left-0 right-0 h-[36%] flex flex-col items-center justify-start"
+                style={{ paddingTop: "1.6%" }}
               >
                 <div className="bc-icon relative md:w-[50px] lg:w-[80px] xl:w-[90px] aspect-square">
                   <Image
@@ -499,7 +478,7 @@ function BookCardInner({
                 </div>
                 <h1
                   className="bc-title pt-1 text-white font-bold text-center uppercase leading-[1.2] font-montserrat sm:text-[11px]
-                 lg:text-[16px] xl:text-[20px] px-[5%] drop-shadow-[4.31px_4.31px_4.31px_rgba(0,0,0,0.25)]"
+                 lg:text-[16px] xl:text-[22px] px-[5%] drop-shadow-[4.31px_4.31px_4.31px_rgba(0,0,0,0.25)]"
                 >
                   {" "}
                   {String(title)
@@ -520,7 +499,7 @@ function BookCardInner({
               {/* LOWER HALF — description + button */}
               <div
                 className="absolute top-[63%] left-0 right-0 bottom-0 flex items-center justify-between flex-col"
-                style={{ padding: "2% 6% 6%" }}
+                style={{ padding: "0% 6% 1.5%" }}
               >
                 <p className="bc-desc text-white tracking-wider text-center font-montserrat leading-[1.3] font-semibold sm:text-[10px] lg:text-[14px] xl:text-lg 2xl:text-[17px] px-[1%]">
                   {description}
@@ -562,5 +541,5 @@ function BookCardInner({
   );
 }
 
-const BookCard = memo(BookCardInner);
-export default BookCard;
+const BookCardBig = memo(BookCardInner);
+export default BookCardBig;
