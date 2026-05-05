@@ -64,42 +64,42 @@ export default function NewsletterCard() {
             </g>
             <g filter="url(#filter1_d_273_11)">
               <path
-                d="M501.457 40.5823L487.314 26.5996H41.5996V487.699L62.3371 510.149L85.6139 532.6H515.6V54.6627L501.457 40.5823Z"
+                d="M501.457 50.5823L487.314 36.5996H41.5996V497.699L62.3371 520.149L85.6139 542.6H515.6V64.6627L501.457 50.5823Z"
                 fill="url(#paint0_linear_273_11)"
               />
             </g>
             <g filter="url(#filter2_d_273_11)">
               <path
-                d="M501.457 40.5823L487.314 26.5996H41.5996V487.699L62.3371 510.149L85.6139 532.6H515.6V54.6627L501.457 40.5823Z"
+                d="M501.457 50.5823L487.314 36.5996H41.5996V497.699L62.3371 520.149L85.6139 542.6H515.6V64.6627L501.457 50.5823Z"
                 fill="#0097A7"
               />
             </g>
             <g filter="url(#filter3_dd_273_11)">
               <path
-                d="M491.795 87.6414L428.97 26.5996L127.063 27.0177V94.749L72.5277 149.101V373.618L199.05 501.973H348.258L491.795 353.131V87.6414Z"
+                d="M491.795 97.6414L428.97 36.5996L127.063 37.0177V104.749L72.5277 159.101V383.618L199.05 511.973H348.258L491.795 363.131V97.6414Z"
                 fill="white"
               />
             </g>
             <g filter="url(#filter4_i_273_11)">
               <path
-                d="M491.604 86.7871L515.447 111.736L514.548 533.597H491.604V86.7871Z"
+                d="M491.604 96.7871L515.447 121.736L514.548 543.597H491.604V96.7871Z"
                 fill="#FE7702"
               />
             </g>
             <g filter="url(#filter5_f_273_11)">
               <path
-                d="M515.6 56.2467V116.6L423.6 26.5996H485.471L515.6 56.2467Z"
+                d="M515.6 66.2467V126.6L423.6 36.5996H485.471L515.6 66.2467Z"
                 fill="black"
                 fillOpacity="0.984"
               />
             </g>
             <path
-              d="M515.6 54.5996V111.6L429.6 26.5996H487.436L515.6 54.5996Z"
+              d="M515.6 64.5996V121.6L429.6 36.5996H487.436L515.6 64.5996Z"
               fill="#0097A7"
             />
             <foreignObject
               x="60"
-              y="70"
+              y="80"
               width="450"
               height="370"
               className="overflow-visible"
@@ -109,9 +109,9 @@ export default function NewsletterCard() {
                   <h2 className="text-[#0097A7] text-center text-[30px] font-bold  font-roboto mb-6 md:mb-0 pl-6">
                     Join Our Newsletter
                   </h2>
-                  <div className="flex flex-col gap-3">
+                  <div className="flex flex-col gap-3 pr-6">
                     <div className="pl-10 mt-2">
-                      <p className="font-bold text-sm md:text-[17px]">
+                      <p className="font-bold text-[19px]">
                         Stay up to date with the latest news and updates from{" "}
                         <b className="text-primary">
                           833PROBAID
@@ -127,7 +127,7 @@ export default function NewsletterCard() {
                         </b>
                         .
                       </p>
-                      <p className="font-bold text-sm md:text-[17px] mt-4 ">
+                      <p className="font-bold text-[19px] mt-4 ">
                         Subscribe to our newsletter.
                       </p>
                     </div>
@@ -192,7 +192,7 @@ export default function NewsletterCard() {
               <image
                 href="/svgs/subscribe.svg"
                 x="183"
-                y="385"
+                y="395"
                 width="200"
                 height="67"
                 className="footer-subscribe-btn"
@@ -283,7 +283,7 @@ export default function NewsletterCard() {
               <filter
                 id="filter1_d_273_11"
                 x="26.2996"
-                y="20.2996"
+                y="30.2996"
                 width="510.6"
                 height="542.6"
                 filterUnits="userSpaceOnUse"
@@ -318,7 +318,7 @@ export default function NewsletterCard() {
               <filter
                 id="filter2_d_273_11"
                 x="18.2996"
-                y="4.29961"
+                y="14.29961"
                 width="510.6"
                 height="542.6"
                 filterUnits="userSpaceOnUse"
@@ -353,7 +353,7 @@ export default function NewsletterCard() {
               <filter
                 id="filter3_dd_273_11"
                 x="48.8273"
-                y="18.8996"
+                y="28.8996"
                 width="455.005"
                 height="514.131"
                 filterUnits="userSpaceOnUse"
@@ -406,7 +406,7 @@ export default function NewsletterCard() {
               <filter
                 id="filter4_i_273_11"
                 x="491.604"
-                y="86.7871"
+                y="96.7871"
                 width="23.8438"
                 height="450.957"
                 filterUnits="userSpaceOnUse"
@@ -446,7 +446,7 @@ export default function NewsletterCard() {
               <filter
                 id="filter5_f_273_11"
                 x="419.6"
-                y="22.5996"
+                y="32.5996"
                 width="100"
                 height="98"
                 filterUnits="userSpaceOnUse"

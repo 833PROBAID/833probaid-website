@@ -30,7 +30,7 @@ export default function ContactCard() {
           <g filter="url(#filter1_d_273_12)">
             <rect
               x="45.6001"
-              y="30.5996"
+              y="40.5996"
               width="479"
               height="506"
               fill="#0097A7"
@@ -39,29 +39,29 @@ export default function ContactCard() {
           <g filter="url(#filter2_d_273_12)">
             <rect
               x="45.6001"
-              y="30.5996"
+              y="40.5996"
               width="479"
               height="508"
               fill="#0097A7"
             />
           </g>
           <path
-            d="M442.6 30.5996H524.6V158.647L442.6 218.6V30.5996Z"
+            d="M442.6 40.5996H524.6V168.647L442.6 228.6V40.5996Z"
             fill="#FE7702"
           />
           <path
-            d="M134.6 30.5996H45.6001V158.647L134.6 218.6V30.5996Z"
+            d="M134.6 40.5996H45.6001V168.647L134.6 228.6V40.5996Z"
             fill="#FE7702"
           />
           <g filter="url(#filter3_dd_273_12)">
             <path
-              d="M76.6001 111.97L130.684 30.5996H442.044L493.095 112.672L493.6 437.453L442.044 507.6H130.794L76.6001 440.96V111.97Z"
+              d="M76.6001 121.97L130.684 40.5996H442.044L493.095 122.672L493.6 447.453L442.044 517.6H130.794L76.6001 450.96V121.97Z"
               fill="white"
             />
           </g>
           <foreignObject
             x="100"
-            y="70"
+            y="80"
             width="370"
             height="320"
             className="overflow-visible"
@@ -70,15 +70,15 @@ export default function ContactCard() {
               <h2 className="text-secondary text-center text-[30px] font-bold">
                 Contact Us
               </h2>
-              <div className="flex flex-col justify-center items-start mt-4 sm:mt-0">
+              <div className="flex flex-col justify-center items-start mt-4 sm:mt-6 text-[19px]">
                 <div className="mb-4 flex items-start gap-3 ">
                   <img
                     src="/svgs/location-pin.svg"
-                    style={{ width: "28px", marginTop: "4px" }}
+                    style={{ width: "38px", marginTop: "4px" }}
                     alt="Location"
                   />
-                  <p className="font-bold text-left  sm:text-[18px]">
-                    311 N. Robertson Blvd #444, Beverly Hills, CA 90211
+                  <p className="font-bold text-left">
+                    311 N. Robertson Blvd #444, <br /> Beverly Hills, CA 90211
                   </p>
                 </div>
                 <a
@@ -87,7 +87,7 @@ export default function ContactCard() {
                 >
                   <img
                     src="/svgs/phone-icon.svg"
-                    style={{ width: "28px" }}
+                    style={{ width: "38px" }}
                     alt="Phone"
                   />
                   <div className="flex flex-row items-start justify-start text-xl  md:text-3xl">
@@ -96,7 +96,7 @@ export default function ContactCard() {
                       <b className="text-secondary tracking-[0.1rem] font-bold ">
                         PROBAID
                       </b>
-                      <b className="text-primary leading-0.5 tracking-[0.28rem] font-bold ml-2 md:ml-1">
+                      <b className="text-primary leading-0.5 tracking-[0.28rem] font-bold ml-0.5">
                         7762243
                       </b>
                     </div>
@@ -109,10 +109,10 @@ export default function ContactCard() {
                 >
                   <img
                     src="/svgs/uiw_mail.svg"
-                    style={{ width: "28px" }}
+                    style={{ width: "38px" }}
                     alt="Email"
                   />
-                  <p className="font-bold md:text-lg">Info@833probaid.com</p>
+                  <p className="font-bold">Info@833probaid.com</p>
                 </a>
 
                 <a
@@ -122,12 +122,10 @@ export default function ContactCard() {
                   <img
                     className="ml-0.5"
                     src="/svgs/globe.svg"
-                    style={{ width: "25px" }}
+                    style={{ width: "35px" }}
                     alt="Website"
                   />
-                  <p className="ml-0.5 font-bold md:text-lg">
-                    www.833probaid.com
-                  </p>
+                  <p className="ml-0.5 font-bold ">www.833probaid.com</p>
                 </a>
               </div>
             </div>
@@ -223,7 +221,7 @@ export default function ContactCard() {
             <filter
               id="filter1_d_273_12"
               x="23.7001"
-              y="19.9209"
+              y="29.9209"
               width="522.8"
               height="549.8"
               filterUnits="userSpaceOnUse"
@@ -264,7 +262,7 @@ export default function ContactCard() {
             <filter
               id="filter2_d_273_12"
               x="31.9001"
-              y="10.8996"
+              y="20.8996"
               width="506.4"
               height="535.4"
               filterUnits="userSpaceOnUse"
@@ -299,7 +297,7 @@ export default function ContactCard() {
             <filter
               id="filter3_dd_273_12"
               x="48.238"
-              y="21.2396"
+              y="31.2396"
               width="473.722"
               height="518.722"
               filterUnits="userSpaceOnUse"

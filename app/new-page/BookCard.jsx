@@ -111,30 +111,6 @@ const COVER_SHADOW_POLYGON_POINTS_MIRROR =
 // All sizes use clamp() so the button scales with the card.
 // Arrow/gap values kept as numbers (px) for the layout math but overridden
 // visually via style on the <Image>.
-const BTN_SIZE = {
-  lg: {
-    textClass: "text-[12px] md:text-[18px] lg:text-[28px] xl:text-[40px]",
-    heightClass: "h-10 lg:h-14 xl:h-[65px]",
-    arrowClass: "w-6 md:w-7 lg:w-8 xl:w-[42px]",
-    gapClass: "gap-1.5 md:gap-2 lg:gap-2.5",
-    pxClass: "px-2 md:px-3 lg:px-3.5",
-  },
-  md: {
-    textClass:
-      "text-[11px] md:text-[13px] lg:text-[18px] xl:text-[22px] 2xl:text-[25px]",
-    heightClass: "h-8 md:h-[38px] lg:h-14 xl:h-[65px]",
-    arrowClass: "w-[14px] md:w-[18px] lg:w-7 xl:w-8",
-    gapClass: "gap-1.5 md:gap-2",
-    pxClass: "px-2 md:px-2.5",
-  },
-  sm: {
-    textClass: "text-[10px] md:text-xs lg:text-base xl:text-[18px]",
-    heightClass: "h-[30px] md:h-9 lg:h-10",
-    arrowClass: "w-3.5 md:w-4 lg:w-5 xl:w-6",
-    gapClass: "gap-1 md:gap-1.5",
-    pxClass: "px-1.5 md:px-2",
-  },
-};
 
 export function LearnMoreButton({
   onClick,
@@ -146,14 +122,13 @@ export function LearnMoreButton({
   const rotateDir = mirrored ? "3deg" : "-3deg";
   return (
     <button
-      className="bc-btn inline-flex items-center gap-2 sm:gap-1 px-3 sm:h-[38px] lg:h-[55px] xl:h-[65px] rounded-[8px] py-2"
+      className="bc-btn inline-flex items-center gap-2 sm:gap-1 px-2 sm:h-[38px] lg:h-[55px] xl:h-[70px] lg:gap-3 rounded-[8px] pl-2.5 "
       type="button"
       onClick={onClick}
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
       style={{
         background: D.orange,
-        border: "mixed solid #924705",
         cursor: "pointer",
         boxShadow:
           "0px 2.73px 6.64px 0px #000000AD, inset 5.46px -5.46px 3.64px 0px #00000040, inset -3.64px 4.55px 3.64px 0px #FFFFFF40, -1.82px -0.91px 3.64px 0px #00000099",
@@ -166,7 +141,7 @@ export function LearnMoreButton({
         WebkitTextStroke: "0.91px #924705",
       }}
     >
-      <span className="bc-btn-text font-poppins font-black sm:text-[13px] lg:text-[18px] xl:text-[22px] uppercase text-white tracking-wide [text-shadow:0px_4px_0px_rgba(0,0,0,0.4)] [-webkit-text-stroke:0.91px_#924705]">
+      <span className="bc-btn-text  font-poppins font-black sm:text-[13px] lg:text-[18px] xl:text-[23px] uppercase text-white tracking-wide [text-shadow:0_4px_4.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
         {" "}
         {label}
       </span>
@@ -175,7 +150,7 @@ export function LearnMoreButton({
         alt=""
         width={100}
         height={100}
-        className="bc-btn-arrow object-contain sm:h-[18px] sm:w-[18px] lg:h-[40px] lg:w-[40px]"
+        className="bc-btn-arrow object-contain sm:h-[18px] sm:w-[18px] lg:h-[45px] lg:w-[45px]"
       />
     </button>
   );
@@ -489,7 +464,7 @@ function BookCardInner({
                   right: -10,
                   top: "50%",
                   transform: "translateY(-50%)",
-                  height: "20%",
+                  height: "18%",
                   background: "#FE7702",
                   boxShadow:
                     "inset 0 1px 0 rgba(255,255,255,0.25), 0 2px 6px rgba(0,0,0,0.3), 0px 4px 5.6px 0px #00000060, 0px -3px 6.2px 0px #00000099, inset -12px 0px 4.6px 0px #00000080, inset 12px 0px 4.6px 0px #00000080",
@@ -499,7 +474,7 @@ function BookCardInner({
                   zIndex: 3,
                 }}
               >
-                <p className="bc-band-text text-white text-center tracking-wider font-black font-poppins leading-[1.3] sm:text-[10px] lg:text-sm xl:text-lg 2xl:text-xl px-[6%] sm:px-[7%] [text-shadow:0px_4px_4px_#00000099]">
+                <p className="bc-band-text text-white text-center tracking-wider font-bold font-poppins leading-[1.3] sm:text-[10px] lg:text-sm xl:text-lg 2xl:text-xl px-[6%] sm:px-[7%] [text-shadow:0_4px_4.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
                   {subtitle}
                 </p>
               </div>
@@ -507,21 +482,20 @@ function BookCardInner({
               {/* UPPER HALF — icon + title */}
               <div
                 className="absolute top-2 left-0 right-0 h-[36%] flex flex-col items-center justify-start"
-                style={{ paddingTop: "3.6%" }}
+                style={{ padding: "5% 0%" }}
               >
-                <div className="bc-icon md:w-[50px] lg:w-[80px] xl:w-[90px]">
+                <div className="bc-icon md:h-[50px] lg:h-[80px] xl:h-[100px] min-h-[100px]">
                   <Image
                     src={icon}
                     alt={title}
                     width={120}
                     height={120}
-                    style={{ width: "100%", height: "auto", display: "block" }}
-                    className={`object-contain floating-text cursor-pointer hover:scale-[1.1] transition-all duration-300 hover:rotate-3 ${icon === "/icons/card-icon-7.png" ? "scale-120" : ""}`}
+                    className={`object-cover w-full md:h-[100px] floating-text cursor-pointer hover:scale-[1.1] transition-all duration-300 hover:rotate-3`}
                   />
                 </div>
                 <h1
-                  className="bc-title pt-1 text-white font-bold text-center uppercase leading-[1.2] font-montserrat sm:text-[11px]
-                 lg:text-[16px] xl:text-[20px] px-[5%] drop-shadow-[4.31px_4.31px_4.31px_rgba(0,0,0,0.25)]"
+                  className="bc-title  text-white font-bold text-center uppercase leading-[1.2] font-montserrat sm:text-[11px]
+                 lg:text-[16px] xl:text-[20px] px-[5%] drop-shadow-[4.31px_4.31px_4.31px_rgba(0,0,0,0.25)] pt-[18px]"
                 >
                   {" "}
                   {String(title)
@@ -542,7 +516,7 @@ function BookCardInner({
               {/* LOWER HALF — description + button */}
               <div
                 className="absolute top-[63%] left-0 right-0 bottom-0 flex items-center justify-between flex-col"
-                style={{ padding: "2% 6% 6%" }}
+                style={{ padding: "2% 4% 6.5%" }}
               >
                 <p className="bc-desc text-white tracking-wider text-center font-montserrat leading-[1.3] font-semibold sm:text-[10px] lg:text-[14px] xl:text-lg 2xl:text-[17px] px-[1%]">
                   {description}

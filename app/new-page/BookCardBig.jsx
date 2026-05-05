@@ -15,7 +15,7 @@ import "./book-card.css";
 const D = {
   // Card max size (px) — used only for maxWidth and aspect-ratio
   w: 1008,
-  h: 444,
+  h: 520,
 
   // Teal palette (cover, base, shadows)
   teal: "#14b3c2",
@@ -44,7 +44,7 @@ const D = {
 // Vertical   % → relative to card height (700px)
 const P = {
   // Inner/cover page insets
-  coverPadV: "8%", // 35/700 — top & bottom gap from card edge
+  coverPadV: "6%", // 35/700 — top & bottom gap from card edge
   hingeH: "9.33%", // (22+20)/450 — staple side inset
   openH: "4%", // 35/450 — open-corner side inset
 
@@ -122,14 +122,13 @@ export function LearnMoreButton({
   const rotateDir = mirrored ? "3deg" : "-3deg";
   return (
     <button
-      className="bc-btn inline-flex items-center gap-2 sm:gap-1 px-3 sm:h-[38px] lg:h-[55px] xl:h-[65px] rounded-[8px] py-2"
+      className="bc-btn inline-flex items-center gap-2 sm:gap-1 px-2 sm:h-[38px] lg:h-[55px] xl:h-[70px] lg:gap-3 rounded-[8px] pl-2.5 "
       type="button"
       onClick={onClick}
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
       style={{
         background: D.orange,
-        border: "mixed solid #924705",
         cursor: "pointer",
         boxShadow:
           "0px 2.73px 6.64px 0px #000000AD, inset 5.46px -5.46px 3.64px 0px #00000040, inset -3.64px 4.55px 3.64px 0px #FFFFFF40, -1.82px -0.91px 3.64px 0px #00000099",
@@ -142,7 +141,7 @@ export function LearnMoreButton({
         WebkitTextStroke: "0.91px #924705",
       }}
     >
-      <span className="bc-btn-text font-poppins font-black sm:text-[13px] lg:text-[18px] xl:text-[24px] uppercase text-white tracking-wide [text-shadow:0px_4px_0px_rgba(0,0,0,0.4)] [-webkit-text-stroke:0.91px_#924705]">
+      <span className="bc-btn-text  font-poppins font-black sm:text-[13px] lg:text-[18px] xl:text-[23px] uppercase text-white tracking-wide [text-shadow:0_4px_4.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
         {" "}
         {label}
       </span>
@@ -478,7 +477,7 @@ function BookCardInner({
                   zIndex: 3,
                 }}
               >
-                <p className="bc-band-text text-white text-center tracking-wider font-black font-poppins leading-[1.3] sm:text-[10px] lg:text-sm xl:text-lg px-[6%] sm:px-[7%] [text-shadow:0px_4px_4px_#00000099]">
+                <p className="bc-band-text text-white text-center tracking-wider font-bold font-montserrat leading-[1.3] sm:text-[10px] lg:text-sm xl:text-lg px-[6%] sm:px-[7%] [text-shadow:0px_4px_4px_#00000099] ">
                   {subtitle}
                 </p>
               </div>
@@ -486,20 +485,19 @@ function BookCardInner({
               {/* UPPER HALF — icon + title */}
               <div
                 className="absolute top-0 left-0 right-0 h-[36%] flex flex-col items-center justify-start"
-                style={{ paddingTop: "1.6%" }}
+                style={{ paddingTop: "2.5%" }}
               >
-                <div className="bc-icon md:w-[50px] lg:w-[80px] xl:w-[90px]">
+                <div className="bc-icon md:h-[50px] lg:h-[80px] xl:h-[100px] min-h-[100px]">
                   <Image
                     src={icon}
                     alt={title}
                     width={120}
                     height={120}
-                    style={{ width: "100%", height: "auto", display: "block" }}
-                    className={`object-contain floating-text cursor-pointer hover:scale-[1.1] transition-all duration-300 hover:rotate-3 ${icon === "/icons/card-icon-7.png" ? "scale-120" : ""}`}
+                    className={`object-cover w-full md:h-[100px] floating-text cursor-pointer hover:scale-[1.1] transition-all duration-300 hover:rotate-3`}
                   />
                 </div>
                 <h1
-                  className="bc-title pt-1 text-white font-bold text-center uppercase leading-[1.2] font-montserrat sm:text-[11px]
+                  className="bc-title pt-3 text-white font-bold text-center uppercase leading-[1.2] font-montserrat sm:text-[11px]
                  lg:text-[16px] xl:text-[22px] px-[5%] drop-shadow-[4.31px_4.31px_4.31px_rgba(0,0,0,0.25)]"
                 >
                   {" "}
@@ -520,8 +518,8 @@ function BookCardInner({
 
               {/* LOWER HALF — description + button */}
               <div
-                className="absolute top-[63%] left-0 right-0 bottom-0 flex items-center justify-between flex-col"
-                style={{ padding: "0% 6% 1.5%" }}
+                className="absolute top-[64%] left-0 right-0 bottom-0 flex items-center justify-between flex-col"
+                style={{ padding: "0% 6% 2.5%" }}
               >
                 <p className="bc-desc text-white tracking-wider text-center font-montserrat leading-[1.3] font-semibold sm:text-[10px] lg:text-[14px] xl:text-lg 2xl:text-[17px] px-[1%]">
                   {description}

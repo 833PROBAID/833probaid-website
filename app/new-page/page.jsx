@@ -92,7 +92,7 @@ export default async function NewPage() {
             icon={card.icon}
             slug={card.slug}
             mirrored={index % 2 !== 0}
-            speed={2500}
+            speed={3500}
             // ← change flip animation speed (ms)
             // width="320px"  ← change card width
             // height="480px" ← change card height
@@ -104,7 +104,7 @@ export default async function NewPage() {
         className="mx-auto w-full  px-2 grid grid-cols-1 md:grid-cols-2 place-items-center justify-center gap-10 md:px-16 md:gap-24 
            lg:px-22 lg:gap-24 xl:px-30 xl:gap-24 "
       >
-        {cards.slice(1,7).map((card, index) => (
+        {cards.slice(1, 18).map((card, index) => (
           <BookCard
             key={card.id}
             title={card.title}

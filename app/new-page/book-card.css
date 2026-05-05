@@ -17,28 +17,28 @@
 /* ── 320 – 374 px ──────────────────────────────────────────────── */
 @media (max-width: 375px) {
   .bc-band-text {
-    font-size: 15px;
+    font-size: 14px;
   }
   .bc-title {
-    font-size: 15px;
+    font-size: 14px;
   }
   .bc-desc {
-    font-size: 13px;
+    font-size: 12px;
   }
 
   .bc-icon {
-    width: 80px;
+    width: 65px;
   }
 
   .bc-btn {
     height: 50px;
   }
   .bc-btn-text {
-    font-size: 18px;
+    font-size: 17px;
   }
   .bc-btn-arrow {
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
   }
 }
 
@@ -72,29 +72,28 @@
 
 /* ── 430 – 767 px ──────────────────────────────────────────────── */
 @media (min-width: 430px) and (max-width: 767px) {
-  /* .bc-band-text { */
-  /* font-size: 12px;
+  .bc-band-text {
+    font-size: 18px;
   }
   .bc-title {
-    font-size: 13px;
+    font-size: 20px;
   }
   .bc-desc {
-    font-size: 10px;
-  }
-*/
-  .bc-icon {
-    width: 90px;
-    height: 90px;
+    font-size: 17px;
   }
 
-  /* .bc-btn {
-    height: 32px;
-  } */
+  .bc-icon {
+    width: 90px;
+  }
+
+  .bc-btn {
+    height: 60px;
+  }
   .bc-btn-text {
-    font-size: 19px;
+    font-size: 22px;
   }
   .bc-btn-arrow {
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
   }
 }
