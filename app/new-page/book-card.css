@@ -59,7 +59,7 @@
   }
 
   .bc-btn {
-    height:60px;
+    height: 60px;
   }
   .bc-btn-text {
     font-size: 20px;
@@ -71,9 +71,9 @@
 }
 
 /* ── 430 – 767 px ──────────────────────────────────────────────── */
-/* @media (min-width: 430px) and (max-width: 767px) {
-  .bc-band-text {
-    font-size: 12px;
+@media (min-width: 430px) and (max-width: 767px) {
+  /* .bc-band-text { */
+  /* font-size: 12px;
   }
   .bc-title {
     font-size: 13px;
@@ -81,20 +81,20 @@
   .bc-desc {
     font-size: 10px;
   }
-
+*/
   .bc-icon {
-    width: 56px;
-    height: 56px;
+    width: 90px;
+    height: 90px;
   }
 
-  .bc-btn {
+  /* .bc-btn {
     height: 32px;
-  }
+  } */
   .bc-btn-text {
-    font-size: 13px;
+    font-size: 19px;
   }
   .bc-btn-arrow {
-    width: 26px;
-    height: 26px;
+    width: 36px;
+    height: 36px;
   }
-} */
+}
