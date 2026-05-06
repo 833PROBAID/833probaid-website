@@ -182,10 +182,10 @@ export default function LogoCard() {
             </filter>
             <filter
               id="filter1_d_273_13"
-              x="24.6001"
-              y="36.5996"
-              width="510"
-              height="542"
+              x="10"
+              y="10.6"
+              width="542"
+              height="576"
               filterUnits="userSpaceOnUse"
               colorInterpolationFilters="sRGB"
             >
@@ -196,7 +196,7 @@ export default function LogoCard() {
                 values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
                 result="hardAlpha"
               />
-              <feOffset dx="-3.6" dy="14.4" />
+              <feOffset dx="-3.6" dy="5.4" />
               <feGaussianBlur stdDeviation="10.8" />
               <feComposite in2="hardAlpha" operator="out" />
               <feColorMatrix
@@ -231,7 +231,7 @@ export default function LogoCard() {
                 values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
                 result="hardAlpha"
               />
-              <feOffset dx="3.6" dy="-3.6" />
+              <feOffset dx="3.6" dy="-2.4" />
               <feGaussianBlur stdDeviation="10.8" />
               <feComposite in2="hardAlpha" operator="out" />
               <feColorMatrix
@@ -249,7 +249,7 @@ export default function LogoCard() {
                 values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
                 result="hardAlpha"
               />
-              <feOffset dx="10.8" dy="-9.6" />
+              <feOffset dx="10.8" dy="-6" />
               <feGaussianBlur stdDeviation="2.4" />
               <feComposite in2="hardAlpha" operator="out" />
               <feColorMatrix

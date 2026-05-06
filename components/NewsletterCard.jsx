@@ -104,13 +104,13 @@ export default function NewsletterCard() {
               height="370"
               className="overflow-visible"
             >
-              <div className="flex flex-col items-center justify-center h-full w-full">
-                <div className="flex flex-col items-center justify-center -mt-10">
-                  <h2 className="text-[#0097A7] text-center text-[30px] font-bold  font-roboto mb-6 md:mb-0 pl-6">
+              <div className="flex flex-col items-center justify-center w-full">
+                <div className="flex flex-col items-center justify-center pt-12">
+                  <h2 className="text-[#0097A7] text-center text-[30px] font-bold  font-montserrat mb-6  pl-6">
                     Join Our Newsletter
                   </h2>
                   <div className="flex flex-col gap-3 pr-6">
-                    <div className="pl-10 mt-2">
+                    <div className="pl-10">
                       <p className="font-bold text-[19px]">
                         Stay up to date with the latest news and updates from{" "}
                         <b className="text-primary">
@@ -196,6 +196,10 @@ export default function NewsletterCard() {
                 width="200"
                 height="67"
                 className="footer-subscribe-btn"
+                style={{
+                  width: "200px !important",
+                  height: "75px !important",
+                }}
               />
             </g>
             <defs>
@@ -282,10 +286,10 @@ export default function NewsletterCard() {
               </filter>
               <filter
                 id="filter1_d_273_11"
-                x="26.2996"
-                y="30.2996"
-                width="510.6"
-                height="542.6"
+                x="8.6"
+                y="3.6"
+                width="543.6"
+                height="577"
                 filterUnits="userSpaceOnUse"
                 colorInterpolationFilters="sRGB"
               >
@@ -296,7 +300,7 @@ export default function NewsletterCard() {
                   values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
                   result="hardAlpha"
                 />
-                <feOffset dx="3.6" dy="14.4" />
+                <feOffset dx="3.6" dy="8.4" />
                 <feGaussianBlur stdDeviation="10.98" />
                 <feComposite in2="hardAlpha" operator="out" />
                 <feColorMatrix

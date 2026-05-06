@@ -17,10 +17,10 @@
 /* ── 320 – 374 px ──────────────────────────────────────────────── */
 @media (max-width: 375px) {
   .bc-band-text {
-    font-size: 14px;
+    font-size: 12px;
   }
   .bc-title {
-    font-size: 14px;
+    font-size: 13px;
   }
   .bc-desc {
     font-size: 12px;

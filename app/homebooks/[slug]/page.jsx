@@ -1,30 +1,42 @@
-/* eslint-disable @next/next/no-img-element */
+/* eslint-disable react/no-danger */
 
+import { cache } from "react";
 import BooksHero from "@/components/BooksHero";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
+  getHomeBookBySlugCached,
   getHomeBookById,
-  getHomeBookBySlug,
   getAdjacentPublishedHomeBooksByNo,
   incrementHomeBookViews,
+  getPublishedHomeBookSlugs,
 } from "@/app/services/homeBookService";
 import HomeBookContentClient from "./HomeBookContentClient";
+import { scopeCSS } from "@/app/utils/scopeCSS";
 
-export const revalidate = 300;
 
-async function fetchHomeBook(slug) {
+/**
+ * Deduplicate the DB/cache lookup across generateMetadata and the page
+ * component so both share a single result per request (React request cache).
+ */
+const fetchHomeBook = cache(async (slug) => {
   const isObjectId = /^[0-9a-fA-F]{24}$/.test(slug);
-  return isObjectId ? getHomeBookById(slug) : getHomeBookBySlug(slug);
+  return isObjectId ? getHomeBookById(slug) : getHomeBookBySlugCached(slug);
+});
+
+export async function generateStaticParams() {
+  const slugs = await getPublishedHomeBookSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const homeBook = await fetchHomeBook(slug);
 
-  if (!homeBook) {
+  if (!homeBook || homeBook.status !== "published") {
     return { title: "Home Book Not Found | 833PROBAID" };
   }
 
@@ -98,11 +110,13 @@ export default async function HomeBookDetailPage({ params }) {
   const { slug } = await params;
   const homeBook = await fetchHomeBook(slug);
 
-  if (!homeBook) notFound();
+  if (!homeBook || homeBook.status !== "published") notFound();
 
   const currentSerial = Number(homeBook.no);
   const { previous: previousHomeBook, next: nextHomeBook } =
-    await getAdjacentPublishedHomeBooksByNo(currentSerial);
+    Number.isFinite(currentSerial)
+      ? await getAdjacentPublishedHomeBooksByNo(currentSerial)
+      : { previous: null, next: null };
 
   incrementHomeBookViews(homeBook._id.toString()).catch(() => {});
 
@@ -118,12 +132,18 @@ export default async function HomeBookDetailPage({ params }) {
       ? { html: homeBook.content.html, css: homeBook.content.css || "" }
       : null);
 
-  const structuredData = homeBook.seo?.structuredData || null;
-  const structuredDataScript = structuredData
-    ? typeof structuredData === "string"
-      ? structuredData
-      : JSON.stringify(structuredData)
-    : null;
+  let structuredDataScript = null;
+  if (homeBook.seo?.structuredData) {
+    try {
+      const raw = homeBook.seo.structuredData;
+      structuredDataScript =
+        typeof raw === "string"
+          ? JSON.stringify(JSON.parse(raw))
+          : JSON.stringify(raw);
+    } catch {
+      // malformed structured data — skip JSON-LD injection
+    }
+  }
 
   return (
     <section className="font-montserrat">
@@ -141,7 +161,30 @@ export default async function HomeBookDetailPage({ params }) {
           subtitle={heroData.subtitle}
         />
 
-        <HomeBookContentClient grapesContent={grapesContent} />
+        {grapesContent?.html ? (
+          <div className="mt-8">
+            <style
+              dangerouslySetInnerHTML={{
+                __html: scopeCSS(grapesContent.css || "", ".homebook-content"),
+              }}
+            />
+            <div
+              className="homebook-content"
+              style={{
+                contain: "layout style",
+                isolation: "isolate",
+                position: "relative",
+                zIndex: 1,
+              }}
+              dangerouslySetInnerHTML={{ __html: grapesContent.html }}
+            />
+            <HomeBookContentClient />
+          </div>
+        ) : (
+          <div className="mt-8 text-center text-gray-500">
+            <p>No content available for this home book.</p>
+          </div>
+        )}
 
         <section className="font-roboto container mx-auto mt-2 flex max-w-7xl items-center justify-between px-4 text-xl font-black md:mt-4 md:text-2xl lg:mt-8 lg:text-3xl xl:mt-12 xl:text-4xl">
           {previousHomeBook?.slug ? (
@@ -151,10 +194,12 @@ export default async function HomeBookDetailPage({ params }) {
               title={previousHomeBook.title || previousHomeBook.slug}
               aria-label={`Previous home book: ${previousHomeBook.title || previousHomeBook.slug}`}
             >
-              <img
+              <Image
                 className="w-8 lg:w-12"
                 src="/images/arrow_prev.png"
                 alt="Previous home book"
+                width={48}
+                height={48}
               />
               <span className="text-secondary hover:text-primary">
                 Previous
@@ -165,10 +210,12 @@ export default async function HomeBookDetailPage({ params }) {
               className="flex cursor-not-allowed items-center gap-2 opacity-40"
               aria-disabled="true"
             >
-              <img
+              <Image
                 className="w-8 lg:w-12"
                 src="/images/arrow_prev.png"
                 alt="No previous home book"
+                width={48}
+                height={48}
               />
               <span className="text-secondary">Previous</span>
             </span>
@@ -182,10 +229,12 @@ export default async function HomeBookDetailPage({ params }) {
               aria-label={`Next home book: ${nextHomeBook.title || nextHomeBook.slug}`}
             >
               <span className="text-secondary hover:text-primary">Next</span>
-              <img
+              <Image
                 className="w-8 lg:w-12"
                 src="/images/arrow.png"
                 alt="Next home book"
+                width={48}
+                height={48}
               />
             </Link>
           ) : (
@@ -194,10 +243,12 @@ export default async function HomeBookDetailPage({ params }) {
               aria-disabled="true"
             >
               <span className="text-secondary">Next</span>
-              <img
+              <Image
                 className="w-8 lg:w-12"
                 src="/images/arrow.png"
                 alt="No next home book"
+                width={48}
+                height={48}
               />
             </span>
           )}

@@ -66,7 +66,7 @@ export default function ContactCard() {
             height="320"
             className="overflow-visible"
           >
-            <div className="flex flex-col items-center justify-center h-full pt-10 w-full">
+            <div className="flex flex-col items-center justify-center h-full pt-20 w-full">
               <h2 className="text-secondary text-center text-[30px] font-bold">
                 Contact Us
               </h2>
@@ -74,7 +74,7 @@ export default function ContactCard() {
                 <div className="mb-4 flex items-start gap-3 ">
                   <img
                     src="/svgs/location-pin.svg"
-                    style={{ width: "38px", marginTop: "4px" }}
+                    style={{ width: "35px" }}
                     alt="Location"
                   />
                   <p className="font-bold text-left">
@@ -87,7 +87,7 @@ export default function ContactCard() {
                 >
                   <img
                     src="/svgs/phone-icon.svg"
-                    style={{ width: "38px" }}
+                    style={{ width: "32px" }}
                     alt="Phone"
                   />
                   <div className="flex flex-row items-start justify-start text-xl  md:text-3xl">
@@ -96,7 +96,12 @@ export default function ContactCard() {
                       <b className="text-secondary tracking-[0.1rem] font-bold ">
                         PROBAID
                       </b>
-                      <b className="text-primary leading-0.5 tracking-[0.28rem] font-bold ml-0.5">
+                      <b
+                        className="text-primary  tracking-[0.28rem] font-bold ml-0.5"
+                        style={{
+                          lineHeight: "2px",
+                        }}
+                      >
                         7762243
                       </b>
                     </div>
@@ -105,14 +110,14 @@ export default function ContactCard() {
 
                 <a
                   href="mailto:info@833probaid.com"
-                  className="sm:mb-4 mb-2 flex items-center gap-3"
+                  className="sm:mb-6 mb-2 flex items-center gap-3"
                 >
                   <img
                     src="/svgs/uiw_mail.svg"
-                    style={{ width: "38px" }}
+                    style={{ height: "35px" }}
                     alt="Email"
                   />
-                  <p className="font-bold">Info@833probaid.com</p>
+                  <p className="font-bold text-[19px]">Info@833probaid.com</p>
                 </a>
 
                 <a
@@ -122,10 +127,12 @@ export default function ContactCard() {
                   <img
                     className="ml-0.5"
                     src="/svgs/globe.svg"
-                    style={{ width: "35px" }}
+                    style={{ height: "30px" }}
                     alt="Website"
                   />
-                  <p className="ml-0.5 font-bold ">www.833probaid.com</p>
+                  <p className="ml-0.5 font-bold text-[19px]">
+                    www.833probaid.com
+                  </p>
                 </a>
               </div>
             </div>
@@ -220,10 +227,10 @@ export default function ContactCard() {
             </filter>
             <filter
               id="filter1_d_273_12"
-              x="23.7001"
-              y="29.9209"
-              width="522.8"
-              height="549.8"
+              x="6"
+              y="4"
+              width="558"
+              height="586"
               filterUnits="userSpaceOnUse"
               colorInterpolationFilters="sRGB"
             >
@@ -240,7 +247,7 @@ export default function ContactCard() {
                 in="SourceAlpha"
                 result="effect1_dropShadow_273_12"
               />
-              <feOffset dy="13.47" />
+              <feOffset dy="4.8" />
               <feGaussianBlur stdDeviation="10.74" />
               <feComposite in2="hardAlpha" operator="out" />
               <feColorMatrix
@@ -261,10 +268,10 @@ export default function ContactCard() {
             </filter>
             <filter
               id="filter2_d_273_12"
-              x="31.9001"
-              y="20.8996"
-              width="506.4"
-              height="535.4"
+              x="14"
+              y="6"
+              width="538"
+              height="576"
               filterUnits="userSpaceOnUse"
               colorInterpolationFilters="sRGB"
             >
@@ -275,12 +282,12 @@ export default function ContactCard() {
                 values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
                 result="hardAlpha"
               />
-              <feOffset dy="-7.2" />
-              <feGaussianBlur stdDeviation="8.22" />
+              <feOffset dy="-4.8" />
+              <feGaussianBlur stdDeviation="9.6" />
               <feComposite in2="hardAlpha" operator="out" />
               <feColorMatrix
                 type="matrix"
-                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.516 0"
+                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.75 0"
               />
               <feBlend
                 mode="normal"

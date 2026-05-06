@@ -138,10 +138,9 @@ export function LearnMoreButton({
           : "scale(1) rotate(0deg)",
         transition: "transform 600ms cubic-bezier(0.34, 1.4, 0.64, 1)",
         willChange: "transform",
-        WebkitTextStroke: "0.91px #924705",
       }}
     >
-      <span className="bc-btn-text  font-poppins font-black sm:text-[13px] lg:text-[18px] xl:text-[23px] uppercase text-white tracking-wide [text-shadow:0_4px_4.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
+      <span className="bc-btn-text  font-montserrat font-black sm:text-[13px] lg:text-[18px] xl:text-[23px] uppercase text-white tracking-wide [text-shadow:0_4px_4.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
         {" "}
         {label}
       </span>
@@ -204,7 +203,7 @@ function BookCardInner({
   const innerPadding = mirrored ? INNER_PAD_MIRRORED : INNER_PAD_NORMAL;
 
   const transformOrigin = mirrored ? "right center" : "left center";
-  const flipAngle = mirrored ? "168deg" : "-168deg";
+  const flipAngle = mirrored ? "120deg" : "-120deg";
   const shadowTopTx = mirrored
     ? "translate(-1.35 -1.15)"
     : "translate(1.35 -1.15)";
@@ -474,28 +473,33 @@ function BookCardInner({
                   zIndex: 3,
                 }}
               >
-                <p className="bc-band-text text-white text-center tracking-wider font-bold font-poppins leading-[1.3] sm:text-[10px] lg:text-sm xl:text-lg 2xl:text-xl px-[6%] sm:px-[7%] [text-shadow:0_4px_4.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
+                <p className="bc-band-text text-white text-center tracking-wider font-bold font-montserrat leading-[1.3] sm:text-[10px] lg:text-sm xl:text-lg 2xl:text-xl px-[6%] sm:px-[7%] [text-shadow:0_4px_4.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
                   {subtitle}
                 </p>
               </div>
 
               {/* UPPER HALF — icon + title */}
               <div
-                className="absolute top-2 left-0 right-0 h-[36%] flex flex-col items-center justify-start"
-                style={{ padding: "5% 0%" }}
+                className="absolute left-0 right-0 h-[36%] flex flex-col items-center justify-start "
+                style={{
+                  paddingTop: "7.5%",
+                }}
               >
-                <div className="bc-icon md:h-[50px] lg:h-[80px] xl:h-[100px] min-h-[100px]">
+                <div className="bc-icon sm:h-[60px] md:h-[70px] lg:h-[90px] xl:h-[100px]">
                   <Image
                     src={icon}
                     alt={title}
                     width={120}
                     height={120}
-                    className={`object-cover w-full md:h-[100px] floating-text cursor-pointer hover:scale-[1.1] transition-all duration-300 hover:rotate-3`}
+                    className={`object-contain w-full sm:h-[60px] md:h-[70px] lg:h-[90px] xl:h-[100px] floating-text cursor-pointer hover:scale-[1.1] transition-all duration-300 ${mirrored ? "hover:rotate-3" : "hover:-rotate-3"}`}
                   />
                 </div>
                 <h1
                   className="bc-title  text-white font-bold text-center uppercase leading-[1.2] font-montserrat sm:text-[11px]
-                 lg:text-[16px] xl:text-[20px] px-[5%] drop-shadow-[4.31px_4.31px_4.31px_rgba(0,0,0,0.25)] pt-[18px]"
+                 lg:text-[16px] xl:text-[20px] px-[5%] drop-shadow-[4.31px_4.31px_4.31px_rgba(0,0,0,0.25)]"
+                  style={{
+                    paddingTop: "4%",
+                  }}
                 >
                   {" "}
                   {String(title)
@@ -529,7 +533,9 @@ function BookCardInner({
                     e.stopPropagation();
                     setOpen(true);
                     if (slug) {
-                      router.push(`/homebooks/${slug}`);
+                      setTimeout(() => {
+                        router.push(`/homebooks/${slug}`);
+                      }, 1000);
                     }
                   }}
                 />

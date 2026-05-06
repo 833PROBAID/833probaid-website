@@ -12,31 +12,9 @@ import {
 } from "@/app/services/blogService";
 import { notFound } from "next/navigation";
 import Image from "next/image";
+import { scopeCSS } from "@/app/utils/scopeCSS";
 
 export const revalidate = 300;
-
-// ─── CSS scoping for GrapesJS content ───────────────────────────────────────
-function scopeCSS(css, scope) {
-	if (!css) return "";
-	return css.replace(
-		/([^{}]+)\{([^{}]*)\}/g,
-		(match, selector, declarations) => {
-			const s = selector.trim();
-			if (s.startsWith("@")) return match;
-			if (s.includes(":root")) return match;
-			if (s === "html" || s === "body") return "";
-			if (s.startsWith(scope)) return match;
-			const scoped = s
-				.split(",")
-				.map((sel) => {
-					const t = sel.trim();
-					return t.startsWith(scope) ? t : `${scope} ${t}`;
-				})
-				.join(", ");
-			return `${scoped} { ${declarations} }`;
-		},
-	);
-}
 
 // ─── Helper: fetch blog by slug or 24-char ObjectId ─────────────────────────
 async function fetchBlog(slug) {

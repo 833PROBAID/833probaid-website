@@ -1,4 +1,5 @@
-import BookCard, { BookCardDefs } from "./BookCard";
+import { BookCardDefs } from "./BookCard";
+import BookCardGrid from "./BookCardGrid";
 import { getPublishedHomeBooksForHomepage } from "@/app/services/homeBookService";
 import Image from "next/image";
 import Footer from "@/components/Footer";
@@ -100,27 +101,7 @@ export default async function NewPage() {
         ))}
       </section>
 
-      <section
-        className="mx-auto w-full  px-2 grid grid-cols-1 md:grid-cols-2 place-items-center justify-center gap-10 md:px-16 md:gap-24 
-           lg:px-22 lg:gap-24 xl:px-30 xl:gap-24 "
-      >
-        {cards.slice(1, 18).map((card, index) => (
-          <BookCard
-            key={card.id}
-            title={card.title}
-            subtitle={card.subtitle}
-            description={card.description}
-            imageSrc={card.imageSrc}
-            icon={card.icon}
-            slug={card.slug}
-            mirrored={index % 2 !== 0}
-            speed={3000}
-            // ← change flip animation speed (ms)
-            // width="320px"  ← change card width
-            // height="480px" ← change card height
-          />
-        ))}
-      </section>
+      <BookCardGrid cards={cards.slice(1)} />
 
       <Footer />
 

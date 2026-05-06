@@ -46,7 +46,7 @@ const P = {
   // Inner/cover page insets
   coverPadV: "6%", // 35/700 — top & bottom gap from card edge
   hingeH: "9.33%", // (22+20)/450 — staple side inset
-  openH: "4%", // 35/450 — open-corner side inset
+  openH: "3.5%", // 35/450 — open-corner side inset
 
   // Staples
   stapleW: "1.7%", // 20/450
@@ -62,7 +62,7 @@ const P = {
 // ── Percentage-safe padding for the inner content column ────────
 // The inner content div's containing block width ≈ 450 × (1 - 9.33% - 7.78%) = 373px
 // CSS % padding is always relative to the element's own width (373px here)
-const INNER_PAD_NORMAL = "8%"; // 28 26 28 52 px
+const INNER_PAD_NORMAL = "5% 7%"; // 28 26 28 52 px
 const INNER_PAD_MIRRORED = "5%";
 
 // ──────────────────────────────────────────────────────────────────
@@ -138,7 +138,6 @@ export function LearnMoreButton({
           : "scale(1) rotate(0deg)",
         transition: "transform 600ms cubic-bezier(0.34, 1.4, 0.64, 1)",
         willChange: "transform",
-        WebkitTextStroke: "0.91px #924705",
       }}
     >
       <span className="bc-btn-text  font-poppins font-black sm:text-[13px] lg:text-[18px] xl:text-[23px] uppercase text-white tracking-wide [text-shadow:0_4px_4.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
@@ -353,11 +352,14 @@ function BookCardInner({
               </div>
 
               {/* Hero image */}
-              <div className="relative w-full bg-white overflow-hidden rounded-2xl border-4 border-secondary shadow-lg shadow-black/30 sm:shadow-xl my-6 sm:shadow-black/40 md:shadow-2xl md:shadow-black/50">
+              <div
+                className="relative w-full h-full bg-white  rounded-2xl border-4 border-secondary shadow-lg 
+              shadow-black/30 sm:shadow-xl my-6 sm:shadow-black/40 md:shadow-2xl md:shadow-black/50"
+              >
                 <img
                   src={imageSrc || "/images/hero.png"}
                   alt={title}
-                  className="h-full w-full object-cover transition-transform duration-500 ease-in-out hover:scale-110"
+                  className="h-[250px] w-full object-cover transition-transform duration-500 ease-in-out hover:scale-110"
                 />
               </div>
               {description && (
@@ -477,23 +479,20 @@ function BookCardInner({
                   zIndex: 3,
                 }}
               >
-                <p className="bc-band-text text-white text-center tracking-wider font-bold font-montserrat leading-[1.3] sm:text-[10px] lg:text-sm xl:text-lg px-[6%] sm:px-[7%] [text-shadow:0px_4px_4px_#00000099] ">
+                <p className="bc-band-text text-white text-center tracking-wider font-bold font-montserrat leading-[1.3] sm:text-[10px] lg:text-sm xl:text-lg 2xl:text-xl px-[4%] [text-shadow:0_4px_4.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
                   {subtitle}
                 </p>
               </div>
 
               {/* UPPER HALF — icon + title */}
-              <div
-                className="absolute top-0 left-0 right-0 h-[36%] flex flex-col items-center justify-start"
-                style={{ paddingTop: "2.5%" }}
-              >
-                <div className="bc-icon md:h-[50px] lg:h-[80px] xl:h-[100px] min-h-[100px]">
+              <div className="absolute top-0 left-0 right-0 h-[36%] flex flex-col items-center justify-start pt-6">
+                <div className="bc-icon sm:h-[60px] md:h-[70px] lg:h-[90px] xl:h-[100px]">
                   <Image
                     src={icon}
                     alt={title}
                     width={120}
                     height={120}
-                    className={`object-cover w-full md:h-[100px] floating-text cursor-pointer hover:scale-[1.1] transition-all duration-300 hover:rotate-3`}
+                    className={`object-contain w-full sm:h-[60px] md:h-[70px] lg:h-[90px] xl:h-[100px] floating-text cursor-pointer hover:scale-[1.1] transition-all duration-300 ${mirrored ? "hover:rotate-3" : "hover:-rotate-3"}`}
                   />
                 </div>
                 <h1
@@ -532,7 +531,9 @@ function BookCardInner({
                     e.stopPropagation();
                     setOpen(true);
                     if (slug) {
-                      router.push(`/homebooks/${slug}`);
+                      setTimeout(() => {
+                        router.push(`/homebooks/${slug}`);
+                      }, 1200);
                     }
                   }}
                 />

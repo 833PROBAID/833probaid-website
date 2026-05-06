@@ -87,11 +87,21 @@ export async function getHomeBookById(homeBookId) {
 	return HomeBook.findById(homeBookId);
 }
 
-// Get home book by slug
+// Get home book by slug (no cache — used internally / admin)
 export async function getHomeBookBySlug(slug) {
 	await connectToDatabase();
 	return HomeBook.findOne({ slug });
 }
+
+// Cached public slug lookup — published only, plain object (lean)
+export const getHomeBookBySlugCached = unstable_cache(
+	async (slug) => {
+		await connectToDatabase();
+		return HomeBook.findOne({ slug, status: "published" }).lean();
+	},
+	["homebook-by-slug-v1"],
+	{ revalidate: 300, tags: ["homebooks"] },
+);
 
 // Create new home book
 export async function createHomeBook(homeBookData) {
