@@ -1,57 +1,52 @@
-import { BookCardDefs } from "./BookCard";
-import BookCardGrid from "./BookCardGrid";
+// SEO metadata for homepage
+export const metadata = {
+  title: "Probate, Trust & Conservatorship Real Estate | 833PROBAID®",
+  description:
+    "833PROBAID® runs a proprietary, court-aligned system for probate, trust, and conservatorship real estate. Eliminate confusion, ensure compliance, and move every case forward with structure and precision. Trusted by attorneys, fiduciaries, and executors.",
+  keywords: [
+    "probate real estate",
+    "trust real estate",
+    "conservatorship real estate",
+    "court supervised real estate",
+    "833PROBAID",
+    "overbid calculator",
+    "insurance risk checker",
+    "access risk analyzer",
+    "executor readiness quiz",
+    "California probate",
+    "fiduciary",
+    "estate sale",
+    "court aligned system",
+    "attorney trusted",
+    "real estate tools",
+  ],
+  openGraph: {
+    title: "Probate, Trust & Conservatorship Real Estate | 833PROBAID®",
+    description:
+      "833PROBAID® runs a proprietary, court-aligned system for probate, trust, and conservatorship real estate. Eliminate confusion, ensure compliance, and move every case forward with structure and precision. Trusted by attorneys, fiduciaries, and executors.",
+    url: "https://833probaid.com/",
+    siteName: "833PROBAID®",
+    images: [
+      {
+        url: "/images/hero-text.png",
+        width: 1200,
+        height: 630,
+        alt: "833PROBAID® Probate, Trust & Conservatorship Real Estate",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Probate, Trust & Conservatorship Real Estate | 833PROBAID®",
+    description:
+      "833PROBAID® runs a proprietary, court-aligned system for probate, trust, and conservatorship real estate. Eliminate confusion, ensure compliance, and move every case forward with structure and precision. Trusted by attorneys, fiduciaries, and executors.",
+    images: ["/images/hero-text.png"],
+  },
+};
+import HomePageClient from "./HomePageClient";
 import { getPublishedHomeBooksForHomepage } from "@/app/services/homeBookService";
-import Image from "next/image";
-import Footer from "@/components/Footer";
-import BookCardBig from "./BookCardBig";
-
-// ══════════════════════════════════════════════════════════════════════
-//  Static fallback cards — shown when the DB returns nothing.
-//  — title       : shown in the orange band + inner page heading
-//  — subtitle    : italic line shown above the band and on inner page
-//  — description : body copy on the inner page (not on the cover)
-//  — imageSrc    : path to image shown on inner page; "" = placeholder
-//  — tag         : small badge top-left on inner page ("SERVICE", "TOOL"…)
-// ══════════════════════════════════════════════════════════════════════
-const FALLBACK_CARDS = [
-  {
-    id: "fallback-1",
-    title: "Probate Consulting",
-    subtitle: "Trusted guidance for every estate",
-    description:
-      "End-to-end support navigating probate court, property valuations, and heir coordination.",
-    imageSrc: "",
-    tag: "SERVICE",
-  },
-  {
-    id: "fallback-2",
-    title: "Estate Planning",
-    subtitle: "Plan ahead, protect your legacy",
-    description:
-      "Comprehensive estate planning services to ensure your assets are distributed according to your wishes.",
-    imageSrc: "",
-    tag: "SERVICE",
-  },
-  {
-    id: "fallback-3",
-    title: "Property Valuation",
-    subtitle: "Accurate valuations you can trust",
-    description:
-      "Professional appraisals for probate properties, trust sales, and conservatorship estates.",
-    imageSrc: "",
-    tag: "SERVICE",
-  },
-  {
-    id: "fallback-4",
-    title: "Court Confirmation",
-    subtitle: "Navigate the overbid process",
-    description:
-      "Expert guidance through court-confirmed sales, overbid procedures, and probate auction strategy.",
-    imageSrc: "",
-    tag: "TOOL",
-  },
-];
-// ══════════════════════════════════════════════════════════════════════
 
 export const revalidate = 300;
 
@@ -59,59 +54,24 @@ function mapHomeBookForCard(homeBook) {
   const id = homeBook?._id?.toString?.() || homeBook?.id || "";
   return {
     id,
+    icon: homeBook?.icon || "/icons/card-icon-1.svg",
     title: homeBook?.title || "Untitled",
     subtitle: homeBook?.subtitle || "",
     description: homeBook?.description || "",
-    imageSrc: homeBook?.image || "",
-    icon: homeBook?.icon || "",
     slug: homeBook?.slug || "",
+    image: homeBook?.image || "/images/footer-logo.png",
   };
 }
 
-export default async function NewPage() {
-  let cards = [];
+export default async function HomePage() {
+  let initialHomeCardData = [];
 
   try {
     const homeBooks = await getPublishedHomeBooksForHomepage();
-    const mapped = (homeBooks || []).map(mapHomeBookForCard);
-    cards = mapped.length > 0 ? mapped : FALLBACK_CARDS;
+    initialHomeCardData = (homeBooks || []).map(mapHomeBookForCard);
   } catch (error) {
     console.error("Failed to load homepage home books:", error);
-    cards = FALLBACK_CARDS;
   }
-  return (
-    <main className="min-h-screen bg-[#e8f0f2] py-20">
-      <BookCardDefs />
-      <section className="mx-auto w-full  grid-cols-1 place-items-center justify-center md:px-16 lg:px-24 hidden sm:grid ">
-        {cards.slice(0, 1).map((card, index) => (
-          <BookCardBig
-            key={card.id}
-            title={card.title}
-            subtitle={card.subtitle}
-            description={card.description}
-            imageSrc={card.imageSrc}
-            icon={card.icon}
-            slug={card.slug}
-            mirrored={index % 2 !== 0}
-            speed={3500}
-            // ← change flip animation speed (ms)
-            // width="320px"  ← change card width
-            // height="480px" ← change card height
-          />
-        ))}
-      </section>
 
-      <BookCardGrid cards={cards.slice(1)} />
-
-      <Footer />
-
-      {/* ══════════════════════════════════════════════════════════════
-          Contact Us section — same 3-layer card structure.
-          Differences from footer card:
-            · Layer 2 has orange triangles at BOTH top corners (not a white fold)
-            · White panel uses a symmetric 8-point octagon clip-path
-            · No left stripe — content is centered
-          ══════════════════════════════════════════════════════════════ */}
-    </main>
-  );
+  return <HomePageClient initialHomeCardData={initialHomeCardData} />;
 }

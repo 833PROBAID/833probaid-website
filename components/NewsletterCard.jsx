@@ -27,7 +27,7 @@ export default function NewsletterCard() {
       setSubscriptionNotice("Add your email in the popup before submitting.");
     } else if (!EMAIL_PATTERN.test(normalizedEmail)) {
       setSubscriptionNotice(
-        "Your email looks invalid. Please correct it in the popup.",
+        "Your email looks invalid. Please correct it in the popup."
       );
     } else {
       setSubscriptionNotice("");
@@ -105,7 +105,7 @@ export default function NewsletterCard() {
               className="overflow-visible"
             >
               <div className="flex flex-col items-center justify-center w-full">
-                <div className="flex flex-col items-center justify-center pt-12">
+                <div className="flex flex-col items-center justify-center pt-10">
                   <h2 className="text-[#0097A7] text-center text-[30px] font-bold  font-montserrat mb-6  pl-6">
                     Join Our Newsletter
                   </h2>
@@ -115,17 +115,8 @@ export default function NewsletterCard() {
                         Stay up to date with the latest news and updates from{" "}
                         <b className="text-primary">
                           833PROBAID
-                          <span
-                            style={{
-                              verticalAlign: "super",
-                              fontSize: "0.9em",
-                              lineHeight: "0",
-                            }}
-                          >
-                            ®
-                          </span>
+                          <sup>®</sup>.
                         </b>
-                        .
                       </p>
                       <p className="font-bold text-[19px] mt-4 ">
                         Subscribe to our newsletter.

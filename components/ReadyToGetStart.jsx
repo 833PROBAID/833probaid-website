@@ -8,12 +8,6 @@ import { useEffect, useState } from "react";
 const ReadyToGetStart = () => {
   const router = useRouter();
   const [isSafariBrowser, setIsSafariBrowser] = useState(false);
-  const headingSizeClass = isSafariBrowser
-    ? "md:text-[36px] md:absolute left-24 top-18"
-    : "text-5xl";
-  const subHeadingSizeClass = isSafariBrowser
-    ? "md:text-[36px]  md:absolute left-40 top-30"
-    : "mt-6 text-5xl";
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -22,7 +16,15 @@ const ReadyToGetStart = () => {
   }, []);
   return (
     <div className="w-full">
-      <div className="bg-secondary  hidden md:grid rounded-xl grid-cols-1 gap-1 p-4 shadow-[0px_12px_20px_0px_rgba(0,0,0,0.2),0px_-12px_20px_0px_rgba(0,0,0,0.2)] justify-center items-center sm:gap-6 sm:p-6 sm:shadow-[0px_12px_20px_0px_rgba(0,0,0,0.4),0px_-12px_20px_0px_rgba(0,0,0,0.4)] md:grid-cols-6 md:shadow-[0px_12px_20px_0px_rgba(0,0,0,0.6),0px_-12px_20px_0px_rgba(0,0,0,0.6)] lg:shadow-[0px_12px_20px_0px_rgba(0,0,0,0.75),0px_-12px_20px_0px_rgba(0,0,0,0.75)] xl:shadow-[0px_12px_20px_0px_rgba(0,0,0,0.9),0px_-12px_20px_0px_rgba(0,0,0,0.9)] -mx-3">
+      <div
+        className="bg-secondary  hidden md:grid rounded-xl grid-cols-1 gap-1 
+      p-4 shadow-[0px_12px_20px_0px_rgba(0,0,0,0.2),0px_-12px_20px_0px_rgba(0,0,0,0.2)] justify-center
+       items-center sm:gap-6 sm:pl-5  sm:pt-[24px] sm:pb-[20px] sm:pr-5
+       sm:shadow-[0px_12px_20px_0px_rgba(0,0,0,0.4),0px_-12px_20px_0px_rgba(0,0,0,0.4)]
+        md:grid-cols-6 md:shadow-[0px_12px_20px_0px_rgba(0,0,0,0.6),0px_-12px_20px_0px_rgba(0,0,0,0.6)] 
+        lg:shadow-[0px_12px_20px_0px_rgba(0,0,0,0.75),0px_-12px_20px_0px_rgba(0,0,0,0.75)]
+         xl:shadow-[0px_12px_20px_0px_rgba(0,0,0,0.9),0px_-12px_20px_0px_rgba(0,0,0,0.9)] -mx-3"
+      >
         <div className="relative h-[350px] sm:h-[450px] md:h-full w-full flex md:col-span-4 ml-2">
           {/* <div className='relative h-[290px] sm:h-[370px] w-full md:h-[300px] lg:h-[412px] xl:h-[520px] 2xl:h-[630px] md:col-span-4 '>
 					<svg
@@ -89,10 +91,10 @@ const ReadyToGetStart = () => {
             <foreignObject x="90" y="60" width="930" height="460">
               <div
                 xmlns="http://www.w3.org/1999/xhtml"
-                className="flex h-full flex-col items-center justify-center px-3 font-montserrat font-bold"
+                className="flex h-full flex-col items-center justify-start px-3 font-montserrat font-semibold pt-10"
               >
-                <h2
-                  className={`font-anton text-center ${headingSizeClass}`}
+                {/* <h2
+                  className={`font-anton text-center font-normal ${headingSizeClass}`}
                   style={{ color: "#EF6C00" }}
                 >
                   <AnimatedText
@@ -101,25 +103,40 @@ const ReadyToGetStart = () => {
                   />
                 </h2>
                 <h2
-                  className={`font-anton text-center ${subHeadingSizeClass}`}
+                  className={`font-anton text-center font-normal ${subHeadingSizeClass}`}
                   style={{ color: "#0097A7" }}
                 >
                   <AnimatedText
                     text="Stop Guessing. Start Executing."
                     animate={true}
                   />
+                </h2> */}
+                <h2
+                  className={`font-anton text-center font-normal  text-5xl mb-2`}
+                  style={{ color: "#EF6C00" }}
+                >
+                  COMMAND THE OUTCOME : CALL (833) PROBAID
                 </h2>
-                <p className={`my-8 text-center text-2xl ${isSafariBrowser ? "mt-36!" : ""}`}>
+                <h2
+                  className={`font-anton text-center font-normal  text-5xl`}
+                  style={{ color: "#0097A7" }}
+                >
+                  Stop Guessing. Start Executing.
+                </h2>
+                <p
+                  className={`my-4 text-center text-[26px] leading-[1.2] text-[#2A2A2A]`}
+                >
                   <AnimatedText text="Court-supervised real estate requires a high standard of precision, compliance, and specialized expertise. Stop navigating probate, conservatorship, or trust property sales through uncertainty." />
                   <br />
                   Call{" "}
-                  <strong style={{ color: "#0097A7" }}>
-                    <AnimatedText text="(833) PROBAID — (833) 776-2243 — NOW " />
-                  </strong>{" "}
+                  <span style={{ color: "#0097A7" }} className="font-semibold">
+                    <AnimatedText text="(833) PROBAID — " />
+                  </span>{" "}
+                  <spam style={{ color: "#FE7702" }} className="font-semibold">
+                    <AnimatedText text="(833) 776-2243 — NOW " />
+                  </spam>{" "}
                   <AnimatedText text="or" />{" "}
-                  <strong style={{ color: "#EF6C00" }}>
-                    <AnimatedText text="fill out the" />
-                  </strong>{" "}
+                  <AnimatedText text="fill out the " />
                   <Link
                     href="/homebooks/833probaid-referral-intake"
                     style={{
@@ -127,9 +144,9 @@ const ReadyToGetStart = () => {
                       textDecoration: "underline",
                     }}
                   >
-                    <strong>
+                    <span>
                       <AnimatedText text="FORM" />
-                    </strong>
+                    </span>
                   </Link>{" "}
                   <AnimatedText text=" for a Strategic Consultation. We eliminate the red tape, protect the estate’s equity, and manage the transaction to a clean, court-approved closing." />
                 </p>
@@ -139,12 +156,12 @@ const ReadyToGetStart = () => {
               <image
                 href="/btn1.svg"
                 xlinkHref="/btn1.svg"
-                x="300"
-                y="497"
-                width="250"
-                height="75"
+                x="250"
+                y="467"
+                width="350"
+                height="100"
                 preserveAspectRatio="xMidYMid meet"
-                className="rtgs-btn1"
+                className="rtgs-btn1 "
                 style={{ cursor: "pointer" }}
                 onClick={() => {
                   router.push("/homebooks/contact-us");
@@ -156,9 +173,9 @@ const ReadyToGetStart = () => {
                 href="/btn2.svg"
                 xlinkHref="/btn2.svg"
                 x="580"
-                y="497"
-                width="250"
-                height="75"
+                y="467"
+                width="350"
+                height="100"
                 preserveAspectRatio="xMidYMid meet"
                 className="rtgs-btn2"
                 style={{ cursor: "pointer" }}
@@ -509,7 +526,7 @@ const ReadyToGetStart = () => {
                 className="flex h-full flex-col items-center justify-center px-3 font-montserrat font-bold"
               >
                 <h3
-                  className={`font-anton text-center ${headingSizeClass}`}
+                  className={`font-anton text-center`}
                   style={{ color: "#EF6C00" }}
                 >
                   <AnimatedText
@@ -518,7 +535,7 @@ const ReadyToGetStart = () => {
                   />
                 </h3>
                 <h2
-                  className={`font-anton text-center ${subHeadingSizeClass}`}
+                  className={`font-anton text-center`}
                   style={{ color: "#0097A7" }}
                 >
                   <AnimatedText

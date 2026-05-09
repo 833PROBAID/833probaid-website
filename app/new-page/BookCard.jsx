@@ -117,12 +117,13 @@ export function LearnMoreButton({
   label = "Learn More",
   size = "lg",
   mirrored = false,
+  inView = false,
 }) {
   const [hov, setHov] = useState(false);
   const rotateDir = mirrored ? "3deg" : "-3deg";
   return (
     <button
-      className="bc-btn inline-flex items-center gap-2 sm:gap-1 px-2 sm:h-[38px] lg:h-[55px] xl:h-[70px] lg:gap-3 rounded-[8px] pl-2.5 "
+      className={`bc-btn inline-flex items-center gap-2 sm:gap-1 px-2 sm:h-[38px] lg:h-[55px] xl:h-[70px] lg:gap-3 rounded-[8px] pl-2.5 hover:${rotateDir}`}
       type="button"
       onClick={onClick}
       onMouseEnter={() => setHov(true)}
@@ -132,7 +133,7 @@ export function LearnMoreButton({
         cursor: "pointer",
         boxShadow:
           "0px 2.73px 6.64px 0px #000000AD, inset 5.46px -5.46px 3.64px 0px #00000040, inset -3.64px 4.55px 3.64px 0px #FFFFFF40, -1.82px -0.91px 3.64px 0px #00000099",
-        animation: hov ? "none" : "floatBounce 3s ease-in-out infinite",
+        animation: hov ? "none" : "floatBounce 2s ease-in-out infinite",
         transform: hov
           ? `scale(1.08) rotate(${rotateDir})`
           : "scale(1) rotate(0deg)",
@@ -140,15 +141,16 @@ export function LearnMoreButton({
         willChange: "transform",
       }}
     >
-      <span className="bc-btn-text  font-montserrat font-black sm:text-[13px] lg:text-[18px] xl:text-[23px] uppercase text-white tracking-wide [text-shadow:0_4px_4.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
+      <span className="bc-btn-text   font-montserrat font-black sm:text-[13px] lg:text-[18px] xl:text-[23px] uppercase text-white tracking-wide [text-shadow:0_4px_4.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
         {" "}
         {label}
       </span>
       <Image
         src="/arrow-right.png"
-        alt=""
+        alt="arrow right"
         width={100}
         height={100}
+        priority
         className="bc-btn-arrow object-contain sm:h-[18px] sm:w-[18px] lg:h-[45px] lg:w-[45px]"
       />
     </button>
@@ -169,8 +171,10 @@ function BookCardInner({
   height = D.h,
   icon,
   mirrored = false,
+  priority = false,
 }) {
   const [open, setOpen] = useState(false);
+  const [flipping, setFlipping] = useState(false);
   const [inView, setInView] = useState(false);
   const stageRef = useRef(null);
   const router = useRouter();
@@ -181,7 +185,7 @@ function BookCardInner({
     if (!el) return;
     const obs = new IntersectionObserver(
       ([entry]) => setInView(entry.isIntersecting),
-      { rootMargin: "100px" },
+      { rootMargin: "100px" }
     );
     obs.observe(el);
     return () => obs.disconnect();
@@ -192,6 +196,10 @@ function BookCardInner({
   const shadowPoints = mirrored
     ? COVER_SHADOW_POLYGON_POINTS_MIRROR
     : COVER_SHADOW_POLYGON_POINTS;
+  const shadowTopTx = mirrored
+    ? "translate(-1.35 -1.15)"
+    : "translate(1.35 -1.15)";
+  const shadowBotTx = mirrored ? "translate(0.55 1.2)" : "translate(-0.55 1.2)";
 
   // Hinge/page edges — now pure percentages
   const hingeEdge = mirrored
@@ -204,10 +212,6 @@ function BookCardInner({
 
   const transformOrigin = mirrored ? "right center" : "left center";
   const flipAngle = mirrored ? "120deg" : "-120deg";
-  const shadowTopTx = mirrored
-    ? "translate(-1.35 -1.15)"
-    : "translate(1.35 -1.15)";
-  const shadowBotTx = mirrored ? "translate(0.55 1.2)" : "translate(-0.55 1.2)";
   const stapleEdge = mirrored ? { right: "7%" } : { left: "7%" }; // 22/450
   const innerBoxShadow = mirrored
     ? "inset 0 0 0 1px rgba(0,0,0,0.07), inset 0px 6px 6px rgba(255,255,255,0.14), inset 0px -6px 10px rgba(0,0,0,0.18), inset 4px 0 10px rgba(0,0,0,0.12), inset -2px 0 8px rgba(180,160,120,0.18)"
@@ -229,7 +233,11 @@ function BookCardInner({
     // ── STAGE: perspective wrapper, fluid width, height driven by aspect-ratio ──
     <div
       ref={stageRef}
-      className={`relative flex items-center w-full box-border py-[4%] ${mirrored ? "justify-center md:justify-start" : "justify-center md:justify-end"}`}
+      className={`relative flex items-center w-full box-border py-[4%] ${
+        mirrored
+          ? "justify-center md:justify-start"
+          : "justify-center md:justify-end"
+      }`}
       style={{
         // perspective scales with the card: 2200/450 * 100 ≈ 489vw, capped at max
         perspective: "clamp(1400px, 489vw, 2200px)",
@@ -258,6 +266,7 @@ function BookCardInner({
             left: 0,
             borderRadius: "1.8%",
             transform: "translateZ(-4px)",
+            WebkitTransform: "translateZ(-4px)",
             background: `linear-gradient(135deg, ${D.tealDark}, ${D.tealDeep})`,
             boxShadow: `
               inset 0 0 0 1px #014E57,
@@ -386,7 +395,7 @@ function BookCardInner({
             pointerEvents: open ? "none" : "auto",
             backfaceVisibility: "hidden",
             WebkitBackfaceVisibility: "hidden",
-            willChange: "transform, opacity",
+            willChange: flipping ? "transform, opacity" : "auto",
           }}
         >
           <div
@@ -491,7 +500,13 @@ function BookCardInner({
                     alt={title}
                     width={120}
                     height={120}
-                    className={`object-contain w-full sm:h-[60px] md:h-[70px] lg:h-[90px] xl:h-[100px] floating-text cursor-pointer hover:scale-[1.1] transition-all duration-300 ${mirrored ? "hover:rotate-3" : "hover:-rotate-3"}`}
+                    priority={priority}
+                    style={{
+                      animationPlayState: inView ? "running" : "paused",
+                    }}
+                    className={`object-contain w-full sm:h-[60px] md:h-[70px] lg:h-[90px] xl:h-[100px] floating-text cursor-pointer hover:scale-[1.1] transition-all duration-300 ${
+                      mirrored ? "hover:rotate-3" : "hover:-rotate-3"
+                    }`}
                   />
                 </div>
                 <h1
@@ -512,7 +527,7 @@ function BookCardInner({
                         </span>
                       ) : (
                         part
-                      ),
+                      )
                     )}
                 </h1>
               </div>
@@ -529,14 +544,17 @@ function BookCardInner({
                   size="md"
                   label="Learn More"
                   mirrored={mirrored}
+                  inView={inView}
                   onClick={(e) => {
                     e.stopPropagation();
+                    setFlipping(true);
                     setOpen(true);
                     if (slug) {
                       setTimeout(() => {
                         router.push(`/homebooks/${slug}`);
-                      }, 1000);
+                      }, 1600);
                     }
+                    setTimeout(() => setFlipping(false), speed + 300);
                   }}
                 />
               </div>

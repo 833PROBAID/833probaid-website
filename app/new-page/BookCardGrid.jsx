@@ -30,6 +30,7 @@ export default function BookCardGrid({ cards = [] }) {
             slug={card.slug}
             mirrored={index % 2 !== 0}
             speed={3000}
+            priority={index < 2}
           />
         ))}
       </section>
@@ -55,7 +56,9 @@ export default function BookCardGrid({ cards = [] }) {
             type="button"
             onClick={() => setShowAll(!showAll)}
             aria-expanded={showAll}
-            aria-label={showAll ? "Show fewer home books" : "Show all home books"}
+            aria-label={
+              showAll ? "Show fewer home books" : "Show all home books"
+            }
             className="cursor-pointer w-51.25 book-card-grid-toggle"
           >
             {showAll ? (
