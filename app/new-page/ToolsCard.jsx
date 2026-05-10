@@ -92,7 +92,7 @@ export default function ToolsCard({ id, icon, title, description, href }) {
 
       {/* ── SHADOW WRAPPER — sits above orange ── */}
       <div
-        className="absolute top-0 md:left-8 md:right-8 px-6 bottom-8 z-20"
+        className="absolute top-0 md:left-8 md:right-8 px-6 md:px-0 bottom-8 z-20"
         style={{
           filter:
             "drop-shadow(1.02px 16px 13.06px #000000AD) drop-shadow(12px 0px 11.7px #00000080)",
