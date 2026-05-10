@@ -238,7 +238,7 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
               <AnimatedText text="Use these free tools to help navigate the probate process with confidence. From calculating overbids to assessing risks, get the insights you need." />
             </p>
           </div>
-          <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4 mt-10">
+          <div className="grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-4 mt-10">
             {toolsCardData.map((item) => (
               <ToolsCard
                 key={item.id}

@@ -525,35 +525,32 @@ const ReadyToGetStart = () => {
                 xmlns="http://www.w3.org/1999/xhtml"
                 className="flex h-full flex-col items-center justify-center px-3 font-montserrat font-bold"
               >
-                <h3
-                  className={`font-anton text-center`}
+                <h2
+                  className={`font-anton text-center font-normal  text-5xl mb-2`}
                   style={{ color: "#EF6C00" }}
                 >
-                  <AnimatedText
-                    text="COMMAND THE OUTCOME : CALL (833) PROBAID"
-                    animate={true}
-                  />
-                </h3>
+                  COMMAND THE OUTCOME : CALL (833) PROBAID
+                </h2>
                 <h2
-                  className={`font-anton text-center`}
+                  className={`font-anton text-center font-normal  text-5xl`}
                   style={{ color: "#0097A7" }}
                 >
-                  <AnimatedText
-                    text="Stop Guessing. Start Executing."
-                    animate={true}
-                  />
+                  Stop Guessing. Start Executing.
                 </h2>
-                <p className="my-6 text-center text-2xl">
+                <p
+                  className={`my-4 text-center text-[26px] leading-[1.2] text-[#2A2A2A]`}
+                >
                   <AnimatedText text="Court-supervised real estate requires a high standard of precision, compliance, and specialized expertise. Stop navigating probate, conservatorship, or trust property sales through uncertainty." />
                   <br />
                   Call{" "}
-                  <strong style={{ color: "#0097A7" }}>
-                    <AnimatedText text="(833) PROBAID — (833) 776-2243 — NOW " />
-                  </strong>{" "}
+                  <span style={{ color: "#0097A7" }} className="font-semibold">
+                    <AnimatedText text="(833) PROBAID — " />
+                  </span>{" "}
+                  <spam style={{ color: "#FE7702" }} className="font-semibold">
+                    <AnimatedText text="(833) 776-2243 — NOW " />
+                  </spam>{" "}
                   <AnimatedText text="or" />{" "}
-                  <strong style={{ color: "#EF6C00" }}>
-                    <AnimatedText text="fill out the" />
-                  </strong>{" "}
+                  <AnimatedText text="fill out the " />
                   <Link
                     href="/homebooks/833probaid-referral-intake"
                     style={{
@@ -561,9 +558,9 @@ const ReadyToGetStart = () => {
                       textDecoration: "underline",
                     }}
                   >
-                    <strong>
+                    <span>
                       <AnimatedText text="FORM" />
-                    </strong>
+                    </span>
                   </Link>{" "}
                   <AnimatedText text=" for a Strategic Consultation. We eliminate the red tape, protect the estate’s equity, and manage the transaction to a clean, court-approved closing." />
                 </p>
