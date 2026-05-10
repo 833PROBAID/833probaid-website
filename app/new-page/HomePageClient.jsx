@@ -13,7 +13,7 @@ import BookCardGrid from "./BookCardGrid";
 const Footer = dynamic(() => import("../../components/Footer"));
 const HomeCard = dynamic(() => import("../../components/HomeCard"));
 const HomeCardBig = dynamic(() => import("../../components/HomeCardBig"));
-const ToolsCard = dynamic(() => import("../../components/ToolsCard"));
+const ToolsCard = dynamic(() => import("./ToolsCard"));
 const TrustCard = dynamic(() => import("../../components/TrustCard"));
 const ReadyToGetStart = dynamic(() => import("@/components/ReadyToGetStart"));
 
@@ -238,7 +238,7 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
               <AnimatedText text="Use these free tools to help navigate the probate process with confidence. From calculating overbids to assessing risks, get the insights you need." />
             </p>
           </div>
-          <div className="grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-4 mt-10">
+          <div className="grid grid-cols-2 gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-4 mt-10">
             {toolsCardData.map((item) => (
               <ToolsCard
                 key={item.id}

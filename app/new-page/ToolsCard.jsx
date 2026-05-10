@@ -1,46 +1,74 @@
-import BookCard, { BookCardDefs } from "./BookCard";
-import { getPublishedHomeBooksForHomepage } from "@/app/services/homeBookService";
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
+export function LearnMoreButton({ onClick, label = "Use Tool" }) {
+  const [hov, setHov] = useState(false);
 
-// ══════════════════════════════════════════════════════════════════════
-//  Static fallback cards — shown when the DB returns nothing.
-//  — title       : shown in the orange band + inner page heading
-//  — subtitle    : italic line shown above the band and on inner page
-//  — description : body copy on the inner page (not on the cover)
-//  — imageSrc    : path to image shown on inner page; "" = placeholder
-//  — tag         : small badge top-left on inner page ("SERVICE", "TOOL"…)
-// ══════════════════════════════════════════════════════════════════════
-// ══════════════════════════════════════════════════════════════════════
-
-export const revalidate = 300;
-
-function mapHomeBookForCard(homeBook) {
-  const id = homeBook?._id?.toString?.() || homeBook?.id || "";
-  return {
-    id,
-    title: homeBook?.title || "Untitled",
-    subtitle: homeBook?.subtitle || "",
-    description: homeBook?.description || "",
-    imageSrc: homeBook?.image || "",
-    icon: homeBook?.icon || "",
-    slug: homeBook?.slug || "",
-  };
+  const rotateDir = "-3deg";
+  return (
+    <button
+      className={`bc-btns inline-flex items-center   gap-1.5 px-2 h-[42px]   rounded-[8px] pl-2.5`}
+      type="button"
+      onClick={onClick}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      style={{
+        background: "#FE7702",
+        cursor: "pointer",
+        boxShadow:
+          "0px 2.73px 6.64px 0px #000000AD, inset 5.46px -5.46px 3.64px 0px #00000040, inset -3.64px 4.55px 3.64px 0px #FFFFFF40, -1.82px -0.91px 3.64px 0px #00000099",
+        // animation: hov ? "none" : "floatBounce 2s ease-in-out infinite",
+        // transform: hov
+        //   ? `scale(1.08) rotate(${rotateDir})`
+        //   : "scale(1) rotate(0deg)",
+        // transition: "transform 600ms cubic-bezier(0.34, 1.4, 0.64, 1)",
+        // willChange: "transform",
+      }}
+    >
+      <span className="bc-btn-texts  font-montserrat font-black sm:text-[13px] lg:text-[15px] uppercase text-white tracking-wide [text-shadow:0_4px_4.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
+        {" "}
+        {label}
+      </span>
+      <Image
+        src="/arrow-right.png"
+        alt="arrow right"
+        width={50}
+        height={50}
+        priority
+        className="bc-btn-arrows object-contain h-[25px] w-[20px] lg:h-[22px] lg:w-[22px]"
+      />
+    </button>
+  );
 }
 
-export default async function NewPage() {
-  let cards = [];
+export default function ToolsCard({ id, icon, title, description, href }) {
+  const router = useRouter();
+  const [isSafariBrowser, setIsSafariBrowser] = useState(false);
 
-  try {
-    const homeBooks = await getPublishedHomeBooksForHomepage();
-    const mapped = (homeBooks || []).map(mapHomeBookForCard);
-    cards = mapped.length > 0 ? mapped : FALLBACK_CARDS;
-  } catch (error) {
-    console.error("Failed to load homepage home books:", error);
-    cards = FALLBACK_CARDS;
-  }
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const ua = window.navigator.userAgent || "";
+    setIsSafariBrowser(/^((?!chrome|android).)*safari/i.test(ua));
+  }, []);
+
+  const handleClick = (e) => {
+    if (!href) return;
+    e.stopPropagation();
+    router.push(href);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      handleClick(e);
+    }
+  };
+
   return (
     <div
-      className="relative mx-auto w-full max-w-4xl overflow-hidden rounded-[13px] bg-[#129fb0] p-6 pt-0! h-[500px]"
+      className="relative mx-auto w-full overflow-hidden rounded-[4px] bg-[#129fb0] h-[400px] md:h-[350px]"
       style={{
         transformStyle: "preserve-3d",
         boxShadow: `
@@ -64,7 +92,7 @@ export default async function NewPage() {
 
       {/* ── SHADOW WRAPPER — sits above orange ── */}
       <div
-        className="absolute top-0 left-6 right-6 bottom-6 sm:left-10 sm:right-10 sm:bottom-10 md:left-12 md:right-12 md:bottom-12 z-20"
+        className="absolute top-0 md:left-8 md:right-8 px-6 bottom-8 z-20"
         style={{
           filter:
             "drop-shadow(1.02px 16px 13.06px #000000AD) drop-shadow(12px 0px 11.7px #00000080)",
@@ -72,7 +100,7 @@ export default async function NewPage() {
       >
         {/* ── INNER CONTENT PANEL ── */}
         <div
-          className="relative bg-[#0b8fa0] p-6 sm:p-10 md:p-12 h-full w-full pr-10"
+          className="relative bg-[#0b8fa0] h-full w-full"
           style={{
             clipPath:
               "polygon(15% 0%, 85% 0%, 100% 15%, 100% 85%, 88% 100%, 15% 100%, 0% 85%, 0% 15%)",
@@ -80,21 +108,24 @@ export default async function NewPage() {
               "polygon(12% 0%, 88% 0%, 100% 12%, 100% 84%, 88% 100%, 12% 100%, 0% 84%, 0% 12%)",
           }}
         >
-          <div className="relative z-50">
-            <div className="flex flex-col items-center justify-center pt-20">
+          <div className="relative z-50 h-full p-4 ">
+            <div className="flex flex-col items-center justify-between text-white gap-2 h-full">
               <Image
-                src="/images/footer-logo.png"
+                src={icon}
                 alt="Footer logo"
-                width={1000}
-                height={1000}
-                className="h-[111px] w-full object-contain px-6 sm:-mt-16 -mt-10 z-50"
+                width={60}
+                height={60}
+                className="object-cover hover:rotate-3 hover:scale-110 cursor-pointer h-20 md:h-16 w-auto  "
               />
-              <p className="text-left font-bold md:mt-4 font-montserrat text-[#2A2A2A] pl-6 text-[16px] leading-tight max-w-[350px]">
-                Expert Probate, Conservatorship, and Trust Real Estate Services
-                handled personally from start to finish. Trusted by attorneys.
-                Relied on by families. Built to keep the process moving, even
-                when things get complicated
+              <h2 className="text-lg font-poppins text-center font-bold ">
+                {title}
+              </h2>
+
+              <p className="text-xs font-montserrat  text-center">
+                {description}
               </p>
+              <LearnMoreButton onClick={handleClick} />
+              {/* <img src="/svgs/use_tool.svg" /> */}
             </div>
           </div>
         </div>
