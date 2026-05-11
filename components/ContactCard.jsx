@@ -317,7 +317,7 @@ export default function ContactCard() {
                 values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
                 result="hardAlpha"
               />
-              <feOffset dx="-12" dy="16.8" />
+              <feOffset dx="-12" dy="11.8" />
               <feGaussianBlur stdDeviation="11.02" />
               <feComposite in2="hardAlpha" operator="out" />
               <feColorMatrix
@@ -335,7 +335,7 @@ export default function ContactCard() {
                 values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
                 result="hardAlpha"
               />
-              <feOffset dx="12" dy="10.8" />
+              <feOffset dx="12" dy="5.8" />
               <feGaussianBlur stdDeviation="11.016" />
               <feComposite in2="hardAlpha" operator="out" />
               <feColorMatrix

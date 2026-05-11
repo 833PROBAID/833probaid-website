@@ -284,7 +284,7 @@ export default function LogoCard() {
                 values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
                 result="hardAlpha"
               />
-              <feOffset dx="1.22" dy="19.2" />
+              <feOffset dx="1.22" dy="15.2" />
               <feGaussianBlur stdDeviation="7.83" />
               <feComposite in2="hardAlpha" operator="out" />
               <feColorMatrix

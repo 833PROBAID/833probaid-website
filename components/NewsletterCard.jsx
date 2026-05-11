@@ -361,7 +361,7 @@ export default function NewsletterCard() {
                   values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
                   result="hardAlpha"
                 />
-                <feOffset dx="-1.22" dy="21.6" />
+                <feOffset dx="-1.22" dy="16.6" />
                 <feGaussianBlur stdDeviation="7.83" />
                 <feComposite in2="hardAlpha" operator="out" />
                 <feColorMatrix
@@ -379,7 +379,7 @@ export default function NewsletterCard() {
                   values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
                   result="hardAlpha"
                 />
-                <feOffset dx="-14.4" dy="4.8" />
+                <feOffset dx="-14.4" dy="-0.2" />
                 <feGaussianBlur stdDeviation="7.02" />
                 <feComposite in2="hardAlpha" operator="out" />
                 <feColorMatrix
