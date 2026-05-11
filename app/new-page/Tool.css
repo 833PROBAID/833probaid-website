@@ -1,0 +1,93 @@
+/* --- Base Styles (Smallest Mobile < 375px) --- */
+.tools-card-shadow-wrapper {
+  height: 170px;
+}
+.inner-content-panel h2 {
+  font-size: 8px;
+}
+.inner-content-panel p {
+  font-size: 6px;
+}
+
+/* LearnMoreButton Controls */
+.bc-btns {
+  height: 22px !important;
+  padding: 0 4px !important;
+}
+.bc-btn-texts {
+  font-size: 6px !important;
+}
+.bc-btn-arrows {
+  width: 10px !important;
+  height: 10px !important;
+}
+
+/* --- 375px – 429px (Standard Mobile) --- */
+@media (min-width: 375px) and (max-width: 429px) {
+  .tools-card-shadow-wrapper {
+    height: 200px;
+  }
+  .inner-content-panel h2 {
+    font-size: 10px;
+  }
+  .inner-content-panel p {
+    font-size: 7px;
+    line-height: 1.2;
+  }
+
+  /* LearnMoreButton Controls */
+  .bc-btns {
+    height: 25px !important;
+    padding: 0 5px !important;
+  }
+  .bc-btn-texts {
+    font-size: 8px !important;
+  }
+  .bc-btn-arrows {
+    width: 10px !important;
+    height: 10px !important;
+  }
+}
+/* --- 430px – 767px (Large Mobile / Pro Max) --- */
+@media (min-width: 430px) and (max-width: 767px) {
+  .tools-card-shadow-wrapper {
+    height: 250px;
+  }
+  .inner-content-panel h2 {
+    font-size: 15px;
+  }
+  .inner-content-panel p {
+    font-size: 10px;
+  }
+
+  .bc-btns {
+    height: 40px !important;
+  }
+  .bc-btn-texts {
+    font-size: 13px !important;
+  }
+  .bc-btn-arrows {
+    width: 18px !important;
+    height: 18px !important;
+  }
+}
+
+/* --- Desktop (768px+) --- */
+@media (min-width: 768px) {
+  .tools-card-shadow-wrapper {
+    height: 280px;
+  }
+  .inner-content-panel h2 {
+    font-size: 18px;
+  }
+  .inner-content-panel p {
+    font-size: 12px;
+  }
+
+  .bc-btns {
+    height: 42px !important;
+  }
+  .bc-btn-texts {
+    font-size: 15px !important;
+  }
+}

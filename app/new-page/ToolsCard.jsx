@@ -2,14 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import "./Tool.css";
 import Image from "next/image";
 export function LearnMoreButton({ onClick, label = "Use Tool" }) {
   const [hov, setHov] = useState(false);
-
   const rotateDir = "-3deg";
   return (
     <button
-      className={`bc-btns inline-flex items-center   gap-1.5 px-2 h-[42px]   rounded-[8px] pl-2.5`}
+      className={`bc-btns inline-flex items-center gap-1.5  rounded-[4px] `}
       type="button"
       onClick={onClick}
       onMouseEnter={() => setHov(true)}
@@ -37,7 +37,7 @@ export function LearnMoreButton({ onClick, label = "Use Tool" }) {
         width={50}
         height={50}
         priority
-        className="bc-btn-arrows object-contain h-[25px] w-[20px] lg:h-[22px] lg:w-[22px]"
+        className="bc-btn-arrows object-contain  lg:h-[22px] lg:w-[22px]"
       />
     </button>
   );
@@ -68,16 +68,14 @@ export default function ToolsCard({ id, icon, title, description, href }) {
 
   return (
     <div
-      className="relative mx-auto w-full overflow-hidden rounded-[4px] bg-[#129fb0] h-[400px] md:h-[350px]"
+      className="relative mx-auto w-full overflow-hidden rounded-[4px] bg-[#129fb0] tools-card-shadow-wrapper md:h-[350px]"
       style={{
         transformStyle: "preserve-3d",
         boxShadow: `
-      inset 0 0 0 1px #014E57,
-      inset 0px 6px 4px rgba(255,255,255,0.25),
-      inset -5px -6px 4px rgba(0,0,0,0.25),
-      5px -6px 15.1px rgba(0,0,0,0.80),
-      -2px 6px 11.3px rgba(0,0,0,0.9)
-    `,
+        0px 0.57px 6.09px 2.3px #000000D4,
+        2.87px -2.87px 3.68px 0px #00000040 inset,
+        -0.57px 3.45px 2.3px 0px #FFFFFF40 inset
+      `,
       }}
     >
       {/* ── ORANGE DECORATIVE SHAPE — behind inner panel ── */}
@@ -92,10 +90,9 @@ export default function ToolsCard({ id, icon, title, description, href }) {
 
       {/* ── SHADOW WRAPPER — sits above orange ── */}
       <div
-        className="absolute top-0 md:left-8 md:right-8 px-6 md:px-0 bottom-8 z-20"
+        className="absolute top-0 md:left-8 md:right-8 left-[9%] right-[9%] md:px-0 bottom-[10%] sm:bottom-8 z-20"
         style={{
-          filter:
-            "drop-shadow(1.02px 16px 13.06px #000000AD) drop-shadow(12px 0px 11.7px #00000080)",
+          filter: "drop-shadow(0px 8px 10px #000000)",
         }}
       >
         {/* ── INNER CONTENT PANEL ── */}
@@ -108,24 +105,26 @@ export default function ToolsCard({ id, icon, title, description, href }) {
               "polygon(12% 0%, 88% 0%, 100% 12%, 100% 84%, 88% 100%, 12% 100%, 0% 84%, 0% 12%)",
           }}
         >
-          <div className="relative z-50 h-full p-4 ">
-            <div className="flex flex-col items-center justify-between text-white gap-2 h-full">
+          <div className="relative z-50 h-full sm:p-4  p-2  inner-content-panel flex flex-col justify-between items-center">
+            <div className="flex flex-col items-center justify-start text-white gap-1  sm:gap-2 h-full">
               <Image
                 src={icon}
                 alt="Footer logo"
                 width={60}
                 height={60}
-                className="object-cover hover:rotate-3 hover:scale-110 cursor-pointer h-20 md:h-16 w-auto  "
+                className="object-cover hover:rotate-3 hover:scale-110 cursor-pointer h-8 md:h-16 w-auto  "
               />
-              <h2 className="text-lg font-poppins text-center font-bold ">
+              <h2 className="text-xs sm:text-lg font-poppins text-center font-bold ">
                 {title}
               </h2>
 
-              <p className="text-xs font-montserrat  text-center">
+              <p className="text-[8px] sm:text-xs font-montserrat  text-center">
                 {description}
               </p>
-              <LearnMoreButton onClick={handleClick} />
               {/* <img src="/svgs/use_tool.svg" /> */}
+            </div>
+            <div>
+              <LearnMoreButton onClick={handleClick} />
             </div>
           </div>
         </div>
