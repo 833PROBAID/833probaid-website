@@ -1048,7 +1048,7 @@ body {
     transform: translateY(0);
   }
   50% {
-    transform: translateY(-5px);
+    transform: translateY(-7px);
   }
   100% {
     transform: translateY(0);
@@ -1096,5 +1096,5 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  animation: floatBounce 3s ease-in-out infinite;
+  animation: floatBounce 2s ease-in-out infinite;
 }

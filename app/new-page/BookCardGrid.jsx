@@ -7,7 +7,27 @@ import BookCard from "./NewBook";
 const INITIAL_COUNT = 6;
 
 export default function BookCardGrid({ cards = [] }) {
-  const [showAll, setShowAll] = useState(false);
+  const [showAll, setShowAll] = useState(() => {
+    if (typeof window !== "undefined") {
+      try {
+        return JSON.parse(localStorage.getItem("bookCardGridShowAll") ?? "false");
+      } catch {
+        return false;
+      }
+    }
+    return false;
+  });
+
+  // Persist state changes
+  const toggleShowAll = () => {
+    setShowAll((prev) => {
+      const next = !prev;
+      if (typeof window !== "undefined") {
+        localStorage.setItem("bookCardGridShowAll", JSON.stringify(next));
+      }
+      return next;
+    });
+  };
 
   const visible = showAll ? cards : cards.slice(0, INITIAL_COUNT);
 
@@ -54,7 +74,7 @@ export default function BookCardGrid({ cards = [] }) {
 					`}</style>
           <button
             type="button"
-            onClick={() => setShowAll(!showAll)}
+            onClick={toggleShowAll}
             aria-expanded={showAll}
             aria-label={
               showAll ? "Show fewer home books" : "Show all home books"

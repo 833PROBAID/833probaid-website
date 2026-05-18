@@ -543,7 +543,7 @@ function BookCardInner({
                     if (slug) {
                       setTimeout(() => {
                         router.push(`/homebooks/${slug}`);
-                      }, 1600);
+                      }, 1400);
                     }
                     setTimeout(() => setFlipping(false), speed + 300);
                   }}
