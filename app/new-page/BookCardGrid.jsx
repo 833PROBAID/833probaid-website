@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import BookCard from "./BookCard";
+import BookCard from "./NewBook";
 
 const INITIAL_COUNT = 6;
 

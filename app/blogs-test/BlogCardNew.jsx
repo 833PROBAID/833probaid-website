@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import "./book-card.css";
+import BlogHero from "@/components/BlogHero";
 
 // ══════════════════════════════════════════════════════════════════
 //  DESIGN CONFIG — every visual value lives here.
@@ -14,8 +15,8 @@ import "./book-card.css";
 // ══════════════════════════════════════════════════════════════════
 const D = {
   // Card max size (px) — used only for maxWidth and aspect-ratio
-  w: 460,
-  h: 700,
+  w: 550,
+  h: 750,
 
   // Teal palette (cover, base, shadows)
   teal: "#14b3c2",
@@ -158,19 +159,17 @@ export function LearnMoreButton({
 // ── BookCard ──────────────────────────────────────────────────────
 function BookCardInner({
   title,
-  subtitle,
-  description,
-  imageSrc,
-  imageAlt = "",
-  tag = "SERVICE",
+  bannerImage,
+  authorAvatar,
+  authorName,
   onLearnMore,
   slug,
   speed = D.flipDur,
   width = D.w,
   height = D.h,
-  icon,
-  mirrored = false,
+  mirrored,
   priority = false,
+  onVideoClick, // optional callback for watch video button
 }) {
   const [open, setOpen] = useState(false);
   const [flipping, setFlipping] = useState(false);
@@ -217,15 +216,13 @@ function BookCardInner({
   return (
     // ── STAGE: perspective wrapper, fluid width, height driven by aspect-ratio ──
     <div
-      className={`relative flex items-center w-full box-border py-[4%] ${
+      className={`relative flex items-center w-full box-border py-[4%]  ${
         mirrored
           ? "justify-center md:justify-start"
           : "justify-center md:justify-end"
       }`}
       style={{
-        // perspective scales with the card: 2200/450 * 100 ≈ 489vw, capped at max
-        perspective: "clamp(1400px, 489vw, 2200px)",
-        perspectiveOrigin: "50% 45%",
+        containerType: "inline-size",
       }}
     >
       {/* ── BOOK WRAPPER ─────────────────────────────────────────── */}
@@ -235,9 +232,11 @@ function BookCardInner({
           position: "relative",
           width: "100%",
           maxWidth: width,
-          aspectRatio: `${width} / ${height}`,
+          // aspectRatio: `${width} / ${height}`,
           transformStyle: "preserve-3d",
           WebkitTransformStyle: "preserve-3d",
+          containerType: "inline-size",
+          height: "clamp(450px, 140cqw, 750px)",
         }}
       >
         {/* ── BASE SHELL: always visible teal frame ── */}
@@ -313,49 +312,48 @@ function BookCardInner({
               right: 0,
               bottom: 0,
               left: 0,
-              background: `linear-gradient(135deg, ${D.paper} 0%, #f5ecd9 100%)`,
+              background: `linear-gradient(135deg, ${D.paper} 0%, #f6f4f1ff 100%)`,
               borderRadius: "1.1%",
               boxShadow: innerBoxShadow,
               overflow: "hidden",
             }}
           >
-            <div
-              style={{
-                padding: innerPadding,
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-                gap: "clamp(8px,2vw,14px)",
-                rowGap: "clamp(8px,2vw,14px)",
-                boxSizing: "border-box",
-              }}
-            >
-              <div className="bg-white flex flex-col items-center justify-center py-4 text-center  border-4 rounded-3xl border-l-18 border-secondary transition-transform duration-300 ease-in-out hover:scale-105 shadow-lg shadow-black/30 sm:shadow-xl sm:shadow-black/40 md:shadow-2xl md:shadow-black/50">
-                <h1 className="font-anton text-2xl uppercase leading-tight text-primary hover:text-secondary">
-                  {title}
-                </h1>
-                {subtitle && (
-                  <p className="font-montserrat mt-4 text-sm font-bold uppercase text-secondary hover:text-primary">
-                    {subtitle}
-                  </p>
-                )}
-              </div>
-
-              {/* Hero image */}
-              <div className="relative w-full bg-white overflow-hidden rounded-2xl border-4 border-secondary shadow-lg shadow-black/30 sm:shadow-xl my-6 sm:shadow-black/40 md:shadow-2xl md:shadow-black/50">
+            {/* Hero image */}
+            {/* <div className="relative w-full bg-white overflow-hidden rounded-2xl border-4 border-secondary shadow-lg shadow-black/30 sm:shadow-xl my-6 sm:shadow-black/40 md:shadow-2xl md:shadow-black/50">
                 <img
-                  src={imageSrc || "/images/hero.png"}
+                  src={bannerImage || "/images/hero.png"}
                   alt={title}
                   className="h-full w-full object-cover transition-transform duration-500 ease-in-out hover:scale-110"
                 />
               </div>
-              {description && (
+              <h1 className="font-anton text-2xl uppercase leading-tight text-primary hover:text-secondary">
+                {title}
+              </h1> */}
+
+            {/* {description && (
                 <div className="p-4 bg-white rounded-2xl border-4 border-secondary mt-4">
                   <p className="text-secondary font-semibold text-sm">
                     {description}
                   </p>
                 </div>
-              )}
+              )} */}
+            <div
+              xmlns="http://www.w3.org/1999/xhtml"
+              style={{ width: "100%", height: "100%" }}
+              className="p-4"
+            >
+              <BlogHero
+                bannerImage={bannerImage}
+                title={title}
+                authorName={authorName}
+                authorAvatar={authorAvatar}
+                wrapperStyle={{
+                  width: "100%",
+                  height: "100%",
+                  aspectRatio: "unset",
+                }}
+                isCard={true}
+              />
             </div>
           </div>
         </div>
@@ -439,7 +437,7 @@ function BookCardInner({
                 bottom: 0,
                 left: 0,
                 zIndex: 1,
-                background: "#0097A7",
+                background: "#fff",
                 borderRadius: "3%",
                 clipPath,
                 WebkitClipPath: clipPath,
@@ -448,98 +446,95 @@ function BookCardInner({
                 WebkitTransform: "translateZ(0.01px)",
               }}
             >
-              {/* ORANGE BAND */}
-              <div
-                style={{
-                  position: "absolute",
-                  left: -10,
-                  right: -10,
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  height: "18%",
-                  background: "#FE7702",
-                  boxShadow:
-                    "inset 0 1px 0 rgba(255,255,255,0.25), 0 2px 6px rgba(0,0,0,0.3), 0px 4px 5.6px 0px #00000060, 0px -3px 6.2px 0px #00000099, inset -12px 0px 4.6px 0px #00000080, inset 12px 0px 4.6px 0px #00000080",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  zIndex: 3,
-                }}
-              >
-                <p className="bc-band-text text-white text-center tracking-wider font-bold font-montserrat leading-[1.3] sm:text-[10px] lg:text-sm xl:text-lg 2xl:text-xl px-[6%] sm:px-[7%] [text-shadow:0_4px_4.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
-                  {subtitle}
-                </p>
-              </div>
-
               {/* UPPER HALF — icon + title */}
-              <div
-                className="absolute left-0 right-0 h-[36%] flex flex-col items-center justify-start "
-                style={{
-                  paddingTop: "7.5%",
-                }}
-              >
-                <div className="bc-icon sm:h-[60px] md:h-[70px] lg:h-[90px] xl:h-[100px]">
-                  <Image
-                    src={icon}
-                    alt={title}
-                    width={120}
-                    height={120}
-                    priority={priority}
-                    // style={{
-                    //   animationPlayState: inView ? "running" : "paused",
-                    // }}
-                    className={`object-contain w-full sm:h-[60px] md:h-[70px] lg:h-[90px] xl:h-[100px] floating-text cursor-pointer hover:scale-[1.1] transition-all duration-300 ${
-                      mirrored ? "hover:rotate-3" : "hover:-rotate-3"
-                    }`}
-                  />
-                </div>
-                <h1
-                  className="bc-title  text-white font-bold text-center uppercase leading-[1.2] font-montserrat sm:text-[11px]
-                 lg:text-[16px] xl:text-[20px] px-[5%] drop-shadow-[4.31px_4.31px_4.31px_rgba(0,0,0,0.25)]"
+              <div className="absolute left-0 right-0 flex flex-col items-center justify-start h-full  md:p-6 p-3 md:gap-6 gap-4 ">
+                <div
+                  className={` w-full  relative  overflow-hidden transition-all duration-300 rounded-xl border-[#FE7702] border-[4px] shadow-lg shadow-black/70`}
                   style={{
-                    paddingTop: "4%",
+                    height: "clamp(120px, 50cqw, 275px)",
+                    width: "100%",
                   }}
                 >
-                  {" "}
-                  {String(title)
-                    .split("®")
-                    .map((part, i, arr) =>
-                      i < arr.length - 1 ? (
-                        <span key={i}>
-                          {part}
-                          <sup className="text-[0.55em]">®</sup>
-                        </span>
-                      ) : (
-                        part
-                      ),
-                    )}
-                </h1>
+                  <Image
+                    src={bannerImage || "/images/hero.png"}
+                    alt={title}
+                    width={1000}
+                    height={1000}
+                    priority={priority}
+                    className={`object-cover w-full  h-full  cursor-pointer hover:scale-[1.1] transition-all duration-300  `}
+                  />
+                </div>
+                <h2
+                  className="font-montserrat text-black  font-semibold pl-2 "
+                  style={{ fontSize: "clamp(14px, 5cqw, 24px)" }}
+                >
+                  {title}
+                </h2>
+                {/* Author Name */}
+                <div className="w-full ">
+                  <hr className="w-full h-[2px] border-[#14b3c2] border rounded-full" />
+                  <div className="flex items-center gap-3 w-full justify-start mt-2">
+                    <img
+                      src={authorAvatar}
+                      alt={authorName}
+                      className="border-primary border-2"
+                      style={{
+                        width: "clamp(25px, 50cqw, 40px)",
+                        aspectRatio: "1/1",
+                        borderRadius: "50%",
+                        objectFit: "cover",
+                        flexShrink: 0,
+                        alignSelf: "center",
+                      }}
+                    />
+                    <span
+                      className="font-poppins font-semibold text-gray-500"
+                      style={{
+                        fontFamily: "Poppins, sans-serif",
+                        lineHeight: 1.2,
+                        alignSelf: "center",
+                        fontSize: "clamp(.8rem, 5cqw, 21px)",
+                      }}
+                    >
+                      {authorName}
+                    </span>
+                  </div>
+                </div>
               </div>
 
               {/* LOWER HALF — description + button */}
-              <div
-                className="absolute top-[63%] left-0 right-0 bottom-0 flex items-center justify-between flex-col"
-                style={{ padding: "2% 4% 6.5%" }}
-              >
-                <p className="bc-desc text-white tracking-wider text-center font-montserrat leading-[1.3] font-semibold sm:text-[10px] lg:text-[14px] xl:text-lg 2xl:text-[17px] px-[1%]">
+              <div className="absolute md:bottom-[6%] bottom-[4%] left-0 right-0 flex items-center justify-between flex-col">
+                {/* <p className="bc-desc text-white tracking-wider text-center font-montserrat leading-[1.3] font-semibold sm:text-[10px] lg:text-[14px] xl:text-lg 2xl:text-[17px] px-[1%]">
                   {description}
-                </p>
-                <LearnMoreButton
-                  size="md"
-                  label="Learn More"
-                  mirrored={mirrored}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setFlipping(true);
-                    setOpen(true);
-                    if (slug) {
-                      setTimeout(() => {
-                        router.push(`/homebooks/${slug}`);
-                      }, 1600);
-                    }
-                    setTimeout(() => setFlipping(false), speed + 300);
-                  }}
-                />
+                </p> */}
+                {mirrored ? (
+                  <LearnMoreButton
+                    size="md"
+                    label="Watch Video"
+                    mirrored={mirrored}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onVideoClick && onVideoClick();
+                    }}
+                  />
+                ) : (
+                  <LearnMoreButton
+                    size="md"
+                    label="Read Article"
+                    mirrored={mirrored}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setFlipping(true);
+                      setOpen(true);
+                      if (slug) {
+                        setTimeout(() => {
+                          router.push(`/blogs/${slug}`);
+                        }, 1600);
+                      }
+                      setTimeout(() => setFlipping(false), speed + 300);
+                    }}
+                  />
+                )}
               </div>
             </div>
           </div>

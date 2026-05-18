@@ -1,6 +1,7 @@
 import { Anton, Montserrat, Poppins } from "next/font/google";
 import "./global.css";
 import AppClientShell from "../components/AppClientShell";
+import MouseTrail from "@/components/MouseTrail";
 
 const anton = Anton({
   weight: "400",
@@ -9,7 +10,7 @@ const anton = Anton({
 });
 
 const montserrat = Montserrat({
-  weight: ["400", "500", "600", "700" , "800", "900"],
+  weight: ["400", "500", "600", "700", "800", "900"],
   variable: "--font-montserrat",
   subsets: ["latin"],
 });
@@ -28,10 +29,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html
-      lang="en"
-      suppressHydrationWarning
-    >
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link
           rel="stylesheet"
@@ -45,6 +43,7 @@ export default function RootLayout({ children }) {
         suppressHydrationWarning
         className={`${anton.variable} ${montserrat.variable} ${poppins.variable} antialiased`}
       >
+        <MouseTrail />
         <AppClientShell>{children}</AppClientShell>
       </body>
     </html>

@@ -97,7 +97,7 @@ export default function ContactCard() {
                         PROBAID
                       </b>
                       <b
-                        className="text-primary  tracking-[0.28rem] font-bold ml-0.5"
+                        className="text-primary  md:tracking-[0.28rem] tracking-[0.2rem] font-bold ml-0.5"
                         style={{
                           lineHeight: "2px",
                         }}

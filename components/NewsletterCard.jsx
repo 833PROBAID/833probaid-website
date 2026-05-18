@@ -27,7 +27,7 @@ export default function NewsletterCard() {
       setSubscriptionNotice("Add your email in the popup before submitting.");
     } else if (!EMAIL_PATTERN.test(normalizedEmail)) {
       setSubscriptionNotice(
-        "Your email looks invalid. Please correct it in the popup."
+        "Your email looks invalid. Please correct it in the popup.",
       );
     } else {
       setSubscriptionNotice("");
@@ -115,7 +115,16 @@ export default function NewsletterCard() {
                         Stay up to date with the latest news and updates from{" "}
                         <b className="text-primary">
                           833PROBAID
-                          <sup>®</sup>.
+                          <span
+                            style={{
+                              verticalAlign: "super",
+                              fontSize: "0.9em",
+                              lineHeight: "0",
+                            }}
+                          >
+                            ®
+                          </span>
+                          .
                         </b>
                       </p>
                       <p className="font-bold text-[19px] mt-4 ">

@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useState } from "react";
+import { memo, useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -14,8 +14,8 @@ import "./book-card.css";
 // ══════════════════════════════════════════════════════════════════
 const D = {
   // Card max size (px) — used only for maxWidth and aspect-ratio
-  w: 460,
-  h: 700,
+  w: 550,
+  h: 750,
 
   // Teal palette (cover, base, shadows)
   teal: "#14b3c2",
@@ -117,12 +117,13 @@ export function LearnMoreButton({
   label = "Learn More",
   size = "lg",
   mirrored = false,
+  inView = false,
 }) {
   const [hov, setHov] = useState(false);
   const rotateDir = mirrored ? "3deg" : "-3deg";
   return (
     <button
-      className={`bc-btn inline-flex items-center gap-2 sm:gap-1 px-2 sm:h-[38px] lg:h-[55px] xl:h-[70px] lg:gap-3 rounded-[8px] pl-2.5 hover:${rotateDir}`}
+      className={`inline-flex items-center gap-2 sm:gap-1 px-2 h-[50px] lg:h-[55px] xl:h-[70px] lg:gap-3 rounded-[8px] pl-2.5 hover:${rotateDir}`}
       type="button"
       onClick={onClick}
       onMouseEnter={() => setHov(true)}
@@ -140,7 +141,7 @@ export function LearnMoreButton({
         willChange: "transform",
       }}
     >
-      <span className="bc-btn-text   font-montserrat font-black sm:text-[13px] lg:text-[18px] xl:text-[23px] uppercase text-white tracking-wide [text-shadow:0_4px_4.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
+      <span className="bc-btn-textss   font-montserrat font-black text-[12px] lg:text-[18px] xl:text-[20px] uppercase text-white tracking-wide [text-shadow:0_4px_4.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
         {" "}
         {label}
       </span>
@@ -150,7 +151,7 @@ export function LearnMoreButton({
         width={100}
         height={100}
         priority
-        className="bc-btn-arrow object-contain sm:h-[18px] sm:w-[18px] lg:h-[45px] lg:w-[45px]"
+        className="bc-btn-arrosw object-contain h-[25px] w-[25px] lg:h-[45px] lg:w-[45px]"
       />
     </button>
   );
@@ -158,23 +159,34 @@ export function LearnMoreButton({
 // ── BookCard ──────────────────────────────────────────────────────
 function BookCardInner({
   title,
-  subtitle,
-  description,
-  imageSrc,
-  imageAlt = "",
-  tag = "SERVICE",
+  bannerImage,
+  authorAvatar,
+  authorName,
   onLearnMore,
   slug,
   speed = D.flipDur,
   width = D.w,
   height = D.h,
-  icon,
   mirrored = false,
   priority = false,
 }) {
   const [open, setOpen] = useState(false);
   const [flipping, setFlipping] = useState(false);
+  const [inView, setInView] = useState(false);
+  const stageRef = useRef(null);
   const router = useRouter();
+
+  // Pause float animation for off-screen cards
+  useEffect(() => {
+    const el = stageRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting),
+      { rootMargin: "100px" },
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
 
   // ── Mirrored variants ──────────────────────────────────────────
   const clipPath = mirrored ? COVER_CLIP_PATH_MIRROR : COVER_CLIP_PATH;
@@ -217,6 +229,7 @@ function BookCardInner({
   return (
     // ── STAGE: perspective wrapper, fluid width, height driven by aspect-ratio ──
     <div
+      ref={stageRef}
       className={`relative flex items-center w-full box-border py-[4%] ${
         mirrored
           ? "justify-center md:justify-start"
@@ -334,28 +347,16 @@ function BookCardInner({
                 <h1 className="font-anton text-2xl uppercase leading-tight text-primary hover:text-secondary">
                   {title}
                 </h1>
-                {subtitle && (
-                  <p className="font-montserrat mt-4 text-sm font-bold uppercase text-secondary hover:text-primary">
-                    {subtitle}
-                  </p>
-                )}
               </div>
 
               {/* Hero image */}
               <div className="relative w-full bg-white overflow-hidden rounded-2xl border-4 border-secondary shadow-lg shadow-black/30 sm:shadow-xl my-6 sm:shadow-black/40 md:shadow-2xl md:shadow-black/50">
                 <img
-                  src={imageSrc || "/images/hero.png"}
+                  src={bannerImage || "/images/hero.png"}
                   alt={title}
                   className="h-full w-full object-cover transition-transform duration-500 ease-in-out hover:scale-110"
                 />
               </div>
-              {description && (
-                <div className="p-4 bg-white rounded-2xl border-4 border-secondary mt-4">
-                  <p className="text-secondary font-semibold text-sm">
-                    {description}
-                  </p>
-                </div>
-              )}
             </div>
           </div>
         </div>
@@ -371,7 +372,7 @@ function BookCardInner({
             WebkitTransformOrigin: transformOrigin,
             transformStyle: "preserve-3d",
             WebkitTransformStyle: "preserve-3d",
-            borderRadius: "2%",
+            borderRadius: "3%",
             transform: coverTransform,
             WebkitTransform: coverTransform,
             opacity: open ? 0 : 1,
@@ -439,7 +440,7 @@ function BookCardInner({
                 bottom: 0,
                 left: 0,
                 zIndex: 1,
-                background: "#0097A7",
+                background: "#fff",
                 borderRadius: "3%",
                 clipPath,
                 WebkitClipPath: clipPath,
@@ -448,86 +449,66 @@ function BookCardInner({
                 WebkitTransform: "translateZ(0.01px)",
               }}
             >
-              {/* ORANGE BAND */}
-              <div
-                style={{
-                  position: "absolute",
-                  left: -10,
-                  right: -10,
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  height: "18%",
-                  background: "#FE7702",
-                  boxShadow:
-                    "inset 0 1px 0 rgba(255,255,255,0.25), 0 2px 6px rgba(0,0,0,0.3), 0px 4px 5.6px 0px #00000060, 0px -3px 6.2px 0px #00000099, inset -12px 0px 4.6px 0px #00000080, inset 12px 0px 4.6px 0px #00000080",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  zIndex: 3,
-                }}
-              >
-                <p className="bc-band-text text-white text-center tracking-wider font-bold font-montserrat leading-[1.3] sm:text-[10px] lg:text-sm xl:text-lg 2xl:text-xl px-[6%] sm:px-[7%] [text-shadow:0_4px_4.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
-                  {subtitle}
-                </p>
-              </div>
-
-              {/* UPPER HALF — icon + title */}
-              <div
-                className="absolute left-0 right-0 h-[36%] flex flex-col items-center justify-start "
-                style={{
-                  paddingTop: "7.5%",
-                }}
-              >
-                <div className="bc-icon sm:h-[60px] md:h-[70px] lg:h-[90px] xl:h-[100px]">
+              {/* UPPER PART — image + title */}
+              <div className="absolute left-0 right-0 flex flex-col items-center justify-start gap-4 sm:gap-6 p-4  sm:p-5 h-full  ">
+                <div>
                   <Image
-                    src={icon}
+                    src={bannerImage || "/images/hero.png"}
                     alt={title}
-                    width={120}
-                    height={120}
+                    width={1000}
+                    height={1000}
                     priority={priority}
-                    // style={{
-                    //   animationPlayState: inView ? "running" : "paused",
-                    // }}
-                    className={`object-contain w-full sm:h-[60px] md:h-[70px] lg:h-[90px] xl:h-[100px] floating-text cursor-pointer hover:scale-[1.1] transition-all duration-300 ${
-                      mirrored ? "hover:rotate-3" : "hover:-rotate-3"
-                    }`}
+                    className={`object-cover w-full sm:h-[100%] xl:h-[250px] cursor-pointer hover:scale-[1.1] transition-all duration-300 rounded-xl border-[#FE7702] border-[4px] shadow-lg shadow-black/70`}
                   />
                 </div>
-                <h1
-                  className="bc-title  text-white font-bold text-center uppercase leading-[1.2] font-montserrat sm:text-[11px]
-                 lg:text-[16px] xl:text-[20px] px-[5%] drop-shadow-[4.31px_4.31px_4.31px_rgba(0,0,0,0.25)]"
-                  style={{
-                    paddingTop: "4%",
-                  }}
+                <h2
+                  className="font-montserrat text-black  font-semibold pl-2 "
+                  style={{ fontSize: "clamp(.8rem, 2.5cqw, 1.5rem)" }}
                 >
-                  {" "}
-                  {String(title)
-                    .split("®")
-                    .map((part, i, arr) =>
-                      i < arr.length - 1 ? (
-                        <span key={i}>
-                          {part}
-                          <sup className="text-[0.55em]">®</sup>
-                        </span>
-                      ) : (
-                        part
-                      ),
-                    )}
-                </h1>
+                  {title}
+                </h2>
+                {/* Author Name */}
+                <div className="w-full ">
+                  <hr className="w-full h-[2px] border-[#14b3c2] border rounded-full" />
+                  <div className="flex items-center gap-3 w-full justify-start mt-2">
+                    <img
+                      src={authorAvatar}
+                      alt={authorName}
+                      className="border-primary border-2"
+                      style={{
+                        width: "clamp(25px, 5cqw, 40px)",
+                        aspectRatio: "1/1",
+                        borderRadius: "50%",
+                        objectFit: "cover",
+                        flexShrink: 0,
+                        alignSelf: "center",
+                      }}
+                    />
+                    <span
+                      className="font-poppins font-semibold text-gray-500"
+                      style={{
+                        fontFamily: "Poppins, sans-serif",
+                        lineHeight: 1.2,
+                        alignSelf: "center",
+                        fontSize: "clamp(.8rem, 2cqw, 20px)",
+                      }}
+                    >
+                      {authorName}
+                    </span>
+                  </div>
+                </div>
               </div>
 
-              {/* LOWER HALF — description + button */}
+              {/* LOWER HALF —   button */}
               <div
-                className="absolute top-[63%] left-0 right-0 bottom-0 flex items-center justify-between flex-col"
+                className="absolute bottom-3  left-0 right-0 bottom-0 flex items-center justify-between flex-col"
                 style={{ padding: "2% 4% 6.5%" }}
               >
-                <p className="bc-desc text-white tracking-wider text-center font-montserrat leading-[1.3] font-semibold sm:text-[10px] lg:text-[14px] xl:text-lg 2xl:text-[17px] px-[1%]">
-                  {description}
-                </p>
                 <LearnMoreButton
                   size="md"
-                  label="Learn More"
+                  label="Read Airticle"
                   mirrored={mirrored}
+                  inView={inView}
                   onClick={(e) => {
                     e.stopPropagation();
                     setFlipping(true);
@@ -565,5 +546,5 @@ function BookCardInner({
   );
 }
 
-const BookCard = memo(BookCardInner);
-export default BookCard;
+const BlogCard = memo(BookCardInner);
+export default BlogCard;
