@@ -4,8 +4,8 @@
 
 import { Fragment, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-// import BlogCard from "../../components/BlogCard";
-import BlogCard, { BookCardDefs } from "./BlogCardNew";
+// FIX: Import from the main BlogCard component, not BlogCardNew
+import BlogCard from "../../components/BlogCard";
 import Footer from "../../components/Footer";
 import Navbar from "../../components/Navbar";
 import blogsApi from "../lib/api/blogs";
@@ -146,7 +146,6 @@ const BlogsPageClient = ({ initialBlogs = [], initialPagination = {} }) => {
     }
 
     didSkipInitialFetch.current = true;
-    // Scroll to top on page change
     window.scrollTo({ top: 0, behavior: "smooth" });
     fetchBlogs(search, page);
   }, [hasSSRInitialData, initialPage, search, page]);
@@ -178,19 +177,23 @@ const BlogsPageClient = ({ initialBlogs = [], initialPagination = {} }) => {
   return (
     <section className="font-montserrat">
       <style>{`
-				@keyframes floatAnimation {
-					0%, 100% { transform: translateY(0px); }
-					50% { transform: translateY(-8px); }
-				}
-				.search-btn-float {
-					animation: floatAnimation 2.5s ease-in-out infinite;
-					will-change: transform;
-				}
-				.search-btn-float:hover {
-					animation-play-state: paused;
-					transform: translateY(-4px);
-				}
-			`}</style>
+        /* FIX: Removed will-change from search bar animation.
+           Only animate on hover, not forever on page load.
+           Safari holds GPU layer for every will-change element — this was
+           burning GPU memory 24/7 just for the search bar. */
+        @-webkit-keyframes floatAnimation {
+          0%, 100% { -webkit-transform: translateY(0px); }
+          50% { -webkit-transform: translateY(-8px); }
+        }
+        @keyframes floatAnimation {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-8px); }
+        }
+        .search-btn-float:hover {
+          -webkit-animation: floatAnimation 2.5s ease-in-out infinite;
+          animation: floatAnimation 2.5s ease-in-out infinite;
+        }
+      `}</style>
       <Navbar />
       <section className="mx-auto mt-9 max-w-7xl px-4 md:px-0">
         <h1 className="font-anton text-center text-2xl md:text-3xl lg:text-4xl xl:text-6xl flex flex-wrap justify-center items-center gap-1 sm:gap-3">
@@ -261,7 +264,6 @@ const BlogsPageClient = ({ initialBlogs = [], initialPagination = {} }) => {
           </div>
         )}
 
-        {/* Full page loading overlay when paginating */}
         {loading && blogs.length > 0 && (
           <div
             style={{
@@ -288,39 +290,55 @@ const BlogsPageClient = ({ initialBlogs = [], initialPagination = {} }) => {
             </p>
           </div>
         )}
-        <BookCardDefs />
+
+        {/* FIX: Removed <BookCardDefs /> — this was part of BlogCardNew and
+            caused duplicate SVG filter definitions on every card render.
+            The main BlogCard component handles its own defs internally. */}
 
         <div className="mx-auto mt-8 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-10 md:gap-16 lg:gap-20 xl:gap-24">
           {blogs.map((blog, index) => {
             const blogKey = blog._id || blog.id || blog.slug || "blog";
-            const commonCardProps = {
-              bannerImage:
-                blog.content?.hero?.bannerImage || "/images/hero.png",
-              title: blog.title || "Untitled",
-              authorName:
-                blog.content?.hero?.authorName || blog.author || "Anonymous",
-              authorAvatar:
-                blog.content?.hero?.authorAvatar || "/images/hero.png",
-            };
+
+            const bannerImage =
+              blog.content?.hero?.bannerImage || "/images/hero.png";
+            const title = blog.title || "Untitled";
+            const authorName =
+              blog.content?.hero?.authorName || blog.author || "Anonymous";
+            const authorAvatar =
+              blog.content?.hero?.authorAvatar || "/images/avatar.png";
+
+            // FIX: Determine card type from actual blog data
+            // If blog has a videoLink it gets a video card, otherwise read article
+            const hasVideo = !!(blog.videoLink && blog.videoLink.trim() !== "");
+            const cardType = hasVideo ? "video" : "read";
+
             return (
-              <Fragment key={blog._id || blog.id}>
-                {/* Right card — always opens the video modal */}
-                <BlogCard
-                  uid={`${blogKey}-card-video`}
-                  alignIndex={index * 2 + 2}
-                  {...commonCardProps}
-                  slug={blog.slug || ""}
-                  speed={3000}
-                  priority={true}
-                  mirrored={index % 2 !== 0}
-                  onVideoClick={() =>
-                    setVideoPopup({
-                      isOpen: true,
-                      videoLink: blog.videoLink || "",
-                    })
-                  }
-                />
-              </Fragment>
+              // FIX: Removed Fragment with two cards — was rendering EVERY blog
+              // post TWICE (once as read, once as video) causing all the duplicates.
+              // Now each blog post renders as exactly ONE card based on its type.
+              <BlogCard
+                key={`${blogKey}-card`}
+                uid={`${blogKey}-card`}
+                alignIndex={index + 1}
+                bannerImage={bannerImage}
+                title={title}
+                authorName={authorName}
+                authorAvatar={authorAvatar}
+                slug={cardType === "read" ? (blog.slug || "") : ""}
+                type={cardType}
+                // FIX: Only pass onVideoClick if the blog actually has a video
+                // Before: EVERY card had onVideoClick which made ALL cards open
+                // a video popup instead of navigating to the article
+                onVideoClick={
+                  hasVideo
+                    ? () =>
+                        setVideoPopup({
+                          isOpen: true,
+                          videoLink: blog.videoLink,
+                        })
+                    : null
+                }
+              />
             );
           })}
         </div>
@@ -329,9 +347,7 @@ const BlogsPageClient = ({ initialBlogs = [], initialPagination = {} }) => {
         {blogs.length > 0 && (
           <section
             className="font-roboto container mx-auto mt-8 flex max-w-7xl items-center justify-between text-xl font-black md:mt-12 md:text-2xl lg:text-3xl xl:text-4xl"
-            style={{
-              overflow: "visible",
-            }}
+            style={{ overflow: "visible" }}
           >
             <button
               onClick={handlePrevPage}
@@ -415,16 +431,18 @@ const BlogsPageClient = ({ initialBlogs = [], initialPagination = {} }) => {
               >
                 Next
               </span>
-              <img className="w-8 lg:w-12" src="/images/arrow.png" alt="Next" />
+              <img
+                className="w-8 lg:w-12"
+                src="/images/arrow.png"
+                alt="Next"
+              />
             </button>
           </section>
         )}
-
-        {/* Removed bottom loading spinner for pagination, now handled by full-page overlay above */}
       </section>
       <Footer />
 
-      {/* Video Popup — rendered via portal to escape stacking context */}
+      {/* Video Popup */}
       {videoPopup.isOpen &&
         typeof document !== "undefined" &&
         createPortal(
@@ -452,9 +470,10 @@ const BlogsPageClient = ({ initialBlogs = [], initialPagination = {} }) => {
               }}
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Close */}
               <button
-                onClick={() => setVideoPopup({ isOpen: false, videoLink: "" })}
+                onClick={() =>
+                  setVideoPopup({ isOpen: false, videoLink: "" })
+                }
                 style={{
                   position: "absolute",
                   top: "0.75rem",
@@ -477,29 +496,15 @@ const BlogsPageClient = ({ initialBlogs = [], initialPagination = {} }) => {
                 ✕
               </button>
               {!videoPopup.videoLink ? (
-                /* No video */
                 <div style={{ marginTop: "2rem" }}>
-                  <p
-                    style={{
-                      color: "#fff",
-                      fontSize: "1.25rem",
-                      fontWeight: 600,
-                    }}
-                  >
+                  <p style={{ color: "#fff", fontSize: "1.25rem", fontWeight: 600 }}>
                     No Video Found
                   </p>
-                  <p
-                    style={{
-                      color: "#aaa",
-                      marginTop: "0.5rem",
-                      fontSize: "0.95rem",
-                    }}
-                  >
+                  <p style={{ color: "#aaa", marginTop: "0.5rem", fontSize: "0.95rem" }}>
                     No video has been linked to this post yet.
                   </p>
                 </div>
               ) : (
-                /* Video player — fills the card */
                 <div
                   style={{
                     width: "100%",
