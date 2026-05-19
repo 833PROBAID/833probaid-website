@@ -21,7 +21,7 @@ export default function BlogHero({
           position: "absolute",
           inset: 0,
           backgroundColor: "#0097A7",
-          borderRadius: "1.1%",
+          borderRadius: "24px",
           boxShadow: "0px 0px 15px rgba(0,0,0,0.85)",
         }}
       />
@@ -31,9 +31,9 @@ export default function BlogHero({
         style={{
           position: "absolute",
           left: "2.2%",
-          top: "2.2%",
+          top: "2.7%",
           right: "2.2%",
-          bottom: "2.2%",
+          bottom: "2.7%",
           backgroundColor: "white",
           borderRadius: "0.8%",
           boxShadow:
