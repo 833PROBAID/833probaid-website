@@ -12,35 +12,33 @@ export default function BlogHero({
       style={{
         position: "relative",
         containerType: "inline-size",
+        filter: "drop-shadow(0px 0px 20px rgba(0,0,0,0.85))",
         ...wrapperStyle,
       }}
     >
-      {/* Teal background card — was SVG rect, now pure CSS */}
+      {/* Teal background card */}
       <div
         style={{
           position: "absolute",
           inset: 0,
           backgroundColor: "#0097A7",
+          borderRadius: "24px",
           clipPath: "polygon(0% 0%, 100% 0%, 100% 78%, 83% 100%, 0% 100%)",
-          filter: "drop-shadow(0px 0px 15px rgba(0,0,0,0.9))",
         }}
       />
 
-      {/* White inner card with cut corner — was SVG path with 3x feGaussianBlur, now CSS */}
+      {/* White inner card */}
       <div
         style={{
           position: "absolute",
           left: "2.2%",
-          top: "2.7%",
+          top: "2.2%",
           right: "2.2%",
-          bottom: "2.7%",
+          bottom: "2.2%",
           backgroundColor: "white",
-          borderRadius: "24px",
-          boxShadow:
-         "0px 0px 40px rgba(0,0,0,1.0)",
-          // Cut corner approximation via clip-path
-clipPath:
-  "polygon(0% 0%, 100% 0%, 100% 78%, 83% 100%, 0% 100%)",
+          borderRadius: "18px",
+          clipPath: "polygon(0% 0%, 100% 0%, 100% 78%, 83% 100%, 0% 100%)",
+          filter: "drop-shadow(0px 0px 12px rgba(0,0,0,0.85))",
         }}
       />
 
@@ -55,9 +53,7 @@ clipPath:
           borderRadius: "13.4076px",
           overflow: "hidden",
           border: "4px solid #FE7702",
-          // Was SVG filter2 with 2x feGaussianBlur — now CSS
-          boxShadow:
-            "-6px 7px 6px rgba(0,0,0,0.59), 3px -5px 6px rgba(0,0,0,0.59)",
+          filter: "drop-shadow(0px 0px 12px rgba(0,0,0,0.85))",
         }}
       >
         <img
