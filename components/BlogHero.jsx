@@ -35,12 +35,10 @@ export default function BlogHero({
           right: "2.2%",
           bottom: "2.7%",
           backgroundColor: "white",
-          borderRadius: "0.8%",
+          borderRadius: "24px",
           boxShadow:
-         "0px 0px 15px rgba(0,0,0,0.85)",
-          // Cut corner approximation via clip-path
-          clipPath:
-            "polygon(0% 0%, 100% 0%, 100% 78%, 83% 100%, 0% 100%)",
+         "0px 0px 40px rgba(0,0,0,1.0)",
+          
         }}
       />
 
