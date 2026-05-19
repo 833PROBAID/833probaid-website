@@ -4,8 +4,8 @@
 
 import { Fragment, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-// import BlogCard from "../../components/BlogCard";
-import BlogCard, { BookCardDefs } from "./BlogCardNew";
+
+import BlogCard from "../../components/BlogCard";
 import Footer from "../../components/Footer";
 import Navbar from "../../components/Navbar";
 import blogsApi from "../lib/api/blogs";
