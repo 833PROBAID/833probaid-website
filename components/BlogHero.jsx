@@ -22,6 +22,7 @@ export default function BlogHero({
           inset: 0,
           backgroundColor: "#0097A7",
           borderRadius: "1.1%",
+          boxShadow: "0px 0px 15px rgba(0,0,0,0.85)",
         }}
       />
 
@@ -29,14 +30,14 @@ export default function BlogHero({
       <div
         style={{
           position: "absolute",
-          left: "1.5%",
-          top: "1.6%",
-          right: "1.5%",
-          bottom: "1.6%",
+          left: "2.2%",
+          top: "2.2%",
+          right: "2.2%",
+          bottom: "2.2%",
           backgroundColor: "white",
           borderRadius: "0.8%",
           boxShadow:
-            "5px -8px 6px rgba(0,0,0,0.6), 8px 7px 6px rgba(0,0,0,0.61), -8px 11px 6px rgba(0,0,0,0.6)",
+         "0px 0px 15px rgba(0,0,0,0.85)",
           // Cut corner approximation via clip-path
           clipPath:
             "polygon(0% 0%, 100% 0%, 100% 78%, 83% 100%, 0% 100%)",
