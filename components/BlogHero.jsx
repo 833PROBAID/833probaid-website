@@ -38,7 +38,9 @@ export default function BlogHero({
           borderRadius: "24px",
           boxShadow:
          "0px 0px 40px rgba(0,0,0,1.0)",
-          
+          // Cut corner approximation via clip-path
+clipPath:
+  "polygon(0% 0%, 100% 0%, 100% 78%, 83% 100%, 0% 100%)",
         }}
       />
 
