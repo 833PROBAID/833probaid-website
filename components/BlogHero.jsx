@@ -15,13 +15,6 @@ export default function BlogHero({
         ...wrapperStyle,
       }}
     >
-      {/* SVG background
-          FIX: Reduced all feGaussianBlur stdDeviation values by 50%
-          Original: 6, 6, 6, 6.1 — these were costing 4x GPU on Safari
-          because blur cost scales as radius squared.
-          New: 3, 3, 3, 3 — same visual shadow, 75% less GPU cost.
-          Also added colorInterpolationFilters="sRGB" for consistent
-          rendering between Safari and Chrome. */}
       <svg
         width="100%"
         height="100%"
@@ -32,14 +25,7 @@ export default function BlogHero({
         style={{ position: "absolute", inset: 0 }}
       >
         <g>
-          <rect
-            x="24.9666"
-            y="24.9663"
-            width="1621"
-            height="1494"
-            rx="18.1531"
-            fill="#0097A7"
-          />
+          <rect x="24.9666" y="24.9663" width="1621" height="1494" rx="18.1531" fill="#0097A7" />
         </g>
         <g filter="url(#filter1_ddd_209_2_hero)">
           <path
@@ -48,150 +34,47 @@ export default function BlogHero({
           />
         </g>
         <g filter="url(#filter2_dd_209_2_hero)">
-          <rect
-            x="157.967"
-            y="130.966"
-            width="1355"
-            height="918"
-            rx="13.4076"
-            fill="white"
-            shapeRendering="crispEdges"
-          />
-          <rect
-            x="161.967"
-            y="134.966"
-            width="1347"
-            height="910"
-            rx="9.40764"
-            stroke="#FE7702"
-            strokeWidth="8"
-            shapeRendering="crispEdges"
-          />
+          <rect x="157.967" y="130.966" width="1355" height="918" rx="13.4076" fill="white" shapeRendering="crispEdges" />
+          <rect x="161.967" y="134.966" width="1347" height="910" rx="9.40764" stroke="#FE7702" strokeWidth="8" shapeRendering="crispEdges" />
         </g>
         <defs>
-          <filter
-            id="filter1_ddd_209_2_hero"
-            x="54.9666"
-            y="54.9663"
-            width="1561"
-            height="1437"
-            filterUnits="userSpaceOnUse"
-            colorInterpolationFilters="sRGB"
-          >
+          <filter id="filter1_ddd_209_2_hero" x="54.9666" y="54.9663" width="1561" height="1437" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
             <feFlood floodOpacity="0" result="BackgroundImageFix" />
-            <feColorMatrix
-              in="SourceAlpha"
-              type="matrix"
-              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-              result="hardAlpha"
-            />
+            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
             <feOffset dx="5" dy="-8" />
             <feGaussianBlur stdDeviation="3" />
             <feComposite in2="hardAlpha" operator="out" />
-            <feColorMatrix
-              type="matrix"
-              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.6 0"
-            />
-            <feBlend
-              mode="normal"
-              in2="BackgroundImageFix"
-              result="effect1_dropShadow_209_2"
-            />
-            <feColorMatrix
-              in="SourceAlpha"
-              type="matrix"
-              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-              result="hardAlpha"
-            />
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.6 0" />
+            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_209_2" />
+            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
             <feOffset dx="8" dy="7" />
             <feGaussianBlur stdDeviation="3" />
             <feComposite in2="hardAlpha" operator="out" />
-            <feColorMatrix
-              type="matrix"
-              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.61 0"
-            />
-            <feBlend
-              mode="normal"
-              in2="effect1_dropShadow_209_2"
-              result="effect2_dropShadow_209_2"
-            />
-            <feColorMatrix
-              in="SourceAlpha"
-              type="matrix"
-              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-              result="hardAlpha"
-            />
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.61 0" />
+            <feBlend mode="normal" in2="effect1_dropShadow_209_2" result="effect2_dropShadow_209_2" />
+            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
             <feOffset dx="-8" dy="11" />
             <feGaussianBlur stdDeviation="3" />
             <feComposite in2="hardAlpha" operator="out" />
-            <feColorMatrix
-              type="matrix"
-              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.6 0"
-            />
-            <feBlend
-              mode="normal"
-              in2="effect2_dropShadow_209_2"
-              result="effect3_dropShadow_209_2"
-            />
-            <feBlend
-              mode="normal"
-              in="SourceGraphic"
-              in2="effect3_dropShadow_209_2"
-              result="shape"
-            />
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.6 0" />
+            <feBlend mode="normal" in2="effect2_dropShadow_209_2" result="effect3_dropShadow_209_2" />
+            <feBlend mode="normal" in="SourceGraphic" in2="effect3_dropShadow_209_2" result="shape" />
           </filter>
-          <filter
-            id="filter2_dd_209_2_hero"
-            x="139.967"
-            y="113.766"
-            width="1388.2"
-            height="954.2"
-            filterUnits="userSpaceOnUse"
-            colorInterpolationFilters="sRGB"
-          >
+          <filter id="filter2_dd_209_2_hero" x="139.967" y="113.766" width="1388.2" height="954.2" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
             <feFlood floodOpacity="0" result="BackgroundImageFix" />
-            <feColorMatrix
-              in="SourceAlpha"
-              type="matrix"
-              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-              result="hardAlpha"
-            />
+            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
             <feOffset dx="-6" dy="7" />
             <feGaussianBlur stdDeviation="3" />
             <feComposite in2="hardAlpha" operator="out" />
-            <feColorMatrix
-              type="matrix"
-              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.59 0"
-            />
-            <feBlend
-              mode="normal"
-              in2="BackgroundImageFix"
-              result="effect1_dropShadow_209_2"
-            />
-            <feColorMatrix
-              in="SourceAlpha"
-              type="matrix"
-              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-              result="hardAlpha"
-            />
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.59 0" />
+            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_209_2" />
+            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
             <feOffset dx="3" dy="-5" />
             <feGaussianBlur stdDeviation="3" />
             <feComposite in2="hardAlpha" operator="out" />
-            <feColorMatrix
-              type="matrix"
-              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.59 0"
-            />
-            <feBlend
-              mode="normal"
-              in2="effect1_dropShadow_209_2"
-              result="effect2_dropShadow_209_2"
-            />
-            <feBlend
-              mode="normal"
-              in="SourceGraphic"
-              in2="effect2_dropShadow_209_2"
-              result="shape"
-            />
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.59 0" />
+            <feBlend mode="normal" in2="effect1_dropShadow_209_2" result="effect2_dropShadow_209_2" />
+            <feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow_209_2" result="shape" />
           </filter>
         </defs>
       </svg>
@@ -227,17 +110,11 @@ export default function BlogHero({
         }}
       >
         {!isCard ? (
-          <h2
-            className="font-anton text-primary leading-tight"
-            style={{ fontSize: "clamp(0.6rem, 2.8cqw, 2.8rem)" }}
-          >
+          <h2 className="font-anton text-primary leading-tight" style={{ fontSize: "clamp(0.6rem, 2.8cqw, 2.8rem)" }}>
             {title}
           </h2>
         ) : (
-          <h2
-            className="font-anton text-primary leading-tight"
-            style={{ fontSize: "clamp(0.9rem, 4.5cqw, 4rem)" }}
-          >
+          <h2 className="font-anton text-primary leading-tight" style={{ fontSize: "clamp(0.9rem, 4.5cqw, 4rem)" }}>
             {title}
           </h2>
         )}
@@ -256,63 +133,31 @@ export default function BlogHero({
           padding: "0 3%",
         }}
       >
-        {!isCard ? (
-          <>
-            <img
-              src={authorAvatar}
-              alt={authorName}
-              className="border-primary border-2"
-              style={{
-                width: "clamp(20px, 5cqw, 80px)",
-                aspectRatio: "1/1",
-                borderRadius: "50%",
-                objectFit: "cover",
-                flexShrink: 0,
-                alignSelf: "center",
-              }}
-            />
-            <span
-              className="font-poppins font-semibold"
-              style={{
-                fontFamily: "Poppins, sans-serif",
-                color: "#333",
-                fontSize: "clamp(0.5rem, 2cqw, 1.6rem)",
-                lineHeight: 1.2,
-                alignSelf: "center",
-              }}
-            >
-              {authorName}
-            </span>
-          </>
-        ) : (
-          <>
-            <img
-              src={authorAvatar}
-              alt={authorName}
-              className="border-primary border-2"
-              style={{
-                width: "clamp(28px, 7cqw, 90px)",
-                aspectRatio: "1/1",
-                borderRadius: "50%",
-                objectFit: "cover",
-                flexShrink: 0,
-                alignSelf: "center",
-              }}
-            />
-            <span
-              className="font-poppins font-semibold"
-              style={{
-                fontFamily: "Poppins, sans-serif",
-                color: "#333",
-                fontSize: "clamp(0.7rem, 3cqw, 2rem)",
-                lineHeight: 1.2,
-                alignSelf: "center",
-              }}
-            >
-              {authorName}
-            </span>
-          </>
-        )}
+        <img
+          src={authorAvatar}
+          alt={authorName}
+          className="border-primary border-2"
+          style={{
+            width: "clamp(28px, 7cqw, 90px)",
+            aspectRatio: "1/1",
+            borderRadius: "50%",
+            objectFit: "cover",
+            flexShrink: 0,
+            alignSelf: "center",
+          }}
+        />
+        <span
+          style={{
+            fontFamily: "Poppins, sans-serif",
+            color: "#333",
+            fontSize: isCard ? "clamp(0.7rem, 3cqw, 2rem)" : "clamp(0.5rem, 2cqw, 1.6rem)",
+            fontWeight: 600,
+            lineHeight: 1.2,
+            alignSelf: "center",
+          }}
+        >
+          {authorName}
+        </span>
       </div>
     </div>
   );
