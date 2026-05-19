@@ -21,7 +21,7 @@ export default function BlogHero({
           position: "absolute",
           inset: 0,
           backgroundColor: "#0097A7",
-          clipPath: "polygon(0% 0%, 100% 0%, 100% 78%, 83% 100%, 0% 100%)",,
+          clipPath: "polygon(0% 0%, 100% 0%, 100% 78%, 83% 100%, 0% 100%)",
           filter: "drop-shadow(0px 0px 15px rgba(0,0,0,0.9))",
         }}
       />
