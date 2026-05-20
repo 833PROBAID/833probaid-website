@@ -100,12 +100,11 @@ export function BookCardDefs() {
 }
 
 // Clip-paths stay in percentage units — they already are ✓
+const COVER_CLIP_PATH = "polygon(0 0, 100% 0, 100% 90%, 88% 100%, 0 100%)";
 const COVER_CLIP_PATH_MIRROR = "polygon(0 0, 100% 0, 100% 100%, 12% 100%, 0 90%)";
 const COVER_SHADOW_POLYGON_POINTS = "0,0 96.5,0 100,3.5 100,88 86,100 0,100";
-const COVER_CLIP_PATH_MIRROR =
-  "polygon(0 0, 100% 0, 100% 100%, 14% 100%, 0 88%)";
-const COVER_SHADOW_POLYGON_POINTS_MIRROR =
-  "0,3.5 3.5,0 100,0 100,100 14,100 0,88";
+const COVER_SHADOW_POLYGON_POINTS_MIRROR = "0,3.5 3.5,0 100,0 100,100 14,100 0,88";
+
 
 // ── LearnMoreButton ───────────────────────────────────────────────
 // All sizes use clamp() so the button scales with the card.
@@ -171,7 +170,7 @@ function BookCardInner({
   width = D.w,
   height = D.h,
   mirrored = false,
-  priority = false,
+  priority = true,
 }) {
   const [open, setOpen] = useState(false);
   const [flipping, setFlipping] = useState(false);
