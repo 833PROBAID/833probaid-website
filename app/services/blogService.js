@@ -24,7 +24,7 @@ const getPublishedBlogsFirstPageCached = unstable_cache(
 		await connectToDatabase();
 
 		const page = 1;
-			   const limit = 5;
+			   const limit = 2;
 		const query = { status: "published" };
 
 		const [blogs, total] = await Promise.all([
@@ -51,7 +51,7 @@ const getPublishedBlogsFirstPageCached = unstable_cache(
 export async function getAllBlogs(options = {}) {
 	await connectToDatabase();
 	
-	const { search = '', page = 1, limit = 5 } = options;
+	const { search = '', page = 1, limit = 2 } = options;
 	const skip = (page - 1) * limit;
 	
 	// Build search query
