@@ -133,7 +133,7 @@ export function LearnMoreButton({
         cursor: "pointer",
         boxShadow:
           "0px 2.73px 6.64px 0px #000000AD, inset 5.46px -5.46px 3.64px 0px #00000040, inset -3.64px 4.55px 3.64px 0px #FFFFFF40, -1.82px -0.91px 3.64px 0px #00000099",
-        animation: hov ? "none" : "floatBounce 2s ease-in-out infinite",
+        animation: hov || !inView ? "none" : "floatBounce 2s ease-in-out infinite",
         transform: hov
           ? `scale(1.08) rotate(${rotateDir})`
           : "scale(1) rotate(0deg)",
