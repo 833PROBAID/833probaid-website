@@ -7,7 +7,7 @@ export default async function BlogsPage() {
   let initialBlogs = [];
   let initialPagination = {
     page: 1,
-    limit: 5,
+    limit: 2,
     total: 0,
     totalPages: 1,
     hasMore: false,
