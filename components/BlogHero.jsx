@@ -12,18 +12,27 @@ export default function BlogHero({
       style={{
         position: "relative",
         containerType: "inline-size",
-        filter: "drop-shadow(0px 0px 8px rgba(0,0,0,0.6))",
         ...wrapperStyle,
       }}
     >
+      {/* Outer shadow wrapper */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          borderRadius: "24px",
+          boxShadow: "0px 0px 25px rgba(0,0,0,0.75)",
+          clipPath: "polygon(0% 0%, 100% 0%, 100% 78%, 83% 100%, 0% 100%)",
+        }}
+      />
+
       {/* Teal background card */}
       <div
         style={{
           position: "absolute",
           inset: 0,
           backgroundColor: "#0097A7",
-          borderRadius: "24px",
-          clipPath: "polygon(0% 0%, 100% 0%, 100% 80%, 86% 100%, 0% 100%)",
+          clipPath: "polygon(0% 0%, 100% 0%, 100% 78%, 83% 100%, 0% 100%)",
         }}
       />
 
@@ -31,14 +40,14 @@ export default function BlogHero({
       <div
         style={{
           position: "absolute",
-          left: "2.2%",
-          top: "2.7%",
-          right: "2.2%",
-          bottom: "2.7%",
+          left: "2.5%",
+          top: "3.5%",
+          right: "2.5%",
+          bottom: "3.5%",
           backgroundColor: "white",
-        
+          borderRadius: "18px",
           clipPath: "polygon(0% 0%, 100% 0%, 100% 78%, 83% 100%, 0% 100%)",
-          filter: "drop-shadow(0px 0px 12px rgba(0,0,0,0.85))",
+          boxShadow: "inset 0px 0px 15px rgba(0,0,0,0.5)",
         }}
       />
 
@@ -53,7 +62,7 @@ export default function BlogHero({
           borderRadius: "13.4076px",
           overflow: "hidden",
           border: "4px solid #FE7702",
-          filter: "drop-shadow(0px 0px 12px rgba(0,0,0,0.85))",
+          boxShadow: "0px 0px 12px rgba(0,0,0,0.7)",
         }}
       >
         <img
