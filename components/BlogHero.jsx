@@ -12,7 +12,7 @@ export default function BlogHero({
       style={{
         position: "relative",
         containerType: "inline-size",
-        filter: "drop-shadow(0px 0px 20px rgba(0,0,0,0.85))",
+        filter: "drop-shadow(0px 0px 8px rgba(0,0,0,0.6))",
         ...wrapperStyle,
       }}
     >
@@ -23,7 +23,7 @@ export default function BlogHero({
           inset: 0,
           backgroundColor: "#0097A7",
           borderRadius: "24px",
-          clipPath: "polygon(0% 0%, 100% 0%, 100% 78%, 83% 100%, 0% 100%)",
+          clipPath: "polygon(0% 0%, 100% 0%, 100% 75%, 80% 100%, 0% 100%)",
         }}
       />
 
@@ -32,11 +32,11 @@ export default function BlogHero({
         style={{
           position: "absolute",
           left: "2.2%",
-          top: "2.2%",
+          top: "2.7%",
           right: "2.2%",
-          bottom: "2.2%",
+          bottom: "2.7%",
           backgroundColor: "white",
-          borderRadius: "18px",
+        
           clipPath: "polygon(0% 0%, 100% 0%, 100% 78%, 83% 100%, 0% 100%)",
           filter: "drop-shadow(0px 0px 12px rgba(0,0,0,0.85))",
         }}
