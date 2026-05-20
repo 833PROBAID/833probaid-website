@@ -16,13 +16,11 @@ import { scopeCSS } from "@/app/utils/scopeCSS";
 
 export const revalidate = 300;
 
-// ─── Helper: fetch blog by slug or 24-char ObjectId ─────────────────────────
 async function fetchBlog(slug) {
 	const isObjectId = /^[0-9a-fA-F]{24}$/.test(slug);
 	return isObjectId ? getBlogById(slug) : getBlogBySlug(slug);
 }
 
-// ─── SSR Metadata (title, description, Open Graph, Twitter, JSON-LD) ────────
 export async function generateMetadata({ params }) {
 	const { slug } = await params;
 	const blog = await fetchBlog(slug);
@@ -97,7 +95,6 @@ export async function generateMetadata({ params }) {
 	return metadata;
 }
 
-// ─── Page ────────────────────────────────────────────────────────────────────
 export default async function BlogPage({ params }) {
 	const { slug } = await params;
 	const blog = await fetchBlog(slug);
@@ -110,7 +107,6 @@ export default async function BlogPage({ params }) {
 			blogId: blog._id,
 		});
 
-	// Increment view count (fire-and-forget, don't block render)
 	incrementBlogViews(blog._id.toString()).catch(() => {});
 
 	const heroData = blog.content?.hero || {
@@ -132,11 +128,9 @@ export default async function BlogPage({ params }) {
 
 	return (
 		<section className='font-montserrat'>
-			{/* JSON-LD structured data injected in <head> by Next.js */}
 			{structuredDataScript && (
 				<script
 					type='application/ld+json'
-					// eslint-disable-next-line react/no-danger
 					dangerouslySetInnerHTML={{ __html: structuredDataScript }}
 				/>
 			)}
@@ -150,15 +144,18 @@ export default async function BlogPage({ params }) {
 					authorAvatar={heroData.authorAvatar}
 				/>
 
-				{/* GrapesJS-authored blog content */}
 				{grapesContent?.html ? (
 					<div className='mt-8'>
 						<style
-							// eslint-disable-next-line react/no-danger
 							dangerouslySetInnerHTML={{
 								__html: scopeCSS(grapesContent.css || "", ".blog-content"),
 							}}
 						/>
+						{/* FIX: Added contentVisibility="auto" — tells Safari to skip
+						    rendering content that is off-screen. This is the single
+						    biggest performance win for long articles on Safari.
+						    Also added WebkitTransform to force GPU compositing layer
+						    so article content doesn't trigger full page repaints. */}
 						<div
 							className='blog-content'
 							style={{
@@ -166,8 +163,10 @@ export default async function BlogPage({ params }) {
 								isolation: "isolate",
 								position: "relative",
 								zIndex: 1,
+								contentVisibility: "auto",
+								WebkitTransform: "translateZ(0)",
+								transform: "translateZ(0)",
 							}}
-							// eslint-disable-next-line react/no-danger
 							dangerouslySetInnerHTML={{ __html: grapesContent.html }}
 						/>
 					</div>

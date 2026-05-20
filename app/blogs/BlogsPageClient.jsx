@@ -4,7 +4,8 @@
 
 import { Fragment, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import BlogCard from "../../components/BlogCard";
+// import BlogCard from "../../components/BlogCard";
+import BlogCard, { BookCardDefs } from "./BlogCardNew";
 import Footer from "../../components/Footer";
 import Navbar from "../../components/Navbar";
 import blogsApi from "../lib/api/blogs";
@@ -287,8 +288,9 @@ const BlogsPageClient = ({ initialBlogs = [], initialPagination = {} }) => {
             </p>
           </div>
         )}
+        <BookCardDefs />
 
-        <div className="mx-auto mt-8 grid grid-cols-2 gap-4 sm:gap-10 md:gap-16 lg:gap-20 xl:gap-24">
+        <div className="mx-auto mt-8 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-10 md:gap-16 lg:gap-20 xl:gap-24">
           {blogs.map((blog, index) => {
             const blogKey = blog._id || blog.id || blog.slug || "blog";
             const commonCardProps = {
@@ -302,21 +304,15 @@ const BlogsPageClient = ({ initialBlogs = [], initialPagination = {} }) => {
             };
             return (
               <Fragment key={blog._id || blog.id}>
-                {/* Left card — always opens the blog page */}
-                <BlogCard
-                  uid={`${blogKey}-card-read`}
-                  alignIndex={index * 2 + 1}
-                  {...commonCardProps}
-                  slug={blog.slug || ""}
-                  type="read"
-                />
                 {/* Right card — always opens the video modal */}
                 <BlogCard
                   uid={`${blogKey}-card-video`}
                   alignIndex={index * 2 + 2}
                   {...commonCardProps}
-                  slug=""
-                  type="watch"
+                  slug={blog.slug || ""}
+                  speed={3000}
+                  priority={true}
+                  mirrored={index % 2 !== 0}
                   onVideoClick={() =>
                     setVideoPopup({
                       isOpen: true,
@@ -352,7 +348,11 @@ const BlogsPageClient = ({ initialBlogs = [], initialPagination = {} }) => {
                 alt="Previous"
               />
               <span
-                className={`${!hasPrev || loading ? "text-gray-400" : "text-secondary hover:text-primary"}`}
+                className={`${
+                  !hasPrev || loading
+                    ? "text-gray-400"
+                    : "text-secondary hover:text-primary"
+                }`}
               >
                 Previous
               </span>
@@ -407,7 +407,11 @@ const BlogsPageClient = ({ initialBlogs = [], initialPagination = {} }) => {
               }`}
             >
               <span
-                className={`${!hasMore || loading ? "text-gray-400" : "text-secondary hover:text-primary"}`}
+                className={`${
+                  !hasMore || loading
+                    ? "text-gray-400"
+                    : "text-secondary hover:text-primary"
+                }`}
               >
                 Next
               </span>
