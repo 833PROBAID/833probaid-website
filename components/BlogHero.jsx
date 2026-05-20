@@ -23,7 +23,7 @@ export default function BlogHero({
           inset: 0,
           backgroundColor: "#0097A7",
           borderRadius: "24px",
-          clipPath: "polygon(0% 0%, 100% 0%, 100% 75%, 80% 100%, 0% 100%)",
+          clipPath: "polygon(0% 0%, 100% 0%, 100% 80%, 86% 100%, 0% 100%)",
         }}
       />
 
