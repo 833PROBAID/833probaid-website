@@ -43,7 +43,7 @@ const getPublishedBlogsFirstPageCached = unstable_cache(
 			},
 		};
 	},
-	["blogs-first-page-v1"],
+	["blogs-first-page-v2"],
 	{ revalidate: 300, tags: ["blogs"] },
 );
 
