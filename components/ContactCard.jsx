@@ -8,6 +8,7 @@ export default function ContactCard() {
           viewBox="0 0 566 586"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
+          style={{ willChange: "transform" }}
         >
           <g filter="url(#filter0_dii_273_12)">
             <rect
