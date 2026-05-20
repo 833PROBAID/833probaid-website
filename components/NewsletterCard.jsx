@@ -51,6 +51,7 @@ export default function NewsletterCard() {
             viewBox="0 0 558 576"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
+			  style={{ willChange: "transform" }}
           >
             <g filter="url(#filter0_dii_273_11)">
               <path
