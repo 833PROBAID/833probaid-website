@@ -25,7 +25,7 @@ const D = {
   tealShadow: "#033842",
 
   // Orange palette (band, staples, button)
-  orange: "#FE7702",
+  orange: "#FD7702",
   orangeLight: "#ff9043",
   orangeDark: "#d65f0f",
 
@@ -120,7 +120,10 @@ export function LearnMoreButton({
   inView = false,
 }) {
   const [hov, setHov] = useState(false);
+  const [mounted, setMounted] = useState(false);
+useEffect(() => setMounted(true), []);
   const rotateDir = mirrored ? "3deg" : "-3deg";
+  if (!mounted) return <div style={{ height: "55px", width: "200px", background: "#FD7702", borderRadius: "8px" }} />;
   return (
     <button
       className={`inline-flex items-center gap-2 sm:gap-1 px-2 h-[50px] lg:h-[55px] xl:h-[70px] lg:gap-3 rounded-[8px] pl-2.5 hover:${rotateDir}`}
@@ -284,7 +287,7 @@ function BookCardInner({
             width: P.stapleW, // 4.44%
             height: P.stapleH, // 25.71%
             transform: "translateZ(5px)",
-            background: "#FE7702",
+            background: "#FD7702",
             borderRadius: "0.4%",
             boxShadow:
               "inset 0 -1px 0 rgba(255,255,255,0.3), 1px -1px 2px rgba(0,0,0,0.25), 4px 0px 4.22px 0px #0000009C, -4px 0px 4.22px 0px #0000009C, inset 0px 5px 4.6px 0px #00000080",
@@ -298,7 +301,7 @@ function BookCardInner({
             width: P.stapleW,
             height: P.stapleH,
             transform: "translateZ(5px)",
-            background: "#FE7702",
+            background: "#FD7702",
             borderRadius: "0.4%",
             boxShadow:
               "inset 0 1px 0 rgba(255,255,255,0.3), 1px 1px 2px rgba(0,0,0,0.25), 4px 0px 4.22px 0px #0000009C, -4px 0px 4.22px 0px #0000009C, inset 0px -5px 4.6px 0px #00000080",
@@ -458,7 +461,7 @@ function BookCardInner({
                     width={1000}
                     height={1000}
                     priority={priority}
-                    className={`object-cover w-full sm:h-[100%] xl:h-[250px] cursor-pointer hover:scale-[1.1] transition-all duration-300 rounded-xl border-[#FE7702] border-[4px] shadow-lg shadow-black/70`}
+                    className={`object-cover w-full sm:h-[100%] xl:h-[250px] cursor-pointer hover:scale-[1.1] transition-all duration-300 rounded-xl border-[#FD7702] border-[4px] shadow-lg shadow-black/70`}
                   />
                 </div>
                 <h2
