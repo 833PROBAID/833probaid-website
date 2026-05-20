@@ -100,7 +100,7 @@ export function BookCardDefs() {
 }
 
 // Clip-paths stay in percentage units — they already are ✓
-const COVER_CLIP_PATH = "polygon(0 0, 100% 0, 100% 88%, 86% 100%, 0 100%)";
+const COVER_CLIP_PATH_MIRROR = "polygon(0 0, 100% 0, 100% 100%, 12% 100%, 0 90%)";
 const COVER_SHADOW_POLYGON_POINTS = "0,0 96.5,0 100,3.5 100,88 86,100 0,100";
 const COVER_CLIP_PATH_MIRROR =
   "polygon(0 0, 100% 0, 100% 100%, 14% 100%, 0 88%)";
