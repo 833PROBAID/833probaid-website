@@ -143,6 +143,7 @@ export default function BlogCard({
               transform-origin: center center;
               -webkit-transform-origin: center center;
               outline: none;
+              will-change: transform;
             }
             .bc-card-wrapper:hover .bc-button-float {
               -webkit-animation: bcBtnFloat 2.5s ease-in-out infinite;
