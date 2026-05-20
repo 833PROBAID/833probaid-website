@@ -107,7 +107,7 @@ const BlogsPageClient = ({ initialBlogs = [], initialPagination = {} }) => {
       const result = await blogsApi.getAll({
         search: searchQuery,
         page: pageNum,
-        limit: 5,
+        limit: 2,
       });
 
       if (result.success) {
