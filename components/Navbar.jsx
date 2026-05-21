@@ -93,7 +93,7 @@ export default function Navbar() {
                   : "text-primary hover:text-secondary"
               }`}
             >
-              Homes
+              Home
             </Link>
             <Link
               href="/blogs"
