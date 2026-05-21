@@ -52,9 +52,7 @@ export default function Navbar() {
   return (
     <header
       className={`sticky top-0 z-50 transition-colors duration-300 ${
-        isScrolled
-          ? "bg-white/95 shadow-xl"
-          : "bg-white/95 shadow-lg"
+        isScrolled ? "bg-white/95 shadow-xl" : "bg-white/95 shadow-lg"
       }`}
     >
       <div className="container mx-auto px-4">
@@ -73,7 +71,7 @@ export default function Navbar() {
                 height={60}
                 sizes="(max-width: 768px) 176px, (max-width: 1280px) 208px, 240px"
                 priority
-                style={{ height: 'auto' }}
+                style={{ height: "auto" }}
                 className={`transition-[width] duration-300 ${
                   isScrolled
                     ? "h-auto w-32 md:w-32 lg:w-40 xl:w-44"
@@ -95,7 +93,7 @@ export default function Navbar() {
                   : "text-primary hover:text-secondary"
               }`}
             >
-              Home
+              Homes
             </Link>
             <Link
               href="/blogs"
