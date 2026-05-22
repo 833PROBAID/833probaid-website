@@ -1,6 +1,6 @@
 export default function ContactCard() {
   return (
-    <div className="flex w-full justify-center">
+    <div className="flex w-full justify-center" style={{ contentVisibility: "auto" }}>
       <div className="w-full" style={{ position: "relative", aspectRatio: "566 / 586" }}>
         <svg width="100%" height="100%" viewBox="0 0 566 586" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none" }}>
           <g filter="url(#f0)">
