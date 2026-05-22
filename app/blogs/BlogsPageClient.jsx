@@ -19,6 +19,7 @@ const BlogsPageClient = ({ initialBlogs = [], initialPagination = {} }) => {
   const initialPage = initialPagination?.page || 1;
   const didSkipInitialFetch = useRef(false);
   const responseCacheRef = useRef(new Map());
+  const requestIdRef = useRef(0);
 
   const [blogs, setBlogs] = useState(
     Array.isArray(initialBlogs) ? initialBlogs : [],
@@ -94,11 +95,14 @@ const BlogsPageClient = ({ initialBlogs = [], initialPagination = {} }) => {
     const cached = responseCacheRef.current.get(cacheKey);
 
     if (cached) {
+      requestIdRef.current += 1;
       setError(null);
       applyBlogsPayload(cached, pageNum);
       setLoading(false);
       return;
     }
+
+    const requestId = ++requestIdRef.current;
 
     try {
       setLoading(true);
@@ -109,6 +113,8 @@ const BlogsPageClient = ({ initialBlogs = [], initialPagination = {} }) => {
         page: pageNum,
         limit: 5,
       });
+
+      if (requestId !== requestIdRef.current) return;
 
       if (result.success) {
         const newBlogs = result.blogs || [];
@@ -126,10 +132,13 @@ const BlogsPageClient = ({ initialBlogs = [], initialPagination = {} }) => {
         setError(result.error || "Failed to fetch blogs");
       }
     } catch (err) {
+      if (requestId !== requestIdRef.current) return;
       console.error("Error fetching blogs:", err);
       setError("Failed to load blogs. Please try again.");
     } finally {
-      setLoading(false);
+      if (requestId === requestIdRef.current) {
+        setLoading(false);
+      }
     }
   };
 
