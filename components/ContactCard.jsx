@@ -1,23 +1,12 @@
-```tsx
+```tsx id="q4p7ga"
 export default function ContactCard() {
   return (
     <div className="flex w-full justify-center p-4">
       <div
-        className="
-          relative
-          w-full
-          max-w-[566px]
-          min-h-[586px]
-          rounded-[22px]
-          bg-[#0097A7]
-          overflow-hidden
-        "
+        className="relative w-full max-w-[566px] min-h-[586px] rounded-[22px] bg-[#0097A7] overflow-hidden"
         style={{
-          boxShadow: `
-            0 10px 30px rgba(0,0,0,0.35),
-            inset 6px -6px 10px rgba(0,0,0,0.25),
-            inset -4px 4px 8px rgba(255,255,255,0.15)
-          `,
+          boxShadow:
+            "0 10px 30px rgba(0,0,0,0.35), inset 6px -6px 10px rgba(0,0,0,0.25), inset -4px 4px 8px rgba(255,255,255,0.15)",
         }}
       >
         {/* OUTER FRAME */}
@@ -25,64 +14,38 @@ export default function ContactCard() {
         <div
           className="absolute inset-[30px] bg-[#0097A7]"
           style={{
-            boxShadow: `
-              0 8px 20px rgba(0,0,0,0.45),
-              inset 0 0 12px rgba(0,0,0,0.25)
-            `,
+            boxShadow:
+              "0 8px 20px rgba(0,0,0,0.45), inset 0 0 12px rgba(0,0,0,0.25)",
           }}
         />
 
-        {/* ORANGE SIDE SHAPES */}
+        {/* LEFT ORANGE */}
 
         <div
           className="absolute left-[30px] top-[30px] w-[90px] h-[190px] bg-[#FE7702]"
           style={{
-            clipPath:
-              "polygon(0 0, 100% 0, 100% 100%, 0 70%)",
+            clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 70%)",
           }}
         />
+
+        {/* RIGHT ORANGE */}
 
         <div
           className="absolute right-[30px] top-[30px] w-[90px] h-[190px] bg-[#FE7702]"
           style={{
-            clipPath:
-              "polygon(0 0, 100% 0, 100% 70%, 0 100%)",
+            clipPath: "polygon(0 0, 100% 0, 100% 70%, 0 100%)",
           }}
         />
 
         {/* MAIN WHITE CARD */}
 
         <div
-          className="
-            absolute
-            left-[62px]
-            right-[62px]
-            top-[40px]
-            bottom-[40px]
-            bg-white
-            px-8
-            py-14
-            flex
-            flex-col
-            items-center
-          "
+          className="absolute left-[62px] right-[62px] top-[40px] bottom-[40px] bg-white px-8 py-14 flex flex-col items-center"
           style={{
-            clipPath: `
-              polygon(
-                14% 0%,
-                86% 0%,
-                100% 14%,
-                100% 86%,
-                86% 100%,
-                14% 100%,
-                0% 86%,
-                0% 14%
-              )
-            `,
-            boxShadow: `
-              -12px 12px 22px rgba(0,0,0,0.28),
-              12px 6px 18px rgba(0,0,0,0.18)
-            `,
+            clipPath:
+              "polygon(14% 0%, 86% 0%, 100% 14%, 100% 86%, 86% 100%, 14% 100%, 0% 86%, 0% 14%)",
+            boxShadow:
+              "-12px 12px 22px rgba(0,0,0,0.28), 12px 6px 18px rgba(0,0,0,0.18)",
           }}
         >
           {/* TITLE */}
@@ -124,15 +87,7 @@ export default function ContactCard() {
                 (833) PROBAID
               </span>
 
-              <span
-                className="
-                  text-[#0097A7]
-                  font-bold
-                  text-[44px]
-                  tracking-[0.22rem]
-                  mt-2
-                "
-              >
+              <span className="text-[#0097A7] font-bold text-[44px] tracking-[0.22rem] mt-2">
                 7762243
               </span>
             </div>
