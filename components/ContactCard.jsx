@@ -1,4 +1,5 @@
-```tsx id="q4p7ga"
+"use client";
+
 export default function ContactCard() {
   return (
     <div className="flex w-full justify-center p-4">
@@ -9,8 +10,6 @@ export default function ContactCard() {
             "0 10px 30px rgba(0,0,0,0.35), inset 6px -6px 10px rgba(0,0,0,0.25), inset -4px 4px 8px rgba(255,255,255,0.15)",
         }}
       >
-        {/* OUTER FRAME */}
-
         <div
           className="absolute inset-[30px] bg-[#0097A7]"
           style={{
@@ -19,8 +18,6 @@ export default function ContactCard() {
           }}
         />
 
-        {/* LEFT ORANGE */}
-
         <div
           className="absolute left-[30px] top-[30px] w-[90px] h-[190px] bg-[#FE7702]"
           style={{
@@ -28,16 +25,12 @@ export default function ContactCard() {
           }}
         />
 
-        {/* RIGHT ORANGE */}
-
         <div
           className="absolute right-[30px] top-[30px] w-[90px] h-[190px] bg-[#FE7702]"
           style={{
             clipPath: "polygon(0 0, 100% 0, 100% 70%, 0 100%)",
           }}
         />
-
-        {/* MAIN WHITE CARD */}
 
         <div
           className="absolute left-[62px] right-[62px] top-[40px] bottom-[40px] bg-white px-8 py-14 flex flex-col items-center"
@@ -48,13 +41,9 @@ export default function ContactCard() {
               "-12px 12px 22px rgba(0,0,0,0.28), 12px 6px 18px rgba(0,0,0,0.18)",
           }}
         >
-          {/* TITLE */}
-
           <h2 className="text-[#FE7702] text-[34px] font-bold mb-10">
             Contact Us
           </h2>
-
-          {/* ADDRESS */}
 
           <div className="w-full flex items-start gap-4 mb-8">
             <img
@@ -69,8 +58,6 @@ export default function ContactCard() {
               Beverly Hills, CA 90211
             </p>
           </div>
-
-          {/* PHONE */}
 
           <a
             href="tel:8337762243"
@@ -93,8 +80,6 @@ export default function ContactCard() {
             </div>
           </a>
 
-          {/* EMAIL */}
-
           <a
             href="mailto:info@833probaid.com"
             className="w-full flex items-center gap-4 mb-8"
@@ -109,8 +94,6 @@ export default function ContactCard() {
               Info@833probaid.com
             </p>
           </a>
-
-          {/* WEBSITE */}
 
           <a
             href="https://www.833probaid.com"
@@ -131,4 +114,3 @@ export default function ContactCard() {
     </div>
   );
 }
-```
