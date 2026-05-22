@@ -223,6 +223,8 @@ function BookCardInner({
       }`}
       style={{
         containerType: "inline-size",
+        contentVisibility: "auto",
+        containIntrinsicSize: "auto 500px auto 700px",
       }}
     >
       {/* ── BOOK WRAPPER ─────────────────────────────────────────── */}

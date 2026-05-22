@@ -75,23 +75,23 @@ export function BookCardDefs() {
       <defs>
         <filter
           id="book-shadow-top"
-          x="-25%"
-          y="-25%"
-          width="150%"
-          height="150%"
+          x="-30%"
+          y="-30%"
+          width="160%"
+          height="160%"
           colorInterpolationFilters="sRGB"
         >
-          <feGaussianBlur stdDeviation="1.4" />
+          <feGaussianBlur stdDeviation="0.7" />
         </filter>
         <filter
           id="book-shadow-bottom"
-          x="-25%"
-          y="-25%"
-          width="150%"
-          height="150%"
+          x="-30%"
+          y="-30%"
+          width="160%"
+          height="160%"
           colorInterpolationFilters="sRGB"
         >
-          <feGaussianBlur stdDeviation="1.7" />
+          <feGaussianBlur stdDeviation="0.9" />
         </filter>
       </defs>
     </svg>
@@ -170,7 +170,6 @@ function BookCardInner({
   priority = false,
 }) {
   const [open, setOpen] = useState(false);
-  const [flipping, setFlipping] = useState(false);
   const [inView, setInView] = useState(false);
   const stageRef = useRef(null);
   const router = useRouter();
@@ -236,7 +235,10 @@ function BookCardInner({
       style={{
         // perspective scales with the card: 2200/450 * 100 ≈ 489vw, capped at max
         perspective: "clamp(1400px, 489vw, 2200px)",
+        WebkitPerspective: "clamp(1400px, 489vw, 2200px)",
         perspectiveOrigin: "50% 45%",
+        WebkitPerspectiveOrigin: "50% 45%",
+        isolation: "isolate",
       }}
     >
       {/* ── BOOK WRAPPER ─────────────────────────────────────────── */}
@@ -391,10 +393,11 @@ function BookCardInner({
             WebkitTransform: coverTransform,
             opacity: open ? 0 : 1,
             transition: coverTransition,
+            WebkitTransition: coverTransition,
             pointerEvents: open ? "none" : "auto",
             backfaceVisibility: "hidden",
             WebkitBackfaceVisibility: "hidden",
-            willChange: flipping ? "transform, opacity" : "auto",
+            willChange: "transform, opacity",
           }}
         >
           <div
@@ -538,14 +541,12 @@ function BookCardInner({
                   inView={inView}
                   onClick={(e) => {
                     e.stopPropagation();
-                    setFlipping(true);
                     setOpen(true);
                     if (slug) {
                       setTimeout(() => {
                         router.push(`/homebooks/${slug}`);
                       }, 1400);
                     }
-                    setTimeout(() => setFlipping(false), speed + 300);
                   }}
                 />
               </div>

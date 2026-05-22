@@ -15,9 +15,15 @@ const ReadyToGetStart = () => {
     setIsSafariBrowser(/^((?!chrome|android).)*safari/i.test(ua));
   }, []);
   return (
-    <div className="w-full">
+    <div
+      className="w-full"
+      style={{
+        contentVisibility: "auto",
+        containIntrinsicSize: "850px 700px",
+      }}
+    >
       <div
-        className="bg-secondary  hidden md:grid rounded-xl grid-cols-1 gap-1 
+        className="bg-secondary  hidden md:grid rounded-xl grid-cols-1 gap-1
       p-4 shadow-[0px_12px_20px_0px_rgba(0,0,0,0.2),0px_-12px_20px_0px_rgba(0,0,0,0.2)] justify-center
        items-center sm:gap-6 sm:pl-5  sm:pt-[24px] sm:pb-[20px] sm:pr-5
        sm:shadow-[0px_12px_20px_0px_rgba(0,0,0,0.4),0px_-12px_20px_0px_rgba(0,0,0,0.4)]
@@ -478,17 +484,17 @@ const ReadyToGetStart = () => {
                 : undefined
             }
           >
-            <g filter="url(#filter0_ddii_167_4)">
+            <g filter="url(#filter0_ddii_167_4_m)">
               <path
                 d="M17.8999 29.2998C17.8999 21.5678 24.1679 15.2998 31.8999 15.2998H1097.9C1105.63 15.2998 1111.9 21.5678 1111.9 29.2998V639.3C1111.9 647.032 1105.63 653.3 1097.9 653.3H31.8999C24.1679 653.3 17.8999 647.032 17.8999 639.3V29.2998Z"
-                fill="url(#paint0_linear_167_4)"
+                fill="url(#paint0_linear_167_4_m)"
               />
               <path
                 d="M31.8999 15.7998H1097.9C1105.36 15.7998 1111.4 21.844 1111.4 29.2998V639.3C1111.4 646.756 1105.36 652.8 1097.9 652.8H31.8999C24.4441 652.8 18.3999 646.756 18.3999 639.3V29.2998C18.3999 21.844 24.4441 15.7998 31.8999 15.7998Z"
                 stroke="#838383"
               />
             </g>
-            <g filter="url(#filter1_d_167_4)">
+            <g filter="url(#filter1_d_167_4_m)">
               <rect
                 x="67.8999"
                 y="66.2998"
@@ -498,7 +504,7 @@ const ReadyToGetStart = () => {
                 fill="white"
               />
             </g>
-            <g filter="url(#filter2_d_167_4)">
+            <g filter="url(#filter2_d_167_4_m)">
               <rect
                 x="67.8999"
                 y="66.2998"
@@ -508,13 +514,13 @@ const ReadyToGetStart = () => {
                 fill="white"
               />
             </g>
-            <g filter="url(#filter3_d_167_4)">
+            <g filter="url(#filter3_d_167_4_m)">
               <path
                 d="M17.8999 31.2998C17.8999 22.4632 25.0633 15.2998 33.8999 15.2998H174.9L94.8999 92.2998L17.8999 172.3V31.2998Z"
                 fill="#0097A7"
               />
             </g>
-            <g filter="url(#filter4_d_167_4)">
+            <g filter="url(#filter4_d_167_4_m)">
               <path
                 d="M67.8999 111.414C67.8999 84.8906 90.4301 63.9534 116.882 65.8948L122.4 66.2998L89.8999 97.2998L67.8999 120.3V111.414Z"
                 fill="#0097A7"
@@ -600,7 +606,7 @@ const ReadyToGetStart = () => {
             </g>
             <defs>
               <filter
-                id="filter0_ddii_167_4"
+                id="filter0_ddii_167_4_m"
                 x="-9.72748e-05"
                 y="-0.000195503"
                 width="1129.2"
@@ -625,7 +631,7 @@ const ReadyToGetStart = () => {
                 <feBlend
                   mode="normal"
                   in2="BackgroundImageFix"
-                  result="effect1_dropShadow_167_4"
+                  result="effect1_dropShadow_167_4_m"
                 />
                 <feColorMatrix
                   in="SourceAlpha"
@@ -642,13 +648,13 @@ const ReadyToGetStart = () => {
                 />
                 <feBlend
                   mode="normal"
-                  in2="effect1_dropShadow_167_4"
-                  result="effect2_dropShadow_167_4"
+                  in2="effect1_dropShadow_167_4_m"
+                  result="effect2_dropShadow_167_4_m"
                 />
                 <feBlend
                   mode="normal"
                   in="SourceGraphic"
-                  in2="effect2_dropShadow_167_4"
+                  in2="effect2_dropShadow_167_4_m"
                   result="shape"
                 />
                 <feColorMatrix
@@ -672,7 +678,7 @@ const ReadyToGetStart = () => {
                 <feBlend
                   mode="normal"
                   in2="shape"
-                  result="effect3_innerShadow_167_4"
+                  result="effect3_innerShadow_167_4_m"
                 />
                 <feColorMatrix
                   in="SourceAlpha"
@@ -694,12 +700,12 @@ const ReadyToGetStart = () => {
                 />
                 <feBlend
                   mode="normal"
-                  in2="effect3_innerShadow_167_4"
-                  result="effect4_innerShadow_167_4"
+                  in2="effect3_innerShadow_167_4_m"
+                  result="effect4_innerShadow_167_4_m"
                 />
               </filter>
               <filter
-                id="filter1_d_167_4"
+                id="filter1_d_167_4_m"
                 x="51.4068"
                 y="57.0678"
                 width="1031.14"
@@ -718,7 +724,7 @@ const ReadyToGetStart = () => {
                   radius="4.1492"
                   operator="dilate"
                   in="SourceAlpha"
-                  result="effect1_dropShadow_167_4"
+                  result="effect1_dropShadow_167_4_m"
                 />
                 <feOffset dx="2.0746" dy="9.33569" />
                 <feGaussianBlur stdDeviation="7.20923" />
@@ -730,17 +736,17 @@ const ReadyToGetStart = () => {
                 <feBlend
                   mode="normal"
                   in2="BackgroundImageFix"
-                  result="effect1_dropShadow_167_4"
+                  result="effect1_dropShadow_167_4_m"
                 />
                 <feBlend
                   mode="normal"
                   in="SourceGraphic"
-                  in2="effect1_dropShadow_167_4"
+                  in2="effect1_dropShadow_167_4_m"
                   result="shape"
                 />
               </filter>
               <filter
-                id="filter2_d_167_4"
+                id="filter2_d_167_4_m"
                 x="51.4814"
                 y="42.8813"
                 width="1026.84"
@@ -759,7 +765,7 @@ const ReadyToGetStart = () => {
                   radius="2"
                   operator="dilate"
                   in="SourceAlpha"
-                  result="effect1_dropShadow_167_4"
+                  result="effect1_dropShadow_167_4_m"
                 />
                 <feOffset dy="-7" />
                 <feGaussianBlur stdDeviation="7.20923" />
@@ -771,17 +777,17 @@ const ReadyToGetStart = () => {
                 <feBlend
                   mode="normal"
                   in2="BackgroundImageFix"
-                  result="effect1_dropShadow_167_4"
+                  result="effect1_dropShadow_167_4_m"
                 />
                 <feBlend
                   mode="normal"
                   in="SourceGraphic"
-                  in2="effect1_dropShadow_167_4"
+                  in2="effect1_dropShadow_167_4_m"
                   result="shape"
                 />
               </filter>
               <filter
-                id="filter3_d_167_4"
+                id="filter3_d_167_4_m"
                 x="8.4599"
                 y="12.0798"
                 width="175.88"
@@ -806,17 +812,17 @@ const ReadyToGetStart = () => {
                 <feBlend
                   mode="normal"
                   in2="BackgroundImageFix"
-                  result="effect1_dropShadow_167_4"
+                  result="effect1_dropShadow_167_4_m"
                 />
                 <feBlend
                   mode="normal"
                   in="SourceGraphic"
-                  in2="effect1_dropShadow_167_4"
+                  in2="effect1_dropShadow_167_4_m"
                   result="shape"
                 />
               </filter>
               <filter
-                id="filter4_d_167_4"
+                id="filter4_d_167_4_m"
                 x="56.4999"
                 y="57.3695"
                 width="75.3"
@@ -841,17 +847,17 @@ const ReadyToGetStart = () => {
                 <feBlend
                   mode="normal"
                   in2="BackgroundImageFix"
-                  result="effect1_dropShadow_167_4"
+                  result="effect1_dropShadow_167_4_m"
                 />
                 <feBlend
                   mode="normal"
                   in="SourceGraphic"
-                  in2="effect1_dropShadow_167_4"
+                  in2="effect1_dropShadow_167_4_m"
                   result="shape"
                 />
               </filter>
               <linearGradient
-                id="paint0_linear_167_4"
+                id="paint0_linear_167_4_m"
                 x1="27.0356"
                 y1="39.9306"
                 x2="1187.18"
