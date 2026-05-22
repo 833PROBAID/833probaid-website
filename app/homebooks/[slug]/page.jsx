@@ -27,8 +27,16 @@ const fetchHomeBook = cache(async (slug) => {
 });
 
 export async function generateStaticParams() {
-  const slugs = await getPublishedHomeBookSlugs();
-  return slugs.map((slug) => ({ slug }));
+  try {
+    const slugs = await getPublishedHomeBookSlugs();
+    return slugs.map((slug) => ({ slug }));
+  } catch (error) {
+    console.warn(
+      "generateStaticParams for /homebooks/[slug] skipped — DB unavailable:",
+      error?.message,
+    );
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }) {
