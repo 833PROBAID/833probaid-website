@@ -151,19 +151,18 @@ export default async function BlogPage({ params }) {
 								__html: scopeCSS(grapesContent.css || "", ".blog-content"),
 							}}
 						/>
-						{/* FIX: Added contentVisibility="auto" — tells Safari to skip
-						    rendering content that is off-screen. This is the single
-						    biggest performance win for long articles on Safari.
-						    Also added WebkitTransform to force GPU compositing layer
-						    so article content doesn't trigger full page repaints. */}
+						{/* Article body is GPU-promoted with translateZ(0) and
+						    paint-contained so its repaints don't bubble to the page.
+						    NOTE: `content-visibility: auto` was removed here — Safari's
+						    implementation paints a blank placeholder during fast scroll
+						    instead of the real content, which read as a flicker/blink. */}
 						<div
 							className='blog-content'
 							style={{
-								contain: "layout style",
+								contain: "layout paint style",
 								isolation: "isolate",
 								position: "relative",
 								zIndex: 1,
-								contentVisibility: "auto",
 								WebkitTransform: "translateZ(0)",
 								transform: "translateZ(0)",
 							}}

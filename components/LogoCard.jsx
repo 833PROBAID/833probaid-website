@@ -2,14 +2,41 @@ import Image from "next/image";
 
 export default function LogoCard() {
   return (
-    <div className="flex w-full justify-center">
-      <div className="w-full">
+    <div
+      className="flex w-full justify-center"
+      // `transform: translateZ(0)` forces Safari to allocate a GPU layer for
+      // this card at page-load time instead of waiting until scroll-into-view
+      // (Safari, unlike Chrome, does not aggressively pre-rasterize off-screen
+      // content during idle time). Once the layer is rasterised it composites
+      // for free on scroll. `contain: paint` + `isolation` keep this card's
+      // repaints from invalidating siblings or the marquee.
+      style={{
+        contain: "layout paint style",
+        isolation: "isolate",
+        transform: "translateZ(0)",
+        WebkitTransform: "translateZ(0)",
+      }}
+    >
+      <div
+        className="w-full relative"
+        // The card now uses an aspect-ratio container: the SVG paints the
+        // visual frame and the HTML content sits ABOVE it via absolute
+        // positioning. The old structure put the HTML inside <foreignObject>,
+        // which Safari paints in a separate pass after the SVG body — that
+        // two-pass paint is what you saw as "first some part then full." With
+        // the HTML lifted out, Safari paints the whole card in one go through
+        // its regular HTML pipeline.
+        style={{ aspectRatio: "566 / 586" }}
+      >
         <svg
           width="100%"
           height="100%"
           viewBox="0 0 566 586"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
+          preserveAspectRatio="xMidYMid meet"
+          className="absolute inset-0 w-full h-full pointer-events-none"
+          aria-hidden="true"
         >
           <g filter="url(#filter0_dii_273_13)">
             <rect
@@ -68,30 +95,6 @@ export default function LogoCard() {
             d="M45.6001 70.5996V127.6L131.6 42.5996H73.7638L45.6001 70.5996Z"
             fill="#0097A7"
           />
-          <foreignObject
-            x="85"
-            y="82"
-            width="370"
-            height="320"
-            className="overflow-visible"
-          >
-            <div className="flex flex-col items-center justify-center pt-16 h-full ">
-              <Image
-                src="/images/footer-logo.png"
-                alt="Footer logo"
-                width={1000}
-                height={1000}
-                className="h-[111px] w-full object-contain px-6 sm:-mt-16 -mt-10"
-              />
-
-              <p className="text-left font-bold  mt-6 font-montserrat text-[#2A2A2A] pl-8 text-[19px] leading-tight">
-                Expert Probate, Conservatorship, and Trust Real Estate Services
-                handled personally from start to finish. Trusted by attorneys.
-                Relied on by families. Built to keep the process moving, even
-                when things get complicated
-              </p>
-            </div>
-          </foreignObject>
           <defs>
             <filter
               id="filter0_dii_273_13"
@@ -116,7 +119,7 @@ export default function LogoCard() {
                 result="effect1_dropShadow_273_13"
               />
               <feOffset dy="1.2" />
-              <feGaussianBlur stdDeviation="6.36" />
+              <feGaussianBlur stdDeviation="3.18" />
               <feComposite in2="hardAlpha" operator="out" />
               <feColorMatrix
                 type="matrix"
@@ -197,7 +200,7 @@ export default function LogoCard() {
                 result="hardAlpha"
               />
               <feOffset dx="-3.6" dy="5.4" />
-              <feGaussianBlur stdDeviation="10.8" />
+              <feGaussianBlur stdDeviation="5.40" />
               <feComposite in2="hardAlpha" operator="out" />
               <feColorMatrix
                 type="matrix"
@@ -232,7 +235,7 @@ export default function LogoCard() {
                 result="hardAlpha"
               />
               <feOffset dx="3.6" dy="-2.4" />
-              <feGaussianBlur stdDeviation="10.8" />
+              <feGaussianBlur stdDeviation="5.40" />
               <feComposite in2="hardAlpha" operator="out" />
               <feColorMatrix
                 type="matrix"
@@ -285,7 +288,7 @@ export default function LogoCard() {
                 result="hardAlpha"
               />
               <feOffset dx="1.22" dy="15.2" />
-              <feGaussianBlur stdDeviation="7.83" />
+              <feGaussianBlur stdDeviation="3.92" />
               <feComposite in2="hardAlpha" operator="out" />
               <feColorMatrix
                 type="matrix"
@@ -303,7 +306,7 @@ export default function LogoCard() {
                 result="hardAlpha"
               />
               <feOffset dx="14.4" />
-              <feGaussianBlur stdDeviation="7.02" />
+              <feGaussianBlur stdDeviation="3.51" />
               <feComposite in2="hardAlpha" operator="out" />
               <feColorMatrix
                 type="matrix"
@@ -344,7 +347,7 @@ export default function LogoCard() {
                 result="hardAlpha"
               />
               <feOffset dy="4.9" />
-              <feGaussianBlur stdDeviation="11.69" />
+              <feGaussianBlur stdDeviation="5.84" />
               <feComposite
                 in2="hardAlpha"
                 operator="arithmetic"
@@ -395,6 +398,35 @@ export default function LogoCard() {
             </linearGradient>
           </defs>
         </svg>
+        {/* HTML overlay — lifted out of <foreignObject> so Safari paints it
+            in a single HTML pass instead of waiting for the SVG body. Position
+            mirrors the old foreignObject (x=85 y=82 w=370 h=320 within a
+            566×586 viewBox). */}
+        <div
+          className="absolute"
+          style={{
+            left: "15.02%",
+            top: "13.99%",
+            width: "65.37%",
+            height: "54.61%",
+          }}
+        >
+          <div className="flex flex-col items-center justify-center pt-16 h-full">
+            <Image
+              src="/images/footer-logo.png"
+              alt="Footer logo"
+              width={1000}
+              height={1000}
+              className="h-[111px] w-full object-contain px-6 sm:-mt-16 -mt-10"
+            />
+            <p className="text-left font-bold mt-6 font-montserrat text-[#2A2A2A] pl-8 text-[19px] leading-tight">
+              Expert Probate, Conservatorship, and Trust Real Estate Services
+              handled personally from start to finish. Trusted by attorneys.
+              Relied on by families. Built to keep the process moving, even
+              when things get complicated
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

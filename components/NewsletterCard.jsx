@@ -43,14 +43,32 @@ export default function NewsletterCard() {
 
   return (
     <>
-      <div className="flex w-full justify-center">
-        <div className="w-full">
+      <div
+        className="flex w-full justify-center"
+        // See LogoCard — `translateZ(0)` forces Safari to pre-rasterize this
+        // card into a GPU layer at page-load time so it composites instantly
+        // when the user scrolls to the footer (no synchronous filter paint).
+        style={{
+          contain: "layout paint style",
+          isolation: "isolate",
+          transform: "translateZ(0)",
+          WebkitTransform: "translateZ(0)",
+        }}
+      >
+        <div
+          className="w-full relative"
+          // See LogoCard — HTML overlay lifted out of <foreignObject>.
+          style={{ aspectRatio: "558 / 576" }}
+        >
           <svg
             width="100%"
             height="100%"
             viewBox="0 0 558 576"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
+            preserveAspectRatio="xMidYMid meet"
+            className="absolute inset-0 w-full h-full pointer-events-none"
+            aria-hidden="true"
           >
             <g filter="url(#filter0_dii_273_11)">
               <path
@@ -97,111 +115,8 @@ export default function NewsletterCard() {
               d="M515.6 64.5996V121.6L429.6 36.5996H487.436L515.6 64.5996Z"
               fill="#0097A7"
             />
-            <foreignObject
-              x="60"
-              y="80"
-              width="450"
-              height="370"
-              className="overflow-visible"
-            >
-              <div className="flex flex-col items-center justify-center w-full">
-                <div className="flex flex-col items-center justify-center pt-10">
-                  <h2 className="text-[#0097A7] text-center text-[30px] font-bold  font-montserrat mb-6  pl-6">
-                    Join Our Newsletter
-                  </h2>
-                  <div className="flex flex-col gap-3 pr-6">
-                    <div className="pl-10">
-                      <p className="font-bold text-[19px]">
-                        Stay up to date with the latest news and updates from{" "}
-                        <b className="text-primary">
-                          833PROBAID
-                          <span
-                            style={{
-                              verticalAlign: "super",
-                              fontSize: "0.9em",
-                              lineHeight: "0",
-                            }}
-                          >
-                            ®
-                          </span>
-                          .
-                        </b>
-                      </p>
-                      <p className="font-bold text-[19px] mt-4 ">
-                        Subscribe to our newsletter.
-                      </p>
-                    </div>
-                    <form onSubmit={handleOpen} className="pl-5">
-                      <div className="border-secondary mx-auto mt-4 mb-5 w-[90%] border-b-4">
-                        <input
-                          type="email"
-                          placeholder="Enter your E-mail"
-                          value={newsletterEmail}
-                          onChange={(event) => {
-                            setNewsletterEmail(event.target.value);
-                            if (subscriptionNotice) setSubscriptionNotice("");
-                          }}
-                          className="placeholder-secondary bg-transparent py-2.5 text-[20px] font-semibold outline-none placeholder:font-extrabold"
-                        />
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </foreignObject>
-            <style>{`
-							.footer-btn-float {
-								animation: footerBtnFloat 2.5s ease-in-out infinite;
-								transform-box: fill-box;
-								transform-origin: center center;
-								cursor: pointer;
-							}
-							.footer-btn-float:focus,
-							.footer-btn-float:focus-visible {
-								outline: none;
-							}
-							.footer-subscribe-btn {
-								transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-								transform-box: fill-box;
-								transform-origin: center center;
-							}
-							.footer-btn-float:hover .footer-subscribe-btn {
-								transform: rotate(-2deg) scale(1.08);
-							}
-							@keyframes footerBtnFloat {
-								0%, 100% { transform: translateY(0px); }
-								50% { transform: translateY(-8px); }
-							}
-						`}</style>
-            <g
-              className="footer-btn-float"
-              onClick={(event) => {
-                if (isOpen) return;
-                handleOpen(event);
-              }}
-              onKeyDown={(event) => {
-                if (isOpen) return;
-                if (event.key === "Enter" || event.key === " ") {
-                  handleOpen(event);
-                }
-              }}
-              role="button"
-              tabIndex={isOpen ? -1 : 0}
-              aria-label="Subscribe"
-            >
-              <image
-                href="/svgs/subscribe.svg"
-                x="183"
-                y="395"
-                width="200"
-                height="67"
-                className="footer-subscribe-btn"
-                style={{
-                  width: "200px !important",
-                  height: "75px !important",
-                }}
-              />
-            </g>
+            {/* foreignObject removed — content now lives in the HTML overlay
+                outside this SVG so Safari paints in one pass. */}
             <defs>
               <filter
                 id="filter0_dii_273_11"
@@ -220,7 +135,7 @@ export default function NewsletterCard() {
                   result="hardAlpha"
                 />
                 <feOffset dy="1.2" />
-                <feGaussianBlur stdDeviation="6.36" />
+                <feGaussianBlur stdDeviation="3.18" />
                 <feComposite in2="hardAlpha" operator="out" />
                 <feColorMatrix
                   type="matrix"
@@ -301,7 +216,7 @@ export default function NewsletterCard() {
                   result="hardAlpha"
                 />
                 <feOffset dx="3.6" dy="8.4" />
-                <feGaussianBlur stdDeviation="10.98" />
+                <feGaussianBlur stdDeviation="5.49" />
                 <feComposite in2="hardAlpha" operator="out" />
                 <feColorMatrix
                   type="matrix"
@@ -336,7 +251,7 @@ export default function NewsletterCard() {
                   result="hardAlpha"
                 />
                 <feOffset dx="-6" dy="-4.8" />
-                <feGaussianBlur stdDeviation="10.98" />
+                <feGaussianBlur stdDeviation="5.49" />
                 <feComposite in2="hardAlpha" operator="out" />
                 <feColorMatrix
                   type="matrix"
@@ -371,7 +286,7 @@ export default function NewsletterCard() {
                   result="hardAlpha"
                 />
                 <feOffset dx="-1.22" dy="16.6" />
-                <feGaussianBlur stdDeviation="7.83" />
+                <feGaussianBlur stdDeviation="3.92" />
                 <feComposite in2="hardAlpha" operator="out" />
                 <feColorMatrix
                   type="matrix"
@@ -389,7 +304,7 @@ export default function NewsletterCard() {
                   result="hardAlpha"
                 />
                 <feOffset dx="-14.4" dy="-0.2" />
-                <feGaussianBlur stdDeviation="7.02" />
+                <feGaussianBlur stdDeviation="3.51" />
                 <feComposite in2="hardAlpha" operator="out" />
                 <feColorMatrix
                   type="matrix"
@@ -430,7 +345,7 @@ export default function NewsletterCard() {
                   result="hardAlpha"
                 />
                 <feOffset dy="4.98" />
-                <feGaussianBlur stdDeviation="11.88" />
+                <feGaussianBlur stdDeviation="5.94" />
                 <feComposite
                   in2="hardAlpha"
                   operator="arithmetic"
@@ -481,6 +396,110 @@ export default function NewsletterCard() {
               </linearGradient>
             </defs>
           </svg>
+          {/* HTML overlay — lifted out of <foreignObject>. The subscribe
+              button is now a real <button> instead of an SVG <g>, so the
+              float animation is a plain CSS keyframe (no transform-box). */}
+          <style>{`
+            .nl-btn-float {
+              animation: nlBtnFloat 2.5s ease-in-out infinite;
+              transform-origin: center center;
+            }
+            .nl-btn-float:focus,
+            .nl-btn-float:focus-visible { outline: none; }
+            .nl-subscribe-img {
+              transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+              transform-origin: center center;
+              display: block;
+              width: 100%;
+              height: 100%;
+              object-fit: contain;
+            }
+            .nl-btn-float:hover .nl-subscribe-img {
+              transform: rotate(-2deg) scale(1.08);
+            }
+            @keyframes nlBtnFloat {
+              0%, 100% { transform: translateY(0px); }
+              50% { transform: translateY(-8px); }
+            }
+          `}</style>
+          <div
+            className="absolute"
+            style={{
+              left: "10.75%",
+              top: "13.89%",
+              width: "80.65%",
+              height: "64.24%",
+            }}
+          >
+            <div className="flex flex-col items-center justify-center w-full">
+              <div className="flex flex-col items-center justify-center pt-10">
+                <h2 className="text-[#0097A7] text-center text-[30px] font-bold font-montserrat mb-6 pl-6">
+                  Join Our Newsletter
+                </h2>
+                <div className="flex flex-col gap-3 pr-6">
+                  <div className="pl-10">
+                    <p className="font-bold text-[19px]">
+                      Stay up to date with the latest news and updates from{" "}
+                      <b className="text-primary">
+                        833PROBAID
+                        <span
+                          style={{
+                            verticalAlign: "super",
+                            fontSize: "0.9em",
+                            lineHeight: "0",
+                          }}
+                        >
+                          ®
+                        </span>
+                        .
+                      </b>
+                    </p>
+                    <p className="font-bold text-[19px] mt-4">
+                      Subscribe to our newsletter.
+                    </p>
+                  </div>
+                  <form onSubmit={handleOpen} className="pl-5">
+                    <div className="border-secondary mx-auto mt-4 mb-5 w-[90%] border-b-4">
+                      <input
+                        type="email"
+                        placeholder="Enter your E-mail"
+                        value={newsletterEmail}
+                        onChange={(event) => {
+                          setNewsletterEmail(event.target.value);
+                          if (subscriptionNotice) setSubscriptionNotice("");
+                        }}
+                        className="placeholder-secondary bg-transparent py-2.5 text-[20px] font-semibold outline-none placeholder:font-extrabold"
+                      />
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* Subscribe button — was an SVG <g> with <image>, now a real
+              <button> with <img>. Positioned to match the previous SVG
+              coordinates (x=183 y=395 w=200 h=67 in 558×576). */}
+          <button
+            type="button"
+            className="nl-btn-float absolute cursor-pointer bg-transparent border-0 p-0"
+            style={{
+              left: "32.80%",
+              top: "68.58%",
+              width: "35.84%",
+              height: "13.02%",
+            }}
+            onClick={(event) => {
+              if (isOpen) return;
+              handleOpen(event);
+            }}
+            aria-label="Subscribe"
+          >
+            <img
+              src="/svgs/subscribe.svg"
+              alt="Subscribe"
+              className="nl-subscribe-img"
+            />
+          </button>
         </div>
       </div>
 

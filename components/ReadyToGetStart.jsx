@@ -18,8 +18,11 @@ const ReadyToGetStart = () => {
     <div
       className="w-full"
       style={{
-        contentVisibility: "auto",
-        containIntrinsicSize: "850px 700px",
+        // `content-visibility: auto` causes blank-placeholder flicker on
+        // Safari/Retina during fast scroll. `contain: paint` gives us paint
+        // isolation without the lazy-rendering side effect.
+        contain: "layout paint style",
+        isolation: "isolate",
       }}
     >
       <div
@@ -31,7 +34,12 @@ const ReadyToGetStart = () => {
         lg:shadow-[0px_12px_20px_0px_rgba(0,0,0,0.75),0px_-12px_20px_0px_rgba(0,0,0,0.75)]
          xl:shadow-[0px_12px_20px_0px_rgba(0,0,0,0.9),0px_-12px_20px_0px_rgba(0,0,0,0.9)] -mx-3"
       >
-        <div className="relative h-[350px] sm:h-[450px] md:h-full w-full flex md:col-span-4 ml-2">
+        <div
+          className="relative h-[350px] sm:h-[450px] md:h-full w-full flex md:col-span-4 ml-2"
+          // Become a query container so the HTML overlay's font sizes (cqw)
+          // scale with the SVG card just like the old <foreignObject> did.
+          style={{ containerType: "inline-size" }}
+        >
           {/* <div className='relative h-[290px] sm:h-[370px] w-full md:h-[300px] lg:h-[412px] xl:h-[520px] 2xl:h-[630px] md:col-span-4 '>
 					<svg
 						className='absolute inset-0 h-full w-full' */}
@@ -94,102 +102,10 @@ const ReadyToGetStart = () => {
                 fill="#0097A7"
               />
             </g>
-            <foreignObject x="90" y="60" width="930" height="460">
-              <div
-                xmlns="http://www.w3.org/1999/xhtml"
-                className="flex h-full flex-col items-center justify-start px-3 font-montserrat font-semibold pt-10"
-              >
-                {/* <h2
-                  className={`font-anton text-center font-normal ${headingSizeClass}`}
-                  style={{ color: "#EF6C00" }}
-                >
-                  <AnimatedText
-                    text="COMMAND THE OUTCOME : CALL (833) PROBAID"
-                    animate={true}
-                  />
-                </h2>
-                <h2
-                  className={`font-anton text-center font-normal ${subHeadingSizeClass}`}
-                  style={{ color: "#0097A7" }}
-                >
-                  <AnimatedText
-                    text="Stop Guessing. Start Executing."
-                    animate={true}
-                  />
-                </h2> */}
-                <h2
-                  className={`font-anton text-center font-normal  text-5xl mb-2`}
-                  style={{ color: "#EF6C00" }}
-                >
-                  COMMAND THE OUTCOME : CALL (833) PROBAID
-                </h2>
-                <h2
-                  className={`font-anton text-center font-normal  text-5xl`}
-                  style={{ color: "#0097A7" }}
-                >
-                  Stop Guessing. Start Executing.
-                </h2>
-                <p
-                  className={`my-4 text-center text-[26px] leading-[1.2] text-[#2A2A2A]`}
-                >
-                  <AnimatedText text="Court-supervised real estate requires a high standard of precision, compliance, and specialized expertise. Stop navigating probate, conservatorship, or trust property sales through uncertainty." />
-                  <br />
-                  Call{" "}
-                  <span style={{ color: "#0097A7" }} className="font-semibold">
-                    <AnimatedText text="(833) PROBAID — " />
-                  </span>{" "}
-                  <spam style={{ color: "#FE7702" }} className="font-semibold">
-                    <AnimatedText text="(833) 776-2243 — NOW " />
-                  </spam>{" "}
-                  <AnimatedText text="or" />{" "}
-                  <AnimatedText text="fill out the " />
-                  <Link
-                    href="/homebooks/833probaid-referral-intake"
-                    style={{
-                      color: "#0097A7",
-                      textDecoration: "underline",
-                    }}
-                  >
-                    <span>
-                      <AnimatedText text="FORM" />
-                    </span>
-                  </Link>{" "}
-                  <AnimatedText text=" for a Strategic Consultation. We eliminate the red tape, protect the estate’s equity, and manage the transaction to a clean, court-approved closing." />
-                </p>
-              </div>
-            </foreignObject>
-            <g className="rtgs-btn1-float">
-              <image
-                href="/btn1.svg"
-                xlinkHref="/btn1.svg"
-                x="250"
-                y="467"
-                width="350"
-                height="100"
-                preserveAspectRatio="xMidYMid meet"
-                className="rtgs-btn1 "
-                style={{ cursor: "pointer" }}
-                onClick={() => {
-                  router.push("/homebooks/contact-us");
-                }}
-              />
-            </g>
-            <g className="rtgs-btn2-float">
-              <image
-                href="/btn2.svg"
-                xlinkHref="/btn2.svg"
-                x="580"
-                y="467"
-                width="350"
-                height="100"
-                preserveAspectRatio="xMidYMid meet"
-                className="rtgs-btn2"
-                style={{ cursor: "pointer" }}
-                onClick={() => {
-                  router.push("/homebooks/833probaid-referral-intake");
-                }}
-              />
-            </g>
+            {/* foreignObject + button <g>s removed — content now lives in
+                the HTML overlay outside this SVG so Safari paints in one
+                pass. The previous SVG-then-foreignObject sequence on Safari
+                caused the visible "first frame, then content" effect. */}
             <defs>
               <filter
                 id="filter0_ddii_167_4"
@@ -456,6 +372,113 @@ const ReadyToGetStart = () => {
               </linearGradient>
             </defs>
           </svg>
+          {/* HTML overlay — replaces the SVG <foreignObject> + button <g>s.
+              Percentages mirror the previous SVG coordinates (viewBox 1130×674):
+              foreignObject x=90 y=60 w=930 h=460 → 7.96% / 8.90% / 82.30% / 68.25%.
+              Buttons x=250,580 y=467 w=350 h=100 → 22.12%,51.33% / 69.29% / 30.97% / 14.84%. */}
+          <div
+            className="absolute pointer-events-none"
+            style={{
+              left: "7.96%",
+              top: "8.90%",
+              width: "82.30%",
+              height: "68.25%",
+            }}
+          >
+            {/*
+              Font sizes use cqw (% of the container's inline size) so they
+              scale with the SVG card exactly like the old foreignObject's
+              viewBox-units did. 1cqw of a 1130-wide viewBox = 11.3 viewBox
+              units, so e.g. font-size 48 → 48/1130*100 ≈ 4.25cqw.
+              clamp() floors at a readable mobile minimum.
+            */}
+            <div className="pointer-events-auto flex h-full flex-col items-center justify-start px-3 font-montserrat font-semibold pt-[3.5cqw]">
+              <h2
+                className="font-anton text-center font-normal mb-2"
+                style={{
+                  color: "#EF6C00",
+                  fontSize: "clamp(18px, 4.25cqw, 48px)",
+                  lineHeight: 1.1,
+                }}
+              >
+                COMMAND THE OUTCOME : CALL (833) PROBAID
+              </h2>
+              <h2
+                className="font-anton text-center font-normal"
+                style={{
+                  color: "#0097A7",
+                  fontSize: "clamp(18px, 4.25cqw, 48px)",
+                  lineHeight: 1.1,
+                }}
+              >
+                Stop Guessing. Start Executing.
+              </h2>
+              <p
+                className="my-[1.4cqw] text-center text-[#2A2A2A]"
+                style={{
+                  fontSize: "clamp(10px, 2.3cqw, 26px)",
+                  lineHeight: 1.2,
+                }}
+              >
+                <AnimatedText text="Court-supervised real estate requires a high standard of precision, compliance, and specialized expertise. Stop navigating probate, conservatorship, or trust property sales through uncertainty." />
+                <br />
+                Call{" "}
+                <span style={{ color: "#0097A7" }} className="font-semibold">
+                  <AnimatedText text="(833) PROBAID — " />
+                </span>{" "}
+                <span style={{ color: "#FE7702" }} className="font-semibold">
+                  <AnimatedText text="(833) 776-2243 — NOW " />
+                </span>{" "}
+                <AnimatedText text="or" />{" "}
+                <AnimatedText text="fill out the " />
+                <Link
+                  href="/homebooks/833probaid-referral-intake"
+                  style={{ color: "#0097A7", textDecoration: "underline" }}
+                >
+                  <span>
+                    <AnimatedText text="FORM" />
+                  </span>
+                </Link>{" "}
+                <AnimatedText text=" for a Strategic Consultation. We eliminate the red tape, protect the estate’s equity, and manage the transaction to a clean, court-approved closing." />
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            className="rtgs-btn1-float absolute cursor-pointer bg-transparent border-0 p-0"
+            style={{
+              left: "22.12%",
+              top: "69.29%",
+              width: "30.97%",
+              height: "14.84%",
+            }}
+            onClick={() => router.push("/homebooks/contact-us")}
+            aria-label="Contact us"
+          >
+            <img
+              src="/btn1.svg"
+              alt="Contact"
+              className="rtgs-btn1 w-full h-full object-contain"
+            />
+          </button>
+          <button
+            type="button"
+            className="rtgs-btn2-float absolute cursor-pointer bg-transparent border-0 p-0"
+            style={{
+              left: "51.33%",
+              top: "69.29%",
+              width: "30.97%",
+              height: "14.84%",
+            }}
+            onClick={() => router.push("/homebooks/833probaid-referral-intake")}
+            aria-label="Referral intake"
+          >
+            <img
+              src="/btn2.svg"
+              alt="Referral intake"
+              className="rtgs-btn2 w-full h-full object-contain"
+            />
+          </button>
         </div>
         <div className="w-[97%] h-full md:col-span-2 hidden md:flex">
           <img
@@ -466,7 +489,11 @@ const ReadyToGetStart = () => {
         </div>
       </div>{" "}
       <div className="bg-secondary block md:hidden rounded-xl md:rounded-none p-4 shadow-[0px_12px_20px_0px_rgba(0,0,0,0.2),0px_-12px_20px_0px_rgba(0,0,0,0.2)] sm:shadow-[0px_12px_20px_0px_rgba(0,0,0,0.4),0px_-12px_20px_0px_rgba(0,0,0,0.4)] md:shadow-[0px_12px_20px_0px_rgba(0,0,0,0.6),0px_-12px_20px_0px_rgba(0,0,0,0.6)] lg:shadow-[0px_12px_20px_0px_rgba(0,0,0,0.75),0px_-12px_20px_0px_rgba(0,0,0,0.75)] xl:shadow-[0px_12px_20px_0px_rgba(0,0,0,0.9),0px_-12px_20px_0px_rgba(0,0,0,0.9)]">
-        <div className="relative aspect-[1130/674] md:h-full w-full flex md:col-span-4">
+        <div
+          className="relative aspect-[1130/674] md:h-full w-full flex md:col-span-4"
+          // Container query so the HTML overlay scales with the card.
+          style={{ containerType: "inline-size" }}
+        >
           <svg
             className="absolute inset-0 h-full w-full"
             viewBox="0 0 1130 674"
@@ -526,84 +553,7 @@ const ReadyToGetStart = () => {
                 fill="#0097A7"
               />
             </g>
-            <foreignObject x="90" y="60" width="930" height="460">
-              <div
-                xmlns="http://www.w3.org/1999/xhtml"
-                className="flex h-full flex-col items-center justify-center px-3 font-montserrat font-bold"
-              >
-                <h2
-                  className={`font-anton text-center font-normal  text-5xl mb-2`}
-                  style={{ color: "#EF6C00" }}
-                >
-                  COMMAND THE OUTCOME : CALL (833) PROBAID
-                </h2>
-                <h2
-                  className={`font-anton text-center font-normal  text-5xl`}
-                  style={{ color: "#0097A7" }}
-                >
-                  Stop Guessing. Start Executing.
-                </h2>
-                <p
-                  className={`my-4 text-center text-[26px] leading-[1.2] text-[#2A2A2A]`}
-                >
-                  <AnimatedText text="Court-supervised real estate requires a high standard of precision, compliance, and specialized expertise. Stop navigating probate, conservatorship, or trust property sales through uncertainty." />
-                  <br />
-                  Call{" "}
-                  <span style={{ color: "#0097A7" }} className="font-semibold">
-                    <AnimatedText text="(833) PROBAID — " />
-                  </span>{" "}
-                  <spam style={{ color: "#FE7702" }} className="font-semibold">
-                    <AnimatedText text="(833) 776-2243 — NOW " />
-                  </spam>{" "}
-                  <AnimatedText text="or" />{" "}
-                  <AnimatedText text="fill out the " />
-                  <Link
-                    href="/homebooks/833probaid-referral-intake"
-                    style={{
-                      color: "#0097A7",
-                      textDecoration: "underline",
-                    }}
-                  >
-                    <span>
-                      <AnimatedText text="FORM" />
-                    </span>
-                  </Link>{" "}
-                  <AnimatedText text=" for a Strategic Consultation. We eliminate the red tape, protect the estate’s equity, and manage the transaction to a clean, court-approved closing." />
-                </p>
-              </div>
-            </foreignObject>
-            <g className="rtgs-btn1-float">
-              <image
-                href="/btn1.svg"
-                xlinkHref="/btn1.svg"
-                x="300"
-                y="497"
-                width="250"
-                height="75"
-                preserveAspectRatio="xMidYMid meet"
-                className="rtgs-btn1"
-                style={{ cursor: "pointer" }}
-                onClick={() => {
-                  router.push("/homebooks/contact-us");
-                }}
-              />
-            </g>
-            <g className="rtgs-btn2-float">
-              <image
-                href="/btn2.svg"
-                xlinkHref="/btn2.svg"
-                x="580"
-                y="497"
-                width="250"
-                height="75"
-                preserveAspectRatio="xMidYMid meet"
-                className="rtgs-btn2"
-                style={{ cursor: "pointer" }}
-                onClick={() => {
-                  router.push("/homebooks/833probaid-referral-intake");
-                }}
-              />
-            </g>
+            {/* foreignObject + button <g>s removed — overlay below. */}
             <defs>
               <filter
                 id="filter0_ddii_167_4_m"
@@ -870,6 +820,105 @@ const ReadyToGetStart = () => {
               </linearGradient>
             </defs>
           </svg>
+          {/* Mobile HTML overlay — same coordinates as desktop foreignObject
+              (x=90 y=60 w=930 h=460 in 1130×674). Mobile buttons were at
+              x=300,580 y=497 w=250 h=75 → 26.55%,51.33% / 73.74% / 22.12% / 11.13%. */}
+          <div
+            className="absolute pointer-events-none"
+            style={{
+              left: "7.96%",
+              top: "8.90%",
+              width: "82.30%",
+              height: "68.25%",
+            }}
+          >
+            <div className="pointer-events-auto flex h-full flex-col items-center justify-center px-3 font-montserrat font-bold">
+              <h2
+                className="font-anton text-center font-normal mb-2"
+                style={{
+                  color: "#EF6C00",
+                  fontSize: "clamp(14px, 4.25cqw, 48px)",
+                  lineHeight: 1.1,
+                }}
+              >
+                COMMAND THE OUTCOME : CALL (833) PROBAID
+              </h2>
+              <h2
+                className="font-anton text-center font-normal"
+                style={{
+                  color: "#0097A7",
+                  fontSize: "clamp(14px, 4.25cqw, 48px)",
+                  lineHeight: 1.1,
+                }}
+              >
+                Stop Guessing. Start Executing.
+              </h2>
+              <p
+                className="my-[1.4cqw] text-center text-[#2A2A2A]"
+                style={{
+                  fontSize: "clamp(8px, 2.3cqw, 26px)",
+                  lineHeight: 1.2,
+                }}
+              >
+                <AnimatedText text="Court-supervised real estate requires a high standard of precision, compliance, and specialized expertise. Stop navigating probate, conservatorship, or trust property sales through uncertainty." />
+                <br />
+                Call{" "}
+                <span style={{ color: "#0097A7" }} className="font-semibold">
+                  <AnimatedText text="(833) PROBAID — " />
+                </span>{" "}
+                <span style={{ color: "#FE7702" }} className="font-semibold">
+                  <AnimatedText text="(833) 776-2243 — NOW " />
+                </span>{" "}
+                <AnimatedText text="or" />{" "}
+                <AnimatedText text="fill out the " />
+                <Link
+                  href="/homebooks/833probaid-referral-intake"
+                  style={{ color: "#0097A7", textDecoration: "underline" }}
+                >
+                  <span>
+                    <AnimatedText text="FORM" />
+                  </span>
+                </Link>{" "}
+                <AnimatedText text=" for a Strategic Consultation. We eliminate the red tape, protect the estate’s equity, and manage the transaction to a clean, court-approved closing." />
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            className="rtgs-btn1-float absolute cursor-pointer bg-transparent border-0 p-0"
+            style={{
+              left: "26.55%",
+              top: "73.74%",
+              width: "22.12%",
+              height: "11.13%",
+            }}
+            onClick={() => router.push("/homebooks/contact-us")}
+            aria-label="Contact us"
+          >
+            <img
+              src="/btn1.svg"
+              alt="Contact"
+              className="rtgs-btn1 w-full h-full object-contain"
+            />
+          </button>
+          <button
+            type="button"
+            className="rtgs-btn2-float absolute cursor-pointer bg-transparent border-0 p-0"
+            style={{
+              left: "51.33%",
+              top: "73.74%",
+              width: "22.12%",
+              height: "11.13%",
+            }}
+            onClick={() => router.push("/homebooks/833probaid-referral-intake")}
+            aria-label="Referral intake"
+          >
+            <img
+              src="/btn2.svg"
+              alt="Referral intake"
+              className="rtgs-btn2 w-full h-full object-contain"
+            />
+          </button>
         </div>
       </div>
       <div className="mt-8 md:hidden">

@@ -1,13 +1,33 @@
 export default function ContactCard() {
   return (
-    <div className="flex w-full justify-center">
-      <div className="w-full">
+    <div
+      className="flex w-full justify-center"
+      // See LogoCard — `translateZ(0)` forces Safari to pre-rasterize this
+      // card into a GPU layer at page-load time so it composites instantly
+      // when the user scrolls to the footer (no synchronous filter paint).
+      style={{
+        contain: "layout paint style",
+        isolation: "isolate",
+        transform: "translateZ(0)",
+        WebkitTransform: "translateZ(0)",
+      }}
+    >
+      <div
+        className="w-full relative"
+        // See LogoCard — HTML overlay lifted out of <foreignObject> so Safari
+        // paints in one HTML pass instead of an SVG-then-foreignObject two
+        // pass that the user saw as "first some part then full."
+        style={{ aspectRatio: "566 / 586" }}
+      >
         <svg
           width="100%"
           height="100%"
           viewBox="0 0 566 586"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
+          preserveAspectRatio="xMidYMid meet"
+          className="absolute inset-0 w-full h-full pointer-events-none"
+          aria-hidden="true"
         >
           <g filter="url(#filter0_dii_273_12)">
             <rect
@@ -59,84 +79,6 @@ export default function ContactCard() {
               fill="white"
             />
           </g>
-          <foreignObject
-            x="100"
-            y="80"
-            width="370"
-            height="320"
-            className="overflow-visible"
-          >
-            <div className="flex flex-col items-center justify-center h-full pt-20 w-full">
-              <h2 className="text-secondary text-center text-[30px] font-bold">
-                Contact Us
-              </h2>
-              <div className="flex flex-col justify-center items-start mt-4 sm:mt-6 text-[19px]">
-                <div className="mb-4 flex items-start gap-3 ">
-                  <img
-                    src="/svgs/location-pin.svg"
-                    style={{ width: "35px" }}
-                    alt="Location"
-                  />
-                  <p className="font-bold text-left">
-                    311 N. Robertson Blvd #444, <br /> Beverly Hills, CA 90211
-                  </p>
-                </div>
-                <a
-                  href="tel:8337762243"
-                  className="mb-8 flex items-center gap-3"
-                >
-                  <img
-                    src="/svgs/phone-icon.svg"
-                    style={{ width: "32px" }}
-                    alt="Phone"
-                  />
-                  <div className="flex flex-row items-start justify-start text-xl  md:text-3xl">
-                    <b className="text-secondary font-bold ">(833)&nbsp;</b>
-                    <div className="flex flex-col gap-3">
-                      <b className="text-secondary tracking-[0.1rem] font-bold ">
-                        PROBAID
-                      </b>
-                      <b
-                        className="text-primary  md:tracking-[0.28rem] tracking-[0.2rem] font-bold ml-0.5"
-                        style={{
-                          lineHeight: "2px",
-                        }}
-                      >
-                        7762243
-                      </b>
-                    </div>
-                  </div>
-                </a>
-
-                <a
-                  href="mailto:info@833probaid.com"
-                  className="sm:mb-6 mb-2 flex items-center gap-3"
-                >
-                  <img
-                    src="/svgs/uiw_mail.svg"
-                    style={{ height: "35px" }}
-                    alt="Email"
-                  />
-                  <p className="font-bold text-[19px]">Info@833probaid.com</p>
-                </a>
-
-                <a
-                  href="https://www.833probaid.com"
-                  className="flex items-center gap-3"
-                >
-                  <img
-                    className="ml-0.5"
-                    src="/svgs/globe.svg"
-                    style={{ height: "30px" }}
-                    alt="Website"
-                  />
-                  <p className="ml-0.5 font-bold text-[19px]">
-                    www.833probaid.com
-                  </p>
-                </a>
-              </div>
-            </div>
-          </foreignObject>
           <defs>
             <filter
               id="filter0_dii_273_12"
@@ -161,7 +103,7 @@ export default function ContactCard() {
                 result="effect1_dropShadow_273_12"
               />
               <feOffset dy="1.2" />
-              <feGaussianBlur stdDeviation="6.36" />
+              <feGaussianBlur stdDeviation="3.18" />
               <feComposite in2="hardAlpha" operator="out" />
               <feColorMatrix
                 type="matrix"
@@ -248,7 +190,7 @@ export default function ContactCard() {
                 result="effect1_dropShadow_273_12"
               />
               <feOffset dy="4.8" />
-              <feGaussianBlur stdDeviation="10.74" />
+              <feGaussianBlur stdDeviation="5.37" />
               <feComposite in2="hardAlpha" operator="out" />
               <feColorMatrix
                 type="matrix"
@@ -283,7 +225,7 @@ export default function ContactCard() {
                 result="hardAlpha"
               />
               <feOffset dy="-4.8" />
-              <feGaussianBlur stdDeviation="9.6" />
+              <feGaussianBlur stdDeviation="4.80" />
               <feComposite in2="hardAlpha" operator="out" />
               <feColorMatrix
                 type="matrix"
@@ -318,7 +260,7 @@ export default function ContactCard() {
                 result="hardAlpha"
               />
               <feOffset dx="-12" dy="11.8" />
-              <feGaussianBlur stdDeviation="11.02" />
+              <feGaussianBlur stdDeviation="5.51" />
               <feComposite in2="hardAlpha" operator="out" />
               <feColorMatrix
                 type="matrix"
@@ -336,7 +278,7 @@ export default function ContactCard() {
                 result="hardAlpha"
               />
               <feOffset dx="12" dy="5.8" />
-              <feGaussianBlur stdDeviation="11.016" />
+              <feGaussianBlur stdDeviation="5.51" />
               <feComposite in2="hardAlpha" operator="out" />
               <feColorMatrix
                 type="matrix"
@@ -356,6 +298,88 @@ export default function ContactCard() {
             </filter>
           </defs>
         </svg>
+        {/* HTML overlay — lifted out of <foreignObject>. Position mirrors
+            the old coordinates (x=100 y=80 w=370 h=320 within 566×586). */}
+        <div
+          className="absolute"
+          style={{
+            left: "17.67%",
+            top: "13.65%",
+            width: "65.37%",
+            height: "54.61%",
+          }}
+        >
+          <div className="flex flex-col items-center justify-center h-full pt-20 w-full">
+            <h2 className="text-secondary text-center text-[30px] font-bold">
+              Contact Us
+            </h2>
+            <div className="flex flex-col justify-center items-start mt-4 sm:mt-6 text-[19px]">
+              <div className="mb-4 flex items-start gap-3 ">
+                <img
+                  src="/svgs/location-pin.svg"
+                  style={{ width: "35px" }}
+                  alt="Location"
+                />
+                <p className="font-bold text-left">
+                  311 N. Robertson Blvd #444, <br /> Beverly Hills, CA 90211
+                </p>
+              </div>
+              <a
+                href="tel:8337762243"
+                className="mb-8 flex items-center gap-3"
+              >
+                <img
+                  src="/svgs/phone-icon.svg"
+                  style={{ width: "32px" }}
+                  alt="Phone"
+                />
+                <div className="flex flex-row items-start justify-start text-xl  md:text-3xl">
+                  <b className="text-secondary font-bold ">(833)&nbsp;</b>
+                  <div className="flex flex-col gap-3">
+                    <b className="text-secondary tracking-[0.1rem] font-bold ">
+                      PROBAID
+                    </b>
+                    <b
+                      className="text-primary  md:tracking-[0.28rem] tracking-[0.2rem] font-bold ml-0.5"
+                      style={{
+                        lineHeight: "2px",
+                      }}
+                    >
+                      7762243
+                    </b>
+                  </div>
+                </div>
+              </a>
+
+              <a
+                href="mailto:info@833probaid.com"
+                className="sm:mb-6 mb-2 flex items-center gap-3"
+              >
+                <img
+                  src="/svgs/uiw_mail.svg"
+                  style={{ height: "35px" }}
+                  alt="Email"
+                />
+                <p className="font-bold text-[19px]">Info@833probaid.com</p>
+              </a>
+
+              <a
+                href="https://www.833probaid.com"
+                className="flex items-center gap-3"
+              >
+                <img
+                  className="ml-0.5"
+                  src="/svgs/globe.svg"
+                  style={{ height: "30px" }}
+                  alt="Website"
+                />
+                <p className="ml-0.5 font-bold text-[19px]">
+                  www.833probaid.com
+                </p>
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

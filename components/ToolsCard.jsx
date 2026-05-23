@@ -31,8 +31,11 @@ export default function ToolsCard({ id, icon, title, description, href }) {
 		<div
 			className='flex w-full justify-center group tc-card-wrapper'
 			style={{
-				contentVisibility: "auto",
-				containIntrinsicSize: "300px 376px",
+				// `content-visibility: auto` causes blank-placeholder flicker on
+				// Safari/Retina during fast scroll. `contain: paint` gives us the
+				// repaint-isolation benefit without the lazy-paint downside.
+				contain: "layout paint style",
+				isolation: "isolate",
 			}}>
 			<div
 				className='w-full relative'

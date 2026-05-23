@@ -6,12 +6,12 @@ import NewsletterCard from "./NewsletterCard";
 const MARQUEE_TEXT =
   " PROBATE · TRUST · CONSERVATORSHIP · SUCCESSOR IN INTEREST ·  PROBATE · TRUST · CONSERVATORSHIP · SUCCESSOR IN INTEREST · PROBATE · TRUST · CONSERVATORSHIP · SUCCESSOR IN INTEREST ·  PROBATE · TRUST · CONSERVATORSHIP · SUCCESSOR IN INTEREST ·   ";
 export default function Footer() {
-  const [isInView, setIsInView] = useState(false);
+  const [isInView, setIsInView] = useState(true);
   const marqueeRef = useRef(null);
 
   useEffect(() => {
     const el = marqueeRef.current;
-    if (!el) return;
+    if (!el || typeof IntersectionObserver === "undefined") return;
     const observer = new IntersectionObserver(
       ([entry]) => setIsInView(entry.isIntersecting),
       { rootMargin: "-100px" },
@@ -23,7 +23,7 @@ export default function Footer() {
   return (
     <footer className="bg-primary/35 border-primary mt-8 border-y-2 md:mt-12 pt-12">
       <div
-        className="bg-secondary  py-2 mt-0.5"
+        className="bg-secondary py-2 mt-0.5"
         style={{
           boxShadow:
             "0 4px 4.6px rgba(0,0,0,0.62), 0 0 6px rgba(255,255,255,0.25), 0px 10px 12.7px 0px #000000A1, 0px -8px 12.7px 0px #000000A1",
@@ -32,12 +32,25 @@ export default function Footer() {
         <div className="overflow-hidden" ref={marqueeRef}>
           <div
             className="animate-marquee font-montserrat font-bold text-white text-[40px] lg:text-[60px] xl:text-[90px]"
-            style={{ animationPlayState: isInView ? "running" : "paused" }}
+            style={{
+              animationPlayState: isInView ? "running" : "paused",
+              transform: "translate3d(0, 0, 0)",
+            }}
+            aria-hidden="true"
           >
+            {/*
+              The marquee animation translates -50%, so the track MUST contain
+              two identical copies of the text. With a single copy + an empty
+              span (the previous markup), the second half of the -50% wrap
+              showed blank space and then snapped back to 0 — that snap was the
+              visible "blink" users reported.
+            */}
             <span className="[text-shadow:0_4px_4.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
               {MARQUEE_TEXT}
             </span>
-            <span className="ml-4 [text-shadow:0_4px_4.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]"></span>
+            <span className="[text-shadow:0_4px_4.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
+              {MARQUEE_TEXT}
+            </span>
           </div>
         </div>
       </div>
