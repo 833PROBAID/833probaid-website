@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -118,6 +118,7 @@ export function LearnMoreButton({
   label = "Learn More",
   size = "lg",
   mirrored = false,
+  inView = true,
 }) {
   const [hov, setHov] = useState(false);
   const rotateDir = mirrored ? "3deg" : "-3deg";
@@ -134,11 +135,16 @@ export function LearnMoreButton({
         boxShadow:
           "0px 2.73px 6.64px 0px #000000AD, inset 5.46px -5.46px 3.64px 0px #00000040, inset -3.64px 4.55px 3.64px 0px #FFFFFF40, -1.82px -0.91px 3.64px 0px #00000099",
         animation: hov ? "none" : "floatBounce 2s ease-in-out infinite",
+        // Pause the infinite float when the card is off-screen so each
+        // card's button doesn't permanently hold its own GPU layer.
+        animationPlayState: inView ? "running" : "paused",
         transform: hov
           ? `scale(1.08) rotate(${rotateDir})`
           : "scale(1) rotate(0deg)",
         transition: "transform 600ms cubic-bezier(0.34, 1.4, 0.64, 1)",
-        willChange: "transform",
+        // Only hint willChange during active hover. An always-on hint
+        // unconditionally promotes the button to its own compositor layer.
+        willChange: hov ? "transform" : "auto",
       }}
     >
       <span className="bc-btn-text   font-montserrat font-black sm:text-[13px] lg:text-[18px] xl:text-[23px] uppercase text-white tracking-wide [text-shadow:0_4px_4.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
@@ -173,7 +179,23 @@ function BookCardInner({
 }) {
   const [open, setOpen] = useState(false);
   const [flipping, setFlipping] = useState(false);
+  const [inView, setInView] = useState(false);
+  const stageRef = useRef(null);
   const router = useRouter();
+
+  // Pause float / hover-prep work on cards that aren't on screen. The
+  // 100 px rootMargin gives the browser a small buffer so animations are
+  // already running before the card visually enters the viewport.
+  useEffect(() => {
+    const el = stageRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting),
+      { rootMargin: "100px" },
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
 
   // ── Mirrored variants ──────────────────────────────────────────
   const clipPath = mirrored ? COVER_CLIP_PATH_MIRROR : COVER_CLIP_PATH;
@@ -215,7 +237,13 @@ function BookCardInner({
 
   return (
     // ── STAGE: perspective wrapper, fluid width, height driven by aspect-ratio ──
+    // No unconditional `translateZ(0)` / `contain: paint` here — promoting
+    // every card to its own GPU layer at idle was ~6.6 MB of compositor
+    // texture per card on Retina, and the infinite button float kept the
+    // layer "active" so Safari could never evict it. The 3D context is
+    // still gated behind `flipping` further down (see BOOK WRAPPER).
     <div
+      ref={stageRef}
       className={`relative flex items-center w-full box-border py-[4%]  ${
         mirrored
           ? "justify-center md:justify-start"
@@ -223,16 +251,7 @@ function BookCardInner({
       }`}
       style={{
         containerType: "inline-size",
-        contain: "layout paint style",
         isolation: "isolate",
-        // `translateZ(0)` forces Safari to allocate a GPU layer for this card
-        // at page-load time instead of waiting until scroll-into-view (Safari,
-        // unlike Chrome, doesn't aggressively pre-rasterize off-screen
-        // content during idle time — the lazy rasterise was the visible "data
-        // taking time to load" effect). Once rasterised the layer composites
-        // for free on scroll. Memory cost is ~5 cards × 1 layer = trivial.
-        transform: "translateZ(0)",
-        WebkitTransform: "translateZ(0)",
       }}
     >
       {/* ── BOOK WRAPPER ─────────────────────────────────────────── */}
@@ -505,15 +524,16 @@ function BookCardInner({
                   <Image
                     src={bannerImage || "/images/hero.png"}
                     alt={title}
-                    width={1000}
-                    height={1000}
-                    // First 2 cards: `priority` adds a preload + fetchpriority=high.
-                    // Remaining cards: explicit `loading="eager"` so the browser
-                    // fetches them in the background at normal priority instead of
-                    // waiting for viewport entry — that wait was the "data taking
-                    // time to load" effect when scrolling down the page.
+                    // Declared at the actual rendered ratio (banners render
+                    // into a 550-px-wide container at most). The previous
+                    // 1000×1000 declaration caused Next to generate a larger
+                    // srcset ceiling than needed and Safari to allocate a
+                    // ~4 MB decoded bitmap per card.
+                    width={800}
+                    height={500}
+                    // Only above-the-fold cards get `priority`. Below-the-fold
+                    // cards use Next's default `lazy` loading.
                     priority={priority}
-                    loading={priority ? undefined : "eager"}
                     decoding="async"
                     sizes="(max-width: 768px) 90vw, (max-width: 1280px) 45vw, 500px"
                     className={`object-cover w-full  h-full  cursor-pointer hover:scale-[1.1] transition-all duration-300  `}
@@ -569,6 +589,7 @@ function BookCardInner({
                     size="md"
                     label="Watch Video"
                     mirrored={mirrored}
+                    inView={inView}
                     onClick={(e) => {
                       e.stopPropagation();
                       onVideoClick && onVideoClick();
@@ -579,6 +600,7 @@ function BookCardInner({
                     size="md"
                     label="Read Article"
                     mirrored={mirrored}
+                    inView={inView}
                     onClick={(e) => {
                       e.stopPropagation();
                       // Enable the 3D context first (flipping=true), then on

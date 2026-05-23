@@ -148,7 +148,11 @@ function WaveBar({ active, color }) {
 
 export default function AIChatbot() {
 	const pathname = usePathname();
-	const pageContextRef = useRef("");
+	// Per-pathname cache of the scraped page text. We scrape lazily — only
+	// when the user actually sends a message — instead of cloning document.body
+	// on every route change (the clone of a content-heavy page like homepage/
+	// blogs blocked Safari's main thread for hundreds of ms).
+	const contextCacheRef = useRef({ path: null, text: "" });
 	const [open, setOpen] = useState(false);
 	const [messages, setMessages] = useState([]);
 	const [input, setInput] = useState("");
@@ -187,47 +191,6 @@ export default function AIChatbot() {
 			if (dismissed) setShowTooltip(false);
 		} catch {}
 	}, []);
-
-	// Scrape visible page text whenever the route changes
-	useEffect(() => {
-		const scrape = () => {
-			try {
-				const clone = document.body.cloneNode(true);
-				// Remove non-content elements
-				clone
-					.querySelectorAll(
-						"script,style,noscript,nav,header,footer,svg,img,button,input,textarea,select,label," +
-							"[aria-hidden='true'],[data-chatbot],[class*='chatbot'],[class*='AIChatbot']," +
-							"[class*='Navbar'],[class*='navbar'],[class*='Footer'],[class*='footer']," +
-							"[class*='sidebar'],[class*='Sidebar'],[class*='modal'],[class*='Modal']",
-					)
-					.forEach((el) => el.remove());
-
-				const raw = clone.innerText || clone.textContent || "";
-
-				// Deduplicate repeated lines (menus, repeated labels, etc.)
-				const seen = new Set();
-				const lines = raw
-					.split(/\n/)
-					.map((l) => l.trim())
-					.filter((l) => {
-						if (l.length < 3) return false; // skip blank / single chars
-						if (/^\d+$/.test(l)) return false; // skip lone numbers
-						if (seen.has(l)) return false; // skip duplicates
-						seen.add(l);
-						return true;
-					});
-
-				// Join, collapse spaces, cap to ~1500 chars (~375 tokens)
-				pageContextRef.current = lines.join(" ").replace(/\s+/g, " ").trim();
-			} catch (err) {
-				console.warn("[AIChatbot] Scrape failed:", err);
-				pageContextRef.current = "";
-			}
-		};
-		const t = setTimeout(scrape, 600);
-		return () => clearTimeout(t);
-	}, [pathname]);
 
 	useEffect(() => {
 		try {
@@ -313,6 +276,79 @@ export default function AIChatbot() {
 		setSpeaking(false);
 	}, []);
 
+	// Walk the live DOM with a TreeWalker (no clone, no DOM mutation) and
+	// collect visible text. FILTER_REJECT on a matched element also skips its
+	// subtree, so whole nav/header/footer/chatbot trees are pruned cheaply.
+	// Cached per pathname — subsequent messages on the same page are free.
+	const getPageContext = useCallback(() => {
+		if (
+			contextCacheRef.current.path === pathname &&
+			contextCacheRef.current.text
+		) {
+			return contextCacheRef.current.text;
+		}
+		try {
+			const SKIP_TAGS = new Set([
+				"SCRIPT", "STYLE", "NOSCRIPT", "NAV", "HEADER", "FOOTER",
+				"SVG", "IMG", "BUTTON", "INPUT", "TEXTAREA", "SELECT", "LABEL",
+			]);
+			const SKIP_CLASS_RE = /chatbot|navbar|footer|sidebar|modal/i;
+
+			const shouldSkip = (el) => {
+				if (SKIP_TAGS.has(el.tagName)) return true;
+				if (el.getAttribute("aria-hidden") === "true") return true;
+				if (el.hasAttribute("data-chatbot")) return true;
+				const cls = el.className;
+				if (typeof cls === "string" && cls && SKIP_CLASS_RE.test(cls))
+					return true;
+				return false;
+			};
+
+			const walker = document.createTreeWalker(
+				document.body,
+				NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT,
+				{
+					acceptNode(node) {
+						if (node.nodeType === 1) {
+							return shouldSkip(node)
+								? NodeFilter.FILTER_REJECT
+								: NodeFilter.FILTER_SKIP;
+						}
+						const t = node.nodeValue;
+						return t && t.trim().length >= 3
+							? NodeFilter.FILTER_ACCEPT
+							: NodeFilter.FILTER_REJECT;
+					},
+				},
+			);
+
+			const seen = new Set();
+			const lines = [];
+			let totalLen = 0;
+			const MAX_LEN = 1500;
+
+			let node;
+			while ((node = walker.nextNode())) {
+				const text = node.nodeValue.replace(/\s+/g, " ").trim();
+				if (text.length < 3) continue;
+				if (/^\d+$/.test(text)) continue;
+				if (seen.has(text)) continue;
+				seen.add(text);
+				lines.push(text);
+				totalLen += text.length + 1;
+				if (totalLen >= MAX_LEN) break;
+			}
+
+			const result = lines.join(" ").substring(0, MAX_LEN);
+			contextCacheRef.current = { path: pathname, text: result };
+			return result;
+		} catch (err) {
+			console.warn("[AIChatbot] Scrape failed:", err);
+			contextCacheRef.current = { path: pathname, text: "" };
+			return "";
+		}
+	}, [pathname]);
+
 	const sendMessage = useCallback(
 		async (text) => {
 			const trimmed = (text || input).trim();
@@ -325,11 +361,12 @@ export default function AIChatbot() {
 			if (textareaRef.current) textareaRef.current.style.height = "auto";
 			setLoading(true);
 			setTyping(true);
+			const pageContext = getPageContext();
 			console.log(
 				"[AIChatbot] Sending message | path:",
 				pathname,
 				"| context chars:",
-				pageContextRef.current.length,
+				pageContext.length,
 			);
 			// Minimum "thinking" time so Alex doesn't feel instant
 			const thinkStart = Date.now();
@@ -340,7 +377,7 @@ export default function AIChatbot() {
 					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify({
 						messages: newMessages,
-						pageContext: pageContextRef.current,
+						pageContext,
 						pathname,
 					}),
 				});
@@ -385,7 +422,16 @@ export default function AIChatbot() {
 				]);
 			}
 		},
-		[input, loading, messages, speakText, stopSpeaking, autoSpeak],
+		[
+			input,
+			loading,
+			messages,
+			speakText,
+			stopSpeaking,
+			autoSpeak,
+			getPageContext,
+			pathname,
+		],
 	);
 
 	const startListening = useCallback(() => {

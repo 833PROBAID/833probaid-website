@@ -320,11 +320,11 @@ const BlogsPageClient = ({ initialBlogs = [], initialPagination = {} }) => {
                   {...commonCardProps}
                   slug={blog.slug || ""}
                   speed={3000}
-                  // Only 5 cards per page — preload all of them so the banner
-                  // images are decoded and ready before the user scrolls.
-                  // (Previous `index < 2` left cards 3-5 visibly empty until
-                  // their image fetch finished.)
-                  priority={true}
+                  // Only the two above-the-fold cards get `priority`
+                  // (which adds a high-priority preload). Preloading all 5
+                  // saturated the network and forced Safari to decode 5
+                  // banners simultaneously — ~20 MB of image memory at once.
+                  priority={index < 2}
                   mirrored={index % 2 !== 0}
                   onVideoClick={() =>
                     setVideoPopup({
