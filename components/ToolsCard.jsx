@@ -276,28 +276,30 @@ export default function ToolsCard({ id, icon, title, description, href }) {
 					/>
 				</div>
 
-				{/* Title overlay */}
+				{/* Title overlay — top-aligned so 1- and 2-line titles share the
+				    same starting Y across cards. Height fits up to 2 lines. */}
 				<div
-					className='absolute flex items-center justify-center text-center'
+					className='absolute flex items-start justify-center text-center'
 					style={{
-						top: "27.57%",
+						top: "26.5%",
 						left: "15.11%",
 						width: "70.53%",
-						height: "16.10%",
+						height: "11%",
 					}}>
 					<h1 className='tc-title-text'>
 						<AnimatedText text={title} />
 					</h1>
 				</div>
 
-				{/* Description overlay */}
+				{/* Description overlay — top-aligned at a fixed Y so descriptions
+				    line up across cards regardless of title line count. */}
 				<div
-					className='absolute flex items-center justify-center text-center'
+					className='absolute flex items-start justify-center text-center'
 					style={{
-						top: "39.24%",
+						top: "39%",
 						left: "12.59%",
 						width: "74.31%",
-						height: "30.18%",
+						height: "31%",
 					}}>
 					<p className='tc-desc-text'>
 						<AnimatedText text={description} />

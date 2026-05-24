@@ -319,7 +319,7 @@ const BlogsPageClient = ({ initialBlogs = [], initialPagination = {} }) => {
                   alignIndex={index * 2 + 2}
                   {...commonCardProps}
                   slug={blog.slug || ""}
-                  speed={3000}
+                  speed={1500}
                   // Only the two above-the-fold cards get `priority`
                   // (which adds a high-priority preload). Preloading all 5
                   // saturated the network and forced Safari to decode 5

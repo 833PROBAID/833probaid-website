@@ -64,8 +64,8 @@ const D = {
   orangeDark: "#d65f0f",
   paper: "#fbf6ec",
   ink: "#1a3540",
-  flipDur: 1400,
-  fadeDur: 500,
+  flipDur: 700,
+  fadeDur: 300,
 };
 
 const P = {
@@ -186,10 +186,8 @@ function BookCardInner({
   priority = false,
 }) {
   const [open, setOpen] = useState(false);
-  // `flipping` is re-introduced (the previous removal noted "zero visual
-  // benefit", but it actually gates whether this card promotes a stack of
-  // GPU layers — see the BOOK WRAPPER block for the rationale).
-  const [flipping, setFlipping] = useState(false);
+  // [FIX-H] `flipping` state removed — was causing 2 extra rerenders per
+  // flip (on start + end) with zero visual benefit.
   const router = useRouter();
 
   // ── Mirrored variants ──────────────────────────────────────────
@@ -210,7 +208,7 @@ function BookCardInner({
     : { left: P.hingeH, right: P.openH };
   const innerPadding = mirrored ? INNER_PAD_MIRRORED : INNER_PAD_NORMAL;
   const transformOrigin = mirrored ? "right center" : "left center";
-  const flipAngle = mirrored ? "120deg" : "-120deg";
+  const flipAngle = mirrored ? "80deg" : "-80deg";
   const stapleEdge = mirrored ? { right: "7%" } : { left: "7%" };
   const spineEdge = mirrored ? { right: 0 } : { left: 0 };
 
@@ -246,26 +244,15 @@ function BookCardInner({
         isolation: "isolate", // [FIX-B2]
       }}
     >
-      {/* ── BOOK WRAPPER ──────────────────────────────────────────
-          3D context (preserve-3d / translateZ) is only enabled while the card
-          is actively flipping. Safari promotes every element with a
-          non-identity transform to its own GPU layer; with ~6 such elements
-          per card × N cards, the compositor exhausted Retina memory and
-          evicted layers during scroll — re-rasterizing them on scroll-back
-          read as blank rectangles. When idle the card is plain 2D with
-          explicit zIndex for stacking. */}
+      {/* ── BOOK WRAPPER ──────────────────────────────────────── */}
       <div
         style={{
           position: "relative",
           width: "100%",
           maxWidth: width,
           aspectRatio: `${width} / ${height}`,
-          ...(flipping
-            ? {
-                transformStyle: "preserve-3d",
-                WebkitTransformStyle: "preserve-3d", // [FIX-B]
-              }
-            : null),
+          transformStyle: "preserve-3d",
+          WebkitTransformStyle: "preserve-3d", // [FIX-B]
         }}
       >
         {/* ── BASE SHELL ── translateZ(-4px) keeps it behind cover */}
@@ -276,8 +263,9 @@ function BookCardInner({
             right: 0,
             bottom: 0,
             left: 0,
-            zIndex: 0,
             borderRadius: "1.8%",
+            transform: "translateZ(-4px)",
+            WebkitTransform: "translateZ(-4px)", // [FIX-B]
             background: `linear-gradient(135deg, ${D.tealDark}, ${D.tealDeep})`,
             boxShadow: `
               inset 0 0 0 1px #014E57,
@@ -286,12 +274,6 @@ function BookCardInner({
               5px -6px 15.1px rgba(0,0,0,0.80),
               -2px 6px 11.3px rgba(0,0,0,0.80)
             `,
-            ...(flipping
-              ? {
-                  transform: "translateZ(-4px)",
-                  WebkitTransform: "translateZ(-4px)", // [FIX-B]
-                }
-              : null),
           }}
         />
 
@@ -303,17 +285,12 @@ function BookCardInner({
             top: "1.5px",
             width: P.stapleW,
             height: P.stapleH,
-            zIndex: 3,
+            transform: "translateZ(5px)",
+            WebkitTransform: "translateZ(5px)", // [FIX-B]
             background: "#FE7702",
             borderRadius: "0.4%",
             boxShadow:
               "inset 0 -1px 0 rgba(255,255,255,0.3), 1px -1px 2px rgba(0,0,0,0.25), 4px 0px 4.22px 0px #0000009C, -4px 0px 4.22px 0px #0000009C, inset 0px 5px 4.6px 0px #00000080",
-            ...(flipping
-              ? {
-                  transform: "translateZ(5px)",
-                  WebkitTransform: "translateZ(5px)", // [FIX-B]
-                }
-              : null),
           }}
         />
         <div
@@ -323,131 +300,109 @@ function BookCardInner({
             bottom: "1.5px",
             width: P.stapleW,
             height: P.stapleH,
-            zIndex: 3,
+            transform: "translateZ(5px)",
+            WebkitTransform: "translateZ(5px)", // [FIX-B]
             background: "#FE7702",
             borderRadius: "0.4%",
             boxShadow:
               "inset 0 1px 0 rgba(255,255,255,0.3), 1px 1px 2px rgba(0,0,0,0.25), 4px 0px 4.22px 0px #0000009C, -4px 0px 4.22px 0px #0000009C, inset 0px -5px 4.6px 0px #00000080",
-            ...(flipping
-              ? {
-                  transform: "translateZ(5px)",
-                  WebkitTransform: "translateZ(5px)", // [FIX-B]
-                }
-              : null),
           }}
         />
 
-        {/* ── INNER PAGE ── translateZ(-1px) hides it behind the cover.
-            Only mounted once the user opens the card. Mounting it up-front
-            meant every closed card on the home page was paying for an extra
-            clipPath layer, an extra boxShadow, and an eagerly-decoded inner
-            image — all invisible behind the cover. Safari/Retina would then
-            drop card rasters under compositor memory pressure and re-paint
-            them on scroll, which read as the "blank rectangle" flash. */}
-        {open && (
+        {/* ── INNER PAGE ── translateZ(-1px) hides it behind the cover */}
+        <div
+          style={{
+            position: "absolute",
+            top: P.coverPadV,
+            bottom: P.coverPadV,
+            ...innerPageEdge,
+            transform: "translateZ(-1px)",
+            WebkitTransform: "translateZ(-1px)", // [FIX-B]
+            borderRadius: "3%",
+            clipPath,
+            WebkitClipPath: clipPath, // [FIX-B]
+            overflow: "hidden",
+          }}
+        >
           <div
             style={{
               position: "absolute",
-              top: P.coverPadV,
-              bottom: P.coverPadV,
-              ...innerPageEdge,
-              zIndex: 1,
-              transform: "translateZ(-1px)",
-              WebkitTransform: "translateZ(-1px)", // [FIX-B]
-              borderRadius: "3%",
-              clipPath,
-              WebkitClipPath: clipPath, // [FIX-B]
+              top: 0,
+              right: 0,
+              bottom: 0,
+              left: 0,
+              background: `linear-gradient(135deg, ${D.paper} 0%, #f5ecd9 100%)`,
+              borderRadius: "1.1%",
+              boxShadow: innerBoxShadow,
               overflow: "hidden",
             }}
           >
             <div
               style={{
-                position: "absolute",
-                top: 0,
-                right: 0,
-                bottom: 0,
-                left: 0,
-                background: `linear-gradient(135deg, ${D.paper} 0%, #f5ecd9 100%)`,
-                borderRadius: "1.1%",
-                boxShadow: innerBoxShadow,
-                overflow: "hidden",
+                padding: innerPadding,
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                gap: "clamp(8px,2vw,14px)",
+                rowGap: "clamp(8px,2vw,14px)",
+                boxSizing: "border-box",
               }}
             >
-              <div
-                style={{
-                  padding: innerPadding,
-                  height: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "clamp(8px,2vw,14px)",
-                  rowGap: "clamp(8px,2vw,14px)",
-                  boxSizing: "border-box",
-                }}
-              >
-                <div className="bg-white flex flex-col items-center justify-center py-4 text-center border-4 rounded-3xl border-l-18 border-secondary transition-transform duration-300 ease-in-out hover:scale-105 shadow-lg shadow-black/30 sm:shadow-xl sm:shadow-black/40 md:shadow-2xl md:shadow-black/50">
-                  <h1 className="font-anton text-2xl uppercase leading-tight text-primary hover:text-secondary">
-                    {title}
-                  </h1>
-                  {subtitle && (
-                    <p className="font-montserrat mt-4 text-sm font-bold uppercase text-secondary hover:text-primary">
-                      {subtitle}
-                    </p>
-                  )}
-                </div>
-
-                <div className="relative w-full bg-white overflow-hidden rounded-2xl border-4 border-secondary shadow-lg shadow-black/30 sm:shadow-xl my-6 sm:shadow-black/40 md:shadow-2xl md:shadow-black/50">
-                  <Image
-                    src={imageSrc || "/images/hero.png"}
-                    alt={imageAlt || title}
-                    width={420}
-                    height={280}
-                    loading="lazy"
-                    decoding="async"
-                    sizes="(max-width: 768px) 90vw, 420px"
-                    className="h-full w-full object-cover transition-transform duration-500 ease-in-out hover:scale-110"
-                  />
-                </div>
-
-                {description && (
-                  <div className="p-4 bg-white rounded-2xl border-4 border-secondary mt-4">
-                    <p className="text-secondary font-semibold text-sm">
-                      {description}
-                    </p>
-                  </div>
+              <div className="bg-white flex flex-col items-center justify-center py-4 text-center border-4 rounded-3xl border-l-18 border-secondary transition-transform duration-300 ease-in-out hover:scale-105 shadow-lg shadow-black/30 sm:shadow-xl sm:shadow-black/40 md:shadow-2xl md:shadow-black/50">
+                <h1 className="font-anton text-2xl uppercase leading-tight text-primary hover:text-secondary">
+                  {title}
+                </h1>
+                {subtitle && (
+                  <p className="font-montserrat mt-4 text-sm font-bold uppercase text-secondary hover:text-primary">
+                    {subtitle}
+                  </p>
                 )}
               </div>
+
+              {/* [FIX-M] <img> → <Image /> for lazy load + WebP/AVIF */}
+              <div className="relative w-full bg-white overflow-hidden rounded-2xl border-4 border-secondary shadow-lg shadow-black/30 sm:shadow-xl my-6 sm:shadow-black/40 md:shadow-2xl md:shadow-black/50">
+                <Image
+                  src={imageSrc || "/images/hero.png"}
+                  alt={imageAlt || title}
+                  width={420}
+                  height={280}
+                  priority={priority}
+                  className="h-full w-full object-cover transition-transform duration-500 ease-in-out hover:scale-110"
+                />
+              </div>
+
+              {description && (
+                <div className="p-4 bg-white rounded-2xl border-4 border-secondary mt-4">
+                  <p className="text-secondary font-semibold text-sm">
+                    {description}
+                  </p>
+                </div>
+              )}
             </div>
           </div>
-        )}
+        </div>
 
-        {/* ── COVER PAGE ─────────────────────────────────────────
-            3D / backface-visibility / willChange are only applied while the
-            card is actively flipping. See BOOK WRAPPER comment for why. */}
+        {/* ── COVER PAGE ───────────────────────────────────────── */}
         <div
           style={{
             position: "absolute",
             top: P.coverPadV,
             bottom: P.coverPadV,
             ...hingeEdge,
-            zIndex: 2,
             transformOrigin,
             WebkitTransformOrigin: transformOrigin, // [FIX-B]
+            transformStyle: "preserve-3d",
+            WebkitTransformStyle: "preserve-3d", // [FIX-B]
             borderRadius: "3%",
+            transform: coverTransform,
+            WebkitTransform: coverTransform, // [FIX-B]
             opacity: open ? 0 : 1,
             transition: coverTransition,
             WebkitTransition: coverTransition, // [FIX-B]
             pointerEvents: open ? "none" : "auto",
-            ...(flipping
-              ? {
-                  transformStyle: "preserve-3d",
-                  WebkitTransformStyle: "preserve-3d", // [FIX-B]
-                  transform: coverTransform,
-                  WebkitTransform: coverTransform, // [FIX-B]
-                  backfaceVisibility: "hidden",
-                  WebkitBackfaceVisibility: "hidden", // [FIX-B]
-                  willChange: "transform, opacity",
-                }
-              : null),
+            backfaceVisibility: "hidden",
+            WebkitBackfaceVisibility: "hidden", // [FIX-B]
+            willChange: "transform, opacity", // [FIX-H] static
           }}
         >
           {/* Cover inner — translate3d(0,0,0.02px) required for
@@ -459,58 +414,55 @@ function BookCardInner({
               right: 0,
               bottom: 0,
               left: 0,
-              ...(flipping
-                ? {
-                    transform: "translate3d(0, 0, 0.02px)",
-                    WebkitTransform: "translate3d(0, 0, 0.02px)", // [FIX-B]
-                    backfaceVisibility: "hidden",
-                    WebkitBackfaceVisibility: "hidden", // [FIX-B]
-                  }
-                : null),
+              transform: "translate3d(0, 0, 0.02px)",
+              WebkitTransform: "translate3d(0, 0, 0.02px)", // [FIX-B]
+              backfaceVisibility: "hidden",
+              WebkitBackfaceVisibility: "hidden", // [FIX-B]
             }}
           >
             {/*
               ── EDGE SHADOW SVG ─────────────────────────────────
-              Only mounted during the flip animation. The two feGaussianBlur
-              passes were rasterising on the CPU on every page paint of every
-              card — a heavy hidden cost on Safari/Retina for a shadow that
-              is only visually meaningful while the cover is mid-rotation.
+              zIndex 0 — sits BEHIND the teal cover surface (zIndex 1).
+              The polygon fills the whole cover shape. The feGaussianBlur
+              makes it soft; overflow:visible lets the blurred fringe
+              show outside the polygon boundary, creating the edge shadow.
+              Only the fringe around the teal surface is visible.
+
+              [FIX-C] stdDeviation: 1.4→0.7, 1.7→0.9 (25% original cost).
             */}
-            {flipping && (
-              <svg
-                aria-hidden="true"
-                focusable="false"
-                viewBox="0 0 100 100"
-                preserveAspectRatio="none"
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  right: 0,
-                  bottom: 0,
-                  left: 0,
-                  width: "100%",
-                  height: "100%",
-                  overflow: "visible",
-                  pointerEvents: "none",
-                  zIndex: 0,
-                }}
-              >
-                <polygon
-                  points={shadowPoints}
-                  fill="#000000"
-                  opacity="0.74"
-                  transform={shadowTopTx}
-                  filter="url(#book-shadow-top)"
-                />
-                <polygon
-                  points={shadowPoints}
-                  fill="#000000"
-                  opacity="0.64"
-                  transform={shadowBotTx}
-                  filter="url(#book-shadow-bottom)"
-                />
-              </svg>
-            )}
+            <svg
+              aria-hidden="true"
+              focusable="false"
+              viewBox="0 0 100 100"
+              preserveAspectRatio="none"
+              style={{
+                position: "absolute",
+                top: 0,
+                right: 0,
+                bottom: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                overflow: "visible",
+                pointerEvents: "none",
+                zIndex: 0,
+              }}
+            >
+              <polygon
+                points={shadowPoints}
+                fill="#000000"
+                opacity="0.74"
+                transform={shadowTopTx}
+                filter="url(#book-shadow-top)"
+              />
+              <polygon
+                points={shadowPoints}
+                fill="#000000"
+                opacity="0.64"
+                transform={shadowBotTx}
+                filter="url(#book-shadow-bottom)"
+              />
+            </svg>
 
             {/* ── COVER SURFACE ── zIndex 1, covers the shadow polygon */}
             <div
@@ -526,12 +478,8 @@ function BookCardInner({
                 clipPath,
                 WebkitClipPath: clipPath, // [FIX-B]
                 overflow: "hidden",
-                ...(flipping
-                  ? {
-                      transform: "translateZ(0.01px)",
-                      WebkitTransform: "translateZ(0.01px)", // [FIX-B]
-                    }
-                  : null),
+                transform: "translateZ(0.01px)",
+                WebkitTransform: "translateZ(0.01px)", // [FIX-B]
               }}
             >
               {/* ORANGE BAND */}
@@ -608,17 +556,10 @@ function BookCardInner({
                   mirrored={mirrored}
                   onClick={(e) => {
                     e.stopPropagation();
-                    // Enable the 3D context first (flipping=true), then on
-                    // the next frame change `open` so CSS `transition: transform`
-                    // interpolates from rotateY(0) to rotateY(flipAngle).
-                    setFlipping(true);
-                    requestAnimationFrame(() => setOpen(true));
+                    setOpen(true);
                     if (slug) {
-                      setTimeout(() => {
-                        router.push(`/homebooks/${slug}`);
-                      }, 1600);
+                      router.push(`/homebooks/${slug}`);
                     }
-                    setTimeout(() => setFlipping(false), speed + 300);
                   }}
                 />
               </div>

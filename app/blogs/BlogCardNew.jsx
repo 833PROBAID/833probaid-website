@@ -35,8 +35,8 @@ const D = {
   ink: "#1a3540",
 
   // Animation
-  flipDur: 1400,
-  fadeDur: 500,
+  flipDur: 700,
+  fadeDur: 300,
 };
 // ══════════════════════════════════════════════════════════════════
 
@@ -134,7 +134,13 @@ export function LearnMoreButton({
         cursor: "pointer",
         boxShadow:
           "0px 2.73px 6.64px 0px #000000AD, inset 5.46px -5.46px 3.64px 0px #00000040, inset -3.64px 4.55px 3.64px 0px #FFFFFF40, -1.82px -0.91px 3.64px 0px #00000099",
-        animation: hov ? "none" : "floatBounce 2s ease-in-out infinite",
+        // Use longhand properties (not the `animation` shorthand) so that
+        // setting `animationPlayState` separately doesn't conflict with the
+        // shorthand resetting play-state to its initial value.
+        animationName: hov ? "none" : "floatBounce",
+        animationDuration: "2s",
+        animationTimingFunction: "ease-in-out",
+        animationIterationCount: "infinite",
         // Pause the infinite float when the card is off-screen so each
         // card's button doesn't permanently hold its own GPU layer.
         animationPlayState: inView ? "running" : "paused",
@@ -217,7 +223,7 @@ function BookCardInner({
   const innerPadding = mirrored ? INNER_PAD_MIRRORED : INNER_PAD_NORMAL;
 
   const transformOrigin = mirrored ? "right center" : "left center";
-  const flipAngle = mirrored ? "120deg" : "-120deg";
+  const flipAngle = mirrored ? "80deg" : "-80deg";
   const stapleEdge = mirrored ? { right: "7%" } : { left: "7%" }; // 22/450
   const innerBoxShadow = mirrored
     ? "inset 0 0 0 1px rgba(0,0,0,0.07), inset 0px 6px 6px rgba(255,255,255,0.14), inset 0px -6px 10px rgba(0,0,0,0.18), inset 4px 0 10px rgba(0,0,0,0.12), inset -2px 0 8px rgba(180,160,120,0.18)"
@@ -513,7 +519,7 @@ function BookCardInner({
               }}
             >
               {/* UPPER HALF — icon + title */}
-              <div className="absolute left-0 right-0 flex flex-col items-center justify-start h-full  md:p-6 p-3 md:gap-6 gap-4 ">
+              <div className="absolute left-0 right-0 flex flex-col items-center justify-start h-full  md:p-10 p-5 md:gap-8 gap-5 ">
                 <div
                   className={` w-full  relative  overflow-hidden transition-all duration-300 rounded-xl border-[#FE7702] border-[4px] shadow-lg shadow-black/70`}
                   style={{
@@ -547,7 +553,7 @@ function BookCardInner({
                 </h2>
                 {/* Author Name */}
                 <div className="w-full ">
-                  <hr className="w-full h-[2px] border-[#14b3c2] border rounded-full" />
+                  <hr className="w-full h-[2px] border-[#14b3c2] border rounded-full mt-3 md:mt-5" />
                   <div className="flex items-center gap-3 w-full justify-start mt-2">
                     <img
                       src={authorAvatar}
@@ -612,9 +618,11 @@ function BookCardInner({
                       setFlipping(true);
                       requestAnimationFrame(() => setOpen(true));
                       if (slug) {
-                        setTimeout(() => {
-                          router.push(`/blogs/${slug}`);
-                        }, 1600);
+                        // Kick off navigation immediately so the next page
+                        // loads in parallel with the cover animation. Next.js
+                        // keeps the current page rendered until the new page
+                        // is ready, so the open animation still plays.
+                        router.push(`/blogs/${slug}`);
                       }
                       setTimeout(() => setFlipping(false), speed + 300);
                     }}

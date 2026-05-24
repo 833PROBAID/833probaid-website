@@ -18,10 +18,13 @@ const ReadyToGetStart = () => {
     <div
       className="w-full"
       style={{
-        // `content-visibility: auto` causes blank-placeholder flicker on
-        // Safari/Retina during fast scroll. `contain: paint` gives us paint
-        // isolation without the lazy-rendering side effect.
-        contain: "layout paint style",
+        // `contain: paint` was previously used here as a Safari workaround,
+        // but it clips child drop-shadows to a rectangle on all four sides,
+        // which made the cards' soft shadows look sharply chopped off.
+        // `isolation: isolate` already gives us a stacking context;
+        // layout+style containment keeps the rest of the isolation benefit
+        // without the paint-clipping side effect.
+        contain: "layout style",
         isolation: "isolate",
       }}
     >
@@ -488,7 +491,7 @@ const ReadyToGetStart = () => {
           />
         </div>
       </div>{" "}
-      <div className="bg-secondary block md:hidden rounded-xl md:rounded-none p-4 shadow-[0px_12px_20px_0px_rgba(0,0,0,0.2),0px_-12px_20px_0px_rgba(0,0,0,0.2)] sm:shadow-[0px_12px_20px_0px_rgba(0,0,0,0.4),0px_-12px_20px_0px_rgba(0,0,0,0.4)] md:shadow-[0px_12px_20px_0px_rgba(0,0,0,0.6),0px_-12px_20px_0px_rgba(0,0,0,0.6)] lg:shadow-[0px_12px_20px_0px_rgba(0,0,0,0.75),0px_-12px_20px_0px_rgba(0,0,0,0.75)] xl:shadow-[0px_12px_20px_0px_rgba(0,0,0,0.9),0px_-12px_20px_0px_rgba(0,0,0,0.9)]">
+      <div className="bg-secondary block md:hidden rounded-xl md:rounded-none border-4 border-[#FE7702] px-4 pt-4 pb-20 shadow-[0_6px_18px_-6px_rgba(0,0,0,0.35)]">
         <div
           className="relative aspect-[1130/674] md:h-full w-full flex md:col-span-4"
           // Container query so the HTML overlay scales with the card.
@@ -887,10 +890,10 @@ const ReadyToGetStart = () => {
             type="button"
             className="rtgs-btn1-float absolute cursor-pointer bg-transparent border-0 p-0"
             style={{
-              left: "26.55%",
+              left: "18%",
               top: "73.74%",
-              width: "22.12%",
-              height: "11.13%",
+              width: "30%",
+              height: "15%",
             }}
             onClick={() => router.push("/homebooks/contact-us")}
             aria-label="Contact us"
@@ -905,10 +908,10 @@ const ReadyToGetStart = () => {
             type="button"
             className="rtgs-btn2-float absolute cursor-pointer bg-transparent border-0 p-0"
             style={{
-              left: "51.33%",
+              left: "52%",
               top: "73.74%",
-              width: "22.12%",
-              height: "11.13%",
+              width: "32%",
+              height: "16%",
             }}
             onClick={() => router.push("/homebooks/833probaid-referral-intake")}
             aria-label="Referral intake"
@@ -923,7 +926,7 @@ const ReadyToGetStart = () => {
       </div>
       <div className="mt-8 md:hidden">
         <div
-          className={`rounded-xl bg-secondary p-7 shadow-[-1.06px_1.78px_12.43px_4px_rgba(0,0,0,0.64)] `}
+          className={`rounded-xl bg-secondary border border-black/30 p-4 shadow-[0px_3.04px_7.39px_0px_rgba(0,0,0,0.68),6.07px_-6.07px_4.05px_0px_rgba(0,0,0,0.25)_inset,-4.05px_5.06px_4.05px_0px_rgba(255,255,255,0.25)_inset,-2.02px_-1.01px_4.05px_0px_rgba(0,0,0,0.6)] `}
         >
           <div className="rounded-xl bg-white p-4 shadow-[-1.06px_1.78px_12.43px_4px_rgba(0,0,0,0.64)]">
             <img

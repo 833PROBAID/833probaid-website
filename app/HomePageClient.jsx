@@ -8,7 +8,6 @@ import Link from "next/link";
 import HomeBooksMobileShowcaseClient from "@/components/HomeBooksMobileShowcaseClient";
 import BookCard, { BookCardDefs } from "./new-page/BookCard";
 import BookCardBig from "./new-page/BookCardBig";
-import BookCardGrid from "./new-page/BookCardGrid";
 
 const Footer = dynamic(() => import("../components/Footer"));
 const HomeCard = dynamic(() => import("../components/HomeCard"));
@@ -111,25 +110,66 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
               />
             </p>
           </div>
-          <BookCardDefs />
-          <section className="mx-auto w-full  grid-cols-1 place-items-center justify-center md:px-16 lg:px-24 hidden sm:grid ">
-            {homeCardData.slice(0, 1).map((card, index) => (
-              <BookCardBig
-                key={card.id}
-                title={card.title}
-                subtitle={card.subtitle}
-                description={card.description}
-                imageSrc={card.imageSrc}
-                icon={card.icon}
-                slug={card.slug}
-                mirrored={index % 2 !== 0}
-                speed={3000}
-                priority={true}
-              />
-            ))}
-          </section>
+          <div className="mt-10 text-white sm:mt-16">
+            {homeCardData.length > 0 && (
+              <div className="-mb-4 flex w-full justify-center sm:mb-10 md:mb-16">
+                <div className="w-full hidden sm:block">
+                  <HomeCardBig
+                    uid={`${homeCardData[0].id}-big-desktop-top`}
+                    icon={homeCardData[0].icon}
+                    title={homeCardData[0].title}
+                    subtitle={homeCardData[0].subtitle}
+                    description={homeCardData[0].description}
+                    slug={homeCardData[0].slug}
+                    bannerImage={homeCardData[0].image}
+                  />
+                </div>
+                <div className="w-full block sm:hidden">
+                  <HomeCard
+                    uid={`${homeCardData[0].id}-card-mobile-top`}
+                    alignIndex={2}
+                    icon={homeCardData[0].icon}
+                    title={homeCardData[0].title}
+                    subtitle={homeCardData[0].subtitle}
+                    description={homeCardData[0].description}
+                    slug={homeCardData[0].slug}
+                    bannerImage={homeCardData[0].image}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
 
-          <BookCardGrid cards={homeCardData.slice(1)} />
+          <HomeBooksMobileShowcaseClient homeCardData={homeCardData} />
+
+          {/* Desktop: Always show all */}
+          <div
+            className="mx-auto hidden grid-cols-2 gap-14 sm:gap-16 md:gap-24 sm:grid lg:gap-20"
+            style={{ contain: "layout paint" }}
+          >
+            {homeCardData.length === 0 ? (
+              <div className="col-span-2 py-12 text-center text-gray-500">
+                <p>No home books available at the moment.</p>
+              </div>
+            ) : (
+              homeCardData
+                // .slice(1, homeCardData.length > 1 ? -1 : homeCardData.length)
+                .slice(1)
+                .map((item, i) => (
+                  <HomeCard
+                    key={item.id}
+                    uid={`${item.id}-desktop-${i + 1}`}
+                    alignIndex={i + 1}
+                    icon={item.icon}
+                    title={item.title}
+                    subtitle={item.subtitle}
+                    description={item.description}
+                    slug={item.slug}
+                    bannerImage={item.image}
+                  />
+                ))
+            )}
+          </div>
 
           {/* Desktop: Always show last big card */}
           {/* <div className="mt-4 hidden text-white sm:mt-10 md:mt-14 sm:block">

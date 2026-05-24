@@ -123,7 +123,7 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
                 icon={card.icon}
                 slug={card.slug}
                 mirrored={index % 2 !== 0}
-                speed={3000}
+                speed={1500}
                 priority={true}
               />
             ))}

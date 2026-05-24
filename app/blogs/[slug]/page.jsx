@@ -136,7 +136,7 @@ export default async function BlogPage({ params }) {
 			)}
 
 			<Navbar />
-			<section className='mx-auto mt-5 max-w-7xl px-4 md:px-0'>
+			<section className='mx-auto mt-5 max-w-7xl px-2 sm:px-3 md:px-2 lg:px-0'>
 				<BlogHero
 					bannerImage={heroData.bannerImage}
 					title={heroData.title}
@@ -152,14 +152,17 @@ export default async function BlogPage({ params }) {
 							}}
 						/>
 						{/* Article body is GPU-promoted with translateZ(0) and
-						    paint-contained so its repaints don't bubble to the page.
+						    layout/style-contained so its repaints don't bubble to the page.
 						    NOTE: `content-visibility: auto` was removed here — Safari's
 						    implementation paints a blank placeholder during fast scroll
-						    instead of the real content, which read as a flicker/blink. */}
+						    instead of the real content, which read as a flicker/blink.
+						    `paint` was also dropped from `contain` because it clipped the
+						    soft side-shadows of inner cards to a hard rectangular edge on
+						    mobile. `isolation: isolate` still gives a stacking context. */}
 						<div
 							className='blog-content'
 							style={{
-								contain: "layout paint style",
+								contain: "layout style",
 								isolation: "isolate",
 								position: "relative",
 								zIndex: 1,

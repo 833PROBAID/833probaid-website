@@ -34,8 +34,8 @@ const D = {
   ink: "#1a3540",
 
   // Animation
-  flipDur: 1400,
-  fadeDur: 500,
+  flipDur: 700,
+  fadeDur: 300,
 };
 // ══════════════════════════════════════════════════════════════════
 
@@ -196,7 +196,7 @@ function BookCardInner({
   const innerPadding = mirrored ? INNER_PAD_MIRRORED : INNER_PAD_NORMAL;
 
   const transformOrigin = mirrored ? "right center" : "left center";
-  const flipAngle = mirrored ? "120deg" : "-120deg";
+  const flipAngle = mirrored ? "80deg" : "-80deg";
   const stapleEdge = mirrored ? { right: "7%" } : { left: "7%" }; // 22/450
   const innerBoxShadow = mirrored
     ? "inset 0 0 0 1px rgba(0,0,0,0.07), inset 0px 6px 6px rgba(255,255,255,0.14), inset 0px -6px 10px rgba(0,0,0,0.18), inset 4px 0 10px rgba(0,0,0,0.12), inset -2px 0 8px rgba(180,160,120,0.18)"
@@ -533,9 +533,7 @@ function BookCardInner({
                     setFlipping(true);
                     setOpen(true);
                     if (slug) {
-                      setTimeout(() => {
-                        router.push(`/homebooks/${slug}`);
-                      }, 1600);
+                      router.push(`/homebooks/${slug}`);
                     }
                     setTimeout(() => setFlipping(false), speed + 300);
                   }}
