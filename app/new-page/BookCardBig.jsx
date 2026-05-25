@@ -6,8 +6,8 @@ import { useRouter } from "next/navigation";
 import "./book-card.css";
 
 const D = {
-  w: 1008,
-  h: 520,
+  w: 1016,
+  h: 440,
   teal: "#14b3c2",
   tealMid: "#0a9aa8",
   tealDark: "#0097A7",
@@ -49,37 +49,54 @@ export function LearnMoreButton({
   const [hov, setHov] = useState(false);
   const rotateDir = mirrored ? "3deg" : "-3deg";
   return (
-    <button
-      className="bc-btn inline-flex items-center gap-2 sm:gap-1 px-2 sm:h-[38px] lg:h-[55px] xl:h-[70px] lg:gap-3 rounded-[8px] pl-2.5"
-      type="button"
-      onClick={onClick}
-      onMouseEnter={() => setHov(true)}
-      onMouseLeave={() => setHov(false)}
+    <div
       style={{
-        background: D.orange,
-        cursor: "pointer",
-        boxShadow:
-          "0px 2.73px 6.64px 0px #000000AD, inset 5.46px -5.46px 3.64px 0px #00000040, inset -3.64px 4.55px 3.64px 0px #FFFFFF40, -1.82px -0.91px 3.64px 0px #00000099",
+        position: "relative",
+        display: "inline-flex",
         animation: hov ? "none" : "floatBounce 2s ease-in-out infinite",
-        transform: hov
-          ? `scale(1.08) rotate(${rotateDir})`
-          : "scale(1) rotate(0deg)",
+        transform: hov ? `scale(1.08) rotate(${rotateDir})` : "scale(1) rotate(0deg)",
         transition: "transform 600ms cubic-bezier(0.34, 1.4, 0.64, 1)",
         willChange: "transform",
       }}
     >
-      <span className="bc-btn-text font-poppins font-black sm:text-[13px] lg:text-[18px] xl:text-[23px] uppercase text-white tracking-wide [text-shadow:0_4px_4.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
-        {label}
-      </span>
-      <Image
-        src="/arrow-right.png"
-        alt=""
-        width={100}
-        height={100}
-        priority
-        className="bc-btn-arrow object-contain sm:h-[18px] sm:w-[18px] lg:h-[45px] lg:w-[45px]"
+      {/* Learn More button shadow */}
+      <div
+        style={{
+          position: "absolute",
+          top: 0, right: 0, bottom: 0, left: 0,
+          borderRadius: "8px",
+          pointerEvents: "none",
+          boxShadow: "0px 2.73px 6.64px 0px #000000AD, 0px -0.91px 5px 3px #00000099",
+        }}
       />
-    </button>
+      <button
+        className="inline-flex items-center gap-2 sm:gap-1 px-2 sm:h-[38px] lg:h-[55px] xl:h-[70px] lg:gap-3 rounded-[8px] pl-2.5"
+        type="button"
+        onClick={onClick}
+        onMouseEnter={() => setHov(true)}
+        onMouseLeave={() => setHov(false)}
+        style={{
+          position: "relative",
+          zIndex: 1,
+          background: D.orange,
+          cursor: "pointer",
+          boxShadow:
+            "inset 5.46px -5.46px 3.64px 0px #00000040, inset -3.64px 4.55px 3.64px 0px #FFFFFF40",
+        }}
+      >
+        <span className="font-poppins font-black sm:text-[13px] lg:text-[18px] xl:text-[23px] uppercase text-white tracking-wide [text-shadow:0_4px_4.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
+          {label}
+        </span>
+        <Image
+          src="/arrow-right.png"
+          alt=""
+          width={100}
+          height={100}
+          priority
+          className="object-contain sm:h-[18px] sm:w-[18px] lg:h-[45px] lg:w-[45px]"
+        />
+      </button>
+    </div>
   );
 }
 
@@ -138,8 +155,8 @@ function BookCardInner({
   const spineEdge = mirrored ? { right: 0 } : { left: 0 };
 
   const shadowClipPath = mirrored
-    ? "polygon(0% 3.5%, 2% 0%, 100% 0%, 100% 100%, 14% 100%, 0% 88%)"
-    : "polygon(0% 0%, 98% 0%, 100% 3.5%, 100% 75%, 90% 100%, 0% 100%)";
+    ? "polygon(0% 3.5%, 0.5% 0%, 100% 0%, 100% 100%, 14% 100%, 0% 88%)"
+    : "polygon(0% 0%, 99.5% 0%, 100% 3.5%, 100% 75%, 90% 100%, 0% 100%)";
 
   const coverTransition = `
     transform ${speed}ms cubic-bezier(0.7,0,0.3,1),
@@ -184,6 +201,23 @@ function BookCardInner({
           WebkitTransformStyle: "preserve-3d",
         }}
       >
+        {/* BASE SHELL shadow */}
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+            bottom: -10,
+            left: -10,
+            borderRadius: "15px",
+            filter: "blur(3px)",
+            transform: "translate(6px, -5px) translateZ(-6px)",
+            WebkitTransform: "translate(6px, -5px) translateZ(-6px)",
+            background: "rgba(0,0,0,0.84)",
+            pointerEvents: "none",
+          }}
+        />
+
         {/* BASE SHELL */}
         <div
           style={{
@@ -199,9 +233,7 @@ function BookCardInner({
             boxShadow: `
               inset 0 0 0 1px #014E57,
               inset 0px 6px 4px rgba(255,255,255,0.25),
-              inset -5px -6px 4px rgba(0,0,0,0.25),
-              5px -6px 15.1px rgba(0,0,0,1),
-              -2px 6px 11.3px rgba(0,0,0,1)
+              inset -5px -6px 4px rgba(0,0,0,0.25)
             `,
           }}
         />
@@ -346,31 +378,11 @@ function BookCardInner({
             <div
               style={{
                 position: "absolute",
-                top: 0, right: 0, bottom: 0, left: 0,
+                top: 0, right: mirrored ? -7 : -3, bottom: -14, left: mirrored ? -3 : -7,
                 pointerEvents: "none",
                 zIndex: 0,
-                filter: "blur(4px)",
-                transform: `translate(${mirrored ? "-1.35%" : "1.35%"}, -1.15%)`,
-              }}
-            >
-              <div
-                style={{
-                  position: "absolute",
-                  top: 0, right: 0, bottom: 0, left: 0,
-                  background: "rgba(0,0,0,0.44)",
-                  clipPath: shadowClipPath,
-                  WebkitClipPath: shadowClipPath,
-                }}
-              />
-            </div>
-            <div
-              style={{
-                position: "absolute",
-                top: -7, right: mirrored ? -3 : -7, bottom: -3, left: mirrored ? -7 : -3,
-                pointerEvents: "none",
-                zIndex: 0,
-                filter: "blur(5px)",
-                transform: `translate(${mirrored ? "0.55%" : "-0.55%"}, 1.2%)`,
+                filter: "blur(3px)",
+                transform: `translate(${mirrored ? "-3px" : "3px"}, -6px)`,
               }}
             >
               <div
@@ -380,6 +392,7 @@ function BookCardInner({
                   background: "rgba(0,0,0,0.64)",
                   clipPath: shadowClipPath,
                   WebkitClipPath: shadowClipPath,
+                  borderRadius: 14
                 }}
               />
             </div>
@@ -402,32 +415,10 @@ function BookCardInner({
                 WebkitTransform: "translateZ(0.01px)",
               }}
             >
-              {/* ORANGE BAND */}
-              <div
-                style={{
-                  position: "absolute",
-                  left: -10,
-                  right: -10,
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  height: "20%",
-                  background: "#FE7702",
-                  boxShadow:
-                    "inset 0 1px 0 rgba(255,255,255,0.25), 0 2px 6px rgba(0,0,0,0.3), 0px 4px 5.6px 0px #00000060, 0px -3px 6.2px 0px #00000099, inset -12px 0px 4.6px 0px #00000080, inset 12px 0px 4.6px 0px #00000080",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  zIndex: 3,
-                }}
-              >
-                <p className="bc-band-text text-white text-center tracking-wider font-bold font-montserrat leading-[1.3] sm:text-[10px] lg:text-sm xl:text-lg 2xl:text-xl px-[4%] [text-shadow:0_4px_4.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
-                  {subtitle}
-                </p>
-              </div>
 
               {/* UPPER HALF — icon + title */}
-              <div className="absolute top-0 left-0 right-0 h-[36%] flex flex-col items-center justify-start pt-6">
-                <div className="bc-icon sm:h-[60px] md:h-[70px] lg:h-[90px] xl:h-[100px]">
+              <div className="flex flex-col items-center justify-start pt-2 lg:pt-6">
+                <div className="sm:h-[50px] md:h-[60px] lg:h-[70px] xl:h-[90px]">
                   <Image
                     src={icon}
                     alt={title}
@@ -437,12 +428,12 @@ function BookCardInner({
                     style={{
                       animationPlayState: inView ? "running" : "paused",
                     }}
-                    className={`object-contain w-full sm:h-[60px] md:h-[70px] lg:h-[90px] xl:h-[100px] floating-text cursor-pointer hover:scale-[1.1] transition-all duration-300 ${
-                      mirrored ? "hover:rotate-3" : "hover:-rotate-3"
+                    className={`object-contain w-full sm:h-[50px] md:h-[60px] lg:h-[70px] xl:h-[90px] floating-text cursor-pointer hover:scale-[1.1] transition-all duration-300 ${
+                      mirrored ? "hover:rotate-10" : "hover:-rotate-10"
                     }`}
                   />
                 </div>
-                <h1 className="bc-title pt-3 text-white font-bold text-center uppercase leading-[1.2] font-montserrat sm:text-[11px] lg:text-[16px] xl:text-[22px] px-[5%] drop-shadow-[4.31px_4.31px_4.31px_rgba(0,0,0,0.25)]">
+                <h1 className="pt-3 text-white font-bold text-center uppercase leading-[1.2] font-montserrat sm:text-[11px] lg:text-[16px] xl:text-[22px] px-[5%] drop-shadow-[0px_2px_1px_rgba(0,0,0,0.85)] tracking-wider">
                   {String(title)
                     .split("®")
                     .map((part, i, arr) =>
@@ -458,12 +449,31 @@ function BookCardInner({
                 </h1>
               </div>
 
+              {/* ORANGE BAND */}
+              <div
+                style={{
+                  padding: "15px 0",
+                  margin: "10px 0",
+                  background: "#FE7702",
+                  boxShadow:
+                    "inset 0 1px 0 rgba(255,255,255,0.25), 0 2px 6px rgba(0,0,0,0.3), 0px 4px 5.6px 0px #00000060, 0px -3px 6.2px 0px #00000099",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  zIndex: 3,
+                }}
+              >
+                <p className="text-white text-center tracking-wider font-extrabold font-montserrat leading-[1.3] sm:text-[10px] lg:text-sm xl:text-lg 2xl:text-xl px-[4%] [text-shadow:1px_1px_2.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
+                  {subtitle}
+                </p>
+              </div>
+
               {/* LOWER HALF — description + button */}
               <div
-                className="absolute top-[64%] left-0 right-0 bottom-0 flex items-center justify-between flex-col"
+                className="flex items-center justify-between flex-col gap-4"
                 style={{ padding: "0% 6% 2.5%" }}
               >
-                <p className="bc-desc text-white tracking-wider text-center font-montserrat leading-[1.3] font-semibold sm:text-[10px] lg:text-[14px] xl:text-lg 2xl:text-[17px] px-[1%]">
+                <p className="text-white tracking-wider text-center font-montserrat leading-[1.3] font-semibold sm:text-[10px] lg:text-[12px] xl:text-[16px] px-[1%] [text-shadow:1px_0px_2.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
                   {description}
                 </p>
                 <LearnMoreButton

@@ -49,38 +49,55 @@ export function LearnMoreButton({
   const [hov, setHov] = useState(false);
   const rotateDir = mirrored ? "3deg" : "-3deg";
   return (
-    <button
-      className="bc-btn inline-flex items-center gap-2 sm:gap-1 px-2 sm:h-[38px] lg:h-[55px] xl:h-[70px] lg:gap-3 rounded-[8px] pl-2.5"
-      type="button"
-      onClick={onClick}
-      onMouseEnter={() => setHov(true)}
-      onMouseLeave={() => setHov(false)}
+    <div
       style={{
-        background: D.orange,
-        cursor: "pointer",
-        boxShadow:
-          "0px 2.73px 6.64px 0px #000000AD, inset 5.46px -5.46px 3.64px 0px #00000040, inset -3.64px 4.55px 3.64px 0px #FFFFFF40, -1.82px -0.91px 3.64px 0px #00000099",
+        position: "relative",
+        display: "inline-flex",
         animation: hov ? "none" : "floatBounce 2s ease-in-out infinite",
-        transform: hov
-          ? `scale(1.08) rotate(${rotateDir})`
-          : "scale(1) rotate(0deg)",
+        transform: hov ? `scale(1.08) rotate(${rotateDir})` : "scale(1) rotate(0deg)",
         transition: "transform 600ms cubic-bezier(0.34, 1.4, 0.64, 1)",
         willChange: "transform",
       }}
     >
-      <span className="bc-btn-text font-montserrat font-black sm:text-[13px] lg:text-[18px] xl:text-[23px] uppercase text-white tracking-wide [text-shadow:0_4px_4.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
-        {label}
-      </span>
-      <Image
-        src="/arrow-right.png"
-        alt="arrow right"
-        width={100}
-        height={100}
-        priority
-        className="bc-btn-arrow object-contain sm:h-[18px] sm:w-[18px] lg:h-[45px] lg:w-[45px]"
-        style={{ transform: `rotate(${arrowRotation})`, transition: "transform 400ms ease" }}
+      {/* Learn More button shadow */}
+      <div
+        style={{
+          position: "absolute",
+          top: 0, right: 0, bottom: 0, left: 0,
+          borderRadius: "8px",
+          pointerEvents: "none",
+          boxShadow: "0px 2.73px 6.64px 0px #000000AD, 0px -0.91px 5px 3px #00000099",
+        }}
       />
-    </button>
+      <button
+        className="inline-flex items-center gap-2 sm:gap-1 px-2 sm:h-[38px] lg:h-[55px] xl:h-[70px] lg:gap-3 rounded-[8px] pl-2.5"
+        type="button"
+        onClick={onClick}
+        onMouseEnter={() => setHov(true)}
+        onMouseLeave={() => setHov(false)}
+        style={{
+          position: "relative",
+          zIndex: 1,
+          background: D.orange,
+          cursor: "pointer",
+          boxShadow:
+            "inset 5.46px -5.46px 3.64px 0px #00000040, inset -3.64px 4.55px 3.64px 0px #FFFFFF40",
+        }}
+      >
+        <span className="font-montserrat font-black sm:text-[13px] lg:text-[18px] xl:text-[23px] uppercase text-white tracking-wide [text-shadow:1_2px_1.6px_rgba(0,0,0,0.82),0_0_6px_rgba(255,255,255,0.25)]">
+          {label}
+        </span>
+        <Image
+          src="/arrow-right.png"
+          alt="arrow right"
+          width={100}
+          height={100}
+          priority
+          className="object-contain sm:h-[18px] sm:w-[18px] lg:h-[45px] lg:w-[45px]"
+          style={{ transform: `rotate(${arrowRotation})`, transition: "transform 400ms ease" }}
+        />
+      </button>
+    </div>
   );
 }
 
@@ -119,8 +136,8 @@ function BookCardInner({
   const spineEdge = mirrored ? { right: 0 } : { left: 0 };
 
   const shadowClipPath = mirrored
-    ? "polygon(0% 3.5%, 3.5% 0%, 100% 0%, 100% 100%, 14% 100%, 0% 88%)"
-    : "polygon(0% 0%, 96.5% 0%, 100% 3.5%, 100% 88%, 86% 100%, 0% 100%)";
+    ? "polygon(0% 3.5%, 1.5% 0%, 100% 0%, 100% 100%, 14% 100%, 0% 88%)"
+    : "polygon(0% 0%, 98.5% 0%, 100% 3.5%, 100% 88%, 86% 100%, 0% 100%)";
 
   const innerBoxShadow = mirrored
     ? "inset 0 0 0 1px rgba(0,0,0,0.07), inset 0px 6px 6px rgba(255,255,255,0.14), inset 0px -6px 10px rgba(0,0,0,0.18), inset 4px 0 10px rgba(0,0,0,0.12), inset -2px 0 8px rgba(180,160,120,0.18)"
@@ -177,6 +194,23 @@ function BookCardInner({
           WebkitTransformStyle: "preserve-3d",
         }}
       >
+        {/* BASE SHELL shadow */}
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+            bottom: -10,
+            left: -10,
+            borderRadius: "15px",
+            filter: "blur(3px)",
+            transform: "translate(6px, -5px) translateZ(-6px)",
+            WebkitTransform: "translate(6px, -5px) translateZ(-6px)",
+            background: "rgba(0,0,0,0.84)",
+            pointerEvents: "none",
+          }}
+        />
+
         {/* BASE SHELL */}
         <div
           style={{
@@ -185,16 +219,14 @@ function BookCardInner({
             right: 0,
             bottom: 0,
             left: 0,
-            borderRadius: "1.8%",
+            borderRadius: "10px",
             transform: "translateZ(-4px)",
             WebkitTransform: "translateZ(-4px)",
             background: `linear-gradient(135deg, ${D.tealDark}, ${D.tealDeep})`,
             boxShadow: `
               inset 0 0 0 1px #014E57,
               inset 0px 6px 4px rgba(255,255,255,0.25),
-              inset -5px -6px 4px rgba(0,0,0,0.25),
-              5px -6px 15.1px rgba(0,0,0,1),
-              -2px 6px 11.3px rgba(0,0,0,1)
+              inset -5px -6px 4px rgba(0,0,0,0.25)
             `,
           }}
         />
@@ -240,7 +272,7 @@ function BookCardInner({
             ...innerPageEdge,
             transform: "translateZ(-1px)",
             WebkitTransform: "translateZ(-1px)",
-            borderRadius: "3%",
+            borderRadius: "10px",
             clipPath,
             WebkitClipPath: clipPath,
             overflow: "hidden",
@@ -315,7 +347,7 @@ function BookCardInner({
             WebkitTransformOrigin: transformOrigin,
             transformStyle: "preserve-3d",
             WebkitTransformStyle: "preserve-3d",
-            borderRadius: "3%",
+            borderRadius: "10%",
             transform: coverTransform,
             WebkitTransform: coverTransform,
             opacity: open ? 0.5 : 1,
@@ -344,7 +376,7 @@ function BookCardInner({
             <div
               style={{
                 position: "absolute",
-                top: 0, right: 0, bottom: 0, left: 0,
+                top: 0, right: mirrored ? -10 : -2, bottom: -15, left: mirrored ? -2 : -10,
                 pointerEvents: "none",
                 zIndex: 0,
                 filter: "blur(4px)",
@@ -358,10 +390,11 @@ function BookCardInner({
                   background: "rgba(0,0,0,0.74)",
                   clipPath: shadowClipPath,
                   WebkitClipPath: shadowClipPath,
+                  borderRadius: 20
                 }}
               />
             </div>
-            <div
+            {/* <div
               style={{
                 position: "absolute",
                 top: 0, right: mirrored ? -3 : -7, bottom: 0, left: mirrored ? -7 : -3,
@@ -380,7 +413,7 @@ function BookCardInner({
                   WebkitClipPath: shadowClipPath,
                 }}
               />
-            </div>
+            </div> */}
 
             {/* COVER SURFACE */}
             <div
@@ -392,7 +425,7 @@ function BookCardInner({
                 left: 0,
                 zIndex: 1,
                 background: "#0097A7",
-                borderRadius: "3%",
+                borderRadius: "10px",
                 clipPath,
                 WebkitClipPath: clipPath,
                 overflow: "hidden",
@@ -412,14 +445,14 @@ function BookCardInner({
                   height: "18%",
                   background: "#FE7702",
                   boxShadow:
-                    "inset 0 1px 0 rgba(255,255,255,0.25), 0 2px 6px rgba(0,0,0,0.3), 0px 4px 5.6px 0px #00000060, 0px -3px 6.2px 0px #00000099, inset -12px 0px 4.6px 0px #00000080, inset 12px 0px 4.6px 0px #00000080",
+                    "inset 0 1px 0 rgba(255,255,255,0.25), 0 2px 6px rgba(0,0,0,0.3), 0px 4px 5.6px 0px #00000060, 0px -3px 6.2px 0px #00000099",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                   zIndex: 3,
                 }}
               >
-                <p className="bc-band-text text-white text-center tracking-wider font-bold font-montserrat leading-[1.3] sm:text-[10px] lg:text-sm xl:text-lg 2xl:text-xl px-[6%] sm:px-[7%] [text-shadow:0_4px_4.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
+                <p className="text-white text-center tracking-wider font-bold font-montserrat leading-[1.3] sm:text-[10px] lg:text-sm xl:text-lg 2xl:text-xl px-[6%] sm:px-[7%] [text-shadow:1px_2px_2.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
                   {subtitle}
                 </p>
               </div>
@@ -429,7 +462,7 @@ function BookCardInner({
                 className="absolute left-0 right-0 h-[36%] flex flex-col items-center justify-start"
                 style={{ paddingTop: "7.5%" }}
               >
-                <div className="bc-icon sm:h-[60px] md:h-[70px] lg:h-[90px] xl:h-[100px]">
+                <div className="sm:h-[60px] md:h-[70px] lg:h-[90px] xl:h-[100px]">
                   <Image
                     src={icon}
                     alt={title}
@@ -437,12 +470,12 @@ function BookCardInner({
                     height={120}
                     priority={priority}
                     className={`object-contain w-full sm:h-[60px] md:h-[70px] lg:h-[90px] xl:h-[100px] floating-text cursor-pointer hover:scale-[1.1] transition-all duration-300 ${
-                      mirrored ? "hover:rotate-3" : "hover:-rotate-3"
+                      mirrored ? "hover:rotate-10" : "hover:-rotate-10"
                     }`}
                   />
                 </div>
                 <h1
-                  className="bc-title text-white font-bold text-center uppercase leading-[1.2] font-montserrat sm:text-[11px] lg:text-[16px] xl:text-[20px] px-[5%] drop-shadow-[4.31px_4.31px_4.31px_rgba(0,0,0,0.25)]"
+                  className="text-white font-bold text-center uppercase leading-[1.2] font-montserrat sm:text-[11px] lg:text-[16px] xl:text-[20px] px-[5%] drop-shadow-[4.31px_4.31px_4.31px_rgba(0,0,0,0.25)] [text-shadow:1_2px_1.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]"
                   style={{ paddingTop: "4%" }}
                 >
                   {String(title)
@@ -465,7 +498,7 @@ function BookCardInner({
                 className="absolute top-[63%] left-0 right-0 bottom-0 flex items-center justify-between flex-col"
                 style={{ padding: "2% 4% 6.5%" }}
               >
-                <p className="bc-desc text-white tracking-wider text-center font-montserrat leading-[1.3] font-semibold sm:text-[10px] lg:text-[14px] xl:text-lg 2xl:text-[17px] px-[1%]">
+                <p className="text-white tracking-wider text-center font-montserrat leading-[1.3] font-semibold sm:text-[10px] lg:text-[14px] xl:text-lg 2xl:text-[17px] px-[1%]">
                   {description}
                 </p>
                 <LearnMoreButton

@@ -110,7 +110,7 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
               />
             </p>
           </div>
-          <section className="mx-auto w-full  grid-cols-1 place-items-center justify-center md:px-16 lg:px-24 hidden sm:grid ">
+          <section className="mx-auto w-full  grid-cols-1 place-items-center justify-center px-2 md:px-16 lg:px-22 xl:px-30 hidden sm:grid ">
             {homeCardData.slice(0, 1).map((card, index) => (
               <BookCardBig
                 key={card.id}
