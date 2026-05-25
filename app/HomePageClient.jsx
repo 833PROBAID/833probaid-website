@@ -6,7 +6,6 @@ import { toolsCardData, trustCardData } from "../public/data/Tools";
 import Image from "next/image";
 import Link from "next/link";
 import HomeBooksMobileShowcaseClient from "@/components/HomeBooksMobileShowcaseClient";
-import BookCard, { BookCardDefs } from "./new-page/BookCard";
 import BookCardBig from "./new-page/BookCardBig";
 import BookCardGrid from "./new-page/BookCardGrid";
 
@@ -111,7 +110,6 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
               />
             </p>
           </div>
-          <BookCardDefs />
           <section className="mx-auto w-full  grid-cols-1 place-items-center justify-center md:px-16 lg:px-24 hidden sm:grid ">
             {homeCardData.slice(0, 1).map((card, index) => (
               <BookCardBig

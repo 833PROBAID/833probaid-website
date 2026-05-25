@@ -5,116 +5,44 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import "./book-card.css";
 
-// ══════════════════════════════════════════════════════════════════
-//  DESIGN CONFIG — every visual value lives here.
-//  Change a number or color; it applies everywhere instantly.
-//  Max card: 450 × 700 px  (aspect-ratio: 450 / 700 = 9 / 14)
-//  All layout values are expressed as % of those dimensions.
-// ══════════════════════════════════════════════════════════════════
 const D = {
-  // Card max size (px) — used only for maxWidth and aspect-ratio
   w: 1008,
   h: 520,
-
-  // Teal palette (cover, base, shadows)
   teal: "#14b3c2",
   tealMid: "#0a9aa8",
   tealDark: "#0097A7",
   tealDeep: "#007B88",
   tealShadow: "#033842",
-
-  // Orange palette (band, staples, button)
   orange: "#FE7702",
   orangeLight: "#ff9043",
   orangeDark: "#d65f0f",
-
-  // Inner page
   paper: "#fbf6ec",
   ink: "#1a3540",
-
-  // Animation
   flipDur: 1400,
   fadeDur: 500,
 };
-// ══════════════════════════════════════════════════════════════════
 
-// ── Percentage constants (derived from 450 × 700 grid) ─────────
-// Horizontal % → relative to card width (450px)
-// Vertical   % → relative to card height (700px)
 const P = {
-  // Inner/cover page insets
-  coverPadV: "6%", // 35/700 — top & bottom gap from card edge
-  hingeH: "9.33%", // (22+20)/450 — staple side inset
-  openH: "3.5%", // 35/450 — open-corner side inset
-
-  // Staples
-  stapleW: "1.7%", // 20/450
-  stapleH: "30%", // 180/700
-
-  // Orange band (height relative to cover panel = 90% × 700 = 630px)
-  bandH: "19.37%", // 122/630
-
-  // Spine shadow strip
-  spineW: "1.78%", // 8/450
+  coverPadV: "6%",
+  hingeH: "9.33%",
+  openH: "3.5%",
+  stapleW: "1.7%",
+  stapleH: "30%",
+  bandH: "19.37%",
+  spineW: "1.78%",
 };
 
-// ── Percentage-safe padding for the inner content column ────────
-// The inner content div's containing block width ≈ 450 × (1 - 9.33% - 7.78%) = 373px
-// CSS % padding is always relative to the element's own width (373px here)
-const INNER_PAD_NORMAL = "5% 7%"; // 28 26 28 52 px
+const INNER_PAD_NORMAL = "5% 7%";
 const INNER_PAD_MIRRORED = "5%";
 
-// ──────────────────────────────────────────────────────────────────
-export function BookCardDefs() {
-  return (
-    <svg
-      aria-hidden="true"
-      focusable="false"
-      style={{ position: "absolute", width: 0, height: 0, overflow: "hidden" }}
-    >
-      <defs>
-        <filter
-          id="book-shadow-top"
-          x="-25%"
-          y="-25%"
-          width="150%"
-          height="150%"
-          colorInterpolationFilters="sRGB"
-        >
-          <feGaussianBlur stdDeviation="1.4" />
-        </filter>
-        <filter
-          id="book-shadow-bottom"
-          x="-25%"
-          y="-25%"
-          width="150%"
-          height="150%"
-          colorInterpolationFilters="sRGB"
-        >
-          <feGaussianBlur stdDeviation="1.7" />
-        </filter>
-      </defs>
-    </svg>
-  );
-}
-
-// Clip-paths stay in percentage units — they already are ✓
 const COVER_CLIP_PATH = "polygon(0 0, 100% 0, 100% 75%, 90% 100%, 0 100%)";
-const COVER_SHADOW_POLYGON_POINTS = "0,0 96.5,0 100,3.5 100,75 90,100 0,100";
 const COVER_CLIP_PATH_MIRROR =
   "polygon(0 0, 100% 0, 100% 100%, 14% 100%, 0 88%)";
-const COVER_SHADOW_POLYGON_POINTS_MIRROR =
-  "0,3.5 3.5,0 100,0 100,100 14,100 0,88";
 
-// ── LearnMoreButton ───────────────────────────────────────────────
-// All sizes use clamp() so the button scales with the card.
-// Arrow/gap values kept as numbers (px) for the layout math but overridden
-// visually via style on the <Image>.
 
 export function LearnMoreButton({
   onClick,
   label = "Learn More",
-  size = "lg",
   mirrored = false,
   inView = false,
 }) {
@@ -122,7 +50,7 @@ export function LearnMoreButton({
   const rotateDir = mirrored ? "3deg" : "-3deg";
   return (
     <button
-      className="bc-btn inline-flex items-center gap-2 sm:gap-1 px-2 sm:h-[38px] lg:h-[55px] xl:h-[70px] lg:gap-3 rounded-[8px] pl-2.5 "
+      className="bc-btn inline-flex items-center gap-2 sm:gap-1 px-2 sm:h-[38px] lg:h-[55px] xl:h-[70px] lg:gap-3 rounded-[8px] pl-2.5"
       type="button"
       onClick={onClick}
       onMouseEnter={() => setHov(true)}
@@ -140,8 +68,7 @@ export function LearnMoreButton({
         willChange: "transform",
       }}
     >
-      <span className="bc-btn-text  font-poppins font-black sm:text-[13px] lg:text-[18px] xl:text-[23px] uppercase text-white tracking-wide [text-shadow:0_4px_4.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
-        {" "}
+      <span className="bc-btn-text font-poppins font-black sm:text-[13px] lg:text-[18px] xl:text-[23px] uppercase text-white tracking-wide [text-shadow:0_4px_4.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
         {label}
       </span>
       <Image
@@ -155,7 +82,7 @@ export function LearnMoreButton({
     </button>
   );
 }
-// ── BookCard ──────────────────────────────────────────────────────
+
 function BookCardInner({
   title,
   subtitle,
@@ -170,12 +97,11 @@ function BookCardInner({
   priority = false,
 }) {
   const [open, setOpen] = useState(false);
-  const [flipping, setFlipping] = useState(false);
   const [inView, setInView] = useState(false);
   const stageRef = useRef(null);
+  const coverRef = useRef(null);
   const router = useRouter();
 
-  // Pause float animation for off-screen cards
   useEffect(() => {
     const el = stageRef.current;
     if (!el) return;
@@ -187,19 +113,8 @@ function BookCardInner({
     return () => obs.disconnect();
   }, []);
 
-  // ── Mirrored variants ──────────────────────────────────────────
   const clipPath = mirrored ? COVER_CLIP_PATH_MIRROR : COVER_CLIP_PATH;
-  const shadowPoints = mirrored
-    ? COVER_SHADOW_POLYGON_POINTS_MIRROR
-    : COVER_SHADOW_POLYGON_POINTS;
-  const shadowTopTx = mirrored
-    ? "translate(-1.35 -1.15)"
-    : "translate(1.35 -1.15)";
-  const shadowBotTx = mirrored ? "translate(0.55 1.2)" : "translate(-0.55 1.2)";
 
-  // Hinge/page edges — aligned to the staple position so the cover
-  // edge sits flush against the spine and the flip rotates on the spine axis.
-  // stapleEdge for non-mirrored = left:"3%", mirrored = right:"7%"
   const hingeH = mirrored ? "7%" : "4%";
   const hingeEdge = mirrored
     ? { right: hingeH, left: P.openH }
@@ -210,8 +125,10 @@ function BookCardInner({
   const innerPadding = mirrored ? INNER_PAD_MIRRORED : INNER_PAD_NORMAL;
 
   const transformOrigin = mirrored ? "right center" : "left center";
-  const flipAngle = mirrored ? "168deg" : "-168deg";
-  const stapleEdge = mirrored ? { right: "7%" } : { left: "3.5%" }; // 22/450
+
+  const flipAngle = mirrored ? "78deg" : "-78deg";
+
+  const stapleEdge = mirrored ? { right: "7%" } : { left: "3.5%" };
   const innerBoxShadow = mirrored
     ? "inset 0 0 0 1px rgba(0,0,0,0.07), inset 0px 6px 6px rgba(255,255,255,0.14), inset 0px -6px 10px rgba(0,0,0,0.18), inset 4px 0 10px rgba(0,0,0,0.12), inset -2px 0 8px rgba(180,160,120,0.18)"
     : "inset 0 0 0 1px rgba(0,0,0,0.07), inset 0px 6px 6px rgba(255,255,255,0.14), inset 0px -6px 10px rgba(0,0,0,0.18), inset -4px 0 10px rgba(0,0,0,0.12), inset 2px 0 8px rgba(180,160,120,0.18)";
@@ -219,6 +136,10 @@ function BookCardInner({
     ? "linear-gradient(270deg, rgba(0,0,0,0.4), transparent)"
     : "linear-gradient(90deg, rgba(0,0,0,0.4), transparent)";
   const spineEdge = mirrored ? { right: 0 } : { left: 0 };
+
+  const shadowClipPath = mirrored
+    ? "polygon(0% 3.5%, 2% 0%, 100% 0%, 100% 100%, 14% 100%, 0% 88%)"
+    : "polygon(0% 0%, 98% 0%, 100% 3.5%, 100% 75%, 90% 100%, 0% 100%)";
 
   const coverTransition = `
     transform ${speed}ms cubic-bezier(0.7,0,0.3,1),
@@ -228,19 +149,31 @@ function BookCardInner({
     ? `translate3d(0, 0, 0.01px) rotateY(${flipAngle})`
     : "translate3d(0, 0, 0.01px) rotateY(0deg)";
 
+  const handleLearnMore = (e) => {
+    e.stopPropagation();
+    setOpen(true);
+    if (slug && coverRef.current) {
+      const el = coverRef.current;
+      const onTransitionEnd = (evt) => {
+        if (evt.propertyName !== "transform") return;
+        el.removeEventListener("transitionend", onTransitionEnd);
+        router.push(`/homebooks/${slug}`);
+      };
+      el.addEventListener("transitionend", onTransitionEnd);
+    }
+  };
+
   return (
-    // ── STAGE: perspective wrapper, fluid width, height driven by aspect-ratio ──
     <div
       ref={stageRef}
-      className={`relative flex items-center w-full box-border py-[4%] justify-center`}
+      className="relative flex items-center w-full box-border py-[4%] justify-center"
       style={{
-        // perspective scales with the card: 2200/450 * 100 ≈ 489vw, capped at max
         perspective: "clamp(1400px, 489vw, 2200px)",
+        WebkitPerspective: "clamp(1400px, 489vw, 2200px)",
         perspectiveOrigin: "50% 45%",
+        WebkitPerspectiveOrigin: "50% 45%",
       }}
     >
-      {/* ── BOOK WRAPPER ─────────────────────────────────────────── */}
-      {/* width: 100% up to max; aspect-ratio locks height proportionally */}
       <div
         style={{
           position: "relative",
@@ -251,7 +184,7 @@ function BookCardInner({
           WebkitTransformStyle: "preserve-3d",
         }}
       >
-        {/* ── BASE SHELL: always visible teal frame ── */}
+        {/* BASE SHELL */}
         <div
           style={{
             position: "absolute",
@@ -259,7 +192,7 @@ function BookCardInner({
             right: 0,
             bottom: 0,
             left: 0,
-            borderRadius: "1.8%",
+            borderRadius: "7px",
             transform: "translateZ(-4px)",
             WebkitTransform: "translateZ(-4px)",
             background: `linear-gradient(135deg, ${D.tealDark}, ${D.tealDeep})`,
@@ -267,12 +200,13 @@ function BookCardInner({
               inset 0 0 0 1px #014E57,
               inset 0px 6px 4px rgba(255,255,255,0.25),
               inset -5px -6px 4px rgba(0,0,0,0.25),
-              5px -6px 15.1px rgba(0,0,0,0.80),
-              -2px 6px 11.3px rgba(0,0,0,0.80)
+              5px -6px 15.1px rgba(0,0,0,1),
+              -2px 6px 11.3px rgba(0,0,0,1)
             `,
           }}
         />
-        {/* ── SPINE STAPLES ── */}
+
+        {/* STAPLES */}
         <div
           style={{
             position: "absolute",
@@ -304,7 +238,7 @@ function BookCardInner({
           }}
         />
 
-        {/* ── INNER PAGE ── */}
+        {/* INNER PAGE */}
         <div
           style={{
             position: "absolute",
@@ -324,7 +258,7 @@ function BookCardInner({
               bottom: 0,
               left: 0,
               background: `linear-gradient(135deg, ${D.paper} 0%, #f5ecd9 100%)`,
-              borderRadius: "1.1%",
+              borderRadius: "7px",
               clipPath,
               WebkitClipPath: clipPath,
               boxShadow: innerBoxShadow,
@@ -342,7 +276,7 @@ function BookCardInner({
                 boxSizing: "border-box",
               }}
             >
-              <div className="bg-white flex flex-col items-center justify-center py-4 text-center  border-4 rounded-3xl border-l-18 border-secondary transition-transform duration-300 ease-in-out hover:scale-105 shadow-lg shadow-black/30 sm:shadow-xl sm:shadow-black/40 md:shadow-2xl md:shadow-black/50">
+              <div className="bg-white flex flex-col items-center justify-center py-4 text-center border-4 rounded-3xl border-l-18 border-secondary transition-transform duration-300 ease-in-out hover:scale-105 shadow-lg shadow-black/30 sm:shadow-xl sm:shadow-black/40 md:shadow-2xl md:shadow-black/50">
                 <h1 className="font-anton text-2xl uppercase leading-tight text-primary hover:text-secondary">
                   {title}
                 </h1>
@@ -353,11 +287,7 @@ function BookCardInner({
                 )}
               </div>
 
-              {/* Hero image */}
-              <div
-                className="relative w-full h-full bg-white  rounded-2xl border-4 border-secondary shadow-lg 
-              shadow-black/30 sm:shadow-xl my-6 sm:shadow-black/40 md:shadow-2xl md:shadow-black/50"
-              >
+              <div className="relative w-full h-full bg-white rounded-2xl border-4 border-secondary shadow-lg shadow-black/30 sm:shadow-xl my-6 sm:shadow-black/40 md:shadow-2xl md:shadow-black/50">
                 <img
                   src={imageSrc || "/images/hero.png"}
                   alt={title}
@@ -375,8 +305,9 @@ function BookCardInner({
           </div>
         </div>
 
-        {/* ── COVER PAGE ── */}
+        {/* COVER PAGE */}
         <div
+          ref={coverRef}
           style={{
             position: "absolute",
             top: P.coverPadV,
@@ -389,12 +320,13 @@ function BookCardInner({
             borderRadius: "3%",
             transform: coverTransform,
             WebkitTransform: coverTransform,
-            opacity: open ? 0 : 1,
+            opacity: open ? 0.5 : 1,
             transition: coverTransition,
+            WebkitTransition: coverTransition,
             pointerEvents: open ? "none" : "auto",
             backfaceVisibility: "hidden",
             WebkitBackfaceVisibility: "hidden",
-            willChange: flipping ? "transform, opacity" : "auto",
+            willChange: "transform, opacity",
           }}
         >
           <div
@@ -410,42 +342,49 @@ function BookCardInner({
               WebkitBackfaceVisibility: "hidden",
             }}
           >
-            {/* SVG edge shadow */}
-            <svg
-              aria-hidden="true"
-              focusable="false"
-              viewBox="0 0 100 100"
-              preserveAspectRatio="none"
+            {/* Edge shadow */}
+            <div
               style={{
                 position: "absolute",
-                top: 0,
-                right: 0,
-                bottom: 0,
-                left: 0,
-                width: "100%",
-                height: "100%",
-                overflow: "visible",
+                top: 0, right: 0, bottom: 0, left: 0,
                 pointerEvents: "none",
                 zIndex: 0,
+                filter: "blur(4px)",
+                transform: `translate(${mirrored ? "-1.35%" : "1.35%"}, -1.15%)`,
               }}
             >
-              <polygon
-                points={shadowPoints}
-                fill="#000000"
-                opacity="0.44"
-                transform={shadowTopTx}
-                filter="url(#book-shadow-top)"
+              <div
+                style={{
+                  position: "absolute",
+                  top: 0, right: 0, bottom: 0, left: 0,
+                  background: "rgba(0,0,0,0.44)",
+                  clipPath: shadowClipPath,
+                  WebkitClipPath: shadowClipPath,
+                }}
               />
-              <polygon
-                points={shadowPoints}
-                fill="#000000"
-                opacity="0.64"
-                transform={shadowBotTx}
-                filter="url(#book-shadow-bottom)"
+            </div>
+            <div
+              style={{
+                position: "absolute",
+                top: -7, right: mirrored ? -3 : -7, bottom: -3, left: mirrored ? -7 : -3,
+                pointerEvents: "none",
+                zIndex: 0,
+                filter: "blur(5px)",
+                transform: `translate(${mirrored ? "0.55%" : "-0.55%"}, 1.2%)`,
+              }}
+            >
+              <div
+                style={{
+                  position: "absolute",
+                  top: 0, right: 0, bottom: 0, left: 0,
+                  background: "rgba(0,0,0,0.64)",
+                  clipPath: shadowClipPath,
+                  WebkitClipPath: shadowClipPath,
+                }}
               />
-            </svg>
+            </div>
 
-            {/* Cover surface */}
+            {/* COVER SURFACE */}
             <div
               style={{
                 position: "absolute",
@@ -503,11 +442,7 @@ function BookCardInner({
                     }`}
                   />
                 </div>
-                <h1
-                  className="bc-title pt-3 text-white font-bold text-center uppercase leading-[1.2] font-montserrat sm:text-[11px]
-                 lg:text-[16px] xl:text-[22px] px-[5%] drop-shadow-[4.31px_4.31px_4.31px_rgba(0,0,0,0.25)]"
-                >
-                  {" "}
+                <h1 className="bc-title pt-3 text-white font-bold text-center uppercase leading-[1.2] font-montserrat sm:text-[11px] lg:text-[16px] xl:text-[22px] px-[5%] drop-shadow-[4.31px_4.31px_4.31px_rgba(0,0,0,0.25)]">
                   {String(title)
                     .split("®")
                     .map((part, i, arr) =>
@@ -536,17 +471,7 @@ function BookCardInner({
                   label="Learn More"
                   mirrored={mirrored}
                   inView={inView}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setFlipping(true);
-                    setOpen(true);
-                    if (slug) {
-                      setTimeout(() => {
-                        router.push(`/homebooks/${slug}`);
-                      }, 1400);
-                    }
-                    setTimeout(() => setFlipping(false), speed + 300);
-                  }}
+                  onClick={handleLearnMore}
                 />
               </div>
             </div>
@@ -559,11 +484,12 @@ function BookCardInner({
               ...spineEdge,
               top: 0,
               bottom: 0,
-              width: P.spineW, // 1.78%
+              width: P.spineW,
               background: spineGradient,
               pointerEvents: "none",
               opacity: open ? 1 : 0,
               transition: `opacity ${speed}ms ease`,
+              WebkitTransition: `opacity ${speed}ms ease`,
               zIndex: 2,
             }}
           />

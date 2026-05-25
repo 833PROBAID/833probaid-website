@@ -18,7 +18,6 @@ export default function BookCardGrid({ cards = [] }) {
     return false;
   });
 
-  // Persist state changes
   const toggleShowAll = () => {
     setShowAll((prev) => {
       const next = !prev;
@@ -30,7 +29,6 @@ export default function BookCardGrid({ cards = [] }) {
   };
 
   const visible = showAll ? cards : cards.slice(0, INITIAL_COUNT);
-
   const hasOverflow = cards.length > INITIAL_COUNT;
 
   return (

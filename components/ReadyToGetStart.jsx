@@ -132,9 +132,9 @@ const ReadyToGetStart = () => {
                   <span style={{ color: "#0097A7" }} className="font-semibold">
                     <AnimatedText text="(833) PROBAID — " />
                   </span>{" "}
-                  <spam style={{ color: "#FE7702" }} className="font-semibold">
+                  <span style={{ color: "#FE7702" }} className="font-semibold">
                     <AnimatedText text="(833) 776-2243 — NOW " />
-                  </spam>{" "}
+                  </span>{" "}
                   <AnimatedText text="or" />{" "}
                   <AnimatedText text="fill out the " />
                   <Link
@@ -546,9 +546,9 @@ const ReadyToGetStart = () => {
                   <span style={{ color: "#0097A7" }} className="font-semibold">
                     <AnimatedText text="(833) PROBAID — " />
                   </span>{" "}
-                  <spam style={{ color: "#FE7702" }} className="font-semibold">
+                  <span style={{ color: "#FE7702" }} className="font-semibold">
                     <AnimatedText text="(833) 776-2243 — NOW " />
-                  </spam>{" "}
+                  </span>{" "}
                   <AnimatedText text="or" />{" "}
                   <AnimatedText text="fill out the " />
                   <Link
