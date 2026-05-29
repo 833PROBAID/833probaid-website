@@ -102,11 +102,8 @@ export function BookCardDefs() {
 
 // Clip-paths stay in percentage units — they already are ✓
 const COVER_CLIP_PATH = "polygon(0 0, 100% 0, 100% 88%, 86% 100%, 0 100%)";
-const COVER_SHADOW_POLYGON_POINTS = "0,0.2 96,0 99,1.9 99.5,87.4 85,100 -1,100";
 const COVER_CLIP_PATH_MIRROR =
   "polygon(0 0, 100% 0, 100% 100%, 14% 100%, 0 88%)";
-const COVER_SHADOW_POLYGON_POINTS_MIRROR =
-  "0,2 3,0 100,0 100,100 14,100 0.1,88";
 
 // ── LearnMoreButton ───────────────────────────────────────────────
 // All sizes use clamp() so the button scales with the card.
@@ -177,13 +174,6 @@ function BookCardInner({
 
   // ── Mirrored variants ──────────────────────────────────────────
   const clipPath = mirrored ? COVER_CLIP_PATH_MIRROR : COVER_CLIP_PATH;
-  const shadowPoints = mirrored
-    ? COVER_SHADOW_POLYGON_POINTS_MIRROR
-    : COVER_SHADOW_POLYGON_POINTS;
-  const shadowTopTx = mirrored
-    ? "translate(-1.35 -1.15)"
-    : "translate(1.35 -1.15)";
-  const shadowBotTx = mirrored ? "translate(0.55 1.2)" : "translate(-0.55 1.2)";
 
   // Hinge/page edges — now pure percentages
   const hingeEdge = mirrored
@@ -197,6 +187,9 @@ function BookCardInner({
   const transformOrigin = mirrored ? "right center" : "left center";
   const flipAngle = mirrored ? "85deg" : "-85deg";
   const stapleEdge = mirrored ? { right: "7%" } : { left: "7%" }; // 22/450
+  const shadowClipPath = mirrored
+    ? "polygon(0% 3.5%, 1.5% 0%, 100% 0%, 100% 100%, 14% 100%, 0% 88%)"
+    : "polygon(0% 0%, 98.5% 0%, 100% 3.5%, 100% 88%, 86% 100%, 0% 100%)";
   const innerBoxShadow = mirrored
     ? "inset 0 0 0 1px rgba(0,0,0,0.07), inset 0px 6px 6px rgba(255,255,255,0.14), inset 0px -6px 10px rgba(0,0,0,0.18), inset 4px 0 10px rgba(0,0,0,0.12), inset -2px 0 8px rgba(180,160,120,0.18)"
     : "inset 0 0 0 1px rgba(0,0,0,0.07), inset 0px 6px 6px rgba(255,255,255,0.14), inset 0px -6px 10px rgba(0,0,0,0.18), inset -4px 0 10px rgba(0,0,0,0.12), inset 2px 0 8px rgba(180,160,120,0.18)";
@@ -222,6 +215,11 @@ function BookCardInner({
           : "justify-center md:justify-end"
       }`}
       style={{
+        perspective: "clamp(1400px, 489vw, 2200px)",
+        WebkitPerspective: "clamp(1400px, 489vw, 2200px)",
+        perspectiveOrigin: "50% 45%",
+        WebkitPerspectiveOrigin: "50% 45%",
+        isolation: "isolate",
         containerType: "inline-size",
       }}
     >
@@ -232,13 +230,29 @@ function BookCardInner({
           position: "relative",
           width: "100%",
           maxWidth: width,
-          // aspectRatio: `${width} / ${height}`,
           transformStyle: "preserve-3d",
           WebkitTransformStyle: "preserve-3d",
           containerType: "inline-size",
           height: "clamp(450px, 140cqw, 750px)",
         }}
       >
+        {/* BASE SHELL shadow */}
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+            bottom: -10,
+            left: -10,
+            borderRadius: "15px",
+            filter: "blur(3px)",
+            transform: "translate(6px, -5px) translateZ(-6px)",
+            WebkitTransform: "translate(6px, -5px) translateZ(-6px)",
+            background: "rgba(0,0,0,0.84)",
+            pointerEvents: "none",
+          }}
+        />
+
         {/* ── BASE SHELL: always visible teal frame ── */}
         <div
           style={{
@@ -374,6 +388,7 @@ function BookCardInner({
             WebkitTransform: coverTransform,
             opacity: open ? 0.5 : 1,
             transition: coverTransition,
+            WebkitTransition: coverTransition,
             pointerEvents: open ? "none" : "auto",
             backfaceVisibility: "hidden",
             WebkitBackfaceVisibility: "hidden",
@@ -393,40 +408,34 @@ function BookCardInner({
               WebkitBackfaceVisibility: "hidden",
             }}
           >
-            {/* SVG edge shadow */}
-            <svg
-              aria-hidden="true"
-              focusable="false"
-              viewBox="0 0 100 100"
-              preserveAspectRatio="none"
+            {/* Edge shadow */}
+            <div
               style={{
                 position: "absolute",
-                top: "-2px",
-                right: 0,
-                bottom: 0,
-                left: "-4px",
-                width: "102.5%",
-                height: "101.1%",
-                overflow: "visible",
+                top: 0,
+                right: mirrored ? -10 : -2,
+                bottom: -15,
+                left: mirrored ? -2 : -10,
                 pointerEvents: "none",
                 zIndex: 0,
+                filter: "blur(4px)",
+                transform: `translate(${mirrored ? "-1.35%" : "1.35%"}, -1.15%)`,
               }}
             >
-              <polygon
-                points={shadowPoints}
-                fill="#000000"
-                opacity="0.74"
-                transform={shadowTopTx}
-                filter="url(#book-shadow-top)"
+              <div
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  right: 0,
+                  bottom: 0,
+                  left: 0,
+                  background: "rgba(0,0,0,0.74)",
+                  clipPath: shadowClipPath,
+                  WebkitClipPath: shadowClipPath,
+                  borderRadius: 20,
+                }}
               />
-              <polygon
-                points={shadowPoints}
-                fill="#000000"
-                opacity="0.74"
-                transform={shadowBotTx}
-                filter="url(#book-shadow-bottom)"
-              />
-            </svg>
+            </div>
 
             {/* Cover surface */}
             <div
