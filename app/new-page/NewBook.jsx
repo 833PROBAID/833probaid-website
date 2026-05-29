@@ -126,6 +126,7 @@ function BookCardInner({
   const [open, setOpen] = useState(false);
   const coverRef = useRef(null);
   const router = useRouter();
+  const [flipping, setFlipping] = useState(false);
 
   const clipPath = mirrored ? COVER_CLIP_PATH_MIRROR : COVER_CLIP_PATH;
 
@@ -165,11 +166,13 @@ function BookCardInner({
 
   const handleLearnMore = (e) => {
     e.stopPropagation();
+    setFlipping(true);
     setOpen(true);
     if (slug) {
       router.prefetch(`/homebooks/${slug}`);
       setTimeout(() => router.push(`/homebooks/${slug}`), speed - 800);
     }
+    setTimeout(() => setFlipping(false), speed + 300);
   };
 
   return (
@@ -359,7 +362,7 @@ function BookCardInner({
             pointerEvents: open ? "none" : "auto",
             backfaceVisibility: "hidden",
             WebkitBackfaceVisibility: "hidden",
-            willChange: "transform, opacity",
+            willChange: flipping ? "transform, opacity" : "auto",
           }}
         >
           <div

@@ -83,7 +83,7 @@ export function BookCardDefs() {
           height="150%"
           colorInterpolationFilters="sRGB"
         >
-          <feGaussianBlur stdDeviation="1.4" />
+          <feGaussianBlur stdDeviation="0.8" />
         </filter>
         <filter
           id="book-shadow-bottom"
@@ -93,7 +93,7 @@ export function BookCardDefs() {
           height="150%"
           colorInterpolationFilters="sRGB"
         >
-          <feGaussianBlur stdDeviation="1.7" />
+          <feGaussianBlur stdDeviation="0.8" />
         </filter>
       </defs>
     </svg>
@@ -102,11 +102,11 @@ export function BookCardDefs() {
 
 // Clip-paths stay in percentage units — they already are ✓
 const COVER_CLIP_PATH = "polygon(0 0, 100% 0, 100% 88%, 86% 100%, 0 100%)";
-const COVER_SHADOW_POLYGON_POINTS = "0,0 96.5,0 100,3.5 100,88 86,100 0,100";
+const COVER_SHADOW_POLYGON_POINTS = "0,0.2 96,0 99,1.9 99.5,87.4 85,100 -1,100";
 const COVER_CLIP_PATH_MIRROR =
   "polygon(0 0, 100% 0, 100% 100%, 14% 100%, 0 88%)";
 const COVER_SHADOW_POLYGON_POINTS_MIRROR =
-  "0,3.5 3.5,0 100,0 100,100 14,100 0,88";
+  "0,2 3,0 100,0 100,100 14,100 0.1,88";
 
 // ── LearnMoreButton ───────────────────────────────────────────────
 // All sizes use clamp() so the button scales with the card.
@@ -195,7 +195,7 @@ function BookCardInner({
   const innerPadding = mirrored ? INNER_PAD_MIRRORED : INNER_PAD_NORMAL;
 
   const transformOrigin = mirrored ? "right center" : "left center";
-  const flipAngle = mirrored ? "120deg" : "-120deg";
+  const flipAngle = mirrored ? "85deg" : "-85deg";
   const stapleEdge = mirrored ? { right: "7%" } : { left: "7%" }; // 22/450
   const innerBoxShadow = mirrored
     ? "inset 0 0 0 1px rgba(0,0,0,0.07), inset 0px 6px 6px rgba(255,255,255,0.14), inset 0px -6px 10px rgba(0,0,0,0.18), inset 4px 0 10px rgba(0,0,0,0.12), inset -2px 0 8px rgba(180,160,120,0.18)"
@@ -255,8 +255,8 @@ function BookCardInner({
               inset 0 0 0 1px #014E57,
               inset 0px 6px 4px rgba(255,255,255,0.25),
               inset -5px -6px 4px rgba(0,0,0,0.25),
-              5px -6px 15.1px rgba(0,0,0,0.80),
-              -2px 6px 11.3px rgba(0,0,0,0.80)
+              4px -4px 15.1px rgba(0,0,0,0.90),
+              -2px 6px 16.3px rgba(0,0,0,0.98)
             `,
           }}
         />
@@ -372,7 +372,7 @@ function BookCardInner({
             borderRadius: "2%",
             transform: coverTransform,
             WebkitTransform: coverTransform,
-            opacity: open ? 0 : 1,
+            opacity: open ? 0.5 : 1,
             transition: coverTransition,
             pointerEvents: open ? "none" : "auto",
             backfaceVisibility: "hidden",
@@ -401,12 +401,12 @@ function BookCardInner({
               preserveAspectRatio="none"
               style={{
                 position: "absolute",
-                top: 0,
+                top: "-2px",
                 right: 0,
                 bottom: 0,
-                left: 0,
-                width: "100%",
-                height: "100%",
+                left: "-4px",
+                width: "102.5%",
+                height: "101.1%",
                 overflow: "visible",
                 pointerEvents: "none",
                 zIndex: 0,
@@ -422,7 +422,7 @@ function BookCardInner({
               <polygon
                 points={shadowPoints}
                 fill="#000000"
-                opacity="0.64"
+                opacity="0.74"
                 transform={shadowBotTx}
                 filter="url(#book-shadow-bottom)"
               />
