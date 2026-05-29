@@ -169,14 +169,9 @@ function BookCardInner({
   const handleLearnMore = (e) => {
     e.stopPropagation();
     setOpen(true);
-    if (slug && coverRef.current) {
-      const el = coverRef.current;
-      const onTransitionEnd = (evt) => {
-        if (evt.propertyName !== "transform") return;
-        el.removeEventListener("transitionend", onTransitionEnd);
-        router.push(`/homebooks/${slug}`);
-      };
-      el.addEventListener("transitionend", onTransitionEnd);
+    if (slug) {
+      router.prefetch(`/homebooks/${slug}`);
+      setTimeout(() => router.push(`/homebooks/${slug}`), speed - 800);
     }
   };
 

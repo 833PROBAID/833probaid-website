@@ -44,13 +44,14 @@ export default function NewsletterCard() {
   return (
     <>
       <div className="flex w-full justify-center">
-        <div className="w-full">
+        <div className="w-full relative">
           <svg
             width="100%"
             height="100%"
             viewBox="0 0 558 576"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
+            className="transform-gpu backface-hidden"
           >
             <g filter="url(#filter0_dii_273_11)">
               <path
@@ -149,59 +150,6 @@ export default function NewsletterCard() {
                 </div>
               </div>
             </foreignObject>
-            <style>{`
-							.footer-btn-float {
-								animation: footerBtnFloat 2.5s ease-in-out infinite;
-								transform-box: fill-box;
-								transform-origin: center center;
-								cursor: pointer;
-							}
-							.footer-btn-float:focus,
-							.footer-btn-float:focus-visible {
-								outline: none;
-							}
-							.footer-subscribe-btn {
-								transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-								transform-box: fill-box;
-								transform-origin: center center;
-							}
-							.footer-btn-float:hover .footer-subscribe-btn {
-								transform: rotate(-2deg) scale(1.08);
-							}
-							@keyframes footerBtnFloat {
-								0%, 100% { transform: translateY(0px); }
-								50% { transform: translateY(-8px); }
-							}
-						`}</style>
-            <g
-              className="footer-btn-float"
-              onClick={(event) => {
-                if (isOpen) return;
-                handleOpen(event);
-              }}
-              onKeyDown={(event) => {
-                if (isOpen) return;
-                if (event.key === "Enter" || event.key === " ") {
-                  handleOpen(event);
-                }
-              }}
-              role="button"
-              tabIndex={isOpen ? -1 : 0}
-              aria-label="Subscribe"
-            >
-              <image
-                href="/svgs/subscribe.svg"
-                x="183"
-                y="395"
-                width="200"
-                height="67"
-                className="footer-subscribe-btn"
-                style={{
-                  width: "200px !important",
-                  height: "75px !important",
-                }}
-              />
-            </g>
             <defs>
               <filter
                 id="filter0_dii_273_11"
@@ -481,6 +429,28 @@ export default function NewsletterCard() {
               </linearGradient>
             </defs>
           </svg>
+          <div
+            className="footer-btn-float absolute left-[32.80%] top-[68.58%] w-[35.84%] h-[11.63%]"
+            onClick={(event) => {
+              if (isOpen) return;
+              handleOpen(event);
+            }}
+            onKeyDown={(event) => {
+              if (isOpen) return;
+              if (event.key === "Enter" || event.key === " ") {
+                handleOpen(event);
+              }
+            }}
+            role="button"
+            tabIndex={isOpen ? -1 : 0}
+            aria-label="Subscribe"
+          >
+            <img
+              src="/svgs/subscribe.svg"
+              className="footer-subscribe-btn w-full h-full object-contain cursor-pointer"
+              alt=""
+            />
+          </div>
         </div>
       </div>
 

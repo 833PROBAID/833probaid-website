@@ -40,10 +40,10 @@ export default function BlogHero({
       <div
         style={{
           position: "absolute",
-          left: "2.5%",
-          top: "3.5%",
-          right: "2.5%",
-          bottom: "3.5%",
+          left: "3.5%",
+          top: "2.5%",
+          right: "3.5%",
+          bottom: "2.5%",
           backgroundColor: "white",
           borderRadius: "18px",
           clipPath: "polygon(0% 0%, 100% 0%, 100% 78%, 83% 100%, 0% 100%)",

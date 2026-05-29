@@ -39,7 +39,6 @@ const COVER_CLIP_PATH = "polygon(0 0, 100% 0, 100% 88%, 86% 100%, 0 100%)";
 const COVER_CLIP_PATH_MIRROR =
   "polygon(0 0, 100% 0, 100% 100%, 14% 100%, 0 88%)";
 
-
 export function LearnMoreButton({
   onClick,
   label = "Learn More",
@@ -54,7 +53,9 @@ export function LearnMoreButton({
         position: "relative",
         display: "inline-flex",
         animation: hov ? "none" : "floatBounce 2s ease-in-out infinite",
-        transform: hov ? `scale(1.08) rotate(${rotateDir})` : "scale(1) rotate(0deg)",
+        transform: hov
+          ? `scale(1.08) rotate(${rotateDir})`
+          : "scale(1) rotate(0deg)",
         transition: "transform 600ms cubic-bezier(0.34, 1.4, 0.64, 1)",
         willChange: "transform",
       }}
@@ -63,10 +64,14 @@ export function LearnMoreButton({
       <div
         style={{
           position: "absolute",
-          top: 0, right: 0, bottom: 0, left: 0,
+          top: 0,
+          right: 0,
+          bottom: 0,
+          left: 0,
           borderRadius: "8px",
           pointerEvents: "none",
-          boxShadow: "0px 2.73px 6.64px 0px #000000AD, 0px -0.91px 5px 3px #00000099",
+          boxShadow:
+            "0px 2.73px 6.64px 0px #000000AD, 0px -0.91px 5px 3px #00000099",
         }}
       />
       <button
@@ -94,7 +99,10 @@ export function LearnMoreButton({
           height={100}
           priority
           className="object-contain sm:h-[18px] sm:w-[18px] lg:h-[45px] lg:w-[45px]"
-          style={{ transform: `rotate(${arrowRotation})`, transition: "transform 400ms ease" }}
+          style={{
+            transform: `rotate(${arrowRotation})`,
+            transition: "transform 400ms ease",
+          }}
         />
       </button>
     </div>
@@ -158,14 +166,9 @@ function BookCardInner({
   const handleLearnMore = (e) => {
     e.stopPropagation();
     setOpen(true);
-    if (slug && coverRef.current) {
-      const el = coverRef.current;
-      const onTransitionEnd = (evt) => {
-        if (evt.propertyName !== "transform") return;
-        el.removeEventListener("transitionend", onTransitionEnd);
-        router.push(`/homebooks/${slug}`);
-      };
-      el.addEventListener("transitionend", onTransitionEnd);
+    if (slug) {
+      router.prefetch(`/homebooks/${slug}`);
+      setTimeout(() => router.push(`/homebooks/${slug}`), speed - 800);
     }
   };
 
@@ -376,7 +379,10 @@ function BookCardInner({
             <div
               style={{
                 position: "absolute",
-                top: 0, right: mirrored ? -10 : -2, bottom: -15, left: mirrored ? -2 : -10,
+                top: 0,
+                right: mirrored ? -10 : -2,
+                bottom: -15,
+                left: mirrored ? -2 : -10,
                 pointerEvents: "none",
                 zIndex: 0,
                 filter: "blur(4px)",
@@ -386,11 +392,14 @@ function BookCardInner({
               <div
                 style={{
                   position: "absolute",
-                  top: 0, right: 0, bottom: 0, left: 0,
+                  top: 0,
+                  right: 0,
+                  bottom: 0,
+                  left: 0,
                   background: "rgba(0,0,0,0.74)",
                   clipPath: shadowClipPath,
                   WebkitClipPath: shadowClipPath,
-                  borderRadius: 20
+                  borderRadius: 20,
                 }}
               />
             </div>
