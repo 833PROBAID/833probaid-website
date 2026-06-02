@@ -50,25 +50,32 @@ export default function BlogHero({
           top: isCard ? "2.5%" : "3.5%",
           right: isCard ? "3.5%" : "2.5%",
           bottom: isCard ? "2.5%" : "3.5%",
-          backgroundColor: "white",
-          borderRadius: "18px",
-          clipPath:
-            isCard && !mirrored
-              ? "polygon(0% 0%, 100% 0%, 100% 90%, 88% 100%, 0% 100%)"
-              : isCard && mirrored
-                ? "polygon(0% 0%, 100% 0%, 100% 78%, 100% 100%, 0% 100%, 12% 100%, 0% 90%)"
-                : "polygon(0% 0%, 100% 0%, 100% 78%, 83% 100%, 0% 100%)",
-          boxShadow: "inset 0px 0px 15px rgba(0,0,0,0.5)",
+          filter: "drop-shadow(0px 0px 15px rgba(0,0,0,0.9))",
         }}
-      />
+      >
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            backgroundColor: "white",
+            borderRadius: "18px",
+            clipPath:
+              isCard && !mirrored
+                ? "polygon(0% 0%, 100% 0%, 100% 90%, 88% 100%, 0% 100%)"
+                : isCard && mirrored
+                  ? "polygon(0% 0%, 100% 0%, 100% 78%, 100% 100%, 0% 100%, 12% 100%, 0% 90%)"
+                  : "polygon(0% 0%, 100% 0%, 100% 78%, 83% 100%, 0% 100%)",
+          }}
+        />
+      </div>
 
       {/* Banner Image */}
       <div
         style={{
           position: "absolute",
-          left: "9.46%",
-          top: isCard ? "6.5%" : "8.35%",
-          width: "81.14%",
+          left: isCard ? "9.46%" : "5%",
+          top: isCard ? "6.5%" : "7.35%",
+          width: isCard ? "81.14%" : "90%",
           height: "58.29%",
           borderRadius: "13.4076px",
           overflow: "hidden",
@@ -92,7 +99,7 @@ export default function BlogHero({
       <div
         style={{
           position: "absolute",
-          left: "6.59%",
+          left: isCard ? "6.59%" : "2.15%",
           top: isCard ? "67.5%" : "68.5%",
           width: "81.14%",
           padding: "0 3%",
@@ -119,7 +126,7 @@ export default function BlogHero({
       <div
         style={{
           position: "absolute",
-          left: "6.59%",
+          left: isCard ? "6.59%" : "2.15%",
           top: "83%",
           width: "60%",
           display: "flex",
