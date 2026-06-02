@@ -11,16 +11,16 @@ export default function ContactCard() {
         >
           <g filter="url(#filter0_dii_273_12)">
             <rect
-              x="14.6001"
-              y="13.5996"
+              x="10.5996"
+              y="9.59961"
               width="541"
               height="556"
               rx="22"
               fill="#0097A7"
             />
             <rect
-              x="15.1001"
-              y="14.0996"
+              x="11.0996"
+              y="10.0996"
               width="540"
               height="555"
               rx="21.5"
@@ -140,10 +140,10 @@ export default function ContactCard() {
           <defs>
             <filter
               id="filter0_dii_273_12"
-              x="9.72748e-05"
-              y="-0.000391006"
-              width="570.2"
-              height="585.2"
+              x="-8"
+              y="-8"
+              width="573.2"
+              height="591.2"
               filterUnits="userSpaceOnUse"
               colorInterpolationFilters="sRGB"
             >
@@ -154,18 +154,12 @@ export default function ContactCard() {
                 values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
                 result="hardAlpha"
               />
-              <feMorphology
-                radius="2"
-                operator="dilate"
-                in="SourceAlpha"
-                result="effect1_dropShadow_273_12"
-              />
-              <feOffset dy="1.2" />
-              <feGaussianBlur stdDeviation="6.36" />
+              <feOffset dx="0" dy="0" />
+              <feGaussianBlur stdDeviation="8" />
               <feComposite in2="hardAlpha" operator="out" />
               <feColorMatrix
                 type="matrix"
-                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0"
+                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0"
               />
               <feBlend
                 mode="normal"
@@ -184,8 +178,8 @@ export default function ContactCard() {
                 values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
                 result="hardAlpha"
               />
-              <feOffset dx="6" dy="-6" />
-              <feGaussianBlur stdDeviation="3.84" />
+              <feOffset dx="0" dy="0" />
+              <feGaussianBlur stdDeviation="4" />
               <feComposite
                 in2="hardAlpha"
                 operator="arithmetic"
@@ -194,35 +188,12 @@ export default function ContactCard() {
               />
               <feColorMatrix
                 type="matrix"
-                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.3 0"
+                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.35 0"
               />
               <feBlend
                 mode="normal"
                 in2="shape"
                 result="effect2_innerShadow_273_12"
-              />
-              <feColorMatrix
-                in="SourceAlpha"
-                type="matrix"
-                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-                result="hardAlpha"
-              />
-              <feOffset dx="-1.2" dy="7.2" />
-              <feGaussianBlur stdDeviation="2.4" />
-              <feComposite
-                in2="hardAlpha"
-                operator="arithmetic"
-                k2="-1"
-                k3="1"
-              />
-              <feColorMatrix
-                type="matrix"
-                values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.3 0"
-              />
-              <feBlend
-                mode="normal"
-                in2="effect2_innerShadow_273_12"
-                result="effect3_innerShadow_273_12"
               />
             </filter>
             <filter

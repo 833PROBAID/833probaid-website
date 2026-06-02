@@ -361,6 +361,7 @@ function BookCardInner({
                 title={title}
                 authorName={authorName}
                 authorAvatar={authorAvatar}
+                mirrored={mirrored}
                 wrapperStyle={{
                   width: "100%",
                   height: "100%",
@@ -484,7 +485,7 @@ function BookCardInner({
                   <hr className="w-full h-[2px] border-[#14b3c2] border rounded-full" />
                   <div className="flex items-center gap-3 w-full justify-start mt-2">
                     <img
-                      src={authorAvatar}
+                      src={'/avatar.png'}
                       alt={authorName}
                       className="border-primary border-2"
                       style={{

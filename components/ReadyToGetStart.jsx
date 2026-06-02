@@ -17,13 +17,14 @@ const ReadyToGetStart = () => {
   return (
     <div className="w-full">
       <div
-        className="bg-secondary  hidden md:grid rounded-xl grid-cols-1 gap-1 
-      p-4 shadow-[0px_12px_20px_0px_rgba(0,0,0,0.2),0px_-12px_20px_0px_rgba(0,0,0,0.2)] justify-center
-       items-center sm:gap-6 sm:pl-5  sm:pt-[24px] sm:pb-[20px] sm:pr-5
-       sm:shadow-[0px_12px_20px_0px_rgba(0,0,0,0.4),0px_-12px_20px_0px_rgba(0,0,0,0.4)]
-        md:grid-cols-6 md:shadow-[0px_12px_20px_0px_rgba(0,0,0,0.6),0px_-12px_20px_0px_rgba(0,0,0,0.6)] 
-        lg:shadow-[0px_12px_20px_0px_rgba(0,0,0,0.75),0px_-12px_20px_0px_rgba(0,0,0,0.75)]
-         xl:shadow-[0px_12px_20px_0px_rgba(0,0,0,0.9),0px_-12px_20px_0px_rgba(0,0,0,0.9)] -mx-3"
+        className="bg-secondary hidden md:grid rounded-xl grid-cols-1 gap-1
+                  p-4 shadow-[0px_0px_20px_0px_rgba(0,0,0,0.2)] justify-center
+                  items-center sm:gap-6 sm:pl-5 sm:pt-[24px] sm:pb-[20px] sm:pr-5
+                  sm:shadow-[0px_0px_20px_0px_rgba(0,0,0,0.4)]
+                  md:grid-cols-6 md:shadow-[0px_0px_20px_0px_rgba(0,0,0,0.6)]
+                  lg:shadow-[0px_0px_20px_0px_rgba(0,0,0,0.75)]
+                  xl:shadow-[0px_0px_20px_10px_rgba(0,0,0,1)]
+                  -mx-3"
       >
         <div className="relative h-[350px] sm:h-[450px] md:h-full w-full flex md:col-span-4 ml-2">
           {/* <div className='relative h-[290px] sm:h-[370px] w-full md:h-[300px] lg:h-[412px] xl:h-[520px] 2xl:h-[630px] md:col-span-4 '>
@@ -36,7 +37,13 @@ const ReadyToGetStart = () => {
             xmlns="http://www.w3.org/2000/svg"
             preserveAspectRatio="xMidYMid meet"
           >
-            <g filter={isSafariBrowser ? "url(#filter0_s_167_4)" : "url(#filter0_ddii_167_4)"}>
+            <g
+              filter={
+                isSafariBrowser
+                  ? "url(#filter0_s_167_4)"
+                  : "url(#filter0_ddii_167_4)"
+              }
+            >
               <path
                 d="M17.8999 29.2998C17.8999 21.5678 24.1679 15.2998 31.8999 15.2998H1097.9C1105.63 15.2998 1111.9 21.5678 1111.9 29.2998V639.3C1111.9 647.032 1105.63 653.3 1097.9 653.3H31.8999C24.1679 653.3 17.8999 647.032 17.8999 639.3V29.2998Z"
                 fill="url(#paint0_linear_167_4)"
@@ -153,31 +160,94 @@ const ReadyToGetStart = () => {
                 colorInterpolationFilters="sRGB"
               >
                 <feFlood floodOpacity="0" result="BackgroundImageFix" />
-                <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                <feColorMatrix
+                  in="SourceAlpha"
+                  type="matrix"
+                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                  result="hardAlpha"
+                />
                 <feOffset dx="-7" dy="9" />
                 <feGaussianBlur stdDeviation="3.5" />
                 <feComposite in2="hardAlpha" operator="out" />
-                <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.64 0" />
-                <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_s" />
-                <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                <feColorMatrix
+                  type="matrix"
+                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.64 0"
+                />
+                <feBlend
+                  mode="normal"
+                  in2="BackgroundImageFix"
+                  result="effect1_dropShadow_s"
+                />
+                <feColorMatrix
+                  in="SourceAlpha"
+                  type="matrix"
+                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                  result="hardAlpha"
+                />
                 <feOffset dx="7" dy="-5" />
                 <feGaussianBlur stdDeviation="3.5" />
                 <feComposite in2="hardAlpha" operator="out" />
-                <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.64 0" />
-                <feBlend mode="normal" in2="effect1_dropShadow_s" result="effect2_dropShadow_s" />
-                <feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow_s" result="shape" />
-                <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                <feColorMatrix
+                  type="matrix"
+                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.64 0"
+                />
+                <feBlend
+                  mode="normal"
+                  in2="effect1_dropShadow_s"
+                  result="effect2_dropShadow_s"
+                />
+                <feBlend
+                  mode="normal"
+                  in="SourceGraphic"
+                  in2="effect2_dropShadow_s"
+                  result="shape"
+                />
+                <feColorMatrix
+                  in="SourceAlpha"
+                  type="matrix"
+                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                  result="hardAlpha"
+                />
                 <feOffset dx="11" dy="10" />
                 <feGaussianBlur stdDeviation="1.5" />
-                <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1" />
-                <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
-                <feBlend mode="normal" in2="shape" result="effect3_innerShadow_s" />
-                <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                <feComposite
+                  in2="hardAlpha"
+                  operator="arithmetic"
+                  k2="-1"
+                  k3="1"
+                />
+                <feColorMatrix
+                  type="matrix"
+                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
+                />
+                <feBlend
+                  mode="normal"
+                  in2="shape"
+                  result="effect3_innerShadow_s"
+                />
+                <feColorMatrix
+                  in="SourceAlpha"
+                  type="matrix"
+                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                  result="hardAlpha"
+                />
                 <feOffset dx="-13" dy="-12" />
                 <feGaussianBlur stdDeviation="1.5" />
-                <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1" />
-                <feColorMatrix type="matrix" values="0 0 0 0 0.537222 0 0 0 0 0.537222 0 0 0 0 0.537222 0 0 0 0.25 0" />
-                <feBlend mode="normal" in2="effect3_innerShadow_s" result="effect4_innerShadow_s" />
+                <feComposite
+                  in2="hardAlpha"
+                  operator="arithmetic"
+                  k2="-1"
+                  k3="1"
+                />
+                <feColorMatrix
+                  type="matrix"
+                  values="0 0 0 0 0.537222 0 0 0 0 0.537222 0 0 0 0 0.537222 0 0 0 0.25 0"
+                />
+                <feBlend
+                  mode="normal"
+                  in2="effect3_innerShadow_s"
+                  result="effect4_innerShadow_s"
+                />
               </filter>
               <filter
                 id="filter0_ddii_167_4"
@@ -448,19 +518,27 @@ const ReadyToGetStart = () => {
             className="rtgs-btn1-float absolute left-[22.12%] top-[69.29%] w-[30.97%] h-[14.84%]"
             onClick={() => router.push("/homebooks/contact-us")}
           >
-            <img src="/btn1.svg" className="rtgs-btn1 w-full h-full object-contain cursor-pointer" alt="" />
+            <img
+              src="/btn1.svg"
+              className="rtgs-btn1 w-full h-full object-contain cursor-pointer"
+              alt=""
+            />
           </div>
           <div
             className="rtgs-btn2-float absolute left-[51.33%] top-[69.29%] w-[30.97%] h-[14.84%]"
             onClick={() => router.push("/homebooks/833probaid-referral-intake")}
           >
-            <img src="/btn2.svg" className="rtgs-btn2 w-full h-full object-contain cursor-pointer" alt="" />
+            <img
+              src="/btn2.svg"
+              className="rtgs-btn2 w-full h-full object-contain cursor-pointer"
+              alt=""
+            />
           </div>
         </div>
         <div className="w-[97%] h-full md:col-span-2 hidden md:flex">
           <img
             src="/images/qr-scan.svg"
-            className="w-full h-auto transition-transform duration-500 ease-out hover:scale-105 cursor-pointer"
+            className="w-full h-auto transition-transform duration-500 ease-out cursor-pointer"
             alt="qr-scan"
           />
         </div>
@@ -474,7 +552,13 @@ const ReadyToGetStart = () => {
             xmlns="http://www.w3.org/2000/svg"
             preserveAspectRatio="xMidYMid meet"
           >
-            <g filter={isSafariBrowser ? "url(#filter0_s_167_4)" : "url(#filter0_ddii_167_4)"}>
+            <g
+              filter={
+                isSafariBrowser
+                  ? "url(#filter0_s_167_4)"
+                  : "url(#filter0_ddii_167_4)"
+              }
+            >
               <path
                 d="M17.8999 29.2998C17.8999 21.5678 24.1679 15.2998 31.8999 15.2998H1097.9C1105.63 15.2998 1111.9 21.5678 1111.9 29.2998V639.3C1111.9 647.032 1105.63 653.3 1097.9 653.3H31.8999C24.1679 653.3 17.8999 647.032 17.8999 639.3V29.2998Z"
                 fill="url(#paint0_linear_167_4)"
@@ -573,31 +657,94 @@ const ReadyToGetStart = () => {
                 colorInterpolationFilters="sRGB"
               >
                 <feFlood floodOpacity="0" result="BackgroundImageFix" />
-                <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                <feColorMatrix
+                  in="SourceAlpha"
+                  type="matrix"
+                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                  result="hardAlpha"
+                />
                 <feOffset dx="-7" dy="9" />
                 <feGaussianBlur stdDeviation="3.5" />
                 <feComposite in2="hardAlpha" operator="out" />
-                <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.64 0" />
-                <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_s" />
-                <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                <feColorMatrix
+                  type="matrix"
+                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.64 0"
+                />
+                <feBlend
+                  mode="normal"
+                  in2="BackgroundImageFix"
+                  result="effect1_dropShadow_s"
+                />
+                <feColorMatrix
+                  in="SourceAlpha"
+                  type="matrix"
+                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                  result="hardAlpha"
+                />
                 <feOffset dx="7" dy="-5" />
                 <feGaussianBlur stdDeviation="3.5" />
                 <feComposite in2="hardAlpha" operator="out" />
-                <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.64 0" />
-                <feBlend mode="normal" in2="effect1_dropShadow_s" result="effect2_dropShadow_s" />
-                <feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow_s" result="shape" />
-                <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                <feColorMatrix
+                  type="matrix"
+                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.64 0"
+                />
+                <feBlend
+                  mode="normal"
+                  in2="effect1_dropShadow_s"
+                  result="effect2_dropShadow_s"
+                />
+                <feBlend
+                  mode="normal"
+                  in="SourceGraphic"
+                  in2="effect2_dropShadow_s"
+                  result="shape"
+                />
+                <feColorMatrix
+                  in="SourceAlpha"
+                  type="matrix"
+                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                  result="hardAlpha"
+                />
                 <feOffset dx="11" dy="10" />
                 <feGaussianBlur stdDeviation="1.5" />
-                <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1" />
-                <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
-                <feBlend mode="normal" in2="shape" result="effect3_innerShadow_s" />
-                <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                <feComposite
+                  in2="hardAlpha"
+                  operator="arithmetic"
+                  k2="-1"
+                  k3="1"
+                />
+                <feColorMatrix
+                  type="matrix"
+                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
+                />
+                <feBlend
+                  mode="normal"
+                  in2="shape"
+                  result="effect3_innerShadow_s"
+                />
+                <feColorMatrix
+                  in="SourceAlpha"
+                  type="matrix"
+                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                  result="hardAlpha"
+                />
                 <feOffset dx="-13" dy="-12" />
                 <feGaussianBlur stdDeviation="1.5" />
-                <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1" />
-                <feColorMatrix type="matrix" values="0 0 0 0 0.537222 0 0 0 0 0.537222 0 0 0 0 0.537222 0 0 0 0.25 0" />
-                <feBlend mode="normal" in2="effect3_innerShadow_s" result="effect4_innerShadow_s" />
+                <feComposite
+                  in2="hardAlpha"
+                  operator="arithmetic"
+                  k2="-1"
+                  k3="1"
+                />
+                <feColorMatrix
+                  type="matrix"
+                  values="0 0 0 0 0.537222 0 0 0 0 0.537222 0 0 0 0 0.537222 0 0 0 0.25 0"
+                />
+                <feBlend
+                  mode="normal"
+                  in2="effect3_innerShadow_s"
+                  result="effect4_innerShadow_s"
+                />
               </filter>
               <filter
                 id="filter0_ddii_167_4"
@@ -868,13 +1015,27 @@ const ReadyToGetStart = () => {
             className="rtgs-btn1-float absolute left-[26.55%] top-[73.74%] w-[22.12%] h-[11.13%]"
             onClick={() => router.push("/homebooks/contact-us")}
           >
-            <img src="/btn1.svg" className="rtgs-btn1 w-full h-full object-contain cursor-pointer" alt="" />
+            <img
+              src="/btn1.svg"
+              className="rtgs-btn1 w-full h-full object-contain cursor-pointer"
+              alt=""
+            />
           </div>
           <div
-            className="rtgs-btn2-float absolute left-[51.33%] top-[73.74%] w-[22.12%] h-[11.13%]"
+            className="rtgs-btn2-float absolute"
+            style={{
+              left: "51.33%",
+              top: "73.74%",
+              width: "22.12%",
+              height: "11.13%",
+            }}
             onClick={() => router.push("/homebooks/833probaid-referral-intake")}
           >
-            <img src="/btn2.svg" className="rtgs-btn2 w-full h-full object-contain cursor-pointer" alt="" />
+            <img
+              src="/btn2.svg"
+              className="rtgs-btn2 w-full h-full object-contain cursor-pointer"
+              alt=""
+            />
           </div>
         </div>
       </div>

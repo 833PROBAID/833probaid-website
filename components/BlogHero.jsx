@@ -5,6 +5,7 @@ export default function BlogHero({
   authorAvatar,
   wrapperStyle = {},
   isCard = false,
+  mirrored = false,
 }) {
   return (
     <div
@@ -20,8 +21,8 @@ export default function BlogHero({
         style={{
           position: "absolute",
           inset: 0,
-          borderRadius: "24px",
-          boxShadow: "0px 0px 25px rgba(0,0,0,0.75)",
+          // borderRadius: "24px",
+          // boxShadow: "0px 0px 25px rgba(0,0,0,0.75)",
           clipPath: "polygon(0% 0%, 100% 0%, 100% 78%, 83% 100%, 0% 100%)",
         }}
       />
@@ -32,7 +33,12 @@ export default function BlogHero({
           position: "absolute",
           inset: 0,
           backgroundColor: "#0097A7",
-          clipPath: "polygon(0% 0%, 100% 0%, 100% 78%, 83% 100%, 0% 100%)",
+          clipPath:
+            isCard && !mirrored
+              ? "polygon(0% 0%, 100% 0%, 100% 89%, 87% 100%, 0% 100%)"
+              : isCard && mirrored
+                ? "polygon(0% 0%, 100% 0%, 100% 0%, 100% 100%, 13% 100%, 0% 89%)"
+                : "polygon(0% 0%, 100% 0%, 100% 78%, 83% 100%, 0% 100%)",
         }}
       />
 
@@ -40,13 +46,18 @@ export default function BlogHero({
       <div
         style={{
           position: "absolute",
-          left: "3.5%",
-          top: "2.5%",
-          right: "3.5%",
-          bottom: "2.5%",
+          left: isCard ? "3.5%" : "2.5%",
+          top: isCard ? "2.5%" : "3.5%",
+          right: isCard ? "3.5%" : "2.5%",
+          bottom: isCard ? "2.5%" : "3.5%",
           backgroundColor: "white",
           borderRadius: "18px",
-          clipPath: "polygon(0% 0%, 100% 0%, 100% 78%, 83% 100%, 0% 100%)",
+          clipPath:
+            isCard && !mirrored
+              ? "polygon(0% 0%, 100% 0%, 100% 90%, 88% 100%, 0% 100%)"
+              : isCard && mirrored
+                ? "polygon(0% 0%, 100% 0%, 100% 78%, 100% 100%, 0% 100%, 12% 100%, 0% 90%)"
+                : "polygon(0% 0%, 100% 0%, 100% 78%, 83% 100%, 0% 100%)",
           boxShadow: "inset 0px 0px 15px rgba(0,0,0,0.5)",
         }}
       />
@@ -56,7 +67,7 @@ export default function BlogHero({
         style={{
           position: "absolute",
           left: "9.46%",
-          top: "8.35%",
+          top: isCard ? "6.5%" : "8.35%",
           width: "81.14%",
           height: "58.29%",
           borderRadius: "13.4076px",
@@ -68,7 +79,12 @@ export default function BlogHero({
         <img
           src={bannerImage}
           alt="Blog banner"
-          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            display: "block",
+          }}
         />
       </div>
 
@@ -77,7 +93,7 @@ export default function BlogHero({
         style={{
           position: "absolute",
           left: "6.59%",
-          top: "68.5%",
+          top: isCard ? "67.5%" : "68.5%",
           width: "81.14%",
           padding: "0 3%",
         }}
@@ -113,7 +129,7 @@ export default function BlogHero({
         }}
       >
         <img
-          src={authorAvatar}
+          src={'/avatar.png'}
           alt={authorName}
           className="border-primary border-2"
           style={{

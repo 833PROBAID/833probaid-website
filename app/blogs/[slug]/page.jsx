@@ -163,7 +163,6 @@ export default async function BlogPage({ params }) {
 								isolation: "isolate",
 								position: "relative",
 								zIndex: 1,
-								contentVisibility: "auto",
 								WebkitTransform: "translateZ(0)",
 								transform: "translateZ(0)",
 							}}

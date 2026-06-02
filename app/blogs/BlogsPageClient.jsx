@@ -107,7 +107,7 @@ const BlogsPageClient = ({ initialBlogs = [], initialPagination = {} }) => {
       const result = await blogsApi.getAll({
         search: searchQuery,
         page: pageNum,
-        limit: 5,
+        limit: 3,
       });
 
       if (result.success) {
@@ -304,7 +304,18 @@ const BlogsPageClient = ({ initialBlogs = [], initialPagination = {} }) => {
             };
             return (
               <Fragment key={blog._id || blog.id}>
-                {/* Right card — always opens the video modal */}
+                {/* Left card — Read Article (normal view) */}
+                <BlogCard
+                  uid={`${blogKey}-card-read`}
+                  alignIndex={index * 2 + 1}
+                  {...commonCardProps}
+                  slug={blog.slug || ""}
+                  speed={3000}
+                  priority={true}
+                  mirrored={false}
+                  onVideoClick={() => {}}
+                />
+                {/* Right card — Watch Video (mirrored view) */}
                 <BlogCard
                   uid={`${blogKey}-card-video`}
                   alignIndex={index * 2 + 2}
@@ -312,7 +323,7 @@ const BlogsPageClient = ({ initialBlogs = [], initialPagination = {} }) => {
                   slug={blog.slug || ""}
                   speed={3000}
                   priority={true}
-                  mirrored={index % 2 !== 0}
+                  mirrored={true}
                   onVideoClick={() =>
                     setVideoPopup({
                       isOpen: true,

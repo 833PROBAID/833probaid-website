@@ -237,10 +237,11 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
             </p>
           </div>
           <div className="grid grid-cols-2 gap-4 sm:gap-8 sm:grid-cols-2 lg:grid-cols-4 mt-10">
-            {toolsCardData.map((item) => (
+            {toolsCardData.map((item, index) => (
               <ToolsCard
                 key={item.id}
                 id={item.id}
+                index={index}
                 icon={item.icon}
                 title={item.title}
                 description={item.description}

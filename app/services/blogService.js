@@ -24,7 +24,7 @@ const getPublishedBlogsFirstPageCached = unstable_cache(
 		await connectToDatabase();
 
 		const page = 1;
-			   const limit = 5;
+			   const limit = 3;
 		const query = { status: "published" };
 
 		const [blogs, total] = await Promise.all([

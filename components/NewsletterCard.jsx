@@ -48,59 +48,59 @@ export default function NewsletterCard() {
           <svg
             width="100%"
             height="100%"
-            viewBox="0 0 558 576"
+            viewBox="0 0 566 586"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
             className="transform-gpu backface-hidden"
           >
             <g filter="url(#filter0_dii_273_11)">
               <path
-                d="M10.5996 31.5996C10.5996 19.4493 20.4493 9.59961 32.5996 9.59961H524.6C536.75 9.59961 546.6 19.4493 546.6 31.5996V541.6C546.6 553.75 536.75 563.6 524.6 563.6H32.5996C20.4493 563.6 10.5996 553.75 10.5996 541.6V31.5996Z"
+                d="M10.5996 31.5996C10.5996 19.4493 20.4493 9.59961 32.5996 9.59961H533.4C545.55 9.59961 555.4 19.4493 555.4 31.5996V541.6C555.4 553.75 545.55 563.6 533.4 563.6H32.5996C20.4493 563.6 10.5996 553.75 10.5996 541.6V31.5996Z"
                 fill="#0097A7"
               />
               <path
-                d="M32.5996 10.0996H524.6C536.474 10.0996 546.1 19.7255 546.1 31.5996V541.6C546.1 553.474 536.474 563.1 524.6 563.1H32.5996C20.7255 563.1 11.0996 553.474 11.0996 541.6V31.5996C11.0996 19.7255 20.7255 10.0996 32.5996 10.0996Z"
+                d="M32.5996 10.0996H533.4C545.274 10.0996 554.9 19.7255 554.9 31.5996V541.6C554.9 553.474 545.274 563.1 533.4 563.1H32.5996C20.7255 563.1 11.0996 553.474 11.0996 541.6V31.5996C11.0996 19.7255 20.7255 10.0996 32.5996 10.0996Z"
                 stroke="#005E68"
               />
             </g>
             <g filter="url(#filter1_d_273_11)">
               <path
-                d="M501.457 50.5823L487.314 36.5996H41.5996V497.699L62.3371 520.149L85.6139 542.6H515.6V64.6627L501.457 50.5823Z"
+                d="M510.257 50.5823L496.114 36.5996H50.3996V497.699L71.1371 520.149L94.4139 542.6H524.4V64.6627L510.257 50.5823Z"
                 fill="url(#paint0_linear_273_11)"
               />
             </g>
             <g filter="url(#filter2_d_273_11)">
               <path
-                d="M501.457 50.5823L487.314 36.5996H41.5996V497.699L62.3371 520.149L85.6139 542.6H515.6V64.6627L501.457 50.5823Z"
+                d="M510.257 50.5823L496.114 36.5996H50.3996V497.699L71.1371 520.149L94.4139 542.6H524.4V64.6627L510.257 50.5823Z"
                 fill="#0097A7"
               />
             </g>
             <g filter="url(#filter3_dd_273_11)">
               <path
-                d="M491.795 97.6414L428.97 36.5996L127.063 37.0177V104.749L72.5277 159.101V383.618L199.05 511.973H348.258L491.795 363.131V97.6414Z"
+                d="M500.595 97.6414L437.77 36.5996L135.863 37.0177V104.749L81.3277 159.101V383.618L207.85 511.973H357.058L500.595 363.131V97.6414Z"
                 fill="white"
               />
             </g>
             <g filter="url(#filter4_i_273_11)">
               <path
-                d="M491.604 96.7871L515.447 121.736L514.548 543.597H491.604V96.7871Z"
+                d="M500.404 96.7871L524.247 121.736L523.348 543.597H500.404V96.7871Z"
                 fill="#FE7702"
               />
             </g>
             <g filter="url(#filter5_f_273_11)">
               <path
-                d="M515.6 66.2467V126.6L423.6 36.5996H485.471L515.6 66.2467Z"
+                d="M524.4 66.2467V126.6L432.4 36.5996H494.271L524.4 66.2467Z"
                 fill="black"
                 fillOpacity="0.984"
               />
             </g>
             <path
-              d="M515.6 64.5996V121.6L429.6 36.5996H487.436L515.6 64.5996Z"
+              d="M524.4 64.5996V121.6L438.4 36.5996H496.236L524.4 64.5996Z"
               fill="#0097A7"
             />
             <foreignObject
-              x="60"
-              y="80"
+              x="70"
+              y="90"
               width="450"
               height="370"
               className="overflow-visible"
@@ -153,10 +153,10 @@ export default function NewsletterCard() {
             <defs>
               <filter
                 id="filter0_dii_273_11"
-                x="-0.000391006"
-                y="-0.000391006"
-                width="557.2"
-                height="575.2"
+                x="-8"
+                y="-8"
+                width="573.2"
+                height="591.2"
                 filterUnits="userSpaceOnUse"
                 colorInterpolationFilters="sRGB"
               >
@@ -167,12 +167,12 @@ export default function NewsletterCard() {
                   values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
                   result="hardAlpha"
                 />
-                <feOffset dy="1.2" />
-                <feGaussianBlur stdDeviation="6.36" />
+                <feOffset dx="0" dy="0" />
+                <feGaussianBlur stdDeviation="8" />
                 <feComposite in2="hardAlpha" operator="out" />
                 <feColorMatrix
                   type="matrix"
-                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.996 0"
+                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0"
                 />
                 <feBlend
                   mode="normal"
@@ -191,8 +191,8 @@ export default function NewsletterCard() {
                   values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
                   result="hardAlpha"
                 />
-                <feOffset dx="6" dy="-6" />
-                <feGaussianBlur stdDeviation="3.84" />
+                <feOffset dx="0" dy="0" />
+                <feGaussianBlur stdDeviation="4" />
                 <feComposite
                   in2="hardAlpha"
                   operator="arithmetic"
@@ -201,40 +201,17 @@ export default function NewsletterCard() {
                 />
                 <feColorMatrix
                   type="matrix"
-                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.3 0"
+                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.35 0"
                 />
                 <feBlend
                   mode="normal"
                   in2="shape"
                   result="effect2_innerShadow_273_11"
                 />
-                <feColorMatrix
-                  in="SourceAlpha"
-                  type="matrix"
-                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-                  result="hardAlpha"
-                />
-                <feOffset dx="-1.2" dy="7.2" />
-                <feGaussianBlur stdDeviation="2.4" />
-                <feComposite
-                  in2="hardAlpha"
-                  operator="arithmetic"
-                  k2="-1"
-                  k3="1"
-                />
-                <feColorMatrix
-                  type="matrix"
-                  values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.3 0"
-                />
-                <feBlend
-                  mode="normal"
-                  in2="effect2_innerShadow_273_11"
-                  result="effect3_innerShadow_273_11"
-                />
               </filter>
               <filter
                 id="filter1_d_273_11"
-                x="8.6"
+                x="17.4"
                 y="3.6"
                 width="543.6"
                 height="577"
@@ -269,7 +246,7 @@ export default function NewsletterCard() {
               </filter>
               <filter
                 id="filter2_d_273_11"
-                x="18.2996"
+                x="27.0996"
                 y="14.29961"
                 width="510.6"
                 height="542.6"
@@ -304,7 +281,7 @@ export default function NewsletterCard() {
               </filter>
               <filter
                 id="filter3_dd_273_11"
-                x="48.8273"
+                x="57.6273"
                 y="28.8996"
                 width="455.005"
                 height="514.131"
@@ -357,7 +334,7 @@ export default function NewsletterCard() {
               </filter>
               <filter
                 id="filter4_i_273_11"
-                x="491.604"
+                x="500.404"
                 y="96.7871"
                 width="23.8438"
                 height="450.957"
@@ -397,7 +374,7 @@ export default function NewsletterCard() {
               </filter>
               <filter
                 id="filter5_f_273_11"
-                x="419.6"
+                x="428.4"
                 y="32.5996"
                 width="100"
                 height="98"
