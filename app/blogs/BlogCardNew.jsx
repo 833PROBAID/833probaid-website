@@ -459,10 +459,11 @@ function BookCardInner({
               {/* UPPER HALF — icon + title */}
               <div className="absolute left-0 right-0 flex flex-col items-center justify-start h-full  md:p-6 p-3 md:gap-6 gap-4 ">
                 <div
-                  className={` w-full  relative  overflow-hidden transition-all duration-300 rounded-xl border-[#FE7702] border-[4px] shadow-lg shadow-black/70`}
+                  className={` w-full  relative  overflow-hidden transition-all duration-300 rounded-xl border-[#FE7702] border-[4px]`}
                   style={{
                     height: "clamp(120px, 50cqw, 275px)",
                     width: "100%",
+                    boxShadow: "0 0 16px 4px rgba(0,0,0,0.8)",
                   }}
                 >
                   <Image
