@@ -75,7 +75,7 @@ export function LearnMoreButton({
         }}
       />
       <button
-        className="inline-flex items-center gap-2 sm:gap-1 px-2 sm:h-[38px] lg:h-[55px] xl:h-[70px] lg:gap-3 rounded-[8px] pl-2.5"
+        className="inline-flex items-center gap-2 sm:gap-1 px-2 h-[48px] sm:h-[38px] lg:h-[55px] xl:h-[70px] lg:gap-3 rounded-[8px] pl-2.5"
         type="button"
         onClick={onClick}
         onMouseEnter={() => setHov(true)}
@@ -89,7 +89,7 @@ export function LearnMoreButton({
             "inset 5.46px -5.46px 3.64px 0px #00000040, inset -3.64px 4.55px 3.64px 0px #FFFFFF40",
         }}
       >
-        <span className="font-montserrat font-black sm:text-[13px] lg:text-[18px] xl:text-[23px] uppercase text-white tracking-wide [text-shadow:1_2px_1.6px_rgba(0,0,0,0.82),0_0_6px_rgba(255,255,255,0.25)]">
+        <span className="font-montserrat font-black text-[18px] sm:text-[13px] lg:text-[18px] xl:text-[23px] uppercase text-white tracking-wide [text-shadow:1_2px_1.6px_rgba(0,0,0,0.82),0_0_6px_rgba(255,255,255,0.25)]">
           {label}
         </span>
         <Image
@@ -98,7 +98,7 @@ export function LearnMoreButton({
           width={100}
           height={100}
           priority
-          className="object-contain sm:h-[18px] sm:w-[18px] lg:h-[45px] lg:w-[45px]"
+          className="object-contain h-[48px] w-[35px] sm:h-[18px] sm:w-[18px] lg:h-[45px] lg:w-[45px]"
           style={{
             transform: `rotate(${arrowRotation})`,
             transition: "transform 400ms ease",

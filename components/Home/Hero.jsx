@@ -11,7 +11,7 @@ const Hero = () => {
 				transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 			}
 			.hero-btn-float:hover img {
-				transform: rotate(-2deg) scale(1.08);
+				transform: rotate(2deg) scale(1.08);
 			}
 			@keyframes heroBtnFloat {
 				0%, 100% { transform: translateY(0px); }

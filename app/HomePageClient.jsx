@@ -166,6 +166,7 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
               <h1 className="font-anton text-center text-2xl md:text-3xl lg:text-4xl xl:text-[55px] flex flex-col justify-center items-center gap-1 sm:gap-3">
                 <AnimatedText
                   text="Selling a Probate, Trust, Or"
+                  className="text-header"
                   as="div"
                   animate={true}
                 />
@@ -184,7 +185,7 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
                 />
               </h4>
               <div className="mt-3">
-                <p className="font-montserrat text-center font-medium text-[15.8px] md:text-xl lg:text-2xl">
+                <p className="font-montserrat text-center font-bold text-[15.8px] md:text-xl lg:text-2xl">
                   <AnimatedText
                     text="Whether you're navigating probate, managing a trust, or dealing with conservatorship property, we understand that you've got a lot on your plate. Let us help you get your property"
                     animate={false}

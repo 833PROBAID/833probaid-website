@@ -138,7 +138,7 @@ export default function BlogHero({
             borderRadius: "50%",
             objectFit: "cover",
             flexShrink: 0,
-            alignSelf: "center",
+            alignSelf: "right",
           }}
         />
         <span

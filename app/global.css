@@ -33,6 +33,7 @@ section {
   --color-botMessage: #ffffff;
   --color-voiceActive: #ff4444;
   --color-voiceInactive: #666666;
+  --color-header: #2A2A2A
 
   --ease-out: cubic-bezier(0.24, 0, 0.38, 1);
 
