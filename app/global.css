@@ -1,4 +1,14 @@
 @import "tailwindcss";
+.radio-label {
+  font-size: 15px;
+  line-height: 1.5;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 4px 10px 4px 16px;
+  border-radius: 4px;
+  width: 100%;
+  color: white;
+}
 
 section {
   contain: none;
