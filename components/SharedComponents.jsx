@@ -965,7 +965,7 @@ export const RadioButton = ({
 			</div>
 
 			<span
-				className={`pr-2.5 pl-4 py-1 rounded font-bold uppercase text-base w-full border ${
+				className={`pr-2.5 pl-4 py-1 rounded font-bold uppercase text-sm text-[15px] line-height-6 w-full border ${
 					color === "orange" ? "border-[#FD7702]" : "border-[#0097A7]"
 				} ${bgColor} text-white`}>
 				{label}
