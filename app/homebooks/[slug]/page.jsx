@@ -15,7 +15,6 @@ import {
   getPublishedHomeBookSlugs,
 } from "@/app/services/homeBookService";
 import HomeBookContentClient from "./HomeBookContentClient";
-import { scopeCSS } from "@/app/utils/scopeCSS";
 
 /**
  * Deduplicate the DB/cache lookup across generateMetadata and the page
@@ -163,11 +162,6 @@ export default async function HomeBookDetailPage({ params }) {
 
         {grapesContent?.html ? (
           <div className="mt-8">
-            <style
-              dangerouslySetInnerHTML={{
-                __html: scopeCSS(grapesContent.css || "", ".homebook-content"),
-              }}
-            />
             <div
               className="homebook-content"
               style={{

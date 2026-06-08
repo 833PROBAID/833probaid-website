@@ -121,21 +121,20 @@ const ReadyToGetStart = () => {
                   Stop Guessing. Start Executing.
                 </h2>
                 <p
-                  className={`my-6 text-center text-[26px] leading-[1.2] text-[#2A2A2A]`}
+                  className={`my-6 text-center font-bold text-[26px] leading-[1.2] text-[#2A2A2A]`}
                 >
                   <AnimatedText text="Court-supervised real estate requires a high standard of precision, compliance, and specialized expertise. Stop navigating probate, conservatorship, or trust property sales through uncertainty." />
-                  <br />
-                  <span className="mt-2 block">
+                  <span className="mt-5 block">
                     Call{" "}
                     <span
                       style={{ color: "#0097A7" }}
-                      className="font-semibold"
+                      className="font-bold"
                     >
                       <AnimatedText text="(833) PROBAID — " />
                     </span>{" "}
                     <span
                       style={{ color: "#FE7702" }}
-                      className="font-semibold"
+                      className="font-bold"
                     >
                       <AnimatedText text="(833) 776-2243 — NOW " />
                     </span>{" "}
@@ -523,7 +522,7 @@ const ReadyToGetStart = () => {
             </defs>
           </svg>
           <div
-            className="rtgs-btn1-float absolute left-[22.12%] top-[69.29%] w-[30.97%] h-[14.84%]"
+            className="rtgs-btn1-float absolute left-[22.12%] top-[71.29%] w-[30.97%] h-[14.84%]"
             onClick={() => router.push("/homebooks/contact-us")}
           >
             <img
@@ -533,7 +532,7 @@ const ReadyToGetStart = () => {
             />
           </div>
           <div
-            className="rtgs-btn2-float absolute left-[51.33%] top-[69.29%] w-[30.97%] h-[14.84%]"
+            className="rtgs-btn2-float absolute left-[51.33%] top-[71.29%] w-[30.97%] h-[14.84%]"
             onClick={() => router.push("/homebooks/833probaid-referral-intake")}
           >
             <img

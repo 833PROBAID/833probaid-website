@@ -399,7 +399,7 @@ const BlogsPageClient = ({ initialBlogs = [], initialPagination = {} }) => {
                       className={`w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-full text-sm sm:text-base lg:text-lg font-black transition-all duration-300 ${
                         item === page
                           ? "bg-secondary text-white scale-110 shadow-md"
-                          : "bg-gray-100 text-gray-600 hover:bg-secondary/20 hover:text-secondary hover:scale-125 hover:-translate-y-1 hover:shadow-md cursor-pointer"
+                          : "bg-primary text-white hover:bg-secondary/20 hover:text-secondary hover:scale-125 hover:-translate-y-1 hover:shadow-md cursor-pointer"
                       } ${loading ? "opacity-40 cursor-not-allowed" : ""}`}
                     >
                       {item}

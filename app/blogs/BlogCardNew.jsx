@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -115,6 +115,7 @@ export function LearnMoreButton({
   label = "Learn More",
   size = "lg",
   mirrored = false,
+  arrowRotation = "0deg",
 }) {
   const [hov, setHov] = useState(false);
   const rotateDir = mirrored ? "3deg" : "-3deg";
@@ -149,6 +150,10 @@ export function LearnMoreButton({
         height={100}
         priority
         className="bc-btn-arrow object-contain sm:h-[18px] sm:w-[18px] lg:h-[45px] lg:w-[45px]"
+        style={{
+          transform: `rotate(${arrowRotation})`,
+          transition: "transform 400ms ease",
+        }}
       />
     </button>
   );
@@ -168,6 +173,7 @@ function BookCardInner({
   priority = false,
   onVideoClick, // optional callback for watch video button
 }) {
+  const [isMobile, setIsMobile] = useState(false)
   const [open, setOpen] = useState(false);
   const [flipping, setFlipping] = useState(false);
   const router = useRouter();
@@ -205,6 +211,13 @@ function BookCardInner({
   const coverTransform = open
     ? `translate3d(0, 0, 0.01px) rotateY(${flipAngle})`
     : "translate3d(0, 0, 0.01px) rotateY(0deg)";
+
+    useEffect(() => {
+          const check = () => setIsMobile(window.innerWidth < 640);
+          check();
+          window.addEventListener('resize', check);
+          return () => window.removeEventListener('resize', check);
+        }, []);
 
   return (
     // ── STAGE: perspective wrapper, fluid width, height driven by aspect-ratio ──
@@ -523,6 +536,7 @@ function BookCardInner({
                     size="md"
                     label="Watch Video"
                     mirrored={mirrored}
+                    arrowRotation={isMobile && mirrored ? "180deg" : "0deg"}
                     onClick={(e) => {
                       e.stopPropagation();
                       onVideoClick && onVideoClick();

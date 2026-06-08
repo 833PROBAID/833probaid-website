@@ -297,6 +297,7 @@ function BookCardInner({
                 padding: innerPadding,
                 height: "100%",
                 display: "flex",
+                justifyContent: "center",
                 flexDirection: "column",
                 gap: "clamp(8px,2vw,14px)",
                 rowGap: "clamp(8px,2vw,14px)",
@@ -313,21 +314,6 @@ function BookCardInner({
                   </p>
                 )}
               </div>
-
-              <div className="relative w-full h-full bg-white rounded-2xl border-4 border-secondary shadow-lg shadow-black/30 sm:shadow-xl my-6 sm:shadow-black/40 md:shadow-2xl md:shadow-black/50">
-                <img
-                  src={imageSrc || "/images/hero.png"}
-                  alt={title}
-                  className="h-[250px] w-full object-cover transition-transform duration-500 ease-in-out hover:scale-110"
-                />
-              </div>
-              {description && (
-                <div className="p-4 bg-white rounded-2xl border-4 border-secondary mt-4">
-                  <p className="text-secondary font-semibold text-sm">
-                    {description}
-                  </p>
-                </div>
-              )}
             </div>
           </div>
         </div>
@@ -413,7 +399,7 @@ function BookCardInner({
 
               {/* UPPER HALF — icon + title */}
               <div className="flex flex-col items-center justify-start pt-2 lg:pt-6">
-                <div className="sm:h-[50px] md:h-[60px] lg:h-[70px] xl:h-[90px]">
+                <div className="sm:h-[50px] md:h-[60px] lg:h-[70px] xl:h-[90px] sm:w-[50px] md:w-[60px] lg:w-[70px] xl:w-[90px]">
                   <Image
                     src={icon}
                     alt={title}

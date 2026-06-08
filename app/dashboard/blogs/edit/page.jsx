@@ -93,7 +93,7 @@ const initialBlogContent = {
 		bannerImage: "/images/blog.png",
 		title: "Emotional First Aid: Supporting Executors Beyond The Legal Process",
 		authorName: "Tigran Mkrtchian",
-		authorAvatar: "/images/hero.png",
+		authorAvatar: "/avatar.png",
 	},
 	flatContent: [],
 	steps: [

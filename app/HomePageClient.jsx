@@ -185,7 +185,7 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
                 />
               </h4>
               <div className="mt-3">
-                <p className="font-montserrat text-center font-bold text-[15.8px] md:text-xl lg:text-2xl">
+                <p className="font-montserrat text-center text-[15.8px] md:text-xl lg:text-2xl">
                   <AnimatedText
                     text="Whether you're navigating probate, managing a trust, or dealing with conservatorship property, we understand that you've got a lot on your plate. Let us help you get your property"
                     animate={false}
