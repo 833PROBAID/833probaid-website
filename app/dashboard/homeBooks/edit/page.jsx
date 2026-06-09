@@ -762,7 +762,6 @@ export default function HomeBookEditPage() {
                     bannerImage={homeBookContent.hero?.bannerImage}
                     title={homeBookContent.hero?.title}
                     subtitle={homeBookContent.hero?.subtitle}
-                    description={homeBookContent.metadata?.description}
                   />
                 </div>
               </div>
