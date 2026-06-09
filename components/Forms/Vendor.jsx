@@ -320,6 +320,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
       className="w-full mt-7"
       ref={formContainerRef}
       style={{ fontFamily: "var(--font-poppins), sans-serif" }}
+      data-no-scope
     >
       {/* Zoom Controls */}
       <div className="sticky top-3 z-50 flex justify-center mb-4 pointer-events-none">

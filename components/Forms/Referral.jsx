@@ -386,9 +386,9 @@ const Form = ({ readOnly = false, initialData = null }) => {
 		<div
 			className='w-full mt-7'
 			ref={formContainerRef}
-			style={{
-				fontFamily: "var(--font-poppins), sans-serif",
-			}}>
+			style={{ fontFamily: "var(--font-poppins), sans-serif" }}
+			data-no-scope
+		>
 			<div className='sticky top-3 z-50 flex justify-center mb-4 pointer-events-none'>
 				<div
 					className='pointer-events-auto flex items-center gap-1 rounded-full px-3 py-1.5'
