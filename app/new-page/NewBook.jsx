@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useState, useRef, useEffect } from "react";
+import { memo, useState, useRef } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import "./book-card.css";
@@ -123,7 +123,6 @@ function BookCardInner({
   mirrored = false,
   priority = false,
 }) {
-  const [isMobile, setIsMobile] = useState(false)
   const [open, setOpen] = useState(false);
   const coverRef = useRef(null);
   const router = useRouter();
@@ -175,13 +174,6 @@ function BookCardInner({
     }
     setTimeout(() => setFlipping(false), speed + 300);
   };
-
-  useEffect(() => {
-      const check = () => setIsMobile(window.innerWidth < 640);
-      check();
-      window.addEventListener('resize', check);
-      return () => window.removeEventListener('resize', check);
-    }, []);
 
   return (
     <div
@@ -525,7 +517,6 @@ function BookCardInner({
                   size="md"
                   label="Learn More"
                   mirrored={mirrored}
-                  arrowRotation={isMobile && mirrored ? "180deg" : "0deg"}
                   onClick={handleLearnMore}
                 />
               </div>

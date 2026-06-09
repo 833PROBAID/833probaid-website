@@ -21,7 +21,7 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer className="bg-primary/35 border-primary mt-8 border-y-2 md:mt-12 pt-12">
+    <footer className="bg-primary/35 border-primary mt-8 border-y-2 pt-12">
       <div
         className="bg-secondary  py-2 mt-0.5"
         style={{

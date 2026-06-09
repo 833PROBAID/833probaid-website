@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import path from "path";
+import { put } from "@vercel/blob";
 import * as vendorController from "../../controllers/vendorController.js";
 
 export async function GET(request) {
@@ -38,9 +37,6 @@ export async function POST(request) {
 				}
 			}
 
-			const uploadDir = path.join(process.cwd(), "public", "uploads", "vendor");
-			await mkdir(uploadDir, { recursive: true });
-
 			// Named file fields with their display labels
 			const fileFields = [
 				{ key: "w9Form", label: "W-9 Form" },
@@ -50,21 +46,19 @@ export async function POST(request) {
 				{ key: "certificationFile", label: "Translation Certification" },
 			];
 
-			for (const { key, label } of fileFields) {
+			for (const { key } of fileFields) {
 				const file = formData.get(key);
 				if (!(file instanceof File)) continue;
-				const bytes = await file.arrayBuffer();
-				const buffer = Buffer.from(bytes);
 				const timestamp = Date.now();
 				const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-				const filename = `${timestamp}-${safeName}`;
-				await writeFile(path.join(uploadDir, filename), buffer);
+				const filename = `vendor/${timestamp}-${safeName}`;
+				const blob = await put(filename, file, { access: "public" });
 				savedFiles.push({
 					originalName: file.name,
-					name: filename,
+					name: `${timestamp}-${safeName}`,
 					size: file.size,
 					mimeType: file.type,
-					path: `/uploads/vendor/${filename}`,
+					path: blob.url,
 					fieldName: key,
 				});
 			}

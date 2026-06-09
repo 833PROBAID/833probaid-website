@@ -26,7 +26,7 @@ export const renderLabel = (text, color, variant) => {
 					return (
 						<span
 							key={index}
-							className={`font-bold ${specialCharSize} text-[${colorCode}] align-middle`}>
+							className={`font-bold ${specialCharSize} text-[${colorCode}] align-baseline`}>
 							{" : "}
 						</span>
 					);

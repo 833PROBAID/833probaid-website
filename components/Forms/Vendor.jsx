@@ -508,8 +508,8 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                               : false
                           }
                         />
-                        ,{" "}
-                        <span className="text-[#FD7702] font-bold ml-4">
+                        <span className="text-[#FD7702] font-bold ml-4">,</span>{" "}
+                        <span className="text-[#FD7702] font-bold">
                           Is Job Over $600? If So, Upload W-9 Form
                         </span>
                       </label>
@@ -627,8 +627,8 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                             formData.cancellationFee === "yes" ? true : false
                           }
                         />
-                        ,
-                        <span className="text-[#FD7702] font-bold mx-4">
+                        <span className="text-[#FD7702] font-bold ml-4">,</span>{" "}
+                        <span className="text-[#FD7702] font-bold mr-4">
                           How Much?
                         </span>
                       </label>
@@ -1740,7 +1740,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                             },
                           ]}
                           width="auto"
-                          gridClass="mr-5"
+                          gridClass="mr-[21px]"
                         />
                         <div className="ml-4">
                           <TextInput
@@ -1749,7 +1749,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                             onChange={handleChange}
                             label="License #:"
                             width="532px"
-                            inputClass="ml-2"
+                            inputClass="ml-2 w-[430px]"
                           />
                         </div>
                       </div>
@@ -1824,7 +1824,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                               },
                             ]}
                             width="auto"
-                            gridClass="mr-14"
+                            gridClass="mr-[54px]"
                           />
                         </div>
                         <label className="block font-bold text-base w-max mx-1">

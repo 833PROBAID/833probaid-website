@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import path from "path";
+import { put } from "@vercel/blob";
 import * as referralController from "../../controllers/referralController.js";
 
 export async function GET(request) {
@@ -40,24 +39,19 @@ export async function POST(request) {
 			}
 
 			// Process file uploads
-			const uploadDir = path.join(process.cwd(), "public", "uploads", "referral");
-			await mkdir(uploadDir, { recursive: true });
-
 			const files = formData.getAll("files");
 			for (const file of files) {
 				if (!(file instanceof File)) continue;
-				const bytes = await file.arrayBuffer();
-				const buffer = Buffer.from(bytes);
 				const timestamp = Date.now();
 				const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-				const filename = `${timestamp}-${safeName}`;
-				await writeFile(path.join(uploadDir, filename), buffer);
+				const filename = `referral/${timestamp}-${safeName}`;
+				const blob = await put(filename, file, { access: "public" });
 				savedFilePaths.push({
 					originalName: file.name,
-					name: filename,
+					name: `${timestamp}-${safeName}`,
 					size: file.size,
 					mimeType: file.type,
-					path: `/uploads/referral/${filename}`,
+					path: blob.url,
 				});
 			}
 		} else {
