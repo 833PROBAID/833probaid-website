@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const TRAIL_DURATION = 900;  // ms — reduced from 1200 for less draw work
 const SMOOTH_FACTOR = 0.15;  // higher = snappier tracking, prevents point bunching near cursor
@@ -8,6 +8,7 @@ const MIN_DIST = 3;          // increased from 1.5 — fewer redundant points
 const BUCKETS = 6;           // opacity buckets instead of per-segment draws
 
 export default function MouseTrail() {
+  const [isMobile, setIsMobile] = useState(false);
   const canvasRef = useRef(null);
   const stateRef = useRef({
     mouse: { x: -999, y: -999 },
@@ -15,6 +16,13 @@ export default function MouseTrail() {
     points: [],
     raf: null,
   });
+
+	useEffect(() => {
+		const check = () => setIsMobile(window.innerWidth < 640);
+		check();
+		window.addEventListener('resize', check);
+		return () => window.removeEventListener('resize', check);
+	}, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -134,7 +142,7 @@ export default function MouseTrail() {
     };
   }, []);
 
-  return (
+  return !isMobile && (
     <canvas
       ref={canvasRef}
       style={{

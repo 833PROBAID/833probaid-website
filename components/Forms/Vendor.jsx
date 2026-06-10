@@ -1885,7 +1885,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                       ]}
                       label="Do You Understand that the Jobs You May Be Assigned Are Court-Supervised and Your Work May Be Reviewed by an Attorney or Judge?"
                       width="full"
-                      containerClass="flex justify-between items-center"
+                      containerClass="flex justify-between items-start"
                       labelClass="w-[950px] text-justify"
                     />
 
@@ -1909,7 +1909,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                       ]}
                       label="Will You Notify the Agent Immediately if You Find Any Sensitive Documents, Cash, Weapons, or Personal Valuables?"
                       width="full"
-                      containerClass="flex justify-between items-center"
+                      containerClass="flex justify-between items-start"
                       labelClass="w-[950px] text-justify"
                     />
 
@@ -1933,7 +1933,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                       ]}
                       label="Do You Agree Not to Take, Gift, Donate or Remove Any Items Unless Instructed in Writing by the Estate Rep or Agent?"
                       width="full"
-                      containerClass="flex justify-between items-center"
+                      containerClass="flex justify-between items-start"
                       labelClass="w-[950px] text-justify"
                     />
                     <RadioGroup
@@ -1956,7 +1956,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                       ]}
                       label="Do You Agree to Take Clear, Timestamped Photos of Your Assigned Work Before and After Completion and Send Them to Us Via Text or Email when Requested? — This Helps Ensure Transparency and Protects All Parties Involved."
                       width="full"
-                      containerClass="flex justify-between items-center"
+                      containerClass="flex justify-between items-start"
                       labelClass="w-[950px] text-justify"
                     />
                     <RadioGroup
@@ -1979,7 +1979,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                       ]}
                       label="Do You Agree to Indemnify and Hold Harmless the Real Estate Agent and Estate Representative for Any Damages Caused by Your Work?"
                       width="full"
-                      containerClass="flex justify-between items-center"
+                      containerClass="flex justify-between items-start"
                       labelClass="w-[950px] text-justify"
                     />
 
@@ -2003,7 +2003,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                       ]}
                       label="Do You Understand that Submission of this Form does not Guarantee Work or Listing on the Approved Vendor List?"
                       width="full"
-                      containerClass="flex justify-between items-center"
+                      containerClass="flex justify-between items-start"
                       labelClass="w-[950px] text-justify"
                     />
                   </FormSection>

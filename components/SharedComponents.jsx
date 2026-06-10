@@ -5,7 +5,7 @@ import "react-datepicker/dist/react-datepicker.css";
 export const renderLabel = (text, color, variant) => {
 	const colorCode = color === "teal" ? "#0097A7" : "#FD7702";
 	const isLarge = variant === "invoice";
-	const textSize = isLarge ? "text-xl" : "text-base";
+	const textSize = isLarge ? "text-xl" : "text-[16.5px]";
 	const specialCharSize = isLarge ? "text-2xl font-bold" : "text-xl";
 
 	if (
