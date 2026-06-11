@@ -19,7 +19,6 @@ const DummyYesRadio = ({ value = false }) => {
       selectedValue={value ? "yes" : "no"}
       label={"Yes"}
       color={"teal"}
-      width={"50px"}
     />
   );
 };
@@ -508,7 +507,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                               : false
                           }
                         />
-                        <span className="text-[#FD7702] font-bold ml-4">,</span>{" "}
+                        <span className="text-[#FD7702] font-bold">,</span>{" "}
                         <span className="text-[#FD7702] font-bold">
                           Is Job Over $600? If So, Upload W-9 Form
                         </span>
@@ -627,7 +626,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                             formData.cancellationFee === "yes" ? true : false
                           }
                         />
-                        <span className="text-[#FD7702] font-bold ml-4">,</span>{" "}
+                        <span className="text-[#FD7702] font-bold">,</span>{" "}
                         <span className="text-[#FD7702] font-bold mr-4">
                           How Much?
                         </span>

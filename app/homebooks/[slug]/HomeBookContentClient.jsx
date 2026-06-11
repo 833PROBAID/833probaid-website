@@ -15,8 +15,12 @@ export default function HomeBookContentClient() {
 	const [referralIntakeEl, setReferralIntakeEl] = useState(null);
 
 	useEffect(() => {
-		setVendorIntakeEl(document.getElementById("vendor-intake"));
-		setReferralIntakeEl(document.getElementById("referral-intake"));
+		const vendorEl = document.getElementById("vendor-intake");
+		const referralEl = document.getElementById("referral-intake");
+		if (vendorEl) vendorEl.setAttribute("data-no-scope", "");
+		if (referralEl) referralEl.setAttribute("data-no-scope", "");
+		setVendorIntakeEl(vendorEl);
+		setReferralIntakeEl(referralEl);
 	}, []);
 
 	return (

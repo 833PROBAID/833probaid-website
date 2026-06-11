@@ -482,7 +482,7 @@ function BookCardInner({
                   {title}
                 </h2>
                 {/* Author Name */}
-                <div className="w-full ">
+                <div className="w-full lg:mt-5">
                   <hr className="w-full h-[2px] border-[#14b3c2] border rounded-full" />
                   <div className="flex items-center gap-3 w-full justify-start mt-2">
                     <img
