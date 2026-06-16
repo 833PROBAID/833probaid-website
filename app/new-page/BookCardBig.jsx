@@ -50,6 +50,7 @@ export function LearnMoreButton({
   const rotateDir = mirrored ? "3deg" : "-3deg";
   return (
     <div
+    className="lg:mt-1"
       style={{
         position: "relative",
         display: "inline-flex",
@@ -202,14 +203,19 @@ function BookCardInner({
             position: "absolute",
             top: 0,
             right: 0,
-            bottom: -10,
-            left: -10,
-            borderRadius: "15px",
-            filter: "blur(3px)",
-            transform: "translate(6px, -5px) translateZ(-6px)",
-            WebkitTransform: "translate(6px, -5px) translateZ(-6px)",
-            background: "rgba(0,0,0,0.84)",
-            pointerEvents: "none",
+            bottom: 0,
+            left: 0,
+            borderRadius: "1.8%",
+            transform: "translateZ(-4px)",
+            WebkitTransform: "translateZ(-4px)",
+            background: `linear-gradient(135deg, ${D.tealDark}, ${D.tealDeep})`,
+            boxShadow: `
+              inset 0 0 0 1px #014E57,
+              inset 0px 6px 4px rgba(255,255,255,0.25),
+              inset -5px -6px 4px rgba(0,0,0,0.25),
+              5px -6px 15.1px rgba(0,0,0,0.80),
+              -2px 6px 11.3px rgba(0,0,0,0.80)
+            `,
           }}
         />
 
@@ -285,7 +291,7 @@ function BookCardInner({
               bottom: 0,
               left: 0,
               background: `linear-gradient(135deg, ${D.paper} 0%, #f5ecd9 100%)`,
-              borderRadius: "7px",
+              borderRadius: "1.1%",
               clipPath,
               WebkitClipPath: clipPath,
               boxShadow: innerBoxShadow,
@@ -293,11 +299,10 @@ function BookCardInner({
             }}
           >
             <div
-              style={{
+              sstyle={{
                 padding: innerPadding,
                 height: "100%",
                 display: "flex",
-                justifyContent: "center",
                 flexDirection: "column",
                 gap: "clamp(8px,2vw,14px)",
                 rowGap: "clamp(8px,2vw,14px)",
@@ -320,7 +325,6 @@ function BookCardInner({
 
         {/* COVER PAGE */}
         <div
-          ref={coverRef}
           style={{
             position: "absolute",
             top: P.coverPadV,
@@ -389,6 +393,9 @@ function BookCardInner({
                 zIndex: 1,
                 background: "#0097A7",
                 borderRadius: "8px",
+                display: "flex",
+                flexDirection: "column",
+                gap: '8px',
                 clipPath,
                 WebkitClipPath: clipPath,
                 overflow: "hidden",
@@ -434,7 +441,7 @@ function BookCardInner({
               <div
                 style={{
                   padding: "15px 0",
-                  margin: "10px 0",
+                  margin: "5px 0",
                   background: "#FE7702",
                   boxShadow:
                     "inset 0 1px 0 rgba(255,255,255,0.25), 0 2px 6px rgba(0,0,0,0.3), 0px 4px 5.6px 0px #00000060, 0px -3px 6.2px 0px #00000099",

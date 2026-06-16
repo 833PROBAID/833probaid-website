@@ -50,7 +50,7 @@ export default function ContactCard() {
                     </div>
                   </div>
                 </a>
-                <a href="mailto:info@833probaid.com" className="sm:mb-6 mb-2 flex items-center gap-3">
+                <a href="mailto:info@833probaid.com" className="mb-6 flex items-center gap-3">
                   <img src="/svgs/uiw_mail.svg" style={{ height: "35px" }} alt="Email" />
                   <p className="font-bold text-[19px]">Info@833probaid.com</p>
                 </a>

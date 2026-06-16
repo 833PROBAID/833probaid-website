@@ -132,10 +132,12 @@ export const Checkbox = ({
 	containerClass = "",
 	disabled = false,
 	variant,
+	error = false,
 }) => {
 	const widthConfig = getWidthStyles(width);
 	const isLarge = variant === "invoice";
 	const borderSize = isLarge ? "border-[4.5px]" : "border-[3.5px]";
+	const checkboxBorder = error ? "border-red-500" : "border-[#FD7702]";
 
 	return (
 		<label
@@ -151,15 +153,15 @@ export const Checkbox = ({
 					checked={checked}
 					onChange={onChange}
 					disabled={disabled}
-					className={`appearance-none h-8 w-8 ${borderSize} border-[#FD7702] bg-white rounded checked:border-[#FD7702] focus:ring-2 focus:ring-[#FD7702] transition-all disabled:cursor-not-allowed`}
+					className={`block appearance-none h-8 w-8 ${borderSize} ${checkboxBorder} bg-white rounded checked:border-[#FD7702] focus:ring-2 focus:ring-[#FD7702] transition-all disabled:cursor-not-allowed`}
 				/>
 				{checked && (
-					<div className='absolute -top-1 left-1 w-full h-full flex items-center justify-center'>
+					<div className='absolute top-0 left-1 w-full h-full flex items-center justify-center'>
 						<i className='fas fa-check text-[#0097A7] text-5xl'></i>
 					</div>
 				)}
 			</div>
-			<span className='font-bold min-w-max'>
+			<span className='font-bold min-w-max h-[24px]'>
 				{typeof label === "string"
 					? renderLabel(label, undefined, variant)
 					: label}
@@ -191,6 +193,7 @@ export const TextInput = React.forwardRef(
 			onFocus,
 			onBlur,
 			variant,
+			error = false,
 			...props
 		},
 		ref,
@@ -200,6 +203,7 @@ export const TextInput = React.forwardRef(
 		const padding = isLarge ? "px-3 py-2" : "px-2 py-1";
 		const textStyle = isLarge ? "text-xl font-bold" : "";
 		const labelSize = isLarge ? "text-xl" : "text-base";
+		const borderColor = error ? "border-red-500" : "border-[#0097A7]";
 		const widthConfig = getWidthStyles(width);
 		const [showDropdown, setShowDropdown] = React.useState(false);
 		const [filteredSuggestions, setFilteredSuggestions] = React.useState([]);
@@ -330,7 +334,7 @@ export const TextInput = React.forwardRef(
 							if (onBlur) onBlur(e);
 						}}
 						autoComplete='off'
-						className={`w-full h-10 ${borderSize} border-[#0097A7] ${padding} bg-gray-200 focus:outline-none focus:ring-2 focus:ring-[#FD7702] focus:ring-offset-0 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-bold ${textStyle} ${inputClass}`}
+						className={`w-full h-10 ${borderSize} ${borderColor} ${padding} bg-gray-200 focus:outline-none focus:ring-2 focus:ring-[#FD7702] focus:ring-offset-0 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-bold ${textStyle} ${inputClass}`}
 						{...props}
 					/>
 					{/* Loading indicator */}
@@ -855,6 +859,7 @@ export const FileUpload = ({
 	multiple = false,
 	value = null,
 	inputKey,
+	error = false,
 }) => {
 	const widthConfig = getWidthStyles(width);
 	const fileName =
@@ -870,7 +875,9 @@ export const FileUpload = ({
 			className={`block h-10 border-[3.5px] px-2 py-1 cursor-pointer transition-colors font-bold ${
 				hasFile
 					? "border-green-500 bg-green-50 text-green-700 hover:bg-green-100"
-					: "border-[#0097A7] bg-gray-200 text-[#FD7702] hover:text-[#0097A7]"
+					: error
+						? "border-red-500 bg-gray-200 text-[#FD7702] hover:text-[#0097A7]"
+						: "border-[#0097A7] bg-gray-200 text-[#FD7702] hover:text-[#0097A7]"
 			} ${widthConfig.className || ""} ${containerClass} ${
 				disabled ? "opacity-50 cursor-not-allowed pointer-events-none" : ""
 			}`}
@@ -905,6 +912,7 @@ export const RadioButton = ({
 	width = "auto",
 	containerClass = "",
 	disabled = false,
+	error = false,
 }) => {
 	const isSelected = selectedValue === value;
 	const widthConfig = getWidthStyles(width);
@@ -966,7 +974,11 @@ export const RadioButton = ({
 
 			<span
 				className={`pr-2.5 pl-4 py-1 rounded font-bold uppercase text-sm text-[15px] line-height-6 w-full border ${
-					color === "orange" ? "border-[#FD7702]" : "border-[#0097A7]"
+					error
+						? "border-red-500 ring-2 ring-red-500"
+						: color === "orange"
+							? "border-[#FD7702]"
+							: "border-[#0097A7]"
 				} ${bgColor} text-white`}>
 				{label}
 			</span>
@@ -989,6 +1001,7 @@ export const RadioGroup = ({
 	required = false,
 	disabled = false,
 	distributeWidth = false,
+	error = false,
 }) => {
 	const widthConfig = getWidthStyles(width);
 	const flexDirection = direction === "vertical" ? "flex-col" : "flex-row";
@@ -1019,7 +1032,7 @@ export const RadioGroup = ({
 			<div
 				className={`flex ${flexDirection} ${gap} ${gridClass} ${
 					distributeWidth ? "w-full" : ""
-				}`}>
+				} ${error ? "ring-2 ring-red-500 rounded p-1 w-max" : ""}`}>
 				{options.map((option) => (
 					<RadioButton
 						key={option.value}

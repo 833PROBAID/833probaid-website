@@ -118,6 +118,7 @@ export function LearnMoreButton({
 }) {
   const [hov, setHov] = useState(false);
   const rotateDir = mirrored ? "3deg" : "-3deg";
+  const isVideoWatch = label.includes("Video")
   return (
     <button
       className={`bc-btn inline-flex items-center gap-2 sm:gap-1 px-2 sm:h-[38px] lg:h-[55px] xl:h-[70px] lg:gap-3 rounded-[8px] pl-2.5 hover:${rotateDir}`}
@@ -143,12 +144,12 @@ export function LearnMoreButton({
         {label}
       </span>
       <Image
-        src="/arrow-right.png"
+        src={isVideoWatch ? "/arrow-right-filled.png" : "/arrow-right.png"}
         alt="arrow right"
         width={100}
         height={100}
         priority
-        className="bc-btn-arrow object-contain sm:h-[18px] sm:w-[18px] lg:h-[45px] lg:w-[45px]"
+        className={`bc-btn-arrow object-contain ${isVideoWatch ? 'sm:w-3.5 lg:w-8.25 sm:h-3.5 lg:h-10.25' : 'sm:w-4.5 lg:w-11.25 sm:h-4.5 lg:h-11.25'}`}
       />
     </button>
   );
@@ -482,7 +483,7 @@ function BookCardInner({
                   {title}
                 </h2>
                 {/* Author Name */}
-                <div className="w-full lg:mt-5">
+                <div className="w-full lg:mt-5 mt-4">
                   <hr className="w-full h-[2px] border-[#14b3c2] border rounded-full" />
                   <div className="flex items-center gap-3 w-full justify-start mt-2">
                     <img

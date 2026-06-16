@@ -153,11 +153,51 @@ const buildFormData = (data) => ({
   },
 });
 
+// Text fields that must always be filled
+const REQUIRED_TEXT_FIELDS = [
+  "businessName",
+  "yourName",
+  "email",
+  "officePhone",
+  "cellPhone",
+  "headquarters",
+  "specificAreas",
+  "notesOrSpecialRequirements",
+  "suretyCompany",
+];
+
+// Radio groups that must have a selection (at least one option chosen)
+const REQUIRED_RADIO_FIELDS = [
+  "acceptDeferredPayment",
+  "paidThroughEscrow",
+  "requireSignedAgreement",
+  "insured",
+  "cancellationFee",
+  "takePhotos",
+  "subcontract",
+  "travelDistance",
+  "howSoon",
+  "preferredTimeWindow",
+  "emergencyServices",
+  "licensed",
+  "insuredSecond",
+  "bonded",
+  "courtSupervisedUnderstand",
+  "notifyAgentSensitive",
+  "agreeNotToTakeItems",
+  "agreeToTakePhotos",
+  "agreeToIndemnify",
+  "understandNoGuarantee",
+];
+
+const isEmpty = (v) => !v?.toString().trim();
+
 const Form2 = ({ readOnly = false, initialData = null }) => {
   const [submitStatus, setSubmitStatus] = useState(null);
   const [submitError, setSubmitError] = useState("");
   const [countdown, setCountdown] = useState(0);
   const [fileResetKey, setFileResetKey] = useState(0);
+  const [fieldErrors, setFieldErrors] = useState(new Set());
   const [_formData, setFormData] = useState(INITIAL_FORM_DATA);
 
   const formData =
@@ -207,6 +247,22 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
         }));
       }
     }
+
+    if (fieldErrors.has(name)) {
+      setFieldErrors((prev) => {
+        const next = new Set(prev);
+        next.delete(name);
+        return next;
+      });
+    }
+    // Clear the section-level error once any checkbox in the group is checked
+    if (group && checked && fieldErrors.has(group)) {
+      setFieldErrors((prev) => {
+        const next = new Set(prev);
+        next.delete(group);
+        return next;
+      });
+    }
   };
 
   const handleFileChange = (e) => {
@@ -226,6 +282,14 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
         ...prev,
         [name]: files && files[0] ? files[0] : null,
       }));
+    }
+
+    if (files && files[0] && fieldErrors.has(name)) {
+      setFieldErrors((prev) => {
+        const next = new Set(prev);
+        next.delete(name);
+        return next;
+      });
     }
   };
 
@@ -270,6 +334,110 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
     if (readOnly) return;
     setSubmitStatus("loading");
     setSubmitError("");
+
+    const errors = new Set();
+    const ts = formData.translationServices;
+
+    // Rule 1: required text fields
+    REQUIRED_TEXT_FIELDS.forEach((f) => {
+      if (isEmpty(formData[f])) errors.add(f);
+    });
+
+    // Rule 4: radio groups need at least one selection
+    REQUIRED_RADIO_FIELDS.forEach((f) => {
+      if (isEmpty(formData[f])) errors.add(f);
+    });
+
+    // Rule 2: checkbox sections need at least one selected
+    if (!Object.values(formData.paymentMethods).some(Boolean))
+      errors.add("paymentMethods");
+    if (!Object.values(formData.daysAvailable).some(Boolean))
+      errors.add("daysAvailable");
+    if (!Object.values(formData.servicesOffered).some(Boolean))
+      errors.add("servicesOffered");
+
+    // Rule 3 + other conditional requirements
+    if (formData.acceptDeferredPayment === "yes" && !formData.w9Form)
+      errors.add("w9Form");
+    if (formData.cancellationFee === "yes" && isEmpty(formData.cancellationAmount))
+      errors.add("cancellationAmount");
+    if (formData.licensed === "yes" && isEmpty(formData.licenseNumber))
+      errors.add("licenseNumber");
+    if (formData.insuredSecond === "yes" && !formData.coiFile)
+      errors.add("coiFile");
+    if (formData.bonded === "yes") {
+      if (isEmpty(formData.bondNumber)) errors.add("bondNumber");
+      if (!formData.bondCertFile) errors.add("bondCertFile");
+    }
+    if (formData.servicesOffered.others && isEmpty(formData.othersList))
+      errors.add("othersList");
+
+    // Translation / Interpretation section (only when that service is selected)
+    if (formData.servicesOffered.translationInterpretationServices) {
+      [
+        "languagesOffered",
+        "areasServed",
+        "inPersonHourlyRate",
+        "phoneVirtualHourlyRate",
+      ].forEach((f) => {
+        if (isEmpty(ts[f])) errors.add(`translationServices.${f}`);
+      });
+
+      const availabilitySelected =
+        ts.listingPresentationTranslation ||
+        ts.contractDisclosureTranslation ||
+        ts.propertyWalkthroughTranslation ||
+        ts.attorneyConferenceTranslation ||
+        ts.otherAvailability;
+      if (!availabilitySelected)
+        errors.add("translationServices.availability");
+      if (ts.otherAvailability && isEmpty(ts.otherAvailabilityList))
+        errors.add("translationServices.otherAvailabilityList");
+
+      // Certification blocks are optional, but become required once checked
+      if (ts.certifiedInterpreter) {
+        if (isEmpty(ts.certifyingAuthority))
+          errors.add("translationServices.certifyingAuthority");
+        if (isEmpty(ts.licenseNumber))
+          errors.add("translationServices.licenseNumber");
+      }
+      if (ts.certifiedTranslator) {
+        if (isEmpty(ts.certifyingOrganization))
+          errors.add("translationServices.certifyingOrganization");
+        if (isEmpty(ts.translatorLicenseNumber))
+          errors.add("translationServices.translatorLicenseNumber");
+        if (isEmpty(ts.languagePairs))
+          errors.add("translationServices.languagePairs");
+        if (isEmpty(ts.yearsOfExperience))
+          errors.add("translationServices.yearsOfExperience");
+        if (isEmpty(ts.turnaroundTime))
+          errors.add("translationServices.turnaroundTime");
+        if (!ts.certificationFile)
+          errors.add("translationServices.certificationFile");
+
+        const spec = ts.specializations || {};
+        const specSelected =
+          spec.willsTrusts ||
+          spec.probateCourtForms ||
+          spec.propertyDisclosures ||
+          spec.legalContracts ||
+          spec.medicalDocuments ||
+          spec.other;
+        if (!specSelected) errors.add("translationServices.specializations");
+        if (spec.other && isEmpty(ts.otherSpecializationList))
+          errors.add("translationServices.otherSpecializationList");
+        if (!spec.iContractTranslation)
+          errors.add("translationServices.iContractTranslation");
+      }
+    }
+
+    if (errors.size > 0) {
+      setFieldErrors(errors);
+      setSubmitStatus("error");
+      setSubmitError("Please complete all required fields highlighted in red.");
+      return;
+    }
+    setFieldErrors(new Set());
     try {
       const {
         w9Form,
@@ -292,6 +460,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
       if (result.success) {
         setSubmitStatus("success");
         setFormData(INITIAL_FORM_DATA);
+        setFieldErrors(new Set());
         setFileResetKey((k) => k + 1);
         setCountdown(5);
         const interval = setInterval(() => {
@@ -427,6 +596,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                       onChange={handleChange}
                       label="Your Business Name:"
                       width="full"
+                      error={fieldErrors.has("businessName")}
                     />
                     <div className="flex gap-4 w-full">
                       <TextInput
@@ -436,6 +606,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                         label="Your Name/Title:"
                         inputClass="w-[400px]"
                         containerClass="justify-between"
+                        error={fieldErrors.has("yourName")}
                       />
                       <TextInput
                         name="email"
@@ -444,6 +615,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                         label="Your E-Mail:"
                         inputClass="w-[440px]"
                         containerClass="justify-between"
+                        error={fieldErrors.has("email")}
                       />
                     </div>
 
@@ -455,6 +627,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                         label="Your Business Phone:"
                         inputClass="w-[400px]"
                         containerClass="justify-between"
+                        error={fieldErrors.has("officePhone")}
                       />
                       <TextInput
                         name="cellPhone"
@@ -463,6 +636,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                         label="Your Cell Phone:"
                         inputClass="w-[440px]"
                         containerClass="justify-between"
+                        error={fieldErrors.has("cellPhone")}
                       />
                     </div>
                   </FormSection>
@@ -476,6 +650,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                       name="acceptDeferredPayment"
                       value={formData.acceptDeferredPayment}
                       onChange={handleChange}
+                      error={fieldErrors.has("acceptDeferredPayment")}
                       options={[
                         {
                           value: "yes",
@@ -493,6 +668,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                       label="Do You Accept Deferred Payment from Escrow?"
                       width="full"
                       containerClass="flex justify-between items-center"
+                      gap="gap-[25px]"
                     />
 
                     <div className="flex items-center gap-4">
@@ -521,6 +697,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                         value={formData.w9Form}
                         disabled={readOnly}
                         inputKey={fileResetKey}
+                        error={fieldErrors.has("w9Form")}
                       />
                     </div>
 
@@ -528,6 +705,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                       name="paidThroughEscrow"
                       value={formData.paidThroughEscrow}
                       onChange={handleChange}
+                      error={fieldErrors.has("paidThroughEscrow")}
                       options={[
                         {
                           value: "yes",
@@ -545,12 +723,14 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                       label="If Paid Through Escrow, Do You Agree to Wait Until Closing with No Late Fees or Interest?"
                       width="full"
                       containerClass="flex justify-between items-center"
+                      gap="gap-[25px]"
                     />
 
                     <RadioGroup
                       name="requireSignedAgreement"
                       value={formData.requireSignedAgreement}
                       onChange={handleChange}
+                      error={fieldErrors.has("requireSignedAgreement")}
                       options={[
                         {
                           value: "yes",
@@ -568,12 +748,14 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                       label="Do You Require a Signed Service Agreement?"
                       width="full"
                       containerClass="flex justify-between items-center"
+                      gap="gap-[25px]"
                     />
 
                     <RadioGroup
                       name="insured"
                       value={formData.insured}
                       onChange={handleChange}
+                      error={fieldErrors.has("insured")}
                       options={[
                         {
                           value: "yes",
@@ -591,12 +773,14 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                       label="Are You Insured and Able to Provide a Certificate if Needed? (Especially for Biohazard)"
                       width="full"
                       containerClass="flex justify-between items-center"
+                      gap="gap-[25px]"
                     />
 
                     <RadioGroup
                       name="cancellationFee"
                       value={formData.cancellationFee}
                       onChange={handleChange}
+                      error={fieldErrors.has("cancellationFee")}
                       options={[
                         {
                           value: "yes",
@@ -614,6 +798,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                       label="Do You Charge Cancellation or Rescheduling Fees?"
                       width="full"
                       containerClass="flex justify-between items-center"
+                      gap="gap-[25px]"
                     />
 
                     <div className="flex items-center gap-4">
@@ -641,6 +826,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                           onChange={handleChange}
                           width="200px"
                           inputClass="pl-9"
+                          error={fieldErrors.has("cancellationAmount")}
                         />
                         <span className="font-bold text-[#FD7702] pl-2">
                           {renderLabel("(Write $0 If None)", "teal")}
@@ -652,6 +838,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                       name="takePhotos"
                       value={formData.takePhotos}
                       onChange={handleChange}
+                      error={fieldErrors.has("takePhotos")}
                       options={[
                         {
                           value: "yes",
@@ -669,18 +856,19 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                       label="Do You Take Before & After Photos - and Can You Email/Text Them to Me?"
                       width="full"
                       containerClass="flex justify-between items-center"
+                      gap="gap-[25px]"
                     />
 
                     <RadioGroup
                       name="subcontract"
                       value={formData.subcontract}
                       onChange={handleChange}
+                      error={fieldErrors.has("subcontract")}
                       options={[
                         {
                           value: "subcontracted",
                           label: "Subcontracted",
                           color: "teal",
-                          width: "170px",
                         },
                         {
                           value: "myself",
@@ -692,6 +880,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                       label="Do You Subcontract the Work or Perform It Yourself?"
                       width="full"
                       containerClass="flex justify-between items-center"
+                      gap="gap-[25px]"
                     />
                   </FormSection>
 
@@ -703,12 +892,14 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                       onChange={handleChange}
                       label="Headquartered in (City):"
                       width="full"
+                      error={fieldErrors.has("headquarters")}
                     />
 
                     <RadioGroup
                       name="travelDistance"
                       value={formData.travelDistance}
                       onChange={handleChange}
+                      error={fieldErrors.has("travelDistance")}
                       options={[
                         {
                           value: "10",
@@ -732,6 +923,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                       label="How Many Miles Are You Willing to Travel from Base Location?"
                       width="full"
                       containerClass="flex justify-between items-center"
+                      gap="gap-[25px]"
                     />
 
                     <TextInput
@@ -740,6 +932,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                       onChange={handleChange}
                       label="Do You Serve Specific Counties or Cities Only?"
                       width="full"
+                      error={fieldErrors.has("specificAreas")}
                     />
                   </FormSection>
 
@@ -805,8 +998,14 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                           checked={formData.paymentMethods.escrowOnly}
                           onChange={handleChange}
                           width="140px"
+                          error={fieldErrors.has("paymentMethods")}
                         />
                       </div>
+                      {fieldErrors.has("paymentMethods") && (
+                        <p className="text-red-500 font-bold text-base">
+                          Please select at least one payment method.
+                        </p>
+                      )}
                     </div>
                   </FormSection>
 
@@ -875,14 +1074,21 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                           checked={formData.daysAvailable.sun}
                           onChange={handleChange}
                           width="95px"
+                          error={fieldErrors.has("daysAvailable")}
                         />
                       </div>
                     </div>
+                    {fieldErrors.has("daysAvailable") && (
+                      <p className="text-red-500 font-bold text-base">
+                        Please select at least one available day.
+                      </p>
+                    )}
 
                     <RadioGroup
                       name="howSoon"
                       value={formData.howSoon}
                       onChange={handleChange}
+                      error={fieldErrors.has("howSoon")}
                       options={[
                         {
                           value: "Same Day",
@@ -913,6 +1119,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                       name="preferredTimeWindow"
                       value={formData.preferredTimeWindow}
                       onChange={handleChange}
+                      error={fieldErrors.has("preferredTimeWindow")}
                       options={[
                         {
                           value: "Morning",
@@ -943,6 +1150,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                       name="emergencyServices"
                       value={formData.emergencyServices}
                       onChange={handleChange}
+                      error={fieldErrors.has("emergencyServices")}
                       options={[
                         {
                           value: "Yes",
@@ -1073,9 +1281,15 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                           value={formData.othersList}
                           onChange={handleChange}
                           width="full"
+                          error={fieldErrors.has("othersList")}
                         />
                       </div>
                     </div>
+                    {fieldErrors.has("servicesOffered") && (
+                      <p className="text-red-500 font-bold text-base">
+                        Please select at least one service offered.
+                      </p>
+                    )}
                   </FormSection>
 
                   {/* Translation/Interpretation Services */}
@@ -1100,6 +1314,9 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                         onChange={handleChange}
                         label="Languages Offered (List All Fluent):"
                         width="full"
+                        error={fieldErrors.has(
+                          "translationServices.languagesOffered"
+                        )}
                       />
 
                       <TextInput
@@ -1108,6 +1325,9 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                         onChange={handleChange}
                         label="Areas Served (Counties / Regions):"
                         width="full"
+                        error={fieldErrors.has(
+                          "translationServices.areasServed"
+                        )}
                       />
 
                       <div
@@ -1134,6 +1354,9 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                             onChange={handleChange}
                             inputClass="pl-7"
                             width="100%"
+                            error={fieldErrors.has(
+                              "translationServices.inPersonHourlyRate"
+                            )}
                           />
                         </div>
                         <div className="flex items-center gap-4">
@@ -1154,6 +1377,9 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                             onChange={handleChange}
                             inputClass="pl-7"
                             width="200px"
+                            error={fieldErrors.has(
+                              "translationServices.phoneVirtualHourlyRate"
+                            )}
                           />
                         </div>
                       </div>
@@ -1271,8 +1497,16 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                             }
                             onChange={handleChange}
                             width="full"
+                            error={fieldErrors.has(
+                              "translationServices.otherAvailabilityList"
+                            )}
                           />
                         </div>
+                        {fieldErrors.has("translationServices.availability") && (
+                          <p className="text-red-500 font-bold text-base">
+                            Please select at least one availability option.
+                          </p>
+                        )}
                       </div>
 
                       <div
@@ -1318,6 +1552,9 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                                 }
                                 onChange={handleChange}
                                 width="300px"
+                                error={fieldErrors.has(
+                                  "translationServices.certifyingAuthority"
+                                )}
                               />
                             </div>
                             <div className="flex items-center gap-4">
@@ -1333,6 +1570,9 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                                 }
                                 onChange={handleChange}
                                 width="300px"
+                                error={fieldErrors.has(
+                                  "translationServices.licenseNumber"
+                                )}
                               />
                             </div>
                           </div>
@@ -1372,6 +1612,9 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                                 }
                                 onChange={handleChange}
                                 width="100%"
+                                error={fieldErrors.has(
+                                  "translationServices.certifyingOrganization"
+                                )}
                               />
                             </div>
                             <div className="flex items-center gap-4">
@@ -1388,6 +1631,9 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                                 }
                                 onChange={handleChange}
                                 width="100%"
+                                error={fieldErrors.has(
+                                  "translationServices.translatorLicenseNumber"
+                                )}
                               />
                             </div>
                             <div
@@ -1411,6 +1657,9 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                                 }
                                 onChange={handleChange}
                                 width="100%"
+                                error={fieldErrors.has(
+                                  "translationServices.languagePairs"
+                                )}
                               />
                             </div>
                             <div className="flex items-center gap-4">
@@ -1426,6 +1675,9 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                                 }
                                 onChange={handleChange}
                                 width="100px"
+                                error={fieldErrors.has(
+                                  "translationServices.yearsOfExperience"
+                                )}
                               />
                               <span className="font-bold text-base">
                                 {renderLabel("years")}
@@ -1587,8 +1839,18 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                                   }
                                   onChange={handleChange}
                                   width="full"
+                                  error={fieldErrors.has(
+                                    "translationServices.otherSpecializationList"
+                                  )}
                                 />
                               </div>
+                              {fieldErrors.has(
+                                "translationServices.specializations"
+                              ) && (
+                                <p className="text-red-500 font-bold text-base">
+                                  Please select at least one specialization.
+                                </p>
+                              )}
                             </div>
                             <div
                               style={{
@@ -1611,6 +1873,9 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                                 }
                                 onChange={handleChange}
                                 width="100px"
+                                error={fieldErrors.has(
+                                  "translationServices.turnaroundTime"
+                                )}
                               />
                               <span className="font-bold text-base">
                                 {renderLabel("days")}
@@ -1634,12 +1899,18 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                                 }
                                 disabled={readOnly}
                                 inputKey={fileResetKey}
+                                error={fieldErrors.has(
+                                  "translationServices.certificationFile"
+                                )}
                               />
                             </div>
                             <Checkbox
                               name="iContractTranslation"
                               group="translationServices.specializations"
                               label="I Confirm That I Am Professionally Certified And Qualified To Translate Legal Documents Within The United States."
+                              error={fieldErrors.has(
+                                "translationServices.iContractTranslation"
+                              )}
                               checked={
                                 formData.translationServices.specializations
                                   ?.iContractTranslation
@@ -1684,6 +1955,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                         value={formData.notesOrSpecialRequirements}
                         onChange={handleChange}
                         width="435px"
+                        error={fieldErrors.has("notesOrSpecialRequirements")}
                       />
                     </div>
 
@@ -1698,7 +1970,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                         onChange={handleFileChange}
                         label="Attach Your Service Fee Sheet Here"
                         accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png"
-                        width="432px"
+                        width="431px"
                         value={formData.serviceFeeSheet}
                         disabled={readOnly}
                         inputKey={fileResetKey}
@@ -1724,6 +1996,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                           name="licensed"
                           value={formData.licensed}
                           onChange={handleChange}
+                          error={fieldErrors.has("licensed")}
                           options={[
                             {
                               value: "yes",
@@ -1739,7 +2012,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                             },
                           ]}
                           width="auto"
-                          gridClass="mr-[21px]"
+                          gridClass="mr-[24px]"
                         />
                         <div className="ml-4">
                           <TextInput
@@ -1748,7 +2021,8 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                             onChange={handleChange}
                             label="License #:"
                             width="532px"
-                            inputClass="ml-2 w-[430px]"
+                            inputClass="ml-1.5 !w-[430px]"
+                            error={fieldErrors.has("licenseNumber")}
                           />
                         </div>
                       </div>
@@ -1762,6 +2036,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                           name="insuredSecond"
                           value={formData.insuredSecond}
                           onChange={handleChange}
+                          error={fieldErrors.has("insuredSecond")}
                           options={[
                             {
                               value: "yes",
@@ -1793,6 +2068,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                             value={formData.coiFile}
                             disabled={readOnly}
                             inputKey={fileResetKey}
+                            error={fieldErrors.has("coiFile")}
                           />
                         </div>
                       </div>
@@ -1808,6 +2084,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                             name="bonded"
                             value={formData.bonded}
                             onChange={handleChange}
+                            error={fieldErrors.has("bonded")}
                             options={[
                               {
                                 value: "yes",
@@ -1834,7 +2111,8 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                             name="bondNumber"
                             value={formData.bondNumber}
                             onChange={handleChange}
-                            inputClass="ml-2"
+                            inputClass="ml-[7px]"
+                            error={fieldErrors.has("bondNumber")}
                           />
                           <FileUpload
                             name="bondCertFile"
@@ -1845,6 +2123,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                             value={formData.bondCertFile}
                             disabled={readOnly}
                             inputKey={fileResetKey}
+                            error={fieldErrors.has("bondCertFile")}
                           />
                         </div>
                       </div>
@@ -1856,6 +2135,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                       onChange={handleChange}
                       label="Surety Company:"
                       width="full"
+                      error={fieldErrors.has("suretyCompany")}
                     />
                   </FormSection>
 
@@ -1868,6 +2148,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                       name="courtSupervisedUnderstand"
                       value={formData.courtSupervisedUnderstand}
                       onChange={handleChange}
+                      error={fieldErrors.has("courtSupervisedUnderstand")}
                       options={[
                         {
                           value: "yes",
@@ -1884,7 +2165,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                       ]}
                       label="Do You Understand that the Jobs You May Be Assigned Are Court-Supervised and Your Work May Be Reviewed by an Attorney or Judge?"
                       width="full"
-                      containerClass="flex justify-between items-start"
+                      containerClass="flex justify-between items-start mt-6"
                       labelClass="w-[950px] text-justify"
                     />
 
@@ -1892,6 +2173,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                       name="notifyAgentSensitive"
                       value={formData.notifyAgentSensitive}
                       onChange={handleChange}
+                      error={fieldErrors.has("notifyAgentSensitive")}
                       options={[
                         {
                           value: "yes",
@@ -1916,6 +2198,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                       name="agreeNotToTakeItems"
                       value={formData.agreeNotToTakeItems}
                       onChange={handleChange}
+                      error={fieldErrors.has("agreeNotToTakeItems")}
                       options={[
                         {
                           value: "yes",
@@ -1939,6 +2222,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                       name="agreeToTakePhotos"
                       value={formData.agreeToTakePhotos}
                       onChange={handleChange}
+                      error={fieldErrors.has("agreeToTakePhotos")}
                       options={[
                         {
                           value: "yes",
@@ -1962,6 +2246,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                       name="agreeToIndemnify"
                       value={formData.agreeToIndemnify}
                       onChange={handleChange}
+                      error={fieldErrors.has("agreeToIndemnify")}
                       options={[
                         {
                           value: "yes",
@@ -1986,6 +2271,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                       name="understandNoGuarantee"
                       value={formData.understandNoGuarantee}
                       onChange={handleChange}
+                      error={fieldErrors.has("understandNoGuarantee")}
                       options={[
                         {
                           value: "yes",
@@ -2002,7 +2288,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                       ]}
                       label="Do You Understand that Submission of this Form does not Guarantee Work or Listing on the Approved Vendor List?"
                       width="full"
-                      containerClass="flex justify-between items-start"
+                      containerClass="flex justify-between items-start -mb-1"
                       labelClass="w-[950px] text-justify"
                     />
                   </FormSection>
