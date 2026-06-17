@@ -58,7 +58,6 @@ export default function BlogHero({
             position: "absolute",
             inset: 0,
             backgroundColor: "white",
-            borderRadius: "18px",
             clipPath:
               isCard && !mirrored
                 ? "polygon(0% 0%, 100% 0%, 100% 90%, 88% 100%, 0% 100%)"
@@ -66,6 +65,7 @@ export default function BlogHero({
                   ? "polygon(0% 0%, 100% 0%, 100% 78%, 100% 100%, 0% 100%, 12% 100%, 0% 90%)"
                   : "polygon(0% 0%, 100% 0%, 100% 78%, 83% 100%, 0% 100%)",
           }}
+          className={ isCard ? "rounded-lg md:rounded-[18px]" : "rounded-[18px]" }
         />
       </div>
 
@@ -77,11 +77,10 @@ export default function BlogHero({
           top: isCard ? "6.5%" : "7.35%",
           width: isCard ? "81.14%" : "90%",
           height: "58.29%",
-          borderRadius: "13.4076px",
           overflow: "hidden",
-          border: "4px solid #FE7702",
           boxShadow: "0px 0px 12px rgba(0,0,0,0.7)",
         }}
+        className={ isCard ? "rounded-lg md:rounded-[13.4076px] border-2 md:border-4 border-[#FE7702]" : "rounded-[13.4076px] border-4 border-[#FE7702]" }
       >
         <img
           src={bannerImage}
@@ -115,7 +114,7 @@ export default function BlogHero({
         ) : (
           <h2
             className="font-anton text-primary leading-tight"
-            style={{ fontSize: "clamp(0.9rem, 4.5cqw, 4rem)" }}
+            style={{ fontSize: "clamp(0.5rem, 4.5cqw, 4rem)" }}
           >
             {title}
           </h2>
@@ -128,7 +127,7 @@ export default function BlogHero({
           position: "absolute",
           left: isCard ? "6.59%" : "2.15%",
           top: "83%",
-          width: "60%",
+          width: isCard ? "100%" : "60%",
           display: "flex",
           alignItems: "center",
           gap: "2%",
@@ -140,7 +139,9 @@ export default function BlogHero({
           alt={authorName}
           className="border-primary border-2"
           style={{
-            width: "clamp(28px, 7cqw, 90px)",
+            width: isCard
+            ? "clamp(20px, 7cqw, 90px)"
+            : "clamp(28px, 7cqw, 90px)",
             aspectRatio: "1/1",
             borderRadius: "50%",
             objectFit: "cover",
@@ -153,7 +154,7 @@ export default function BlogHero({
             fontFamily: "Poppins, sans-serif",
             color: "#333",
             fontSize: isCard
-              ? "clamp(0.7rem, 3cqw, 2rem)"
+              ? "clamp(0.4rem, 3cqw, 2rem)"
               : "clamp(0.5rem, 2cqw, 1.6rem)",
             fontWeight: 600,
             lineHeight: 1.2,

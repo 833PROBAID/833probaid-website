@@ -121,7 +121,7 @@ export function LearnMoreButton({
   const isVideoWatch = label.includes("Video")
   return (
     <button
-      className={`bc-btn inline-flex items-center gap-2 sm:gap-1 px-2 sm:h-[38px] lg:h-[55px] xl:h-[70px] lg:gap-3 rounded-[8px] pl-2.5 hover:${rotateDir}`}
+      className={`inline-flex items-center gap-2 sm:gap-1 px-2 h-[28px] md:h-[55px] xl:h-[70px] md:gap-3 rounded-sm md:rounded-[8px] pl-2.5 hover:${rotateDir} shadow-[0px_2.73px_6.64px_0px_rgba(0,0,0,0.68),2.46px_-2.46px_1.64px_0px_rgba(0,0,0,0.25)_inset,-2.64px_1.55px_1.64px_0px_rgba(255,255,255,0.25)_inset,-1.82px_-0.91px_3.64px_0px_rgba(0,0,0,0.6)] md:shadow-[0px_2.73px_6.64px_0px_rgba(0,0,0,0.68),5.46px_-5.46px_3.64px_0px_rgba(0,0,0,0.25)_inset,-3.64px_4.55px_3.64px_0px_rgba(255,255,255,0.25)_inset,-1.82px_-0.91px_3.64px_0px_rgba(0,0,0,0.6)]`}
       type="button"
       onClick={onClick}
       onMouseEnter={() => setHov(true)}
@@ -129,8 +129,8 @@ export function LearnMoreButton({
       style={{
         background: D.orange,
         cursor: "pointer",
-        boxShadow:
-          "0px 2.73px 6.64px 0px #000000AD, inset 5.46px -5.46px 3.64px 0px #00000040, inset -3.64px 4.55px 3.64px 0px #FFFFFF40, -1.82px -0.91px 3.64px 0px #00000099",
+        // boxShadow:
+        //   "0px 2.73px 6.64px 0px #000000AD, inset 5.46px -5.46px 3.64px 0px #00000040, inset -3.64px 4.55px 3.64px 0px #FFFFFF40, -1.82px -0.91px 3.64px 0px #00000099",
         animation: hov ? "none" : "floatBounce 2s ease-in-out infinite",
         transform: hov
           ? `scale(1.08) rotate(${rotateDir})`
@@ -139,7 +139,7 @@ export function LearnMoreButton({
         willChange: "transform",
       }}
     >
-      <span className="bc-btn-text   font-montserrat font-black sm:text-[13px] lg:text-[18px] xl:text-[23px] uppercase text-white tracking-wide [text-shadow:0_4px_4.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
+      <span className="font-montserrat font-black text-[8px] md:text-[18px] xl:text-[23px] uppercase text-white tracking-wide [text-shadow:0.5_1px_0.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)] md:[text-shadow:0_4px_4.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
         {" "}
         {label}
       </span>
@@ -149,7 +149,7 @@ export function LearnMoreButton({
         width={100}
         height={100}
         priority
-        className={`bc-btn-arrow object-contain ${isVideoWatch ? 'sm:w-3.5 lg:w-8.25 sm:h-3.5 lg:h-10.25' : 'sm:w-4.5 lg:w-11.25 sm:h-4.5 lg:h-11.25'}`}
+        className={`object-contain ${isVideoWatch ? 'w-3.5 md:w-8.25 h-3.5 md:h-10.25' : 'w-4.5 md:w-11.25 h-4.5 md:h-11.25'}`}
       />
     </button>
   );
@@ -234,8 +234,9 @@ function BookCardInner({
           transformStyle: "preserve-3d",
           WebkitTransformStyle: "preserve-3d",
           containerType: "inline-size",
-          height: "clamp(450px, 140cqw, 750px)",
+          // height: "clamp(245px, 140cqw, 750px)",
         }}
+        className="book-wrapper h-64 sm:h-90 md:h-140 lg:h-187.5"
       >
         {/* BASE SHELL shadow */}
         <div
@@ -266,14 +267,8 @@ function BookCardInner({
             transform: "translateZ(-4px)",
             WebkitTransform: "translateZ(-4px)",
             background: `linear-gradient(135deg, ${D.tealDark}, ${D.tealDeep})`,
-            boxShadow: `
-              inset 0 0 0 1px #014E57,
-              inset 0px 6px 4px rgba(255,255,255,0.25),
-              inset -5px -6px 4px rgba(0,0,0,0.25),
-              4px -4px 15.1px rgba(0,0,0,0.90),
-              -2px 6px 16.3px rgba(0,0,0,0.98)
-            `,
           }}
+          className="shadow-[inset_0_0_0_1px_#014E57,inset_0_6px_4px_rgba(255,255,255,0.25),inset_-5px_-6px_4px_rgba(0,0,0,0.25)] md:shadow-[inset_0_0_0_1px_#014E57,inset_0_6px_4px_rgba(255,255,255,0.25),inset_-5px_-6px_4px_rgba(0,0,0,0.25),4px_-4px_15.1px_rgba(0,0,0,0.90),-2px_6px_16.3px_rgba(0,0,0,0.98)]"
         />
 
         {/* ── SPINE STAPLES ── */}
@@ -355,7 +350,7 @@ function BookCardInner({
             <div
               xmlns="http://www.w3.org/1999/xhtml"
               style={{ width: "100%", height: "100%" }}
-              className="p-4"
+              className="p-2 md:p-4"
             >
               <BlogHero
                 bannerImage={bannerImage}
@@ -412,11 +407,12 @@ function BookCardInner({
           >
             {/* Edge shadow */}
             <div
+              className="-bottom-2 md:-bottom-3.75"
               style={{
                 position: "absolute",
                 top: 0,
                 right: mirrored ? -10 : -2,
-                bottom: -15,
+                // bottom: -15,
                 left: mirrored ? -2 : -10,
                 pointerEvents: "none",
                 zIndex: 0,
@@ -458,13 +454,12 @@ function BookCardInner({
               }}
             >
               {/* UPPER HALF — icon + title */}
-              <div className="absolute left-0 right-0 flex flex-col items-center justify-start h-full  md:p-6 p-3 md:gap-6 gap-4 ">
+              <div className="absolute left-0 right-0 flex flex-col items-center justify-start h-full  md:p-6 p-3 md:gap-6 gap-2.5">
                 <div
-                  className={` w-full  relative  overflow-hidden transition-all duration-300 rounded-xl border-[#FE7702] border-[4px]`}
+                  className={` w-full relative  overflow-hidden transition-all duration-300 rounded-lg md:rounded-xl border-[#FE7702] border md:border-4 shadow-[0_0_4px_3px_rgba(0,0,0,0.6)] md:shadow-[0_0_16px_4px_rgba(0,0,0,0.8)]`}
                   style={{
-                    height: "clamp(120px, 50cqw, 275px)",
+                    height: "clamp(90px, 50cqw, 275px)",
                     width: "100%",
-                    boxShadow: "0 0 16px 4px rgba(0,0,0,0.8)",
                   }}
                 >
                   <Image
@@ -477,24 +472,22 @@ function BookCardInner({
                   />
                 </div>
                 <h2
-                  className="font-montserrat text-black  font-semibold pl-2 "
-                  style={{ fontSize: "clamp(14px, 5cqw, 24px)" }}
+                  className="font-montserrat text-black  font-semibold pl-1 md:pl-2 "
+                  style={{ fontSize: "clamp(6px, 4cqw, 24px)" }}
                 >
                   {title}
                 </h2>
                 {/* Author Name */}
-                <div className="w-full lg:mt-5 mt-4">
+                <div className="w-full lg:mt-5 -mt-1 md:mt-2">
                   <hr className="w-full h-[2px] border-[#14b3c2] border rounded-full" />
-                  <div className="flex items-center gap-3 w-full justify-start mt-2">
+                  <div className="flex items-center gap-1 md:gap-3 w-full justify-start mt-1 md:mt-2">
                     <img
                       src={'/avatar.png'}
                       alt={authorName}
-                      className="border-primary border-2"
+                      className="border-primary border-[0.5px] md:border-2 w-3.5 md:w-10"
                       style={{
-                        width: "clamp(25px, 50cqw, 40px)",
                         aspectRatio: "1/1",
                         borderRadius: "50%",
-                        objectFit: "cover",
                         flexShrink: 0,
                         alignSelf: "center",
                       }}
@@ -505,7 +498,7 @@ function BookCardInner({
                         fontFamily: "Poppins, sans-serif",
                         lineHeight: 1.2,
                         alignSelf: "center",
-                        fontSize: "clamp(.8rem, 5cqw, 21px)",
+                        fontSize: "clamp(.4rem, 3cqw, 21px)",
                       }}
                     >
                       {authorName}
