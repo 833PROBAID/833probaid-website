@@ -998,7 +998,6 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                           checked={formData.paymentMethods.escrowOnly}
                           onChange={handleChange}
                           width="140px"
-                          error={fieldErrors.has("paymentMethods")}
                         />
                       </div>
                       {fieldErrors.has("paymentMethods") && (
@@ -1074,7 +1073,6 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                           checked={formData.daysAvailable.sun}
                           onChange={handleChange}
                           width="95px"
-                          error={fieldErrors.has("daysAvailable")}
                         />
                       </div>
                     </div>

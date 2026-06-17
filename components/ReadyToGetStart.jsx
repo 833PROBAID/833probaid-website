@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import AnimatedText from "./AnimatedText";
+import CTAButton from "./CTAButton";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -521,24 +522,24 @@ const ReadyToGetStart = () => {
               </linearGradient>
             </defs>
           </svg>
-          <div
-            className="rtgs-btn1-float absolute left-[22.12%] top-[71.29%] w-[30.97%] h-[14.84%]"
-            onClick={() => router.push("/homebooks/contact-us")}
-          >
-            <img
-              src="/btn1.svg"
-              className="rtgs-btn1 w-full h-full object-contain cursor-pointer"
-              alt=""
+          <div className="absolute left-[24.12%] top-[71.29%] w-[26.97%] h-[12.84%]">
+            <CTAButton
+              label="Learn More"
+              onClick={() => router.push("/homebooks/contact-us")}
+              className="w-full h-full justify-center px-1!"
+              textClassName="text-[15px] xl:text-[18px]"
+              iconClassName="w-7 lg:w-9 xl:w-10 h-7 lg:h-9 xl:h-10"
             />
           </div>
-          <div
-            className="rtgs-btn2-float absolute left-[51.33%] top-[71.29%] w-[30.97%] h-[14.84%]"
-            onClick={() => router.push("/homebooks/833probaid-referral-intake")}
-          >
-            <img
-              src="/btn2.svg"
-              className="rtgs-btn2 w-full h-full object-contain cursor-pointer"
-              alt=""
+          <div className="absolute left-[53.33%] top-[71.29%] w-[26.97%] h-[12.84%]">
+            <CTAButton
+              label="Form"
+              onClick={() => router.push("/homebooks/833probaid-referral-intake")}
+              bg="#0097A7"
+              mirrored
+              className="w-full h-full justify-center px-1!"
+              textClassName="text-[15px] xl:text-[18px]"
+              iconClassName="w-7 lg:w-9 xl:w-10 h-7 lg:h-9 xl:h-10"
             />
           </div>
         </div>
@@ -1018,30 +1019,31 @@ const ReadyToGetStart = () => {
               </linearGradient>
             </defs>
           </svg>
-          <div
-            className="rtgs-btn1-float absolute left-[26.55%] top-[73.74%] w-[22.12%] h-[11.13%]"
-            onClick={() => router.push("/homebooks/contact-us")}
-          >
-            <img
-              src="/btn1.svg"
-              className="rtgs-btn1 w-full h-full object-contain cursor-pointer"
-              alt=""
+          <div className="absolute left-[22.55%] sm:left-[26.55%] top-[73.74%] flex min-w-[22.12%] h-[11.13%] items-center justify-center">
+            <CTAButton
+              label="Learn More"
+              onClick={() => router.push("/homebooks/contact-us")}
+              className="w-full justify-center gap-1! px-1.5 py-1 h-full shadow-[0px_2.73px_6.64px_0px_rgba(0,0,0,0.68),2.46px_-2.46px_1.64px_0px_rgba(0,0,0,0.25)_inset,-2.64px_1.55px_1.64px_0px_rgba(255,255,255,0.25)_inset,-1.82px_-0.91px_3.64px_0px_rgba(0,0,0,0.6)]! md:shadow-[2px_1.73px_6.64px_0px_rgba(0,0,0,1),5.46px_-5.46px_3.64px_0px_rgba(0,0,0,0.25)_inset,-3.64px_4.55px_3.64px_0px_rgba(255,255,255,0.25)_inset,-1.82px_-0.91px_3.64px_0px_rgba(0,0,0,0.7)]! rounded-sm! md:rounded-lg!"
+              textClassName="text-[9px] sm:text-[13px] tracking-tight"
+              iconClassName="w-3 h-3 sm:w-5 sm:h-5"
             />
           </div>
           <div
-            className="rtgs-btn2-float absolute"
+            className="absolute flex items-center justify-center left-[55.33%] sm:left-[51.33%]"
             style={{
-              left: "51.33%",
               top: "73.74%",
               width: "22.12%",
               height: "11.13%",
             }}
-            onClick={() => router.push("/homebooks/833probaid-referral-intake")}
           >
-            <img
-              src="/btn2.svg"
-              className="rtgs-btn2 w-full h-full object-contain cursor-pointer"
-              alt=""
+            <CTAButton
+              label="Form"
+              onClick={() => router.push("/homebooks/833probaid-referral-intake")}
+              bg="#0097A7"
+              mirrored
+              className="w-full justify-center gap-1! px-1.5 py-1 h-full shadow-[0px_2.73px_6.64px_0px_rgba(0,0,0,0.68),2.46px_-2.46px_1.64px_0px_rgba(0,0,0,0.25)_inset,-2.64px_1.55px_1.64px_0px_rgba(255,255,255,0.25)_inset,-1.82px_-0.91px_3.64px_0px_rgba(0,0,0,0.6)]! md:shadow-[2px_1.73px_6.64px_0px_rgba(0,0,0,1),5.46px_-5.46px_3.64px_0px_rgba(0,0,0,0.25)_inset,-3.64px_4.55px_3.64px_0px_rgba(255,255,255,0.25)_inset,-1.82px_-0.91px_3.64px_0px_rgba(0,0,0,0.7)]! rounded-sm! md:rounded-lg!"
+              textClassName="text-[9px] sm:text-[13px] tracking-tight"
+              iconClassName="w-3 h-3 sm:w-5 sm:h-5"
             />
           </div>
         </div>

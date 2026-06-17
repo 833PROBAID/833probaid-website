@@ -7,7 +7,7 @@ import "./book-card.css";
 
 const D = {
   w: 1016,
-  h: 440,
+  h: 460,
   teal: "#14b3c2",
   tealMid: "#0a9aa8",
   tealDark: "#0097A7",
@@ -299,7 +299,7 @@ function BookCardInner({
             }}
           >
             <div
-              sstyle={{
+              style={{
                 padding: innerPadding,
                 height: "100%",
                 display: "flex",
@@ -307,6 +307,7 @@ function BookCardInner({
                 gap: "clamp(8px,2vw,14px)",
                 rowGap: "clamp(8px,2vw,14px)",
                 boxSizing: "border-box",
+                justifyContent: "center"
               }}
             >
               <div className="bg-white flex flex-col items-center justify-center py-4 text-center border-4 rounded-3xl border-l-18 border-secondary transition-transform duration-300 ease-in-out hover:scale-105 shadow-lg shadow-black/30 sm:shadow-xl sm:shadow-black/40 md:shadow-2xl md:shadow-black/50">
@@ -461,7 +462,7 @@ function BookCardInner({
                 className="flex items-center justify-between flex-col gap-4"
                 style={{ padding: "0% 6% 2.5%" }}
               >
-                <p className="text-white tracking-wider text-center font-montserrat leading-[1.3] font-semibold sm:text-[10px] lg:text-[12px] xl:text-[16px] px-[1%] [text-shadow:1px_0px_2.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
+                <p className="text-white tracking-wider text-center font-montserrat leading-[1.3] font-semibold sm:text-[10px] lg:text-[14px] xl:text-lg 2xl:text-[17px] px-[1%] [text-shadow:1px_0px_2.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
                   {description}
                 </p>
                 <LearnMoreButton

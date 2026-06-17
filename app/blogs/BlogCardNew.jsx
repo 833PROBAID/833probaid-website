@@ -129,8 +129,6 @@ export function LearnMoreButton({
       style={{
         background: D.orange,
         cursor: "pointer",
-        // boxShadow:
-        //   "0px 2.73px 6.64px 0px #000000AD, inset 5.46px -5.46px 3.64px 0px #00000040, inset -3.64px 4.55px 3.64px 0px #FFFFFF40, -1.82px -0.91px 3.64px 0px #00000099",
         animation: hov ? "none" : "floatBounce 2s ease-in-out infinite",
         transform: hov
           ? `scale(1.08) rotate(${rotateDir})`
@@ -139,7 +137,7 @@ export function LearnMoreButton({
         willChange: "transform",
       }}
     >
-      <span className="font-montserrat font-black text-[8px] md:text-[18px] xl:text-[23px] uppercase text-white tracking-wide [text-shadow:0.5_1px_0.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)] md:[text-shadow:0_4px_4.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
+      <span className="font-montserrat font-black text-[8px] md:text-[18px] xl:text-[23px] uppercase text-white tracking-wide [text-shadow:0.5_1px_0.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)] md:[text-shadow:1px_3px_1.6px_rgba(0,0,0,0.82),0_0_6px_rgba(255,255,255,0.25)]">
         {" "}
         {label}
       </span>

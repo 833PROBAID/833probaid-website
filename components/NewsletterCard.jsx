@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import AnimatedText from "./AnimatedText";
 import NewsletterSubscriptionModal from "./NewsletterSubscriptionModal";
+import CTAButton from "./CTAButton";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -406,26 +407,16 @@ export default function NewsletterCard() {
               </linearGradient>
             </defs>
           </svg>
-          <div
-            className="footer-btn-float absolute left-[32.80%] top-[68.58%] w-[35.84%] h-[11.63%]"
-            onClick={(event) => {
-              if (isOpen) return;
-              handleOpen(event);
-            }}
-            onKeyDown={(event) => {
-              if (isOpen) return;
-              if (event.key === "Enter" || event.key === " ") {
+          <div className="absolute left-[32.80%] top-[68.58%] w-[35.84%] h-[10.63%] flex items-center justify-center">
+            <CTAButton
+              label="Subscribe"
+              className="gap-2 sm:gap-1 xl:gap-3 px-4 sm:px-1 lg:px-4 h-full rounded-lg sm:rounded-sm lg:rounded-lg"
+              textClassName="text-[14px] sm:text-[7px] lg:text-[11px] xl:text-[14px]"
+              iconClassName="w-7 sm:w-4 lg:w-7 h-7 sm:h-4 lg:h-7"
+              onClick={(event) => {
+                if (isOpen) return;
                 handleOpen(event);
-              }
-            }}
-            role="button"
-            tabIndex={isOpen ? -1 : 0}
-            aria-label="Subscribe"
-          >
-            <img
-              src="/svgs/subscribe.svg"
-              className="footer-subscribe-btn w-full h-full object-contain cursor-pointer"
-              alt=""
+              }}
             />
           </div>
         </div>
