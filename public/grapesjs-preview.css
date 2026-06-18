@@ -837,6 +837,10 @@
 				transition: color 0.3s ease;
 			}
 
+			.border-left-secondary {
+				border-left-color: var(--secondary) !important;
+			}
+
 			/* =========================================
 			   PHONE ONLY (max-width: 767px)
 			   Disable all hover animations & transitions

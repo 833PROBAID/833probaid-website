@@ -4,11 +4,14 @@ import "react-datepicker/dist/react-datepicker.css";
 import {
 	Checkbox,
 	TextInput,
+	PhoneInput,
 	FileUpload,
 	RadioButton,
 	RadioGroup,
 	FormSection,
 	renderLabel,
+	isValidUSPhone,
+	isValidEmail,
 } from "../SharedComponents";
 import referralsApi from "../../app/lib/api/referrals";
 
@@ -134,6 +137,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 	const [submitError, setSubmitError] = useState("");
 	const [countdown, setCountdown] = useState(0);
 	const [fieldErrors, setFieldErrors] = useState(new Set());
+	const [submitAttempted, setSubmitAttempted] = useState(false);
 	const [_formData, setFormData] = useState(INITIAL_FORM_DATA);
 
 	// Always derive display data directly from initialData in readOnly mode,
@@ -342,6 +346,9 @@ const Form = ({ readOnly = false, initialData = null }) => {
 
 	const isEmpty = (v) => !v?.toString().trim();
 
+	// "N/A" / "Not Yet Assigned" are acceptable for the optional attorney email
+	const isNaValue = (v) => /^(n\/?a|not yet assigned)$/i.test(v?.toString().trim());
+
 	// Build the set of invalid field keys (empty set === valid)
 	const buildErrors = () => {
 		const errors = new Set();
@@ -370,6 +377,20 @@ const Form = ({ readOnly = false, initialData = null }) => {
 		// role "Other" requires roleOther
 		if (formData.role === "Other" && isEmpty(formData.roleOther))
 			errors.add("roleOther");
+
+		// Email format checks (referring email is required; attorney email allows "N/A")
+		if (!isEmpty(formData.referringEmail) && !isValidEmail(formData.referringEmail))
+			errors.add("referringEmail");
+		if (
+			!isEmpty(formData.attorneyEmail) &&
+			!isNaValue(formData.attorneyEmail) &&
+			!isValidEmail(formData.attorneyEmail)
+		)
+			errors.add("attorneyEmail");
+
+		// Phone must be a valid US number (when provided)
+		if (!isEmpty(formData.referringPhone) && !isValidUSPhone(formData.referringPhone))
+			errors.add("referringPhone");
 
 		// Property 0
 		if (isEmpty(prop0.address)) errors.add("property.0.address");
@@ -443,10 +464,19 @@ const Form = ({ readOnly = false, initialData = null }) => {
 		return errors;
 	};
 
+	// Once a submit has been attempted, re-validate live on every change so
+	// error highlights appear/disappear immediately without re-clicking submit.
+	useEffect(() => {
+		if (!submitAttempted) return;
+		setFieldErrors(buildErrors());
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [_formData, submitAttempted]);
+
 	const handleSendPdfByEmail = async () => {
 		if (readOnly) return;
 		setSubmitStatus("loading");
 		setSubmitError("");
+		setSubmitAttempted(true);
 		const errors = buildErrors();
 		if (errors.size > 0) {
 			setFieldErrors(errors);
@@ -463,6 +493,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 				setSubmitStatus("success");
 				setFormData(INITIAL_FORM_DATA);
 				setFieldErrors(new Set());
+				setSubmitAttempted(false);
 				setCountdown(5);
 				const interval = setInterval(() => {
 					setCountdown((prev) => {
@@ -706,25 +737,40 @@ const Form = ({ readOnly = false, initialData = null }) => {
 											error={fieldErrors.has("firmName")}
 										/>
 
-										<div className='flex gap-4 w-full'>
+										<div className={`flex gap-4 w-full ${fieldErrors.has("referringEmail") && 'mb-6'}`}>
 											<TextInput
 												name='referringEmail'
 												value={formData.referringEmail}
 												onChange={handleChange}
 												label='Your Email:'
 												type='email'
+												placeholder='e.g. name@firm.com'
+												inputClass='placeholder:italic placeholder-[#FD7702]'
 												width='50%'
 												required
 												error={fieldErrors.has("referringEmail")}
+												errorMessage={
+													!isEmpty(formData.referringEmail) &&
+													!isValidEmail(formData.referringEmail)
+														? "Please enter a valid email address."
+														: ""
+												}
 											/>
 
-											<TextInput
+											<PhoneInput
 												name='referringPhone'
 												value={formData.referringPhone}
 												onChange={handleChange}
 												label='Your Phone:'
+												placeholder='(555) 123-4567'
 												width='50%'
 												error={fieldErrors.has("referringPhone")}
+												errorMessage={
+													!isEmpty(formData.referringPhone) &&
+													!isValidUSPhone(formData.referringPhone)
+														? "Please enter a valid 10-digit US phone number."
+														: ""
+												}
 											/>
 										</div>
 
@@ -781,8 +827,17 @@ const Form = ({ readOnly = false, initialData = null }) => {
 												onChange={handleChange}
 												label="Attorney's Email (If Different):"
 												type='email'
+												placeholder='e.g. attorney@firm.com (or "N/A")'
+												inputClass='placeholder:italic placeholder-[#FD7702]'
 												containerClass='mt-3'
 												error={fieldErrors.has("attorneyEmail")}
+												errorMessage={
+													!isEmpty(formData.attorneyEmail) &&
+													!isNaValue(formData.attorneyEmail) &&
+													!isValidEmail(formData.attorneyEmail)
+														? "Please enter a valid email address."
+														: ""
+												}
 											/>
 											<div
 												className='bg-gray-100 p-3 mt-3 italic space-y-2'

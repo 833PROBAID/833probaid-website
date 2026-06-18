@@ -194,6 +194,7 @@ export const TextInput = React.forwardRef(
 			onBlur,
 			variant,
 			error = false,
+			errorMessage = "",
 			...props
 		},
 		ref,
@@ -525,6 +526,152 @@ export const TextInput = React.forwardRef(
 								</div>
 							</div>
 						)}
+					{error && errorMessage && (
+						<p className='absolute top-full left-0 text-red-500 font-bold text-sm mt-1'>
+							{errorMessage}
+						</p>
+					)}
+				</div>
+			</div>
+		);
+	},
+);
+
+// --- US phone helpers (shared) ---------------------------------------------
+// Strip everything except digits.
+export const getPhoneDigits = (v) => (v || "").toString().replace(/\D/g, "");
+
+// Format raw input into "(XXX) XXX-XXXX" as the user types. The "+1" country
+// code is shown separately and hard-coded, so a leading "1" is dropped here.
+export const formatUSPhone = (raw) => {
+	let digits = getPhoneDigits(raw);
+	if (digits.length > 10 && digits.startsWith("1")) digits = digits.slice(1);
+	digits = digits.slice(0, 10);
+	const len = digits.length;
+	if (len === 0) return "";
+	if (len < 4) return `(${digits}`;
+	if (len < 7) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+	return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+};
+
+// Valid 10-digit US/NANP number: area code and exchange code both start 2-9.
+// (The "next 3" after +1 — the area code — must begin with 2-9.)
+export const isValidUSPhone = (v) =>
+	/^[2-9]\d{2}[2-9]\d{6}$/.test(getPhoneDigits(v));
+
+// Email validation. Requires a local part, a domain made of dot-separated
+// labels (no leading/trailing/consecutive dots), and a TLD of at least 2
+// letters — so "das@das.c" is rejected while "name@company.com" passes.
+const EMAIL_REGEX =
+	/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\.[a-zA-Z]{2,}$/;
+export const isValidEmail = (v) => {
+	const email = (v ?? "").toString().trim();
+	// Guard against overly long addresses and lengthy local parts (RFC limits)
+	if (email.length > 254) return false;
+	if (email.indexOf("@") > 64) return false;
+	return EMAIL_REGEX.test(email);
+};
+
+export const PhoneInput = React.forwardRef(
+	(
+		{
+			name,
+			value,
+			onChange,
+			label,
+			placeholder = "(555) 123-4567",
+			disabled = false,
+			width = "full",
+			containerClass = "",
+			inputClass = "",
+			error = false,
+			errorMessage = "",
+			...props
+		},
+		ref,
+	) => {
+		const borderColor = error ? "border-red-500" : "border-[#0097A7]";
+		const widthConfig = getWidthStyles(width);
+
+		const innerRef = React.useRef(null);
+		const caretRef = React.useRef(null);
+
+		const setRefs = (el) => {
+			innerRef.current = el;
+			if (typeof ref === "function") ref(el);
+			else if (ref) ref.current = el;
+		};
+
+		// Restore the caret after the reformatted value re-renders, so editing
+		// in the middle of the number doesn't kick the cursor to the end.
+		React.useLayoutEffect(() => {
+			if (caretRef.current != null && innerRef.current) {
+				const pos = caretRef.current;
+				innerRef.current.setSelectionRange(pos, pos);
+				caretRef.current = null;
+			}
+		});
+
+		const handleInput = (e) => {
+			const { value: rawValue, selectionStart } = e.target;
+			const digitsBefore = rawValue
+				.slice(0, selectionStart)
+				.replace(/\D/g, "").length;
+			const formatted = formatUSPhone(rawValue);
+
+			// Caret goes just after the Nth digit (where N = digits before caret).
+			let pos = 0;
+			if (digitsBefore > 0) {
+				let count = 0;
+				pos = formatted.length;
+				for (let i = 0; i < formatted.length; i++) {
+					if (/\d/.test(formatted[i])) count++;
+					if (count >= digitsBefore) {
+						pos = i + 1;
+						break;
+					}
+				}
+			}
+			caretRef.current = pos;
+			onChange({ target: { name, value: formatted, type: "tel" } });
+		};
+
+		return (
+			<div
+				className={`flex flex-row items-center gap-1 ${
+					widthConfig.className || ""
+				} ${containerClass}`}
+				style={widthConfig.style || {}}>
+				{label && (
+					<label className='block font-bold text-base mb-1 whitespace-nowrap min-w-max'>
+						{typeof label === "string" ? renderLabel(label) : label}
+					</label>
+				)}
+				<div className='relative w-full'>
+					<div className='flex w-full'>
+						<span
+							className={`flex items-center justify-center px-3 h-10 border-[3.5px] border-r-0 ${borderColor} bg-gray-200 font-bold text-[#0097A7] select-none`}>
+							+1
+						</span>
+						<input
+							ref={setRefs}
+							type='tel'
+							name={name}
+							value={value}
+							onChange={handleInput}
+							placeholder={placeholder}
+							disabled={disabled}
+							inputMode='numeric'
+							autoComplete='off'
+							className={`w-full h-10 border-[3.5px] ${borderColor} px-2 py-1 bg-gray-200 focus:outline-none focus:ring-2 focus:ring-[#FD7702] focus:ring-offset-0 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-bold ${inputClass}`}
+							{...props}
+						/>
+					</div>
+					{error && errorMessage && (
+						<p className='absolute top-full left-0 text-red-500 font-bold text-sm mt-1'>
+							{errorMessage}
+						</p>
+					)}
 				</div>
 			</div>
 		);

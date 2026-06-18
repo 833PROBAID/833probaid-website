@@ -3,11 +3,14 @@ import React, { useState, useRef, useEffect } from "react";
 import {
   Checkbox,
   TextInput,
+  PhoneInput,
   FileUpload,
   RadioButton,
   RadioGroup,
   FormSection,
   renderLabel,
+  isValidUSPhone,
+  isValidEmail,
 } from "../SharedComponents";
 import vendorsApi from "../../app/lib/api/vendors";
 
@@ -198,6 +201,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
   const [countdown, setCountdown] = useState(0);
   const [fileResetKey, setFileResetKey] = useState(0);
   const [fieldErrors, setFieldErrors] = useState(new Set());
+  const [submitAttempted, setSubmitAttempted] = useState(false);
   const [_formData, setFormData] = useState(INITIAL_FORM_DATA);
 
   const formData =
@@ -330,17 +334,23 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
     setZoomLevel(1);
   };
 
-  const handleSubmit = async () => {
-    if (readOnly) return;
-    setSubmitStatus("loading");
-    setSubmitError("");
-
+  // Build the set of invalid field keys (empty set === valid)
+  const buildErrors = () => {
     const errors = new Set();
     const ts = formData.translationServices;
 
     // Rule 1: required text fields
     REQUIRED_TEXT_FIELDS.forEach((f) => {
       if (isEmpty(formData[f])) errors.add(f);
+    });
+
+    // Email must be a valid format (when provided)
+    if (!isEmpty(formData.email) && !isValidEmail(formData.email))
+      errors.add("email");
+
+    // Phone fields must be valid US numbers (when provided)
+    ["officePhone", "cellPhone"].forEach((f) => {
+      if (!isEmpty(formData[f]) && !isValidUSPhone(formData[f])) errors.add(f);
     });
 
     // Rule 4: radio groups need at least one selection
@@ -431,6 +441,25 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
       }
     }
 
+    return errors;
+  };
+
+  // Once a submit has been attempted, re-validate live on every change so
+  // error highlights appear/disappear immediately without re-clicking submit.
+  useEffect(() => {
+    if (!submitAttempted) return;
+    setFieldErrors(buildErrors());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [_formData, submitAttempted]);
+
+  const handleSubmit = async () => {
+    if (readOnly) return;
+    setSubmitStatus("loading");
+    setSubmitError("");
+    setSubmitAttempted(true);
+
+    const errors = buildErrors();
+
     if (errors.size > 0) {
       setFieldErrors(errors);
       setSubmitStatus("error");
@@ -461,6 +490,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
         setSubmitStatus("success");
         setFormData(INITIAL_FORM_DATA);
         setFieldErrors(new Set());
+        setSubmitAttempted(false);
         setFileResetKey((k) => k + 1);
         setCountdown(5);
         const interval = setInterval(() => {
@@ -598,7 +628,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                       width="full"
                       error={fieldErrors.has("businessName")}
                     />
-                    <div className="flex gap-4 w-full">
+                    <div className={`flex gap-4 w-full ${fieldErrors.has("email") && 'mb-7.5'}`}>
                       <TextInput
                         name="yourName"
                         value={formData.yourName}
@@ -613,30 +643,52 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                         value={formData.email}
                         onChange={handleChange}
                         label="Your E-Mail:"
-                        inputClass="w-[440px]"
+                        type="email"
+                        placeholder="e.g. name@company.com"
+                        inputClass="w-[440px] placeholder:italic placeholder-[#FD7702]"
                         containerClass="justify-between"
                         error={fieldErrors.has("email")}
+                        errorMessage={
+                          !isEmpty(formData.email) &&
+                          !isValidEmail(formData.email)
+                            ? "Please enter a valid email address."
+                            : ""
+                        }
                       />
                     </div>
 
-                    <div className="flex gap-4 w-full">
-                      <TextInput
+                    <div className={`flex gap-4 w-full ${(fieldErrors.has("officePhone") || fieldErrors.has("cellPhone")) && 'mb-7.5'}`}>
+                      <PhoneInput
                         name="officePhone"
                         value={formData.officePhone}
                         onChange={handleChange}
                         label="Your Business Phone:"
+                        placeholder="(555) 123-4567"
                         inputClass="w-[400px]"
                         containerClass="justify-between"
                         error={fieldErrors.has("officePhone")}
+                        errorMessage={
+                          !isEmpty(formData.officePhone) &&
+                          !isValidUSPhone(formData.officePhone)
+                            ? "Please enter a valid 10-digit US phone number."
+                            : ""
+                        }
                       />
-                      <TextInput
+                      <PhoneInput
                         name="cellPhone"
                         value={formData.cellPhone}
                         onChange={handleChange}
                         label="Your Cell Phone:"
+                        placeholder="(555) 123-4567"
                         inputClass="w-[440px]"
                         containerClass="justify-between"
                         error={fieldErrors.has("cellPhone")}
+                        errorMessage={
+                          !isEmpty(formData.cellPhone) &&
+                          !isValidUSPhone(formData.cellPhone)
+                            ? "Please enter a valid 10-digit US phone number."
+                            : ""
+                        }
                       />
                     </div>
                   </FormSection>
