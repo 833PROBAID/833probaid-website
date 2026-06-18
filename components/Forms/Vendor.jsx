@@ -13,6 +13,7 @@ import {
   isValidEmail,
 } from "../SharedComponents";
 import vendorsApi from "../../app/lib/api/vendors";
+import { uploadToBlob } from "../../app/lib/blobUpload";
 
 const DummyYesRadio = ({ value = false }) => {
   return (
@@ -478,14 +479,24 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
       } = formData;
       const { certificationFile: certFile, ...tsFields } = translationServices;
       const dataToSend = { ...fields, translationServices: tsFields };
-      const filesToSend = {};
-      if (w9Form instanceof File) filesToSend.w9Form = w9Form;
-      if (serviceFeeSheet instanceof File)
-        filesToSend.serviceFeeSheet = serviceFeeSheet;
-      if (coiFile instanceof File) filesToSend.coiFile = coiFile;
-      if (bondCertFile instanceof File) filesToSend.bondCertFile = bondCertFile;
-      if (certFile instanceof File) filesToSend.certificationFile = certFile;
-      const result = await vendorsApi.create(dataToSend, filesToSend);
+
+      // Upload files directly to Blob from the browser (bypasses the 4.5 MB
+      // serverless limit that caused HTTP 413 on large files).
+      const namedFiles = [
+        ["w9Form", w9Form],
+        ["serviceFeeSheet", serviceFeeSheet],
+        ["coiFile", coiFile],
+        ["bondCertFile", bondCertFile],
+        ["certificationFile", certFile],
+      ];
+      const uploadedFiles = [];
+      for (const [fieldName, file] of namedFiles) {
+        if (file instanceof File) {
+          uploadedFiles.push(await uploadToBlob(file, "vendor", fieldName));
+        }
+      }
+
+      const result = await vendorsApi.create({ ...dataToSend, uploadedFiles });
       if (result.success) {
         setSubmitStatus("success");
         setFormData(INITIAL_FORM_DATA);

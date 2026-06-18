@@ -14,6 +14,7 @@ import {
 	isValidEmail,
 } from "../SharedComponents";
 import referralsApi from "../../app/lib/api/referrals";
+import { uploadToBlob } from "../../app/lib/blobUpload";
 
 const INITIAL_FORM_DATA = {
 	// Referring Party Info
@@ -486,9 +487,19 @@ const Form = ({ readOnly = false, initialData = null }) => {
 		}
 		setFieldErrors(new Set());
 		try {
-			// Separate File objects from the rest
+			// Upload files directly to Blob from the browser (bypasses the 4.5 MB
+			// serverless limit that caused HTTP 413 on large files).
 			const { uploadedFiles, ...fields } = formData;
-			const result = await referralsApi.create(fields, uploadedFiles || []);
+			const uploaded = [];
+			for (const file of uploadedFiles || []) {
+				if (file instanceof File) {
+					uploaded.push(await uploadToBlob(file, "referral"));
+				} else if (file) {
+					// Already-uploaded metadata (edit/prefill scenarios) — pass through.
+					uploaded.push(file);
+				}
+			}
+			const result = await referralsApi.create({ ...fields, uploadedFiles: uploaded });
 			if (result.success) {
 				setSubmitStatus("success");
 				setFormData(INITIAL_FORM_DATA);
