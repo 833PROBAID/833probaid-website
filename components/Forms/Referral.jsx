@@ -473,6 +473,18 @@ const Form = ({ readOnly = false, initialData = null }) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [_formData, submitAttempted]);
 
+	// After errors render, scroll the first highlighted field into view.
+	const scrollToFirstError = () => {
+		requestAnimationFrame(() => {
+			requestAnimationFrame(() => {
+				const el = printRef.current?.querySelector(
+					".border-red-500, .ring-red-500, .text-red-500"
+				);
+				el?.scrollIntoView({ behavior: "smooth", block: "center" });
+			});
+		});
+	};
+
 	const handleSendPdfByEmail = async () => {
 		if (readOnly) return;
 		setSubmitStatus("loading");
@@ -483,6 +495,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 			setFieldErrors(errors);
 			setSubmitStatus("error");
 			setSubmitError("Please complete all required fields highlighted in red.");
+			scrollToFirstError();
 			return;
 		}
 		setFieldErrors(new Set());
@@ -773,7 +786,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 												value={formData.referringPhone}
 												onChange={handleChange}
 												label='Your Phone:'
-												placeholder='(555) 123-4567'
+												placeholder='(555) 234-5678'
 												width='50%'
 												error={fieldErrors.has("referringPhone")}
 												errorMessage={
@@ -1440,6 +1453,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 											width='full'
 											required
 											error={fieldErrors.has("property.0.address")}
+											placeholder="123 Main St, Los Angeles, CA 90041"
 										/>
 
 										<RadioGroup
@@ -1670,6 +1684,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 															error={fieldErrors.has(
 																`property.${index + 1}.address`
 															)}
+															placeholder="123 Main St, Los Angeles, CA 90041"
 														/>
 														<RadioGroup
 															name='occupancyStatus'

@@ -579,7 +579,7 @@ export const PhoneInput = React.forwardRef(
 			value,
 			onChange,
 			label,
-			placeholder = "(555) 123-4567",
+			placeholder = "(555) 234-5678",
 			disabled = false,
 			width = "full",
 			containerClass = "",

@@ -453,6 +453,18 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [_formData, submitAttempted]);
 
+  // After errors render, scroll the first highlighted field into view.
+  const scrollToFirstError = () => {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const el = printRef.current?.querySelector(
+          ".border-red-500, .ring-red-500, .text-red-500"
+        );
+        el?.scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+    });
+  };
+
   const handleSubmit = async () => {
     if (readOnly) return;
     setSubmitStatus("loading");
@@ -465,6 +477,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
       setFieldErrors(errors);
       setSubmitStatus("error");
       setSubmitError("Please complete all required fields highlighted in red.");
+      scrollToFirstError();
       return;
     }
     setFieldErrors(new Set());
@@ -674,7 +687,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                         value={formData.officePhone}
                         onChange={handleChange}
                         label="Your Business Phone:"
-                        placeholder="(555) 123-4567"
+                        placeholder="(555) 234-5678"
                         inputClass="w-[400px]"
                         containerClass="justify-between"
                         error={fieldErrors.has("officePhone")}
@@ -690,7 +703,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                         value={formData.cellPhone}
                         onChange={handleChange}
                         label="Your Cell Phone:"
-                        placeholder="(555) 123-4567"
+                        placeholder="(555) 234-5678"
                         inputClass="w-[440px]"
                         containerClass="justify-between"
                         error={fieldErrors.has("cellPhone")}
