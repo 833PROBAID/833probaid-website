@@ -50,9 +50,9 @@ export function LearnMoreButton({
   const rotateDir = mirrored ? "3deg" : "-3deg";
   return (
     <div
-    className="lg:mt-1"
+    className="lg:mt-1 bottom-[6.5%]"
       style={{
-        position: "relative",
+        position: "absolute",
         display: "inline-flex",
         animation: hov ? "none" : "floatBounce 2s ease-in-out infinite",
         transform: hov ? `scale(1.08) rotate(${rotateDir})` : "scale(1) rotate(0deg)",
@@ -85,7 +85,7 @@ export function LearnMoreButton({
             "inset 5.46px -5.46px 3.64px 0px #00000040, inset -3.64px 4.55px 3.64px 0px #FFFFFF40",
         }}
       >
-        <span className="font-poppins font-black sm:text-[13px] lg:text-[18px] xl:text-[23px] uppercase text-white tracking-wide [text-shadow:0_4px_4.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
+        <span className="font-poppins font-black sm:text-[13px] lg:text-[18px] xl:text-[23px] uppercase text-white tracking-wide [text-shadow:1px_2px_1.6px_rgba(0,0,0,0.81),0_0_6px_rgba(255,255,255,0.25)]">
           {label}
         </span>
         <Image

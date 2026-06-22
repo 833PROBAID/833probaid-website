@@ -14,6 +14,10 @@ section {
   contain: none;
 }
 
+.border-left-secondary {
+  border-left-color: var(--color-secondary);
+}
+
 @theme {
   --font-anton: "Anton", sans-serif;
   --font-roboto: "Roboto", sans-serif;
