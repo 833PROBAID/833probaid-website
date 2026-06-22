@@ -1,4 +1,5 @@
 import Image from "next/image";
+import CTAButton from "../CTAButton";
 
 const Hero = () => {
   return (
@@ -11,7 +12,7 @@ const Hero = () => {
 				transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 			}
 			.hero-btn-float:hover img {
-				transform: rotate(-2deg) scale(1.08);
+				transform: rotate(2deg) scale(1.08);
 			}
 			@keyframes heroBtnFloat {
 				0%, 100% { transform: translateY(0px); }
@@ -55,13 +56,10 @@ const Hero = () => {
                 </div>
               </div>
 
-              <button className="cursor-pointer lg:mb-45 w-max hero-btn-float">
-                <img
-                  src="/btn0.svg"
-                  className="w-full max-w-[300px] sm:max-w-[350px]"
-                  alt="Get Started Button"
-                />
-              </button>
+              <CTAButton
+                label="Process Overview"
+                className="cursor-pointer lg:mb-45 w-max px-4 h-12 lg:h-16"
+              />
             </div>
 
             {/* Right Image Section - Hero Person */}

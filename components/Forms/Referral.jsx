@@ -4,13 +4,17 @@ import "react-datepicker/dist/react-datepicker.css";
 import {
 	Checkbox,
 	TextInput,
+	PhoneInput,
 	FileUpload,
 	RadioButton,
 	RadioGroup,
 	FormSection,
 	renderLabel,
+	isValidUSPhone,
+	isValidEmail,
 } from "../SharedComponents";
 import referralsApi from "../../app/lib/api/referrals";
+import { uploadToBlob } from "../../app/lib/blobUpload";
 
 const INITIAL_FORM_DATA = {
 	// Referring Party Info
@@ -133,6 +137,8 @@ const Form = ({ readOnly = false, initialData = null }) => {
 	const [submitStatus, setSubmitStatus] = useState(null); // null | 'loading' | 'success' | 'error'
 	const [submitError, setSubmitError] = useState("");
 	const [countdown, setCountdown] = useState(0);
+	const [fieldErrors, setFieldErrors] = useState(new Set());
+	const [submitAttempted, setSubmitAttempted] = useState(false);
 	const [_formData, setFormData] = useState(INITIAL_FORM_DATA);
 
 	// Always derive display data directly from initialData in readOnly mode,
@@ -146,10 +152,36 @@ const Form = ({ readOnly = false, initialData = null }) => {
 			setFormData(buildFormData(initialData));
 		}
 	}, [readOnly, initialData]);
+	// Remove a single key from the field-error set (used as the user fixes fields)
+	const clearFieldError = (key) => {
+		setFieldErrors((prev) => {
+			if (!prev.has(key)) return prev;
+			const next = new Set(prev);
+			next.delete(key);
+			return next;
+		});
+	};
+
+	const HEAR_OPTIONS = [
+		"onlineSearch",
+		"socialMedia",
+		"directAttorneyReferral",
+		"pastCasePriorMatter",
+		"emailNewsletterOrBrochure",
+		"barAssociationOrLegalEvent",
+		"courtClerkOrProbateExaminer",
+		"other",
+	];
+
 	// Handler for main form fields
 	const handleChange = (e) => {
 		const { name, value, type, checked } = e.target;
 		const group = e.target.dataset?.group;
+
+		// Clear errors as the user edits
+		clearFieldError(name);
+		if (group && checked) clearFieldError(group);
+		if (HEAR_OPTIONS.includes(name) && checked) clearFieldError("howDidYouHear");
 
 		if (name === "multipleProperties") {
 			setFormData((prev) => {
@@ -219,6 +251,14 @@ const Form = ({ readOnly = false, initialData = null }) => {
 	// Handler for property fields in exportedProperties
 	const handlePropertyChange = (index, e) => {
 		const { name, value, type, checked } = e.target;
+
+		// Clear the matching property error (and its details error) as the user edits
+		clearFieldError(`property.${index}.${name}`);
+		if (name === "accessRestrictions" && value !== "Yes")
+			clearFieldError(`property.${index}.accessRestrictionsDetails`);
+		if (name === "urgency" && value !== "Yes")
+			clearFieldError(`property.${index}.urgencyDetails`);
+
 		if (name === "multipleProperties") {
 			setFormData((prev) => {
 				let updatedProperties = prev.exportedProperties.map((property, i) => {
@@ -305,17 +345,179 @@ const Form = ({ readOnly = false, initialData = null }) => {
 	const [zoomLevel, setZoomLevel] = useState(1);
 	const formContainerRef = useRef(null);
 
+	const isEmpty = (v) => !v?.toString().trim();
+
+	// "N/A" / "Not Yet Assigned" are acceptable for the optional attorney email
+	const isNaValue = (v) => /^(n\/?a|not yet assigned)$/i.test(v?.toString().trim());
+
+	// Build the set of invalid field keys (empty set === valid)
+	const buildErrors = () => {
+		const errors = new Set();
+		const prop0 = formData.exportedProperties[0] || {};
+
+		// Rule 1: required top-level fields
+		const requiredFields = {
+			referringPartyName: formData.referringPartyName,
+			role: formData.role,
+			firmName: formData.firmName,
+			referringEmail: formData.referringEmail,
+			referringPhone: formData.referringPhone,
+			preferredContact: formData.preferredContact,
+			clientName: formData.clientName,
+			clientRole: formData.clientRole,
+			lettersIssued: formData.lettersIssued,
+			courthouse: formData.courthouse,
+			multipleProperties: formData.multipleProperties,
+			attorneyName: formData.attorneyName,
+			attorneyEmail: formData.attorneyEmail,
+		};
+		Object.entries(requiredFields).forEach(([k, v]) => {
+			if (isEmpty(v)) errors.add(k);
+		});
+
+		// role "Other" requires roleOther
+		if (formData.role === "Other" && isEmpty(formData.roleOther))
+			errors.add("roleOther");
+
+		// Email format checks (referring email is required; attorney email allows "N/A")
+		if (!isEmpty(formData.referringEmail) && !isValidEmail(formData.referringEmail))
+			errors.add("referringEmail");
+		if (
+			!isEmpty(formData.attorneyEmail) &&
+			!isNaValue(formData.attorneyEmail) &&
+			!isValidEmail(formData.attorneyEmail)
+		)
+			errors.add("attorneyEmail");
+
+		// Phone must be a valid US number (when provided)
+		if (!isEmpty(formData.referringPhone) && !isValidUSPhone(formData.referringPhone))
+			errors.add("referringPhone");
+
+		// Property 0
+		if (isEmpty(prop0.address)) errors.add("property.0.address");
+		if (isEmpty(prop0.occupancyStatus))
+			errors.add("property.0.occupancyStatus");
+		if (isEmpty(prop0.accessRestrictions))
+			errors.add("property.0.accessRestrictions");
+		if (isEmpty(prop0.urgency)) errors.add("property.0.urgency");
+		if (prop0.accessRestrictions === "Yes" && isEmpty(prop0.accessRestrictionsDetails))
+			errors.add("property.0.accessRestrictionsDetails");
+		if (prop0.urgency === "Yes" && isEmpty(prop0.urgencyDetails))
+			errors.add("property.0.urgencyDetails");
+
+		// Additional properties (when multipleProperties === "Yes")
+		for (let i = 1; i < formData.exportedProperties.length; i++) {
+			const p = formData.exportedProperties[i];
+			if (isEmpty(p.address)) errors.add(`property.${i}.address`);
+			if (isEmpty(p.occupancyStatus))
+				errors.add(`property.${i}.occupancyStatus`);
+			if (isEmpty(p.accessRestrictions))
+				errors.add(`property.${i}.accessRestrictions`);
+			if (isEmpty(p.urgency)) errors.add(`property.${i}.urgency`);
+			if (isEmpty(p.multipleProperties))
+				errors.add(`property.${i}.multipleProperties`);
+			if (p.accessRestrictions === "Yes" && isEmpty(p.accessRestrictionsDetails))
+				errors.add(`property.${i}.accessRestrictionsDetails`);
+			if (p.urgency === "Yes" && isEmpty(p.urgencyDetails))
+				errors.add(`property.${i}.urgencyDetails`);
+		}
+
+		// Rule 2: at least one caseType must be checked
+		if (!Object.values(formData.caseType).some(Boolean))
+			errors.add("caseType");
+
+		// Rule 2: at least one requestedSupport checkbox must be checked
+		const supportBoxes = [
+			"contactClient",
+			"waitForIntro",
+			"provideOpinion",
+			"refereeAssigned",
+			"conductWalkthrough",
+			"preparePhotos",
+			"coordinateVendors",
+			"notReadyForListing",
+		];
+		if (!supportBoxes.some((k) => formData.requestedSupport[k]))
+			errors.add("requestedSupport");
+
+		// refereeAssigned requires willOrderPrivateAppraisal
+		if (
+			formData.requestedSupport.refereeAssigned &&
+			isEmpty(formData.requestedSupport.willOrderPrivateAppraisal)
+		)
+			errors.add("willOrderPrivateAppraisal");
+
+		// Rule 2: at least one documentUpload checkbox must be checked
+		if (!Object.values(formData.documentUpload).some(Boolean))
+			errors.add("documentUpload");
+
+		// At least one file uploaded
+		if (!formData.uploadedFiles || formData.uploadedFiles.length === 0)
+			errors.add("uploadedFiles");
+
+		// Rule 2: at least one "How did you hear" option checked
+		if (!HEAR_OPTIONS.some((k) => formData[k])) errors.add("howDidYouHear");
+
+		// "other" requires otherDetails
+		if (formData.other && isEmpty(formData.otherDetails))
+			errors.add("otherDetails");
+
+		return errors;
+	};
+
+	// Once a submit has been attempted, re-validate live on every change so
+	// error highlights appear/disappear immediately without re-clicking submit.
+	useEffect(() => {
+		if (!submitAttempted) return;
+		setFieldErrors(buildErrors());
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [_formData, submitAttempted]);
+
+	// After errors render, scroll the first highlighted field into view.
+	const scrollToFirstError = () => {
+		requestAnimationFrame(() => {
+			requestAnimationFrame(() => {
+				const el = printRef.current?.querySelector(
+					".border-red-500, .ring-red-500, .text-red-500"
+				);
+				el?.scrollIntoView({ behavior: "smooth", block: "center" });
+			});
+		});
+	};
+
 	const handleSendPdfByEmail = async () => {
 		if (readOnly) return;
 		setSubmitStatus("loading");
 		setSubmitError("");
+		setSubmitAttempted(true);
+		const errors = buildErrors();
+		if (errors.size > 0) {
+			setFieldErrors(errors);
+			setSubmitStatus("error");
+			setSubmitError("Please complete all required fields highlighted in red.");
+			scrollToFirstError();
+			return;
+		}
+		setFieldErrors(new Set());
 		try {
-			// Separate File objects from the rest
+			// Upload files directly to Blob from the browser (bypasses the 4.5 MB
+			// serverless limit that caused HTTP 413 on large files).
 			const { uploadedFiles, ...fields } = formData;
-			const result = await referralsApi.create(fields, uploadedFiles || []);
+			const uploaded = [];
+			for (const file of uploadedFiles || []) {
+				if (file instanceof File) {
+					uploaded.push(await uploadToBlob(file, "referral"));
+				} else if (file) {
+					// Already-uploaded metadata (edit/prefill scenarios) — pass through.
+					uploaded.push(file);
+				}
+			}
+			const result = await referralsApi.create({ ...fields, uploadedFiles: uploaded });
 			if (result.success) {
 				setSubmitStatus("success");
 				setFormData(INITIAL_FORM_DATA);
+				setFieldErrors(new Set());
+				setSubmitAttempted(false);
 				setCountdown(5);
 				const interval = setInterval(() => {
 					setCountdown((prev) => {
@@ -344,6 +546,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 				...prev,
 				uploadedFiles: [...prev.uploadedFiles, ...Array.from(files)],
 			}));
+			clearFieldError("uploadedFiles");
 		}
 	};
 
@@ -386,9 +589,9 @@ const Form = ({ readOnly = false, initialData = null }) => {
 		<div
 			className='w-full mt-7'
 			ref={formContainerRef}
-			style={{
-				fontFamily: "var(--font-poppins), sans-serif",
-			}}>
+			style={{ fontFamily: "var(--font-poppins), sans-serif" }}
+			data-no-scope
+		>
 			<div className='sticky top-3 z-50 flex justify-center mb-4 pointer-events-none'>
 				<div
 					className='pointer-events-auto flex items-center gap-1 rounded-full px-3 py-1.5'
@@ -496,6 +699,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 											label='Your Full Name:'
 											width='full'
 											required
+											error={fieldErrors.has("referringPartyName")}
 										/>
 
 										<div className='flex items-center gap-4'>
@@ -504,6 +708,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 												value={formData.role}
 												onChange={handleChange}
 												label='Your Role:'
+												error={fieldErrors.has("role")}
 												options={[
 													{
 														value: "Attorney",
@@ -540,6 +745,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													onChange={handleChange}
 													width='400px'
 													autoFocus
+													error={fieldErrors.has("roleOther")}
 												/>
 											)}
 										</div>
@@ -552,25 +758,43 @@ const Form = ({ readOnly = false, initialData = null }) => {
 											placeholder='If none, write "N/A" or describe your connection - e.g., friend, neighbor, church, etc.'
 											inputClass='placeholder:italic placeholder-[#FD7702]'
 											width='full'
+											error={fieldErrors.has("firmName")}
 										/>
 
-										<div className='flex gap-4 w-full'>
+										<div className={`flex gap-4 w-full ${fieldErrors.has("referringEmail") && 'mb-6'}`}>
 											<TextInput
 												name='referringEmail'
 												value={formData.referringEmail}
 												onChange={handleChange}
 												label='Your Email:'
 												type='email'
+												placeholder='e.g. name@firm.com'
+												inputClass='placeholder:italic placeholder-[#FD7702]'
 												width='50%'
 												required
+												error={fieldErrors.has("referringEmail")}
+												errorMessage={
+													!isEmpty(formData.referringEmail) &&
+													!isValidEmail(formData.referringEmail)
+														? "Please enter a valid email address."
+														: ""
+												}
 											/>
 
-											<TextInput
+											<PhoneInput
 												name='referringPhone'
 												value={formData.referringPhone}
 												onChange={handleChange}
 												label='Your Phone:'
+												placeholder='(555) 234-5678'
 												width='50%'
+												error={fieldErrors.has("referringPhone")}
+												errorMessage={
+													!isEmpty(formData.referringPhone) &&
+													!isValidUSPhone(formData.referringPhone)
+														? "Please enter a valid 10-digit US phone number."
+														: ""
+												}
 											/>
 										</div>
 
@@ -579,6 +803,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 											value={formData.preferredContact}
 											onChange={handleChange}
 											label='Your Preferred Method of Contact:'
+											error={fieldErrors.has("preferredContact")}
 											options={[
 												{
 													value: "Call",
@@ -618,6 +843,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 												value={formData.attorneyName}
 												onChange={handleChange}
 												label="Attorney of Record's Full Name:"
+												error={fieldErrors.has("attorneyName")}
 											/>
 											<TextInput
 												name='attorneyEmail'
@@ -625,7 +851,17 @@ const Form = ({ readOnly = false, initialData = null }) => {
 												onChange={handleChange}
 												label="Attorney's Email (If Different):"
 												type='email'
+												placeholder='e.g. attorney@firm.com (or "N/A")'
+												inputClass='placeholder:italic placeholder-[#FD7702]'
 												containerClass='mt-3'
+												error={fieldErrors.has("attorneyEmail")}
+												errorMessage={
+													!isEmpty(formData.attorneyEmail) &&
+													!isNaValue(formData.attorneyEmail) &&
+													!isValidEmail(formData.attorneyEmail)
+														? "Please enter a valid email address."
+														: ""
+												}
 											/>
 											<div
 												className='bg-gray-100 p-3 mt-3 italic space-y-2'
@@ -1031,6 +1267,11 @@ const Form = ({ readOnly = false, initialData = null }) => {
 												width='240px'
 											/>
 										</div>
+										{fieldErrors.has("caseType") && (
+											<p className='text-red-500 font-bold text-base'>
+												Please select at least one case type.
+											</p>
+										)}
 									</FormSection>
 
 									{/* Client/Representative Details */}
@@ -1044,6 +1285,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 											label='Full Name:'
 											width='full'
 											required
+											error={fieldErrors.has("clientName")}
 										/>
 
 										<RadioGroup
@@ -1051,6 +1293,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 											value={formData.clientRole}
 											onChange={handleChange}
 											label='Role in the Case:'
+											error={fieldErrors.has("clientRole")}
 											options={[
 												{
 													value: "Executor",
@@ -1098,6 +1341,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 														name='lettersIssued'
 														value={formData.lettersIssued}
 														onChange={handleChange}
+														error={fieldErrors.has("lettersIssued")}
 														options={[
 															{
 																value: "Yes",
@@ -1139,6 +1383,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 															}}
 															className='border-[3px] border-[#0097A7] px-2 py-1 bg-gray-200 placeholder:italic placeholder-[#FD7702] w-[240px] font-bold focus:outline-none focus:ring-2 focus:ring-[#FD7702] focus:ring-offset-0'
 															placeholderText='Select date'
+															popperPlacement="bottom-end"
 															dateFormat='yyyy-MM-dd'
 														/>
 													</div>
@@ -1168,6 +1413,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 															}}
 															className='border-[3px] border-[#0097A7] px-2 py-1 bg-gray-200 placeholder:italic placeholder-[#FD7702] w-[230px] font-bold focus:outline-none focus:ring-2 focus:ring-[#FD7702] focus:ring-offset-0'
 															placeholderText='Select date'
+															popperPlacement="bottom-end"
 															dateFormat='yyyy-MM-dd'
 														/>
 													</div>
@@ -1189,6 +1435,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 											onChange={handleChange}
 											label='Courthouse Handling File:'
 											width='full'
+											error={fieldErrors.has("courthouse")}
 										/>
 									</FormSection>
 
@@ -1205,6 +1452,8 @@ const Form = ({ readOnly = false, initialData = null }) => {
 											label='Full Property Address:'
 											width='full'
 											required
+											error={fieldErrors.has("property.0.address")}
+											placeholder="123 Main St, Los Angeles, CA 90041"
 										/>
 
 										<RadioGroup
@@ -1214,6 +1463,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 											}
 											onChange={(e) => handlePropertyChange(0, e)}
 											label='Occupancy Status:'
+											error={fieldErrors.has("property.0.occupancyStatus")}
 											options={[
 												{
 													value: "Vacant",
@@ -1271,6 +1521,9 @@ const Form = ({ readOnly = false, initialData = null }) => {
 														label='Yes'
 														color='teal'
 														width='70px'
+														error={fieldErrors.has(
+															"property.0.accessRestrictions"
+														)}
 													/>
 													<TextInput
 														ref={(el) => {
@@ -1287,6 +1540,9 @@ const Form = ({ readOnly = false, initialData = null }) => {
 														containerClass='w-full max-w-none'
 														inputClass='placeholder:italic placeholder-[#FD7702]'
 														width='340px'
+														error={fieldErrors.has(
+															"property.0.accessRestrictionsDetails"
+														)}
 													/>
 												</div>
 												<RadioGroup
@@ -1296,6 +1552,9 @@ const Form = ({ readOnly = false, initialData = null }) => {
 															?.accessRestrictions || ""
 													}
 													onChange={(e) => handlePropertyChange(0, e)}
+													error={fieldErrors.has(
+														"property.0.accessRestrictions"
+													)}
 													options={[
 														{
 															value: "No",
@@ -1333,6 +1592,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 														label='Yes'
 														color='teal'
 														width='143px'
+														error={fieldErrors.has("property.0.urgency")}
 													/>
 													<TextInput
 														ref={(el) => {
@@ -1349,12 +1609,14 @@ const Form = ({ readOnly = false, initialData = null }) => {
 														containerClass='w-full max-w-none'
 														inputClass='placeholder:italic placeholder-[#FD7702]'
 														width='267px'
+														error={fieldErrors.has("property.0.urgencyDetails")}
 													/>
 												</div>
 												<RadioGroup
 													name='urgency'
 													value={formData.exportedProperties[0]?.urgency || ""}
 													onChange={(e) => handlePropertyChange(0, e)}
+													error={fieldErrors.has("property.0.urgency")}
 													options={[
 														{
 															value: "No",
@@ -1379,6 +1641,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 											value={formData.multipleProperties}
 											onChange={handleChange}
 											label='Multiple Properties?'
+											error={fieldErrors.has("multipleProperties")}
 											options={[
 												{
 													value: "Yes",
@@ -1418,6 +1681,10 @@ const Form = ({ readOnly = false, initialData = null }) => {
 															label='Full Property Address:'
 															width='full'
 															required
+															error={fieldErrors.has(
+																`property.${index + 1}.address`
+															)}
+															placeholder="123 Main St, Los Angeles, CA 90041"
 														/>
 														<RadioGroup
 															name='occupancyStatus'
@@ -1426,6 +1693,9 @@ const Form = ({ readOnly = false, initialData = null }) => {
 																handlePropertyChange(index + 1, e)
 															}
 															label='Occupancy Status:'
+															error={fieldErrors.has(
+																`property.${index + 1}.occupancyStatus`
+															)}
 															options={[
 																{
 																	value: "Vacant",
@@ -1482,6 +1752,9 @@ const Form = ({ readOnly = false, initialData = null }) => {
 																		label='Yes'
 																		color='teal'
 																		width='70px'
+																		error={fieldErrors.has(
+																			`property.${index + 1}.accessRestrictions`
+																		)}
 																	/>
 																	<TextInput
 																		ref={(el) =>
@@ -1498,6 +1771,9 @@ const Form = ({ readOnly = false, initialData = null }) => {
 																		containerClass='w-full max-w-none'
 																		inputClass='placeholder:italic placeholder-[#FD7702]'
 																		width='340px'
+																		error={fieldErrors.has(
+																			`property.${index + 1}.accessRestrictionsDetails`
+																		)}
 																	/>
 																</div>
 																<RadioGroup
@@ -1506,6 +1782,9 @@ const Form = ({ readOnly = false, initialData = null }) => {
 																	onChange={(e) =>
 																		handlePropertyChange(index + 1, e)
 																	}
+																	error={fieldErrors.has(
+																		`property.${index + 1}.accessRestrictions`
+																	)}
 																	options={[
 																		{
 																			value: "No",
@@ -1524,7 +1803,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 																/>
 															</div>
 														</div>
-														<div className='flex items-start justify-between w-full gap-2'>
+														<div className='flex items-center justify-between w-full gap-2'>
 															<label
 																className='block font-bold text-base flex-shrink-0'
 																style={{ minWidth: "35%" }}>
@@ -1542,7 +1821,10 @@ const Form = ({ readOnly = false, initialData = null }) => {
 																		}
 																		label='Yes'
 																		color='teal'
-																		width='70px'
+																		width='143px'
+																		error={fieldErrors.has(
+																			`property.${index + 1}.urgency`
+																		)}
 																	/>
 																	<TextInput
 																		ref={(el) =>
@@ -1558,6 +1840,9 @@ const Form = ({ readOnly = false, initialData = null }) => {
 																		containerClass='w-full max-w-none'
 																		inputClass='placeholder:italic placeholder-[#FD7702]'
 																		width='267px'
+																		error={fieldErrors.has(
+																			`property.${index + 1}.urgencyDetails`
+																		)}
 																	/>
 																</div>
 																<RadioGroup
@@ -1566,6 +1851,9 @@ const Form = ({ readOnly = false, initialData = null }) => {
 																	onChange={(e) =>
 																		handlePropertyChange(index + 1, e)
 																	}
+																	error={fieldErrors.has(
+																		`property.${index + 1}.urgency`
+																	)}
 																	options={[
 																		{
 																			value: "No",
@@ -1591,6 +1879,9 @@ const Form = ({ readOnly = false, initialData = null }) => {
 																handlePropertyChange(index + 1, e)
 															}
 															label='Multiple Properties?'
+															error={fieldErrors.has(
+																`property.${index + 1}.multipleProperties`
+															)}
 															options={[
 																{
 																	value: "Yes",
@@ -1676,15 +1967,17 @@ const Form = ({ readOnly = false, initialData = null }) => {
 															formData.requestedSupport
 																.willOrderPrivateAppraisal
 														}
-														onChange={(e) =>
+														onChange={(e) => {
+															clearFieldError("willOrderPrivateAppraisal");
 															setFormData((prev) => ({
 																...prev,
 																requestedSupport: {
 																	...prev.requestedSupport,
 																	willOrderPrivateAppraisal: e.target.value,
 																},
-															}))
-														}
+															}));
+														}}
+														error={fieldErrors.has("willOrderPrivateAppraisal")}
 														options={[
 															{
 																value: "Yes",
@@ -1727,6 +2020,11 @@ const Form = ({ readOnly = false, initialData = null }) => {
 												width='full'
 											/>
 										</div>
+										{fieldErrors.has("requestedSupport") && (
+											<p className='text-red-500 font-bold text-base'>
+												Please select at least one type of requested support.
+											</p>
+										)}
 									</FormSection>
 
 									{/* Document Upload */}
@@ -1794,6 +2092,11 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													width='full'
 												/>
 											</div>
+											{fieldErrors.has("documentUpload") && (
+												<p className='text-red-500 font-bold text-base mt-2'>
+													Please select at least one document type.
+												</p>
+											)}
 										</div>
 										<div
 											style={{
@@ -1811,7 +2114,13 @@ const Form = ({ readOnly = false, initialData = null }) => {
 												accept='.pdf,.doc,.docx,.jpg,.png,.zip'
 												width='full'
 												multiple
+												error={fieldErrors.has("uploadedFiles")}
 											/>
+											{fieldErrors.has("uploadedFiles") && (
+												<p className='text-red-500 font-bold text-base mt-2'>
+													Please upload at least one document.
+												</p>
+											)}
 											<div className='mt-2 text-sm text-gray-500'>
 												{formData.uploadedFiles.length > 0 && (
 													<div>
@@ -1835,7 +2144,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 
 									{/* How Did You Hear About Us */}
 									<FormSection
-										title='How Did You Hear About 833PROBAID™?'
+										title='How Did You Hear About 833PROBAID®?'
 										icon='fa-question'>
 										<div className='grid grid-cols-2 gap-2 mb-2'>
 											<Checkbox
@@ -1912,10 +2221,16 @@ const Form = ({ readOnly = false, initialData = null }) => {
 														width='100%'
 														ref={howDidYouHearOtherRef}
 														autoFocus
+														error={fieldErrors.has("otherDetails")}
 													/>
 												)}
 											</div>
 										</div>
+										{fieldErrors.has("howDidYouHear") && (
+											<p className='text-red-500 font-bold text-base'>
+												Please select at least one option.
+											</p>
+										)}
 									</FormSection>
 
 									<div className='pt-5 pb-9'></div>
@@ -1985,16 +2300,17 @@ const Form = ({ readOnly = false, initialData = null }) => {
 				<div className='flex flex-col items-center mt-6 gap-3'>
 					{!readOnly && submitStatus !== "success" && (
 						<button
-							className='bg-[#0097A7] text-xl font-bold text-white px-8 py-3 rounded hover:bg-[#1f8a8b] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2'
+							type='button'
+							className='bg-[#0097A7] text-xl font-bold text-white px-5 py-2 rounded hover:bg-[#1f8a8b] transition-colors disabled:opacity-50'
 							onClick={handleSendPdfByEmail}
 							disabled={submitStatus === "loading"}>
 							{submitStatus === "loading" ? (
 								<>
-									<i className='fas fa-spinner fa-spin'></i> Submitting…
+									<i className='fas fa-spinner fa-spin mr-2'></i>Submitting…
 								</>
 							) : (
 								<>
-									<i className='fas fa-envelope'></i> Submit Referral
+									<i className='fas fa-paper-plane mr-2'></i>Submit Referral
 								</>
 							)}
 						</button>

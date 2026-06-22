@@ -50,7 +50,7 @@ export default function ContactCard() {
                     </div>
                   </div>
                 </a>
-                <a href="mailto:info@833probaid.com" className="sm:mb-6 mb-2 flex items-center gap-3">
+                <a href="mailto:info@833probaid.com" className="mb-6 flex items-center gap-3">
                   <img src="/svgs/uiw_mail.svg" style={{ height: "35px" }} alt="Email" />
                   <p className="font-bold text-[19px]">Info@833probaid.com</p>
                 </a>
@@ -62,28 +62,63 @@ export default function ContactCard() {
             </div>
           </foreignObject>
           <defs>
-            <filter id="filter0_dii_273_12" x="9.72748e-05" y="-0.000391006" width="570.2" height="585.2" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+            <filter
+              id="filter0_dii_273_12"
+              x="-8"
+              y="-8"
+              width="573.2"
+              height="591.2"
+              filterUnits="userSpaceOnUse"
+              colorInterpolationFilters="sRGB"
+            >
               <feFlood floodOpacity="0" result="BackgroundImageFix" />
-              <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
-              <feMorphology radius="2" operator="dilate" in="SourceAlpha" result="effect1_dropShadow_273_12" />
-              <feOffset dy="1.2" />
-              <feGaussianBlur stdDeviation="6.36" />
+              <feColorMatrix
+                in="SourceAlpha"
+                type="matrix"
+                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                result="hardAlpha"
+              />
+              <feOffset dx="0" dy="0" />
+              <feGaussianBlur stdDeviation="8" />
               <feComposite in2="hardAlpha" operator="out" />
-              <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0" />
-              <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_273_12" />
-              <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_273_12" result="shape" />
-              <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
-              <feOffset dx="6" dy="-6" />
-              <feGaussianBlur stdDeviation="3.84" />
-              <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1" />
-              <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.3 0" />
-              <feBlend mode="normal" in2="shape" result="effect2_innerShadow_273_12" />
-              <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
-              <feOffset dx="-1.2" dy="7.2" />
-              <feGaussianBlur stdDeviation="2.4" />
-              <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1" />
-              <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.3 0" />
-              <feBlend mode="normal" in2="effect2_innerShadow_273_12" result="effect3_innerShadow_273_12" />
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0"
+              />
+              <feBlend
+                mode="normal"
+                in2="BackgroundImageFix"
+                result="effect1_dropShadow_273_12"
+              />
+              <feBlend
+                mode="normal"
+                in="SourceGraphic"
+                in2="effect1_dropShadow_273_12"
+                result="shape"
+              />
+              <feColorMatrix
+                in="SourceAlpha"
+                type="matrix"
+                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                result="hardAlpha"
+              />
+              <feOffset dx="0" dy="0" />
+              <feGaussianBlur stdDeviation="4" />
+              <feComposite
+                in2="hardAlpha"
+                operator="arithmetic"
+                k2="-1"
+                k3="1"
+              />
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.35 0"
+              />
+              <feBlend
+                mode="normal"
+                in2="shape"
+                result="effect2_innerShadow_273_12"
+              />
             </filter>
             <filter id="filter1_d_273_12" x="6" y="4" width="558" height="586" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
               <feFlood floodOpacity="0" result="BackgroundImageFix" />

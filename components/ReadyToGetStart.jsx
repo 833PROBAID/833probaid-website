@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import AnimatedText from "./AnimatedText";
+import CTAButton from "./CTAButton";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -17,36 +18,33 @@ const ReadyToGetStart = () => {
   return (
     <div className="w-full">
       <div
-        className="bg-secondary  hidden md:grid rounded-xl grid-cols-1 gap-1 
-      p-4 shadow-[0px_12px_20px_0px_rgba(0,0,0,0.2),0px_-12px_20px_0px_rgba(0,0,0,0.2)] justify-center
-       items-center sm:gap-6 sm:pl-5  sm:pt-[24px] sm:pb-[20px] sm:pr-5
-       sm:shadow-[0px_12px_20px_0px_rgba(0,0,0,0.4),0px_-12px_20px_0px_rgba(0,0,0,0.4)]
-        md:grid-cols-6 md:shadow-[0px_12px_20px_0px_rgba(0,0,0,0.6),0px_-12px_20px_0px_rgba(0,0,0,0.6)] 
-        lg:shadow-[0px_12px_20px_0px_rgba(0,0,0,0.75),0px_-12px_20px_0px_rgba(0,0,0,0.75)]
-         xl:shadow-[0px_12px_20px_0px_rgba(0,0,0,0.9),0px_-12px_20px_0px_rgba(0,0,0,0.9)] -mx-3"
+        className="bg-secondary hidden md:grid rounded-xl grid-cols-1 gap-1
+                  p-4 shadow-[0px_0px_20px_0px_rgba(0,0,0,0.2)] justify-center
+                  items-center sm:gap-6 sm:pl-5 sm:pt-[24px] sm:pb-[20px] sm:pr-5
+                  sm:shadow-[0px_0px_20px_0px_rgba(0,0,0,0.4)]
+                  md:grid-cols-6 md:shadow-[0px_0px_20px_0px_rgba(0,0,0,0.6)]
+                  lg:shadow-[0px_0px_20px_0px_rgba(0,0,0,0.75)]
+                  xl:shadow-[0px_0px_20px_10px_rgba(0,0,0,1)]
+                  -mx-3"
       >
         <div className="relative h-[350px] sm:h-[450px] md:h-full w-full flex md:col-span-4 ml-2">
           {/* <div className='relative h-[290px] sm:h-[370px] w-full md:h-[300px] lg:h-[412px] xl:h-[520px] 2xl:h-[630px] md:col-span-4 '>
 					<svg
 						className='absolute inset-0 h-full w-full' */}
           <svg
-            className="absolute inset-0 h-full w-full"
+            className={`absolute inset-0 h-full w-full${isSafariBrowser ? " transform-gpu backface-hidden" : ""}`}
             viewBox="0 0 1130 674"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
             preserveAspectRatio="xMidYMid meet"
-            style={
-              isSafariBrowser
-                ? {
-                    transform: "translateZ(0)",
-                    WebkitTransform: "translateZ(0)",
-                    backfaceVisibility: "hidden",
-                    WebkitBackfaceVisibility: "hidden",
-                  }
-                : undefined
-            }
           >
-            <g filter="url(#filter0_ddii_167_4)">
+            <g
+              filter={
+                isSafariBrowser
+                  ? "url(#filter0_s_167_4)"
+                  : "url(#filter0_ddii_167_4)"
+              }
+            >
               <path
                 d="M17.8999 29.2998C17.8999 21.5678 24.1679 15.2998 31.8999 15.2998H1097.9C1105.63 15.2998 1111.9 21.5678 1111.9 29.2998V639.3C1111.9 647.032 1105.63 653.3 1097.9 653.3H31.8999C24.1679 653.3 17.8999 647.032 17.8999 639.3V29.2998Z"
                 fill="url(#paint0_linear_167_4)"
@@ -124,67 +122,141 @@ const ReadyToGetStart = () => {
                   Stop Guessing. Start Executing.
                 </h2>
                 <p
-                  className={`my-4 text-center text-[26px] leading-[1.2] text-[#2A2A2A]`}
+                  className={`my-6 text-center font-bold text-[26px] leading-[1.2] text-[#2A2A2A]`}
                 >
                   <AnimatedText text="Court-supervised real estate requires a high standard of precision, compliance, and specialized expertise. Stop navigating probate, conservatorship, or trust property sales through uncertainty." />
-                  <br />
-                  Call{" "}
-                  <span style={{ color: "#0097A7" }} className="font-semibold">
-                    <AnimatedText text="(833) PROBAID — " />
-                  </span>{" "}
-                  <spam style={{ color: "#FE7702" }} className="font-semibold">
-                    <AnimatedText text="(833) 776-2243 — NOW " />
-                  </spam>{" "}
-                  <AnimatedText text="or" />{" "}
-                  <AnimatedText text="fill out the " />
-                  <Link
-                    href="/homebooks/833probaid-referral-intake"
-                    style={{
-                      color: "#0097A7",
-                      textDecoration: "underline",
-                    }}
-                  >
-                    <span>
-                      <AnimatedText text="FORM" />
-                    </span>
-                  </Link>{" "}
-                  <AnimatedText text=" for a Strategic Consultation. We eliminate the red tape, protect the estate’s equity, and manage the transaction to a clean, court-approved closing." />
+                  <span className="mt-5 block">
+                    Call{" "}
+                    <span
+                      style={{ color: "#0097A7" }}
+                      className="font-bold"
+                    >
+                      <AnimatedText text="(833) PROBAID — " />
+                    </span>{" "}
+                    <span
+                      style={{ color: "#FE7702" }}
+                      className="font-bold"
+                    >
+                      <AnimatedText text="(833) 776-2243 — NOW " />
+                    </span>{" "}
+                    <AnimatedText text="or" />{" "}
+                    <AnimatedText text="fill out the " />
+                    <Link
+                      href="/homebooks/833probaid-referral-intake"
+                      style={{
+                        color: "#0097A7",
+                        textDecoration: "underline",
+                      }}
+                    >
+                      <span>
+                        <AnimatedText text="FORM" />
+                      </span>
+                    </Link>{" "}
+                    <AnimatedText text=" for a Strategic Consultation. We eliminate the red tape, protect the estate’s equity, and manage the transaction to a clean, court-approved closing." />
+                  </span>
                 </p>
               </div>
             </foreignObject>
-            <g className="rtgs-btn1-float">
-              <image
-                href="/btn1.svg"
-                xlinkHref="/btn1.svg"
-                x="250"
-                y="467"
-                width="350"
-                height="100"
-                preserveAspectRatio="xMidYMid meet"
-                className="rtgs-btn1 "
-                style={{ cursor: "pointer" }}
-                onClick={() => {
-                  router.push("/homebooks/contact-us");
-                }}
-              />
-            </g>
-            <g className="rtgs-btn2-float">
-              <image
-                href="/btn2.svg"
-                xlinkHref="/btn2.svg"
-                x="580"
-                y="467"
-                width="350"
-                height="100"
-                preserveAspectRatio="xMidYMid meet"
-                className="rtgs-btn2"
-                style={{ cursor: "pointer" }}
-                onClick={() => {
-                  router.push("/homebooks/833probaid-referral-intake");
-                }}
-              />
-            </g>
             <defs>
+              <filter
+                id="filter0_s_167_4"
+                x="-9.72748e-05"
+                y="-0.000195503"
+                width="1129.2"
+                height="673.2"
+                filterUnits="userSpaceOnUse"
+                colorInterpolationFilters="sRGB"
+              >
+                <feFlood floodOpacity="0" result="BackgroundImageFix" />
+                <feColorMatrix
+                  in="SourceAlpha"
+                  type="matrix"
+                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                  result="hardAlpha"
+                />
+                <feOffset dx="-7" dy="9" />
+                <feGaussianBlur stdDeviation="3.5" />
+                <feComposite in2="hardAlpha" operator="out" />
+                <feColorMatrix
+                  type="matrix"
+                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.64 0"
+                />
+                <feBlend
+                  mode="normal"
+                  in2="BackgroundImageFix"
+                  result="effect1_dropShadow_s"
+                />
+                <feColorMatrix
+                  in="SourceAlpha"
+                  type="matrix"
+                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                  result="hardAlpha"
+                />
+                <feOffset dx="7" dy="-5" />
+                <feGaussianBlur stdDeviation="3.5" />
+                <feComposite in2="hardAlpha" operator="out" />
+                <feColorMatrix
+                  type="matrix"
+                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.64 0"
+                />
+                <feBlend
+                  mode="normal"
+                  in2="effect1_dropShadow_s"
+                  result="effect2_dropShadow_s"
+                />
+                <feBlend
+                  mode="normal"
+                  in="SourceGraphic"
+                  in2="effect2_dropShadow_s"
+                  result="shape"
+                />
+                <feColorMatrix
+                  in="SourceAlpha"
+                  type="matrix"
+                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                  result="hardAlpha"
+                />
+                <feOffset dx="11" dy="10" />
+                <feGaussianBlur stdDeviation="1.5" />
+                <feComposite
+                  in2="hardAlpha"
+                  operator="arithmetic"
+                  k2="-1"
+                  k3="1"
+                />
+                <feColorMatrix
+                  type="matrix"
+                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
+                />
+                <feBlend
+                  mode="normal"
+                  in2="shape"
+                  result="effect3_innerShadow_s"
+                />
+                <feColorMatrix
+                  in="SourceAlpha"
+                  type="matrix"
+                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                  result="hardAlpha"
+                />
+                <feOffset dx="-13" dy="-12" />
+                <feGaussianBlur stdDeviation="1.5" />
+                <feComposite
+                  in2="hardAlpha"
+                  operator="arithmetic"
+                  k2="-1"
+                  k3="1"
+                />
+                <feColorMatrix
+                  type="matrix"
+                  values="0 0 0 0 0.537222 0 0 0 0 0.537222 0 0 0 0 0.537222 0 0 0 0.25 0"
+                />
+                <feBlend
+                  mode="normal"
+                  in2="effect3_innerShadow_s"
+                  result="effect4_innerShadow_s"
+                />
+              </filter>
               <filter
                 id="filter0_ddii_167_4"
                 x="-9.72748e-05"
@@ -450,11 +522,31 @@ const ReadyToGetStart = () => {
               </linearGradient>
             </defs>
           </svg>
+          <div className="absolute left-[24.12%] top-[71.29%] w-[26.97%] h-[12.84%]">
+            <CTAButton
+              label="Learn More"
+              onClick={() => router.push("/homebooks/contact-us")}
+              className="w-full h-full justify-center px-1!"
+              textClassName="text-[15px] xl:text-[18px]"
+              iconClassName="w-7 lg:w-9 xl:w-10 h-7 lg:h-9 xl:h-10"
+            />
+          </div>
+          <div className="absolute left-[53.33%] top-[71.29%] w-[26.97%] h-[12.84%]">
+            <CTAButton
+              label="Form"
+              onClick={() => router.push("/homebooks/833probaid-referral-intake")}
+              bg="#0097A7"
+              mirrored
+              className="w-full h-full justify-center px-1!"
+              textClassName="text-[15px] xl:text-[18px]"
+              iconClassName="w-7 lg:w-9 xl:w-10 h-7 lg:h-9 xl:h-10"
+            />
+          </div>
         </div>
         <div className="w-[97%] h-full md:col-span-2 hidden md:flex">
           <img
             src="/images/qr-scan.svg"
-            className="w-full h-auto transition-transform duration-500 ease-out hover:scale-105 cursor-pointer"
+            className="w-full h-auto transition-transform duration-500 ease-out cursor-pointer"
             alt="qr-scan"
           />
         </div>
@@ -462,23 +554,19 @@ const ReadyToGetStart = () => {
       <div className="bg-secondary block md:hidden rounded-xl md:rounded-none p-4 shadow-[0px_12px_20px_0px_rgba(0,0,0,0.2),0px_-12px_20px_0px_rgba(0,0,0,0.2)] sm:shadow-[0px_12px_20px_0px_rgba(0,0,0,0.4),0px_-12px_20px_0px_rgba(0,0,0,0.4)] md:shadow-[0px_12px_20px_0px_rgba(0,0,0,0.6),0px_-12px_20px_0px_rgba(0,0,0,0.6)] lg:shadow-[0px_12px_20px_0px_rgba(0,0,0,0.75),0px_-12px_20px_0px_rgba(0,0,0,0.75)] xl:shadow-[0px_12px_20px_0px_rgba(0,0,0,0.9),0px_-12px_20px_0px_rgba(0,0,0,0.9)]">
         <div className="relative aspect-[1130/674] md:h-full w-full flex md:col-span-4">
           <svg
-            className="absolute inset-0 h-full w-full"
+            className={`absolute inset-0 h-full w-full${isSafariBrowser ? " transform-gpu backface-hidden" : ""}`}
             viewBox="0 0 1130 674"
             fill="white"
             xmlns="http://www.w3.org/2000/svg"
             preserveAspectRatio="xMidYMid meet"
-            style={
-              isSafariBrowser
-                ? {
-                    transform: "translateZ(0)",
-                    WebkitTransform: "translateZ(0)",
-                    backfaceVisibility: "hidden",
-                    WebkitBackfaceVisibility: "hidden",
-                  }
-                : undefined
-            }
           >
-            <g filter="url(#filter0_ddii_167_4)">
+            <g
+              filter={
+                isSafariBrowser
+                  ? "url(#filter0_s_167_4)"
+                  : "url(#filter0_ddii_167_4)"
+              }
+            >
               <path
                 d="M17.8999 29.2998C17.8999 21.5678 24.1679 15.2998 31.8999 15.2998H1097.9C1105.63 15.2998 1111.9 21.5678 1111.9 29.2998V639.3C1111.9 647.032 1105.63 653.3 1097.9 653.3H31.8999C24.1679 653.3 17.8999 647.032 17.8999 639.3V29.2998Z"
                 fill="url(#paint0_linear_167_4)"
@@ -546,9 +634,9 @@ const ReadyToGetStart = () => {
                   <span style={{ color: "#0097A7" }} className="font-semibold">
                     <AnimatedText text="(833) PROBAID — " />
                   </span>{" "}
-                  <spam style={{ color: "#FE7702" }} className="font-semibold">
+                  <span style={{ color: "#FE7702" }} className="font-semibold">
                     <AnimatedText text="(833) 776-2243 — NOW " />
-                  </spam>{" "}
+                  </span>{" "}
                   <AnimatedText text="or" />{" "}
                   <AnimatedText text="fill out the " />
                   <Link
@@ -566,39 +654,106 @@ const ReadyToGetStart = () => {
                 </p>
               </div>
             </foreignObject>
-            <g className="rtgs-btn1-float">
-              <image
-                href="/btn1.svg"
-                xlinkHref="/btn1.svg"
-                x="300"
-                y="497"
-                width="250"
-                height="75"
-                preserveAspectRatio="xMidYMid meet"
-                className="rtgs-btn1"
-                style={{ cursor: "pointer" }}
-                onClick={() => {
-                  router.push("/homebooks/contact-us");
-                }}
-              />
-            </g>
-            <g className="rtgs-btn2-float">
-              <image
-                href="/btn2.svg"
-                xlinkHref="/btn2.svg"
-                x="580"
-                y="497"
-                width="250"
-                height="75"
-                preserveAspectRatio="xMidYMid meet"
-                className="rtgs-btn2"
-                style={{ cursor: "pointer" }}
-                onClick={() => {
-                  router.push("/homebooks/833probaid-referral-intake");
-                }}
-              />
-            </g>
             <defs>
+              <filter
+                id="filter0_s_167_4"
+                x="-9.72748e-05"
+                y="-0.000195503"
+                width="1129.2"
+                height="673.2"
+                filterUnits="userSpaceOnUse"
+                colorInterpolationFilters="sRGB"
+              >
+                <feFlood floodOpacity="0" result="BackgroundImageFix" />
+                <feColorMatrix
+                  in="SourceAlpha"
+                  type="matrix"
+                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                  result="hardAlpha"
+                />
+                <feOffset dx="-7" dy="9" />
+                <feGaussianBlur stdDeviation="3.5" />
+                <feComposite in2="hardAlpha" operator="out" />
+                <feColorMatrix
+                  type="matrix"
+                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.64 0"
+                />
+                <feBlend
+                  mode="normal"
+                  in2="BackgroundImageFix"
+                  result="effect1_dropShadow_s"
+                />
+                <feColorMatrix
+                  in="SourceAlpha"
+                  type="matrix"
+                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                  result="hardAlpha"
+                />
+                <feOffset dx="7" dy="-5" />
+                <feGaussianBlur stdDeviation="3.5" />
+                <feComposite in2="hardAlpha" operator="out" />
+                <feColorMatrix
+                  type="matrix"
+                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.64 0"
+                />
+                <feBlend
+                  mode="normal"
+                  in2="effect1_dropShadow_s"
+                  result="effect2_dropShadow_s"
+                />
+                <feBlend
+                  mode="normal"
+                  in="SourceGraphic"
+                  in2="effect2_dropShadow_s"
+                  result="shape"
+                />
+                <feColorMatrix
+                  in="SourceAlpha"
+                  type="matrix"
+                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                  result="hardAlpha"
+                />
+                <feOffset dx="11" dy="10" />
+                <feGaussianBlur stdDeviation="1.5" />
+                <feComposite
+                  in2="hardAlpha"
+                  operator="arithmetic"
+                  k2="-1"
+                  k3="1"
+                />
+                <feColorMatrix
+                  type="matrix"
+                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
+                />
+                <feBlend
+                  mode="normal"
+                  in2="shape"
+                  result="effect3_innerShadow_s"
+                />
+                <feColorMatrix
+                  in="SourceAlpha"
+                  type="matrix"
+                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                  result="hardAlpha"
+                />
+                <feOffset dx="-13" dy="-12" />
+                <feGaussianBlur stdDeviation="1.5" />
+                <feComposite
+                  in2="hardAlpha"
+                  operator="arithmetic"
+                  k2="-1"
+                  k3="1"
+                />
+                <feColorMatrix
+                  type="matrix"
+                  values="0 0 0 0 0.537222 0 0 0 0 0.537222 0 0 0 0 0.537222 0 0 0 0.25 0"
+                />
+                <feBlend
+                  mode="normal"
+                  in2="effect3_innerShadow_s"
+                  result="effect4_innerShadow_s"
+                />
+              </filter>
               <filter
                 id="filter0_ddii_167_4"
                 x="-9.72748e-05"
@@ -864,6 +1019,33 @@ const ReadyToGetStart = () => {
               </linearGradient>
             </defs>
           </svg>
+          <div className="absolute left-[22.55%] sm:left-[26.55%] top-[73.74%] flex min-w-[22.12%] h-[11.13%] items-center justify-center">
+            <CTAButton
+              label="Learn More"
+              onClick={() => router.push("/homebooks/contact-us")}
+              className="w-full justify-center gap-1! px-1.5 py-1 h-full shadow-[0px_2.73px_6.64px_0px_rgba(0,0,0,0.68),2.46px_-2.46px_1.64px_0px_rgba(0,0,0,0.25)_inset,-2.64px_1.55px_1.64px_0px_rgba(255,255,255,0.25)_inset,-1.82px_-0.91px_3.64px_0px_rgba(0,0,0,0.6)]! md:shadow-[2px_1.73px_6.64px_0px_rgba(0,0,0,1),5.46px_-5.46px_3.64px_0px_rgba(0,0,0,0.25)_inset,-3.64px_4.55px_3.64px_0px_rgba(255,255,255,0.25)_inset,-1.82px_-0.91px_3.64px_0px_rgba(0,0,0,0.7)]! rounded-sm! md:rounded-lg!"
+              textClassName="text-[9px] sm:text-[13px] tracking-tight"
+              iconClassName="w-3 h-3 sm:w-5 sm:h-5"
+            />
+          </div>
+          <div
+            className="absolute flex items-center justify-center left-[55.33%] sm:left-[51.33%]"
+            style={{
+              top: "73.74%",
+              width: "22.12%",
+              height: "11.13%",
+            }}
+          >
+            <CTAButton
+              label="Form"
+              onClick={() => router.push("/homebooks/833probaid-referral-intake")}
+              bg="#0097A7"
+              mirrored
+              className="w-full justify-center gap-1! px-1.5 py-1 h-full shadow-[0px_2.73px_6.64px_0px_rgba(0,0,0,0.68),2.46px_-2.46px_1.64px_0px_rgba(0,0,0,0.25)_inset,-2.64px_1.55px_1.64px_0px_rgba(255,255,255,0.25)_inset,-1.82px_-0.91px_3.64px_0px_rgba(0,0,0,0.6)]! md:shadow-[2px_1.73px_6.64px_0px_rgba(0,0,0,1),5.46px_-5.46px_3.64px_0px_rgba(0,0,0,0.25)_inset,-3.64px_4.55px_3.64px_0px_rgba(255,255,255,0.25)_inset,-1.82px_-0.91px_3.64px_0px_rgba(0,0,0,0.7)]! rounded-sm! md:rounded-lg!"
+              textClassName="text-[9px] sm:text-[13px] tracking-tight"
+              iconClassName="w-3 h-3 sm:w-5 sm:h-5"
+            />
+          </div>
         </div>
       </div>
       <div className="mt-8 md:hidden">

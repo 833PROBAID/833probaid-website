@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import BookCard from "./NewBook";
+import CTAButton from "@/components/CTAButton";
 
 const INITIAL_COUNT = 6;
 
@@ -18,7 +18,6 @@ export default function BookCardGrid({ cards = [] }) {
     return false;
   });
 
-  // Persist state changes
   const toggleShowAll = () => {
     setShowAll((prev) => {
       const next = !prev;
@@ -30,7 +29,6 @@ export default function BookCardGrid({ cards = [] }) {
   };
 
   const visible = showAll ? cards : cards.slice(0, INITIAL_COUNT);
-
   const hasOverflow = cards.length > INITIAL_COUNT;
 
   return (
@@ -57,46 +55,20 @@ export default function BookCardGrid({ cards = [] }) {
 
       {hasOverflow && (
         <div className="flex justify-center mt-12">
-          <style>{`
-						.book-card-grid-toggle {
-							animation: bookCardGridToggleFloat 2.5s ease-in-out infinite;
-						}
-						.book-card-grid-toggle img {
-							transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-						}
-						.book-card-grid-toggle:hover img {
-							transform: rotate(-2deg) scale(1.08);
-						}
-						@keyframes bookCardGridToggleFloat {
-							0%, 100% { transform: translateY(0px); }
-							50% { transform: translateY(-8px); }
-						}
-					`}</style>
-          <button
-            type="button"
+          <CTAButton
+            label={showAll ? "Show Less" : "Show More"}
             onClick={toggleShowAll}
+            bg="#0097A7"
+            icon="/arrow-right.png"
+            iconClassName={`w-8 lg:w-10 h-8 lg:h-10 ${
+              showAll ? "-rotate-90" : "rotate-90"
+            }`}
+            className="px-5 h-12 lg:h-14"
             aria-expanded={showAll}
             aria-label={
               showAll ? "Show fewer home books" : "Show all home books"
             }
-            className="cursor-pointer w-51.25 book-card-grid-toggle"
-          >
-            {showAll ? (
-              <Image
-                src="/svgs/show-less.svg"
-                alt="Show Less"
-                width={1000}
-                height={1000}
-              />
-            ) : (
-              <Image
-                src="/svgs/show-more.svg"
-                alt="Show All"
-                width={1000}
-                height={1000}
-              />
-            )}
-          </button>
+          />
         </div>
       )}
     </>

@@ -17,7 +17,6 @@ import {
 import HomeBookContentClient from "./HomeBookContentClient";
 import { scopeCSS } from "@/app/utils/scopeCSS";
 
-
 /**
  * Deduplicate the DB/cache lookup across generateMetadata and the page
  * component so both share a single result per request (React request cache).
@@ -113,10 +112,11 @@ export default async function HomeBookDetailPage({ params }) {
   if (!homeBook || homeBook.status !== "published") notFound();
 
   const currentSerial = Number(homeBook.no);
-  const { previous: previousHomeBook, next: nextHomeBook } =
-    Number.isFinite(currentSerial)
-      ? await getAdjacentPublishedHomeBooksByNo(currentSerial)
-      : { previous: null, next: null };
+  const { previous: previousHomeBook, next: nextHomeBook } = Number.isFinite(
+    currentSerial
+  )
+    ? await getAdjacentPublishedHomeBooksByNo(currentSerial)
+    : { previous: null, next: null };
 
   incrementHomeBookViews(homeBook._id.toString()).catch(() => {});
 
@@ -186,7 +186,8 @@ export default async function HomeBookDetailPage({ params }) {
           </div>
         )}
 
-        <section className="font-roboto container mx-auto mt-2 flex max-w-7xl items-center justify-between px-4 text-xl font-black md:mt-4 md:text-2xl lg:mt-8 lg:text-3xl xl:mt-12 xl:text-4xl">
+        <section className="font-roboto container mx-auto flex max-w-7xl items-center justify-between px-4 text-xl font-black md:text-2xl lg:text-3xl mt-8 xl:text-4xl">
+         
           {previousHomeBook?.slug ? (
             <Link
               href={`/homebooks/${previousHomeBook.slug}`}

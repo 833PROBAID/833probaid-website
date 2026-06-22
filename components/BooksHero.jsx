@@ -62,7 +62,7 @@ export default function BooksHero({ bannerImage, title, subtitle }) {
 					<img
 						src={bannerImage}
 						alt={title}
-						className='h-full w-full object-cover transition-transform duration-500 ease-in-out hover:scale-110'
+						className='h-full w-full transition-transform duration-500 ease-in-out hover:scale-107'
 					/>
 				</div>
 			</div>

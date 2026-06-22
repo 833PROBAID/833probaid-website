@@ -4,7 +4,8 @@
 
 import { Fragment, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import BlogCard from "../../components/BlogCard";
+// import BlogCard from "../../components/BlogCard";
+import BlogCard, { BookCardDefs } from "./BlogCardNew";
 import Footer from "../../components/Footer";
 import Navbar from "../../components/Navbar";
 import blogsApi from "../lib/api/blogs";
@@ -106,7 +107,7 @@ const BlogsPageClient = ({ initialBlogs = [], initialPagination = {} }) => {
       const result = await blogsApi.getAll({
         search: searchQuery,
         page: pageNum,
-        limit: 5,
+        limit: 3,
       });
 
       if (result.success) {
@@ -287,6 +288,7 @@ const BlogsPageClient = ({ initialBlogs = [], initialPagination = {} }) => {
             </p>
           </div>
         )}
+        <BookCardDefs />
 
         <div className="mx-auto mt-8 grid grid-cols-2 gap-4 sm:gap-10 md:gap-16 lg:gap-20 xl:gap-24">
           {blogs.map((blog, index) => {
@@ -302,21 +304,26 @@ const BlogsPageClient = ({ initialBlogs = [], initialPagination = {} }) => {
             };
             return (
               <Fragment key={blog._id || blog.id}>
-                {/* Left card — always opens the blog page */}
+                {/* Left card — Read Article (normal view) */}
                 <BlogCard
                   uid={`${blogKey}-card-read`}
                   alignIndex={index * 2 + 1}
                   {...commonCardProps}
                   slug={blog.slug || ""}
-                  type="read"
+                  speed={3000}
+                  priority={true}
+                  mirrored={false}
+                  onVideoClick={() => {}}
                 />
-                {/* Right card — always opens the video modal */}
+                {/* Right card — Watch Video (mirrored view) */}
                 <BlogCard
                   uid={`${blogKey}-card-video`}
                   alignIndex={index * 2 + 2}
                   {...commonCardProps}
-                  slug=""
-                  type="watch"
+                  slug={blog.slug || ""}
+                  speed={3000}
+                  priority={true}
+                  mirrored={true}
                   onVideoClick={() =>
                     setVideoPopup({
                       isOpen: true,
@@ -352,7 +359,11 @@ const BlogsPageClient = ({ initialBlogs = [], initialPagination = {} }) => {
                 alt="Previous"
               />
               <span
-                className={`${!hasPrev || loading ? "text-gray-400" : "text-secondary hover:text-primary"}`}
+                className={`${
+                  !hasPrev || loading
+                    ? "text-gray-400"
+                    : "text-secondary hover:text-primary"
+                }`}
               >
                 Previous
               </span>
@@ -388,7 +399,7 @@ const BlogsPageClient = ({ initialBlogs = [], initialPagination = {} }) => {
                       className={`w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-full text-sm sm:text-base lg:text-lg font-black transition-all duration-300 ${
                         item === page
                           ? "bg-secondary text-white scale-110 shadow-md"
-                          : "bg-gray-100 text-gray-600 hover:bg-secondary/20 hover:text-secondary hover:scale-125 hover:-translate-y-1 hover:shadow-md cursor-pointer"
+                          : "bg-primary text-white hover:bg-secondary/20 hover:text-secondary hover:scale-125 hover:-translate-y-1 hover:shadow-md cursor-pointer"
                       } ${loading ? "opacity-40 cursor-not-allowed" : ""}`}
                     >
                       {item}
@@ -407,7 +418,11 @@ const BlogsPageClient = ({ initialBlogs = [], initialPagination = {} }) => {
               }`}
             >
               <span
-                className={`${!hasMore || loading ? "text-gray-400" : "text-secondary hover:text-primary"}`}
+                className={`${
+                  !hasMore || loading
+                    ? "text-gray-400"
+                    : "text-secondary hover:text-primary"
+                }`}
               >
                 Next
               </span>

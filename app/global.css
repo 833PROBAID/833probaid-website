@@ -1,7 +1,21 @@
 @import "tailwindcss";
+.radio-label {
+  font-size: 15px;
+  line-height: 1.5;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 4px 10px 4px 16px;
+  border-radius: 4px;
+  width: 100%;
+  color: white;
+}
 
 section {
   contain: none;
+}
+
+.border-left-secondary {
+  border-left-color: var(--color-secondary);
 }
 
 @theme {
@@ -33,6 +47,7 @@ section {
   --color-botMessage: #ffffff;
   --color-voiceActive: #ff4444;
   --color-voiceInactive: #666666;
+  --color-header: #2A2A2A
 
   --ease-out: cubic-bezier(0.24, 0, 0.38, 1);
 
@@ -1097,4 +1112,27 @@ body {
   align-items: center;
   justify-content: center;
   animation: floatBounce 2s ease-in-out infinite;
+}
+
+/* NewsletterCard — subscribe button float animation */
+.footer-btn-float {
+  animation: footerBtnFloat 2.5s ease-in-out infinite;
+  transform-origin: center center;
+  cursor: pointer;
+  will-change: transform;
+}
+.footer-btn-float:focus,
+.footer-btn-float:focus-visible {
+  outline: none;
+}
+.footer-subscribe-btn {
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform-origin: center center;
+}
+.footer-btn-float:hover .footer-subscribe-btn {
+  transform: rotate(-2deg) scale(1.08);
+}
+@keyframes footerBtnFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
 }

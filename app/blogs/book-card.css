@@ -70,6 +70,18 @@
   }
 }
 
+@media (min-width: 440px) and (max-width: 540px) {
+  .book-wrapper {
+    height: 280px;
+  }
+}
+
+@media (min-width: 541px) and (max-width: 640px) {
+  .book-wrapper {
+    height: 320px;
+  }
+}
+
 /* ── 430 – 767 px ──────────────────────────────────────────────── */
 @media (min-width: 430px) and (max-width: 767px) {
   .bc-band-text {

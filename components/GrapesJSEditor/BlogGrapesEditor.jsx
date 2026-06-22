@@ -20,11 +20,21 @@ export default function BlogGrapesEditor({ initialContent, onSave }) {
 		onSaveRef.current = onSave;
 	}, [onSave]);
 
+	// Custom utility rules that should always be present in the saved CSS,
+	// even though GrapesJS prunes rules that aren't applied to a component.
+	// --secondary resolves in the editor canvas, --color-secondary on the
+	// public page; the literal is the final fallback.
+	const EXTRA_CSS =
+		".border-left-secondary{border-left-color:var(--secondary,var(--color-secondary,#fe7702))}";
+
 	// Function to get current editor content
 	const getCurrentContent = () => {
 		if (instanceRef.current) {
 			const html = instanceRef.current.getHtml();
-			const css = instanceRef.current.getCss();
+			let css = instanceRef.current.getCss();
+			if (!css.includes(".border-left-secondary")) {
+				css += EXTRA_CSS;
+			}
 			const state = JSON.stringify(instanceRef.current.getProjectData());
 			return { html, css, state };
 		}

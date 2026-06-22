@@ -14,13 +14,10 @@ class VendorsApi {
 		return apiClient.get(`/api/vendors/${id}`);
 	}
 
-	async create(formData, files = {}) {
-		const fd = new FormData();
-		fd.append("data", JSON.stringify(formData));
-		for (const [fieldName, file] of Object.entries(files)) {
-			if (file) fd.append(fieldName, file);
-		}
-		return apiClient.post("/api/vendors", fd);
+	// Files are uploaded directly to Blob from the browser (see
+	// app/lib/blobUpload.js); `data` carries their metadata in `uploadedFiles`.
+	async create(data) {
+		return apiClient.post("/api/vendors", data);
 	}
 
 	async delete(id) {

@@ -14,13 +14,10 @@ class ReferralsApi {
 		return apiClient.get(`/api/referrals/${id}`);
 	}
 
-	async create(formData, files = []) {
-		const fd = new FormData();
-		fd.append("data", JSON.stringify(formData));
-		for (const file of files) {
-			fd.append("files", file);
-		}
-		return apiClient.post("/api/referrals", fd);
+	// Files are uploaded directly to Blob from the browser (see
+	// app/lib/blobUpload.js); `data` carries their metadata in `uploadedFiles`.
+	async create(data) {
+		return apiClient.post("/api/referrals", data);
 	}
 
 	async delete(id) {
