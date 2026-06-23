@@ -2069,7 +2069,9 @@ const Form = ({ readOnly = false, initialData = null }) => {
 												onChange={handleChange}
 												width='full'
 											/>
-											<div className='flex gap-6 items-center w-full'>
+											<div className={`flex gap-6 items-center w-full ${(!isEmpty(formData.requestedSupport.refereePhone) &&
+														!isValidUSPhone(formData.requestedSupport.refereePhone)) || (!isEmpty(formData.requestedSupport.refereeEmail) &&
+														!isValidEmail(formData.requestedSupport.refereeEmail)) ? 'mb-[35px]' : ''}`}>
 												<Checkbox
 													name='preparePhotos'
 													group='requestedSupport'
