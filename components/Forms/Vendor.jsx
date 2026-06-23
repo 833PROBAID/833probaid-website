@@ -167,7 +167,6 @@ const REQUIRED_TEXT_FIELDS = [
   "headquarters",
   "specificAreas",
   "notesOrSpecialRequirements",
-  "suretyCompany",
 ];
 
 // Radio groups that must have a selection (at least one option chosen)
@@ -202,7 +201,9 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
   const [countdown, setCountdown] = useState(0);
   const [fileResetKey, setFileResetKey] = useState(0);
   const [fieldErrors, setFieldErrors] = useState(new Set());
-  const [submitAttempted, setSubmitAttempted] = useState(false);
+  // Fields the user has interacted with. Live validation only applies to
+  // these, so nothing is highlighted until the user actually changes a field.
+  const [touched, setTouched] = useState(new Set());
   const [_formData, setFormData] = useState(INITIAL_FORM_DATA);
 
   const formData =
@@ -218,9 +219,30 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
   const [zoomLevel, setZoomLevel] = useState(1);
   const formContainerRef = useRef(null);
 
+  const markTouched = (...keys) => {
+    setTouched((prev) => {
+      const next = new Set(prev);
+      keys.forEach((k) => k && next.add(k));
+      return next;
+    });
+  };
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     const group = e.target.dataset?.group;
+
+    // Mark only the field(s) being edited so live validation applies to them.
+    // Some answers make other fields required — mark those dependents too.
+    const touchedKeys = [group || name];
+    if (name === "bonded")
+      touchedKeys.push("bondNumber", "bondCertFile", "suretyCompany");
+    else if (name === "acceptDeferredPayment") touchedKeys.push("w9Form");
+    else if (name === "cancellationFee") touchedKeys.push("cancellationAmount");
+    else if (name === "licensed") touchedKeys.push("licenseNumber");
+    else if (name === "insuredSecond") touchedKeys.push("coiFile");
+    else if (group === "servicesOffered" && name === "others")
+      touchedKeys.push("othersList");
+    markTouched(...touchedKeys);
 
     if (type === "checkbox") {
       if (group) {
@@ -252,26 +274,11 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
         }));
       }
     }
-
-    if (fieldErrors.has(name)) {
-      setFieldErrors((prev) => {
-        const next = new Set(prev);
-        next.delete(name);
-        return next;
-      });
-    }
-    // Clear the section-level error once any checkbox in the group is checked
-    if (group && checked && fieldErrors.has(group)) {
-      setFieldErrors((prev) => {
-        const next = new Set(prev);
-        next.delete(group);
-        return next;
-      });
-    }
   };
 
   const handleFileChange = (e) => {
     const { name, files } = e.target;
+    markTouched(name);
     // Handle nested translation services file fields
     if (name.startsWith("translationServices.")) {
       const fieldName = name.replace("translationServices.", "");
@@ -287,14 +294,6 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
         ...prev,
         [name]: files && files[0] ? files[0] : null,
       }));
-    }
-
-    if (files && files[0] && fieldErrors.has(name)) {
-      setFieldErrors((prev) => {
-        const next = new Set(prev);
-        next.delete(name);
-        return next;
-      });
     }
   };
 
@@ -379,6 +378,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
     if (formData.bonded === "yes") {
       if (isEmpty(formData.bondNumber)) errors.add("bondNumber");
       if (!formData.bondCertFile) errors.add("bondCertFile");
+      if (isEmpty(formData.suretyCompany)) errors.add("suretyCompany");
     }
     if (formData.servicesOffered.others && isEmpty(formData.othersList))
       errors.add("othersList");
@@ -445,13 +445,15 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
     return errors;
   };
 
-  // Once a submit has been attempted, re-validate live on every change so
-  // error highlights appear/disappear immediately without re-clicking submit.
+  // Validate live, but only for fields the user has actually touched — so
+  // nothing is red on first render, and changing one field only (re)validates
+  // that field. A full validation still runs on Submit.
   useEffect(() => {
-    if (!submitAttempted) return;
-    setFieldErrors(buildErrors());
+    if (readOnly || touched.size === 0) return;
+    const all = buildErrors();
+    setFieldErrors(new Set([...all].filter((k) => touched.has(k))));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [_formData, submitAttempted]);
+  }, [_formData, touched, readOnly]);
 
   // After errors render, scroll the first highlighted field into view.
   const scrollToFirstError = () => {
@@ -469,11 +471,12 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
     if (readOnly) return;
     setSubmitStatus("loading");
     setSubmitError("");
-    setSubmitAttempted(true);
 
     const errors = buildErrors();
 
     if (errors.size > 0) {
+      // On Submit, reveal every error and treat all of them as touched.
+      setTouched((prev) => new Set([...prev, ...errors]));
       setFieldErrors(errors);
       setSubmitStatus("error");
       setSubmitError("Please complete all required fields highlighted in red.");
@@ -514,7 +517,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
         setSubmitStatus("success");
         setFormData(INITIAL_FORM_DATA);
         setFieldErrors(new Set());
-        setSubmitAttempted(false);
+        setTouched(new Set());
         setFileResetKey((k) => k + 1);
         setCountdown(5);
         const interval = setInterval(() => {
@@ -2029,6 +2032,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                         value={formData.notesOrSpecialRequirements}
                         onChange={handleChange}
                         width="435px"
+                        placeholder='If no, write "N/A"'
                         error={fieldErrors.has("notesOrSpecialRequirements")}
                       />
                     </div>

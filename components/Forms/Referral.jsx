@@ -87,6 +87,9 @@ const INITIAL_FORM_DATA = {
 		refereeAssigned: false,
 		conductWalkthrough: false,
 		preparePhotos: false,
+		refereeFullName: "",
+		refereePhone: "",
+		refereeEmail: "",
 		willOrderPrivateAppraisal: "",
 		coordinateVendors: false,
 		notReadyForListing: false,
@@ -138,7 +141,6 @@ const Form = ({ readOnly = false, initialData = null }) => {
 	const [submitError, setSubmitError] = useState("");
 	const [countdown, setCountdown] = useState(0);
 	const [fieldErrors, setFieldErrors] = useState(new Set());
-	const [submitAttempted, setSubmitAttempted] = useState(false);
 	const [_formData, setFormData] = useState(INITIAL_FORM_DATA);
 
 	// Always derive display data directly from initialData in readOnly mode,
@@ -153,13 +155,37 @@ const Form = ({ readOnly = false, initialData = null }) => {
 		}
 	}, [readOnly, initialData]);
 	// Remove a single key from the field-error set (used as the user fixes fields)
-	const clearFieldError = (key) => {
-		setFieldErrors((prev) => {
-			if (!prev.has(key)) return prev;
+	// Fields the user has interacted with. Live validation only applies to
+	// these, so nothing is highlighted until the user actually changes a field.
+	const [touched, setTouched] = useState(new Set());
+	const markTouched = (...keys) => {
+		setTouched((prev) => {
 			const next = new Set(prev);
-			next.delete(key);
+			keys.forEach((k) => k && next.add(k));
 			return next;
 		});
+	};
+
+	// Pre-mark a newly opened property block's required fields so they validate
+	// (and highlight red) immediately when the block appears.
+	const markPropertyRequiredTouched = (i) => {
+		markTouched(
+			`property.${i}.address`,
+			`property.${i}.occupancyStatus`,
+			`property.${i}.accessRestrictions`,
+			`property.${i}.urgency`,
+			`property.${i}.multipleProperties`,
+		);
+	};
+
+	// Update a single text/phone field inside the requestedSupport group.
+	const handleSupportFieldChange = (field) => (e) => {
+		const { value } = e.target;
+		markTouched(field);
+		setFormData((prev) => ({
+			...prev,
+			requestedSupport: { ...prev.requestedSupport, [field]: value },
+		}));
 	};
 
 	const HEAR_OPTIONS = [
@@ -173,17 +199,51 @@ const Form = ({ readOnly = false, initialData = null }) => {
 		"other",
 	];
 
+	// In Document Upload these three letter types are mutually exclusive —
+	// checking one clears the other two.
+	const EXCLUSIVE_DOCS = [
+		"lettersOfAdministration",
+		"lettersOfConservatorship",
+		"trustCertification",
+	];
+
+	// In Requested Support these two can't be checked together; checking one
+	// clears the other (and "Prepare Photos" also clears the appraisal radio).
+	const EXCLUSIVE_SUPPORT = ["preparePhotos", "refereeAssigned"];
+
 	// Handler for main form fields
 	const handleChange = (e) => {
 		const { name, value, type, checked } = e.target;
 		const group = e.target.dataset?.group;
 
-		// Clear errors as the user edits
-		clearFieldError(name);
-		if (group && checked) clearFieldError(group);
-		if (HEAR_OPTIONS.includes(name) && checked) clearFieldError("howDidYouHear");
+		// Mark only the field(s) being edited so live validation applies to them.
+		if (group) {
+			markTouched(group);
+			if (group === "requestedSupport" && EXCLUSIVE_SUPPORT.includes(name))
+				markTouched(
+					"willOrderPrivateAppraisal",
+					"refereeFullName",
+					"refereePhone",
+					"refereeEmail",
+				);
+			if (group === "documentUpload") markTouched("uploadedFiles");
+		} else if (HEAR_OPTIONS.includes(name)) {
+			markTouched("howDidYouHear");
+			if (name === "other") markTouched("otherDetails");
+		} else if (name === "lettersIssued") {
+			markTouched("lettersIssued", "lettersDate", "courthouse");
+		} else if (name === "role") {
+			markTouched("role", "roleOther");
+		} else if (name === "clientRole") {
+			markTouched("clientRole", "clientRoleOther");
+		} else {
+			markTouched(name);
+		}
 
 		if (name === "multipleProperties") {
+			// A second property block opens — pre-validate its required fields.
+			if (value === "Yes" && formData.exportedProperties.length === 1)
+				markPropertyRequiredTouched(1);
 			setFormData((prev) => {
 				let newExportedProperties = prev.exportedProperties;
 				if (value === "Yes") {
@@ -218,17 +278,47 @@ const Form = ({ readOnly = false, initialData = null }) => {
 
 		if (type === "checkbox") {
 			if (group) {
-				setFormData((prev) => ({
-					...prev,
-					[group]: {
-						...prev[group],
-						[name]: checked,
-					},
-				}));
+				setFormData((prev) => {
+					const updatedGroup = { ...prev[group], [name]: checked };
+					// Document Upload: only one of the three letter types at a time
+					if (group === "documentUpload" && checked && EXCLUSIVE_DOCS.includes(name)) {
+						EXCLUSIVE_DOCS.forEach((k) => {
+							if (k !== name) updatedGroup[k] = false;
+						});
+					}
+					// Requested Support: "Prepare Photos" and "No Referee Assigned" are
+					// mutually exclusive, and the appraisal radio only applies while
+					// "No Referee Assigned" is checked.
+					if (group === "requestedSupport") {
+						if (checked && EXCLUSIVE_SUPPORT.includes(name)) {
+							EXCLUSIVE_SUPPORT.forEach((k) => {
+								if (k !== name) updatedGroup[k] = false;
+							});
+						}
+						// The appraisal radio applies only while "No Referee Assigned"
+						// is checked; the referee fields only while "Prepare Photos" is.
+						if (!updatedGroup.refereeAssigned)
+							updatedGroup.willOrderPrivateAppraisal = "";
+						if (!updatedGroup.preparePhotos) {
+							updatedGroup.refereeFullName = "";
+							updatedGroup.refereePhone = "";
+							updatedGroup.refereeEmail = "";
+						}
+					}
+					return { ...prev, [group]: updatedGroup };
+				});
 			} else {
 				setFormData((prev) => ({ ...prev, [name]: checked }));
 			}
 		} else {
+			// When letters have been issued, require & auto-open the issue date.
+			if (name === "lettersIssued") {
+				setFormData((prev) => ({ ...prev, lettersIssued: value }));
+				if (value === "Yes") {
+					setTimeout(() => lettersDateRef.current?.setOpen(true), 0);
+				}
+				return;
+			}
 			// Special handling for the 'howDidYouHear' radio: focus the 'Other' input when selected and clear it when not
 			if (name === "howDidYouHear") {
 				setFormData((prev) => ({
@@ -252,14 +342,17 @@ const Form = ({ readOnly = false, initialData = null }) => {
 	const handlePropertyChange = (index, e) => {
 		const { name, value, type, checked } = e.target;
 
-		// Clear the matching property error (and its details error) as the user edits
-		clearFieldError(`property.${index}.${name}`);
-		if (name === "accessRestrictions" && value !== "Yes")
-			clearFieldError(`property.${index}.accessRestrictionsDetails`);
-		if (name === "urgency" && value !== "Yes")
-			clearFieldError(`property.${index}.urgencyDetails`);
+		// Mark the matching property field(s) as touched so they validate live.
+		markTouched(`property.${index}.${name}`);
+		if (name === "accessRestrictions" && value === "Yes")
+			markTouched(`property.${index}.accessRestrictionsDetails`);
+		if (name === "urgency" && value === "Yes")
+			markTouched(`property.${index}.urgencyDetails`);
 
 		if (name === "multipleProperties") {
+			// A further property block opens — pre-validate its required fields.
+			if (value === "Yes" && index === formData.exportedProperties.length - 1)
+				markPropertyRequiredTouched(index + 1);
 			setFormData((prev) => {
 				let updatedProperties = prev.exportedProperties.map((property, i) => {
 					if (i !== index) return property;
@@ -340,6 +433,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 	const urgencyDetailsRef0 = useRef(null);
 	const urgencyDetailsRefs = useRef({});
 	const howDidYouHearOtherRef = useRef(null);
+	const lettersDateRef = useRef(null);
 
 	// Zoom control state
 	const [zoomLevel, setZoomLevel] = useState(1);
@@ -366,7 +460,6 @@ const Form = ({ readOnly = false, initialData = null }) => {
 			clientName: formData.clientName,
 			clientRole: formData.clientRole,
 			lettersIssued: formData.lettersIssued,
-			courthouse: formData.courthouse,
 			multipleProperties: formData.multipleProperties,
 			attorneyName: formData.attorneyName,
 			attorneyEmail: formData.attorneyEmail,
@@ -378,6 +471,15 @@ const Form = ({ readOnly = false, initialData = null }) => {
 		// role "Other" requires roleOther
 		if (formData.role === "Other" && isEmpty(formData.roleOther))
 			errors.add("roleOther");
+
+		if (formData.clientRole === "Other" && isEmpty(formData.clientRoleOther))
+			errors.add("clientRoleOther");
+
+		// When the court has issued letters, the issue date and courthouse are required.
+		if (formData.lettersIssued === "Yes") {
+			if (isEmpty(formData.lettersDate)) errors.add("lettersDate");
+			if (isEmpty(formData.courthouse)) errors.add("courthouse");
+		}
 
 		// Email format checks (referring email is required; attorney email allows "N/A")
 		if (!isEmpty(formData.referringEmail) && !isValidEmail(formData.referringEmail))
@@ -447,12 +549,23 @@ const Form = ({ readOnly = false, initialData = null }) => {
 		)
 			errors.add("willOrderPrivateAppraisal");
 
-		// Rule 2: at least one documentUpload checkbox must be checked
-		if (!Object.values(formData.documentUpload).some(Boolean))
-			errors.add("documentUpload");
+		// preparePhotos requires the referee's name, phone, and email.
+		if (formData.requestedSupport.preparePhotos) {
+			const rs = formData.requestedSupport;
+			if (isEmpty(rs.refereeFullName)) errors.add("refereeFullName");
+			if (isEmpty(rs.refereePhone) || !isValidUSPhone(rs.refereePhone))
+				errors.add("refereePhone");
+			if (isEmpty(rs.refereeEmail) || !isValidEmail(rs.refereeEmail))
+				errors.add("refereeEmail");
+		}
 
-		// At least one file uploaded
-		if (!formData.uploadedFiles || formData.uploadedFiles.length === 0)
+		// Document Upload is optional, but if a document type is checked the
+		// matching file(s) must be uploaded.
+		const anyDocChecked = Object.values(formData.documentUpload).some(Boolean);
+		if (
+			anyDocChecked &&
+			(!formData.uploadedFiles || formData.uploadedFiles.length === 0)
+		)
 			errors.add("uploadedFiles");
 
 		// Rule 2: at least one "How did you hear" option checked
@@ -465,13 +578,15 @@ const Form = ({ readOnly = false, initialData = null }) => {
 		return errors;
 	};
 
-	// Once a submit has been attempted, re-validate live on every change so
-	// error highlights appear/disappear immediately without re-clicking submit.
+	// Validate live, but only for fields the user has actually touched — so
+	// nothing is red on first render, and changing one field only (re)validates
+	// that field. A full validation still runs on Submit.
 	useEffect(() => {
-		if (!submitAttempted) return;
-		setFieldErrors(buildErrors());
+		if (readOnly || touched.size === 0) return;
+		const all = buildErrors();
+		setFieldErrors(new Set([...all].filter((k) => touched.has(k))));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [_formData, submitAttempted]);
+	}, [_formData, touched, readOnly]);
 
 	// After errors render, scroll the first highlighted field into view.
 	const scrollToFirstError = () => {
@@ -489,9 +604,10 @@ const Form = ({ readOnly = false, initialData = null }) => {
 		if (readOnly) return;
 		setSubmitStatus("loading");
 		setSubmitError("");
-		setSubmitAttempted(true);
 		const errors = buildErrors();
 		if (errors.size > 0) {
+			// On Submit, reveal every error and treat all of them as touched.
+			setTouched((prev) => new Set([...prev, ...errors]));
 			setFieldErrors(errors);
 			setSubmitStatus("error");
 			setSubmitError("Please complete all required fields highlighted in red.");
@@ -517,7 +633,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 				setSubmitStatus("success");
 				setFormData(INITIAL_FORM_DATA);
 				setFieldErrors(new Set());
-				setSubmitAttempted(false);
+				setTouched(new Set());
 				setCountdown(5);
 				const interval = setInterval(() => {
 					setCountdown((prev) => {
@@ -546,7 +662,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 				...prev,
 				uploadedFiles: [...prev.uploadedFiles, ...Array.from(files)],
 			}));
-			clearFieldError("uploadedFiles");
+			markTouched("uploadedFiles");
 		}
 	};
 
@@ -738,7 +854,6 @@ const Form = ({ readOnly = false, initialData = null }) => {
 												width='full'
 												containerClass='w-full flex justify-between'
 											/>
-											{formData.role === "Other" && (
 												<TextInput
 													name='roleOther'
 													value={formData.roleOther}
@@ -747,7 +862,6 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													autoFocus
 													error={fieldErrors.has("roleOther")}
 												/>
-											)}
 										</div>
 
 										<TextInput
@@ -1287,50 +1401,58 @@ const Form = ({ readOnly = false, initialData = null }) => {
 											required
 											error={fieldErrors.has("clientName")}
 										/>
-
-										<RadioGroup
-											name='clientRole'
-											value={formData.clientRole}
-											onChange={handleChange}
-											label='Role in the Case:'
-											error={fieldErrors.has("clientRole")}
-											options={[
-												{
-													value: "Executor",
-													label: "Executor",
-													color: "teal",
-													width: "140px",
-												},
-												{
-													value: "Administrator",
-													label: "Administrator",
-													color: "orange",
-													width: "180px",
-												},
-												{
-													value: "Conservator",
-													label: "Conservator",
-													color: "teal",
-													width: "160px",
-												},
-												{
-													value: "Trustee",
-													label: "Trustee",
-													color: "orange",
-													width: "120px",
-												},
-												{
-													value: "Other",
-													label: "Other",
-													color: "teal",
-													width: "100px",
-												},
-											]}
-											width='full'
-											gap='gap-4'
-											containerClass='w-full flex justify-between'
-										/>
-
+										<div className='flex items-center gap-4'>
+											<RadioGroup
+												name='clientRole'
+												value={formData.clientRole}
+												onChange={handleChange}
+												label='Role in the Case:'
+												error={fieldErrors.has("clientRole")}
+												options={[
+													{
+														value: "Executor",
+														label: "Executor",
+														color: "teal",
+														width: "140px",
+													},
+													{
+														value: "Administrator",
+														label: "Administrator",
+														color: "orange",
+														width: "180px",
+													},
+													{
+														value: "Conservator",
+														label: "Conservator",
+														color: "teal",
+														width: "160px",
+													},
+													{
+														value: "Trustee",
+														label: "Trustee",
+														color: "orange",
+														width: "120px",
+													},
+													{
+														value: "Other",
+														label: "Other",
+														color: "teal",
+														width: "100px",
+													},
+												]}
+												width='full'
+												gap='gap-4'
+												containerClass='w-full flex justify-between'
+											/>
+											<TextInput
+												name='clientRoleOther'
+												value={formData.clientRoleOther}
+												onChange={handleChange}
+												width='290px'
+												autoFocus
+												error={fieldErrors.has("clientRoleOther")}
+											/>
+										</div>
 										<div className='flex justify-between items-center'>
 											<label className='block font-bold text-base'>
 												Has the Court Issued Letters Yet?
@@ -1365,6 +1487,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 															{renderLabel("Issued On:")}
 														</label>
 														<DatePicker
+															ref={lettersDateRef}
 															selected={
 																formData.lettersDate
 																	? new Date(formData.lettersDate + "T00:00:00")
@@ -1381,7 +1504,11 @@ const Form = ({ readOnly = false, initialData = null }) => {
 																};
 																handleChange(event);
 															}}
-															className='border-[3px] border-[#0097A7] px-2 py-1 bg-gray-200 placeholder:italic placeholder-[#FD7702] w-[240px] font-bold focus:outline-none focus:ring-2 focus:ring-[#FD7702] focus:ring-offset-0'
+															className={`border-[3px] px-2 py-1 bg-gray-200 placeholder:italic placeholder-[#FD7702] w-[240px] font-bold focus:outline-none focus:ring-2 focus:ring-[#FD7702] focus:ring-offset-0 ${
+																fieldErrors.has("lettersDate")
+																	? "border-red-500"
+																	: "border-[#0097A7]"
+															}`}
 															placeholderText='Select date'
 															popperPlacement="bottom-end"
 															dateFormat='yyyy-MM-dd'
@@ -1942,14 +2069,56 @@ const Form = ({ readOnly = false, initialData = null }) => {
 												onChange={handleChange}
 												width='full'
 											/>
-											<Checkbox
-												name='preparePhotos'
-												group='requestedSupport'
-												label='Prepare Photos for Referee'
-												checked={formData.requestedSupport.preparePhotos}
-												onChange={handleChange}
-												width='full'
-											/>
+											<div className='flex gap-6 items-center w-full'>
+												<Checkbox
+													name='preparePhotos'
+													group='requestedSupport'
+													label='Prepare Photos for Referee'
+													checked={formData.requestedSupport.preparePhotos}
+													onChange={handleChange}
+													width='300px'
+												/>
+												<div className="flex gap-2 items-center">
+												<TextInput
+													name='refereeFullName'
+													value={formData.requestedSupport.refereeFullName}
+													onChange={handleSupportFieldChange("refereeFullName")}
+													label="Referee's Full Name:"
+													inputClass="!w-[160px]"
+													error={fieldErrors.has("refereeFullName")}
+												/>
+												<PhoneInput
+													name='refereePhone'
+													value={formData.requestedSupport.refereePhone}
+													onChange={handleSupportFieldChange("refereePhone")}
+													label='Phone:'
+													inputClass="full"
+													error={fieldErrors.has("refereePhone")}
+													errorMessage={
+														!isEmpty(formData.requestedSupport.refereePhone) &&
+														!isValidUSPhone(formData.requestedSupport.refereePhone)
+															? "Please enter a valid 10-digit US phone number."
+															: ""
+													}
+												/>
+												<TextInput
+													name='refereeEmail'
+													value={formData.requestedSupport.refereeEmail}
+													onChange={handleSupportFieldChange("refereeEmail")}
+													label='Email:'
+													type='email'
+													inputClass="full"
+													placeholder='e.g. name@firm.com'
+													error={fieldErrors.has("refereeEmail")}
+													errorMessage={
+														!isEmpty(formData.requestedSupport.refereeEmail) &&
+														!isValidEmail(formData.requestedSupport.refereeEmail)
+															? "Please enter a valid email address."
+															: ""
+													}
+												/>
+												</div>
+											</div>
 											<div className='flex gap-1 items-start justify-between w-full'>
 												<Checkbox
 													name='refereeAssigned'
@@ -1968,7 +2137,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 																.willOrderPrivateAppraisal
 														}
 														onChange={(e) => {
-															clearFieldError("willOrderPrivateAppraisal");
+															markTouched("willOrderPrivateAppraisal");
 															setFormData((prev) => ({
 																...prev,
 																requestedSupport: {
