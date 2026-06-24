@@ -14,6 +14,7 @@ import {
 } from "../SharedComponents";
 import vendorsApi from "../../app/lib/api/vendors";
 import { uploadToBlob } from "../../app/lib/blobUpload";
+import CTAButton from "../CTAButton";
 
 const DummyYesRadio = ({ value = false }) => {
   return (
@@ -691,7 +692,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                         onChange={handleChange}
                         label="Your Business Phone:"
                         placeholder="(555) 234-5678"
-                        inputClass="w-[400px]"
+                        inputClass="w-[400px] placeholder:italic placeholder-[#FD7702]"
                         containerClass="justify-between"
                         error={fieldErrors.has("officePhone")}
                         errorMessage={
@@ -707,7 +708,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                         onChange={handleChange}
                         label="Your Cell Phone:"
                         placeholder="(555) 234-5678"
-                        inputClass="w-[440px]"
+                        inputClass="w-[440px] placeholder:italic placeholder-[#FD7702]"
                         containerClass="justify-between"
                         error={fieldErrors.has("cellPhone")}
                         errorMessage={
@@ -2033,6 +2034,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                         onChange={handleChange}
                         width="435px"
                         placeholder='If no, write "N/A"'
+                        inputClass='placeholder:italic placeholder-[#FD7702] placeholder:text-center'
                         error={fieldErrors.has("notesOrSpecialRequirements")}
                       />
                     </div>
@@ -2453,22 +2455,14 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
       )}
       {!readOnly && (
         <div className="flex justify-center mt-6">
-          <button
-            type="button"
-            onClick={handleSubmit}
-            disabled={submitStatus === "loading"}
-            className="bg-[#0097A7] text-xl font-bold text-white px-5 py-2 rounded hover:bg-[#1f8a8b] transition-colors disabled:opacity-50"
-          >
-            {submitStatus === "loading" ? (
-              <>
-                <i className="fas fa-spinner fa-spin mr-2"></i>Submitting…
-              </>
-            ) : (
-              <>
-                <i className="fas fa-paper-plane mr-2"></i>Submit
-              </>
-            )}
-          </button>
+          <CTAButton
+              label={submitStatus === 'loading' ? 'Submitting…' : 'Submit'} 
+              iconPosition="left"
+              onClick={handleSubmit}
+              disabled={submitStatus === "loading"}
+              icon={<i className={`fas ${submitStatus === "loading" ? 'fa-spinner fa-spin' : 'fa-paper-plane'} text-white text-xl tracking-wide [text-shadow:1px_2px_1.6px_rgba(0,0,0,0.82),0_0_6px_rgba(255,255,255,0.25)]`} />} 
+              className="cursor-pointer w-max px-4 h-12 lg:h-16 mb-4 mt-5"
+            />
         </div>
       )}
     </div>

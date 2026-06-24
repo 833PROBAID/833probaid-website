@@ -545,7 +545,6 @@ export const getPhoneDigits = (v) => (v || "").toString().replace(/\D/g, "");
 // code is shown separately and hard-coded, so a leading "1" is dropped here.
 export const formatUSPhone = (raw) => {
 	let digits = getPhoneDigits(raw);
-	if (digits.length > 10 && digits.startsWith("1")) digits = digits.slice(1);
 	digits = digits.slice(0, 10);
 	const len = digits.length;
 	if (len === 0) return "";

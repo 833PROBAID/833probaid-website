@@ -15,6 +15,7 @@ import {
 } from "../SharedComponents";
 import referralsApi from "../../app/lib/api/referrals";
 import { uploadToBlob } from "../../app/lib/blobUpload";
+import CTAButton from "../CTAButton";
 
 const INITIAL_FORM_DATA = {
 	// Referring Party Info
@@ -875,7 +876,8 @@ const Form = ({ readOnly = false, initialData = null }) => {
 											error={fieldErrors.has("firmName")}
 										/>
 
-										<div className={`flex gap-4 w-full ${fieldErrors.has("referringEmail") && 'mb-6'}`}>
+										<div className={`flex gap-4 w-full ${fieldErrors.has("referringEmail") || (!isEmpty(formData.referringPhone) &&
+														!isValidUSPhone(formData.referringPhone)) ? 'mb-7' : ''}`}>
 											<TextInput
 												name='referringEmail'
 												value={formData.referringEmail}
@@ -901,6 +903,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 												onChange={handleChange}
 												label='Your Phone:'
 												placeholder='(555) 234-5678'
+												inputClass="placeholder:italic placeholder-[#FD7702]"
 												width='50%'
 												error={fieldErrors.has("referringPhone")}
 												errorMessage={
@@ -1011,11 +1014,12 @@ const Form = ({ readOnly = false, initialData = null }) => {
 									{/* Case Type */}
 									<FormSection title='Case Type' icon='fa-gavel'>
 										<div className='flex justify-start gap-2 w-full'>
-											<div className='w-[575px]'>
+											<div className='w-[560px]'>
 												<Checkbox
 													name='probate'
 													group='caseType'
 													label='Probate'
+													containerClass="w-fit"
 													checked={formData.caseType.probate}
 													onChange={(e) => {
 														setFormData({
@@ -1037,7 +1041,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													}}
 												/>
 											</div>
-											<div className='flex gap-4'>
+											<div className='flex gap-[32px]'>
 												<Checkbox
 													name='fullAuthority'
 													group='caseType'
@@ -1095,7 +1099,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 											</div>
 										</div>
 										<div className='flex justify-start gap-2 w-full'>
-											<div className='w-[575px]'>
+											<div className='w-[560px]'>
 												<Checkbox
 													name='conservatorship'
 													group='caseType'
@@ -1128,7 +1132,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													width='180px'
 												/>
 											</div>
-											<div className='flex gap-4'>
+											<div className='flex gap-[32px]'>
 												<Checkbox
 													name='ofTheEstate'
 													group='caseType'
@@ -1225,7 +1229,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 											</div>
 										</div>
 										<div className='flex justify-start gap-2 w-full'>
-											<div className='w-[575px]'>
+											<div className='w-[560px]'>
 												<Checkbox
 													name='trustSale'
 													group='caseType'
@@ -1258,7 +1262,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													width='200px'
 												/>
 											</div>
-											<div className='flex gap-2'>
+											<div className='flex gap-[24px]'>
 												<Checkbox
 													name='trustee'
 													group='caseType'
@@ -1581,6 +1585,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 											required
 											error={fieldErrors.has("property.0.address")}
 											placeholder="123 Main St, Los Angeles, CA 90041"
+											inputClass="placeholder:italic placeholder-[#FD7702]"
 										/>
 
 										<RadioGroup
@@ -1812,6 +1817,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 																`property.${index + 1}.address`
 															)}
 															placeholder="123 Main St, Los Angeles, CA 90041"
+															inputClass="placeholder:italic placeholder-[#FD7702]"
 														/>
 														<RadioGroup
 															name='occupancyStatus'
@@ -2041,35 +2047,35 @@ const Form = ({ readOnly = false, initialData = null }) => {
 												name='contactClient'
 												group='requestedSupport'
 												label='Contact Client Directly and Coordinate Next Steps'
+												containerClass="w-fit"
 												checked={formData.requestedSupport.contactClient}
 												onChange={handleChange}
-												width='full'
 											/>
 											<Checkbox
 												name='waitForIntro'
 												group='requestedSupport'
 												label='Wait for Your Intro Email or Call'
+												containerClass="w-fit"
 												checked={formData.requestedSupport.waitForIntro}
 												onChange={handleChange}
-												width='full'
 											/>
 											<Checkbox
 												name='provideOpinion'
 												group='requestedSupport'
 												label='Provide a Court-Aligned Opinion of Value'
+												containerClass="w-fit"
 												checked={formData.requestedSupport.provideOpinion}
 												onChange={handleChange}
-												width='full'
 											/>
 											<Checkbox
 												name='conductWalkthrough'
 												group='requestedSupport'
 												label='Conduct Property Walkthrough and Condition Report'
+												containerClass="w-fit"
 												checked={formData.requestedSupport.conductWalkthrough}
 												onChange={handleChange}
-												width='full'
 											/>
-											<div className={`flex gap-6 items-center w-full ${(!isEmpty(formData.requestedSupport.refereePhone) &&
+											<div className={`flex gap-3 items-center w-full ${(!isEmpty(formData.requestedSupport.refereePhone) &&
 														!isValidUSPhone(formData.requestedSupport.refereePhone)) || (!isEmpty(formData.requestedSupport.refereeEmail) &&
 														!isValidEmail(formData.requestedSupport.refereeEmail)) ? 'mb-[35px]' : ''}`}>
 												<Checkbox
@@ -2080,6 +2086,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													onChange={handleChange}
 													width='300px'
 												/>
+												<span className="font-bold text-xl text-[#FD7702]">/</span>
 												<div className="flex gap-2 items-center">
 												<TextInput
 													name='refereeFullName'
@@ -2094,7 +2101,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													value={formData.requestedSupport.refereePhone}
 													onChange={handleSupportFieldChange("refereePhone")}
 													label='Phone:'
-													inputClass="full"
+													inputClass="full placeholder:italic placeholder-[#FD7702]"
 													error={fieldErrors.has("refereePhone")}
 													errorMessage={
 														!isEmpty(formData.requestedSupport.refereePhone) &&
@@ -2109,7 +2116,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													onChange={handleSupportFieldChange("refereeEmail")}
 													label='Email:'
 													type='email'
-													inputClass="full"
+													inputClass="full placeholder:italic placeholder-[#FD7702]"
 													placeholder='e.g. name@firm.com'
 													error={fieldErrors.has("refereeEmail")}
 													errorMessage={
@@ -2178,17 +2185,17 @@ const Form = ({ readOnly = false, initialData = null }) => {
 												name='coordinateVendors'
 												group='requestedSupport'
 												label='Coordinate Vendors (Clean-Out, Locksmith, Etc.)'
+												containerClass="w-fit"
 												checked={formData.requestedSupport.coordinateVendors}
 												onChange={handleChange}
-												width='full'
 											/>
 											<Checkbox
 												name='notReadyForListing'
 												group='requestedSupport'
 												label='Pre-Listing Consultation Only - Meet with the Client to Explain the Process and Prep the File'
+												containerClass="w-fit"
 												checked={formData.requestedSupport.notReadyForListing}
 												onChange={handleChange}
-												width='full'
 											/>
 										</div>
 										{fieldErrors.has("requestedSupport") && (
@@ -2217,7 +2224,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 														formData.documentUpload.lettersOfAdministration
 													}
 													onChange={handleChange}
-													width='full'
+													width='fit'
 												/>
 												<Checkbox
 													name='lettersOfConservatorship'
@@ -2227,7 +2234,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 														formData.documentUpload.lettersOfConservatorship
 													}
 													onChange={handleChange}
-													width='full'
+													width='fit'
 												/>
 												<Checkbox
 													name='trustCertification'
@@ -2235,7 +2242,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													label='Trust Certification Page (or Full Trust Agreement if Unavailable)'
 													checked={formData.documentUpload.trustCertification}
 													onChange={handleChange}
-													width='full'
+													width='fit'
 												/>
 												<Checkbox
 													name='recordedDeed'
@@ -2243,7 +2250,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													label='Recorded Deed in Trust Name (to Confirm Title Vesting Prior to Prelim — Optional, But Helps Speed Up Coordination)'
 													checked={formData.documentUpload.recordedDeed}
 													onChange={handleChange}
-													width='full'
+													width='fit'
 												/>
 
 												<Checkbox
@@ -2252,7 +2259,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													label='Minute Order or Court Filling Confirming Sale Authority'
 													checked={formData.documentUpload.courtMinuteOrder}
 													onChange={handleChange}
-													width='full'
+													width='fit'
 												/>
 												<Checkbox
 													name='relevantFilings'
@@ -2260,7 +2267,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													label='Any Relevant Filings, Petitions, or Timeline Documents'
 													checked={formData.documentUpload.relevantFilings}
 													onChange={handleChange}
-													width='full'
+													width='fit'
 												/>
 											</div>
 											{fieldErrors.has("documentUpload") && (
@@ -2324,7 +2331,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 												checked={formData.onlineSearch}
 												onChange={handleChange}
 												label='Online Search'
-												width='full'
+												width='fit'
 											/>
 											<Checkbox
 												name='socialMedia'
@@ -2332,7 +2339,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 												checked={formData.socialMedia}
 												onChange={handleChange}
 												label='Social Media'
-												width='full'
+												width='fit'
 											/>
 											<Checkbox
 												name='directAttorneyReferral'
@@ -2340,7 +2347,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 												checked={formData.directAttorneyReferral}
 												onChange={handleChange}
 												label='Direct Attorney Referral'
-												width='full'
+												width='fit'
 											/>
 											<Checkbox
 												name='pastCasePriorMatter'
@@ -2348,7 +2355,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 												checked={formData.pastCasePriorMatter}
 												onChange={handleChange}
 												label='Past Case / Prior Matter'
-												width='full'
+												width='fit'
 											/>
 											<Checkbox
 												name='emailNewsletterOrBrochure'
@@ -2356,7 +2363,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 												checked={formData.emailNewsletterOrBrochure}
 												onChange={handleChange}
 												label='Email Newsletter or Brochure'
-												width='full'
+												width='fit'
 											/>
 											<Checkbox
 												name='barAssociationOrLegalEvent'
@@ -2364,7 +2371,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 												checked={formData.barAssociationOrLegalEvent}
 												onChange={handleChange}
 												label='Bar Association / Legal Event'
-												width='full'
+												width='fit'
 											/>
 											<Checkbox
 												name='courtClerkOrProbateExaminer'
@@ -2372,7 +2379,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 												checked={formData.courtClerkOrProbateExaminer}
 												onChange={handleChange}
 												label='Court Clerk or Probate Examiner'
-												width='full'
+												width='fit'
 											/>
 											<div className='w-full flex items-center gap-2'>
 												<Checkbox
@@ -2384,17 +2391,15 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													color='orange'
 													width='90px'
 												/>
-												{formData.other && (
-													<TextInput
-														name='otherDetails'
-														value={formData.otherDetails}
-														onChange={handleChange}
-														width='100%'
-														ref={howDidYouHearOtherRef}
-														autoFocus
-														error={fieldErrors.has("otherDetails")}
-													/>
-												)}
+												<TextInput
+													name='otherDetails'
+													value={formData.otherDetails}
+													onChange={handleChange}
+													width='100%'
+													ref={howDidYouHearOtherRef}
+													autoFocus
+													error={fieldErrors.has("otherDetails")}
+												/>
 											</div>
 										</div>
 										{fieldErrors.has("howDidYouHear") && (
@@ -2470,21 +2475,14 @@ const Form = ({ readOnly = false, initialData = null }) => {
 			<div className='max-w-full overflow-x-hidden px-4'>
 				<div className='flex flex-col items-center mt-6 gap-3'>
 					{!readOnly && submitStatus !== "success" && (
-						<button
-							type='button'
-							className='bg-[#0097A7] text-xl font-bold text-white px-5 py-2 rounded hover:bg-[#1f8a8b] transition-colors disabled:opacity-50'
+						<CTAButton 
+							label={submitStatus === 'loading' ? 'Submitting…' : 'Submit Referral'} 
+							iconPosition="left"
 							onClick={handleSendPdfByEmail}
-							disabled={submitStatus === "loading"}>
-							{submitStatus === "loading" ? (
-								<>
-									<i className='fas fa-spinner fa-spin mr-2'></i>Submitting…
-								</>
-							) : (
-								<>
-									<i className='fas fa-paper-plane mr-2'></i>Submit Referral
-								</>
-							)}
-						</button>
+							disabled={submitStatus === "loading"}
+							icon={<i className={`fas ${submitStatus === "loading" ? 'fa-spinner fa-spin' : 'fa-paper-plane'} text-white text-xl tracking-wide [text-shadow:1px_2px_1.6px_rgba(0,0,0,0.82),0_0_6px_rgba(255,255,255,0.25)]`} />} 
+							className="cursor-pointer w-max px-4 h-12 lg:h-16 mb-4 mt-5"
+						/>
 					)}
 					{submitStatus === "success" && (
 						<div className='flex items-center gap-2 bg-green-100 border border-green-400 text-green-800 font-bold px-6 py-3 rounded'>
