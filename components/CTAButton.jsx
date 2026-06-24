@@ -12,6 +12,8 @@ export default function CTAButton({
   type = "button",
   mirrored = false,
   icon = "/arrow-right.png",
+  iconPosition = "right",
+  iconAlt = "",
   bg = "#FE7702",
   className = "",
   shadowClassName = "shadow-[2px_1.73px_6.64px_0px_rgba(0,0,0,1),5.46px_-5.46px_3.64px_0px_rgba(0,0,0,0.25)_inset,-3.64px_4.55px_3.64px_0px_rgba(255,255,255,0.25)_inset,-1.82px_-0.91px_3.64px_0px_rgba(0,0,0,0.7)]",
@@ -21,6 +23,22 @@ export default function CTAButton({
 }) {
   const [hov, setHov] = useState(false);
   const rotateDir = mirrored ? "3deg" : "-3deg";
+
+  const iconEl =
+    icon == null || icon === false ? null : typeof icon === "string" ? (
+      <Image
+        src={icon}
+        alt={iconAlt}
+        width={100}
+        height={100}
+        priority
+        className={`object-contain ${iconClassName}`}
+      />
+    ) : (
+      icon
+    );
+  const iconOnLeft = iconPosition === "left";
+
   return (
     <button
       type={type}
@@ -38,19 +56,13 @@ export default function CTAButton({
         willChange: "transform",
       }}
     >
+      {iconOnLeft && iconEl}
       <span
         className={`font-montserrat font-black uppercase text-white tracking-wide [text-shadow:1px_2px_1.6px_rgba(0,0,0,0.82),0_0_6px_rgba(255,255,255,0.25)] ${textClassName}`}
       >
         {label}
       </span>
-      <Image
-        src={icon}
-        alt="arrow right"
-        width={100}
-        height={100}
-        priority
-        className={`object-contain ${iconClassName}`}
-      />
+      {!iconOnLeft && iconEl}
     </button>
   );
 }

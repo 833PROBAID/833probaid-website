@@ -9,6 +9,30 @@ import { SectionLoading } from "../../../../components/LoadingState";
 
 const IMAGE_EXTS = ["jpg", "jpeg", "png", "gif", "webp"];
 
+// Force a real download of a (possibly cross-origin) Blob-stored file. The
+// native `download` attribute is ignored cross-origin, so we fetch the file,
+// build an object URL, and click a temporary anchor. Optionally also open the
+// original file in a new tab. The tab is opened synchronously (inside the click
+// gesture) so popup blockers don't kill it; falls back to opening on error.
+async function downloadFile(url, name, { openInNewTab = false } = {}) {
+	const newTab = openInNewTab ? window.open(url, "_blank") : null;
+	try {
+		const res = await fetch(url);
+		if (!res.ok) throw new Error("Failed to fetch file");
+		const blob = await res.blob();
+		const blobUrl = URL.createObjectURL(blob);
+		const a = document.createElement("a");
+		a.href = blobUrl;
+		a.download = name || "download";
+		document.body.appendChild(a);
+		a.click();
+		a.remove();
+		setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+	} catch {
+		if (!newTab) window.open(url, "_blank", "noopener,noreferrer");
+	}
+}
+
 const FILE_FIELD_LABELS = {
 	w9Form: "W-9 Form",
 	serviceFeeSheet: "Service Fee Sheet",
@@ -39,13 +63,15 @@ function ImageLightbox({ src, name, onClose }) {
 				<div className='flex w-full items-center justify-between rounded-t-xl bg-gray-900 px-4 py-2'>
 					<span className='truncate text-sm font-medium text-white'>{name}</span>
 					<div className='flex items-center gap-2 ml-4 shrink-0'>
-						<a
-							href={src}
-							download={name}
+						<button
+							type='button'
 							className='rounded bg-white/10 px-3 py-1 text-xs font-semibold text-white hover:bg-white/20 transition-colors'
-							onClick={(e) => e.stopPropagation()}>
+							onClick={(e) => {
+								e.stopPropagation();
+								downloadFile(src, name);
+							}}>
 							Download
-						</a>
+						</button>
 						<button
 							onClick={onClose}
 							className='flex h-7 w-7 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors'>
@@ -273,6 +299,10 @@ export default function VendorViewPage() {
 									href={filePath}
 									target='_blank'
 									rel='noopener noreferrer'
+									onClick={(e) => {
+										e.preventDefault();
+										downloadFile(filePath, originalName, { openInNewTab: true });
+									}}
 									className='flex items-start gap-3 rounded-xl border border-gray-200 px-4 py-3 text-sm text-primary hover:bg-primary/5 hover:border-primary transition-colors'>
 									<span className='text-2xl mt-0.5'>{isPdf ? "📄" : "📎"}</span>
 									<div className='flex flex-col min-w-0'>
