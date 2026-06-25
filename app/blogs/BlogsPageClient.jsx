@@ -290,7 +290,7 @@ const BlogsPageClient = ({ initialBlogs = [], initialPagination = {} }) => {
         )}
         <BookCardDefs />
 
-        <div className="mx-auto mt-8 grid grid-cols-2 gap-4 sm:gap-10 md:gap-16 lg:gap-20 xl:gap-24">
+        <div className="mx-auto mt-8 grid grid-cols-2 gap-6 sm:gap-10 md:gap-16 lg:gap-20 xl:gap-24">
           {blogs.map((blog, index) => {
             const blogKey = blog._id || blog.id || blog.slug || "blog";
             const commonCardProps = {
