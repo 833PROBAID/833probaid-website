@@ -208,7 +208,7 @@ function BookCardInner({
   return (
     // ── STAGE: perspective wrapper, fluid width, height driven by aspect-ratio ──
     <div
-      className={`relative flex items-center w-full box-border py-[4%]  ${
+      className={`relative flex items-center w-full box-border  ${
         mirrored
           ? "justify-center md:justify-start"
           : "justify-center md:justify-end"
