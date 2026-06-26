@@ -529,7 +529,28 @@ const Form = ({ readOnly = false, initialData = null }) => {
 		if (!Object.values(formData.caseType).some(Boolean))
 			errors.add("caseType");
 
-		// Rule 2: at least one requestedSupport checkbox must be checked
+		if (
+			formData.caseType.probate &&
+			!formData.caseType.fullAuthority &&
+			!formData.caseType.limitedAuthority
+		)
+			errors.add("caseType.probateAuthority");
+
+		if (
+			formData.caseType.conservatorship &&
+			!formData.caseType.ofTheEstate &&
+			!formData.caseType.ofThePerson &&
+			!formData.caseType.both
+		)
+			errors.add("caseType.conservatorshipScope");
+
+		if (
+			formData.caseType.trustSale &&
+			!formData.caseType.trustee &&
+			!formData.caseType.successorTrustee
+		)
+			errors.add("caseType.trustSaleRole");
+
 		const supportBoxes = [
 			"contactClient",
 			"waitForIntro",
@@ -860,7 +881,6 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													value={formData.roleOther}
 													onChange={handleChange}
 													width='400px'
-													autoFocus
 													error={fieldErrors.has("roleOther")}
 												/>
 										</div>
@@ -946,6 +966,52 @@ const Form = ({ readOnly = false, initialData = null }) => {
 											containerClass='w-full flex justify-between'
 										/>
 
+										{/* <div className='w-full flex justify-between items-center'>
+											<label className='block font-bold text-lg'>
+												{renderLabel(
+													"Your Preferred Method of Contact:"
+												)}
+											</label>
+											<div className='flex gap-4'>
+												{["Call", "Email", "Text"].map((method) => {
+													const selected = formData.preferredContact
+														? formData.preferredContact
+																.split(",")
+																.map((s) => s.trim())
+																.filter(Boolean)
+														: [];
+													return (
+														<Checkbox
+															key={method}
+															name={method}
+															label={method}
+															width='100px'
+															checked={selected.includes(method)}
+															error={fieldErrors.has("preferredContact")}
+															onChange={() => {
+																markTouched("preferredContact");
+																setFormData((prev) => {
+																	const cur = prev.preferredContact
+																		? prev.preferredContact
+																				.split(",")
+																				.map((s) => s.trim())
+																				.filter(Boolean)
+																		: [];
+																	const next = cur.includes(method)
+																		? cur.filter((v) => v !== method)
+																		: [...cur, method];
+																	return {
+																		...prev,
+																		preferredContact: next.join(", "),
+																	};
+																});
+															}}
+														/>
+													);
+												})}
+											</div>
+										</div> */}
+
 										<div className='pt-3 font-bold'>
 											<div
 												style={{
@@ -1022,6 +1088,10 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													containerClass="w-fit"
 													checked={formData.caseType.probate}
 													onChange={(e) => {
+														markTouched(
+															"caseType",
+															"caseType.probateAuthority"
+														);
 														setFormData({
 															...formData,
 															caseType: {
@@ -1068,6 +1138,9 @@ const Form = ({ readOnly = false, initialData = null }) => {
 														});
 													}}
 													width='160px'
+													error={fieldErrors.has(
+														"caseType.probateAuthority"
+													)}
 												/>
 												<Checkbox
 													name='limitedAuthority'
@@ -1095,6 +1168,9 @@ const Form = ({ readOnly = false, initialData = null }) => {
 														});
 													}}
 													width='400px'
+													error={fieldErrors.has(
+														"caseType.probateAuthority"
+													)}
 												/>
 											</div>
 										</div>
@@ -1106,6 +1182,10 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													label='Conservatorship'
 													checked={formData.caseType.conservatorship}
 													onChange={(e) => {
+														markTouched(
+															"caseType",
+															"caseType.conservatorshipScope"
+														);
 														setFormData({
 															...formData,
 															caseType: {
@@ -1163,6 +1243,9 @@ const Form = ({ readOnly = false, initialData = null }) => {
 														});
 													}}
 													width='160px'
+													error={fieldErrors.has(
+														"caseType.conservatorshipScope"
+													)}
 												/>
 												<Checkbox
 													name='ofThePerson'
@@ -1194,6 +1277,9 @@ const Form = ({ readOnly = false, initialData = null }) => {
 														});
 													}}
 													width='170px'
+													error={fieldErrors.has(
+														"caseType.conservatorshipScope"
+													)}
 												/>
 												<Checkbox
 													name='both'
@@ -1225,6 +1311,9 @@ const Form = ({ readOnly = false, initialData = null }) => {
 														});
 													}}
 													width='150px'
+													error={fieldErrors.has(
+														"caseType.conservatorshipScope"
+													)}
 												/>
 											</div>
 										</div>
@@ -1236,6 +1325,10 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													label='Trust Sale'
 													checked={formData.caseType.trustSale}
 													onChange={(e) => {
+														markTouched(
+															"caseType",
+															"caseType.trustSaleRole"
+														);
 														setFormData({
 															...formData,
 															caseType: {
@@ -1293,6 +1386,9 @@ const Form = ({ readOnly = false, initialData = null }) => {
 														});
 													}}
 													width='168px'
+													error={fieldErrors.has(
+														"caseType.trustSaleRole"
+													)}
 												/>
 												<Checkbox
 													name='successorTrustee'
@@ -1324,6 +1420,9 @@ const Form = ({ readOnly = false, initialData = null }) => {
 														});
 													}}
 													width='250px'
+													error={fieldErrors.has(
+														"caseType.trustSaleRole"
+													)}
 												/>
 											</div>
 										</div>
@@ -1453,7 +1552,6 @@ const Form = ({ readOnly = false, initialData = null }) => {
 												value={formData.clientRoleOther}
 												onChange={handleChange}
 												width='290px'
-												autoFocus
 												error={fieldErrors.has("clientRoleOther")}
 											/>
 										</div>
@@ -2397,7 +2495,6 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													onChange={handleChange}
 													width='100%'
 													ref={howDidYouHearOtherRef}
-													autoFocus
 													error={fieldErrors.has("otherDetails")}
 												/>
 											</div>

@@ -243,6 +243,18 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
     else if (name === "insuredSecond") touchedKeys.push("coiFile");
     else if (group === "servicesOffered" && name === "others")
       touchedKeys.push("othersList");
+    else if (
+      group === "servicesOffered" &&
+      name === "translationInterpretationServices" &&
+      checked
+    )
+      touchedKeys.push(
+        "translationServices.languagesOffered",
+        "translationServices.areasServed",
+        "translationServices.inPersonHourlyRate",
+        "translationServices.phoneVirtualHourlyRate",
+        "translationServices.availability"
+      );
     markTouched(...touchedKeys);
 
     if (type === "checkbox") {
@@ -258,6 +270,30 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
         setFormData((prev) => ({ ...prev, [name]: checked }));
       }
     } else {
+      if (name === "cancellationAmount") {
+        const numericValue = value.replace(/[^0-9]/g, "");
+        setFormData((prev) => ({
+          ...prev,
+          [name]: numericValue,
+        }));
+        return;
+      }
+      if (
+        name === "translationServices.inPersonHourlyRate" ||
+        name === "translationServices.phoneVirtualHourlyRate"
+      ) {
+        const field = name.split(".")[1];
+        const numericValue = value.replace(/[^0-9]/g, "");
+      
+        setFormData((prev) => ({
+          ...prev,
+          translationServices: {
+            ...prev.translationServices,
+            [field]: numericValue,
+          },
+        }));
+        return;
+      }
       // Handle nested translation services fields
       if (name.startsWith("translationServices.")) {
         const fieldName = name.replace("translationServices.", "");
@@ -410,14 +446,10 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
       if (ts.certifiedInterpreter) {
         if (isEmpty(ts.certifyingAuthority))
           errors.add("translationServices.certifyingAuthority");
-        if (isEmpty(ts.licenseNumber))
-          errors.add("translationServices.licenseNumber");
       }
       if (ts.certifiedTranslator) {
         if (isEmpty(ts.certifyingOrganization))
           errors.add("translationServices.certifyingOrganization");
-        if (isEmpty(ts.translatorLicenseNumber))
-          errors.add("translationServices.translatorLicenseNumber");
         if (isEmpty(ts.languagePairs))
           errors.add("translationServices.languagePairs");
         if (isEmpty(ts.yearsOfExperience))
@@ -1558,6 +1590,10 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                               formData.translationServices.otherAvailability
                             }
                             onChange={(e) => {
+                              markTouched(
+                                "translationServices.availability",
+                                "translationServices.otherAvailabilityList"
+                              );
                               setFormData((prev) => ({
                                 ...prev,
                                 translationServices: {
@@ -1648,9 +1684,6 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                                 }
                                 onChange={handleChange}
                                 width="300px"
-                                error={fieldErrors.has(
-                                  "translationServices.licenseNumber"
-                                )}
                               />
                             </div>
                           </div>
@@ -1709,9 +1742,6 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                                 }
                                 onChange={handleChange}
                                 width="100%"
-                                error={fieldErrors.has(
-                                  "translationServices.translatorLicenseNumber"
-                                )}
                               />
                             </div>
                             <div
