@@ -104,6 +104,111 @@ function ImageLightbox({ src, name, onClose }) {
 	);
 }
 
+function PdfLightbox({ src, name, onClose }) {
+	const [blobUrl, setBlobUrl] = useState(null);
+	const [failed, setFailed] = useState(false);
+
+	const handleKey = useCallback(
+		(e) => {
+			if (e.key === "Escape") onClose();
+		},
+		[onClose],
+	);
+	useEffect(() => {
+		document.addEventListener("keydown", handleKey);
+		return () => document.removeEventListener("keydown", handleKey);
+	}, [handleKey]);
+
+	// Blob storage serves PDFs with `Content-Disposition: attachment`, which
+	// browsers won't render in an iframe. Fetch the file and build a same-origin
+	// object URL (no attachment disposition) so it previews inline.
+	useEffect(() => {
+		let active = true;
+		let objectUrl;
+		fetch(src)
+			.then((res) => {
+				if (!res.ok) throw new Error("Failed to load PDF");
+				return res.blob();
+			})
+			.then((blob) => {
+				if (!active) return;
+				objectUrl = URL.createObjectURL(blob);
+				setBlobUrl(objectUrl);
+			})
+			.catch((err) => {
+				active && setFailed(true)
+			});
+		return () => {
+			active = false;
+			if (objectUrl) URL.revokeObjectURL(objectUrl);
+		};
+	}, [src]);
+
+	return (
+		<div
+			className='fixed inset-0 z-[999] flex items-center justify-center bg-black/80 p-4'
+			onClick={onClose}>
+			<div
+				className='relative max-w-5xl w-full h-[90vh] flex flex-col'
+				onClick={(e) => e.stopPropagation()}>
+				<div className='flex w-full items-center justify-between rounded-t-xl bg-gray-900 px-4 py-2'>
+					<span className='truncate text-sm font-medium text-white'>{name}</span>
+					<div className='flex items-center gap-2 ml-4 shrink-0'>
+						<button
+							type='button'
+							className='rounded bg-white/10 px-3 py-1 text-xs font-semibold text-white hover:bg-white/20 transition-colors'
+							onClick={(e) => {
+								e.stopPropagation();
+								downloadFile(src, name);
+							}}>
+							Download
+						</button>
+						<button
+							onClick={onClose}
+							className='flex h-7 w-7 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors'>
+							<svg
+								className='h-4 w-4'
+								fill='none'
+								stroke='currentColor'
+								viewBox='0 0 24 24'>
+								<path
+									strokeLinecap='round'
+									strokeLinejoin='round'
+									strokeWidth={2}
+									d='M6 18L18 6M6 6l12 12'
+								/>
+							</svg>
+						</button>
+					</div>
+				</div>
+				<div className='w-full flex-1 overflow-hidden rounded-b-xl bg-gray-800'>
+					{failed ? (
+						<div className='flex h-full flex-col items-center justify-center gap-3 text-sm text-gray-300'>
+							<span>Couldn&apos;t load preview.</span>
+							<button
+								type='button'
+								className='rounded bg-white/10 px-3 py-1 text-xs font-semibold text-white hover:bg-white/20 transition-colors'
+								onClick={() => downloadFile(src, name)}>
+								Download instead
+							</button>
+						</div>
+					) : blobUrl ? (
+						<iframe
+							src={blobUrl}
+							title={name}
+							className='h-full w-full border-0'
+						/>
+					) : (
+						<div className='flex h-full items-center justify-center text-sm text-gray-300'>
+							Loading preview…
+						</div>
+					)}
+				</div>
+			</div>
+		</div>
+	);
+}
+
 export default function VendorViewPage() {
 	const { id } = useParams();
 	const router = useRouter();
@@ -112,6 +217,7 @@ export default function VendorViewPage() {
 	const [error, setError] = useState("");
 	const [deleting, setDeleting] = useState(false);
 	const [lightbox, setLightbox] = useState(null);
+	const [pdfModal, setPdfModal] = useState(null);
 
 	useEffect(() => {
 		if (!id) return;
@@ -162,6 +268,14 @@ export default function VendorViewPage() {
 					src={lightbox.src}
 					name={lightbox.name}
 					onClose={() => setLightbox(null)}
+				/>
+			)}
+
+			{pdfModal && (
+				<PdfLightbox
+					src={pdfModal.src}
+					name={pdfModal.name}
+					onClose={() => setPdfModal(null)}
 				/>
 			)}
 
@@ -293,17 +407,10 @@ export default function VendorViewPage() {
 								);
 							}
 
-							return (
-								<a
-									key={i}
-									href={filePath}
-									target='_blank'
-									rel='noopener noreferrer'
-									onClick={(e) => {
-										e.preventDefault();
-										downloadFile(filePath, originalName, { openInNewTab: true });
-									}}
-									className='flex items-start gap-3 rounded-xl border border-gray-200 px-4 py-3 text-sm text-primary hover:bg-primary/5 hover:border-primary transition-colors'>
+							const cardClass =
+								"flex items-start gap-3 rounded-xl border border-gray-200 px-4 py-3 text-sm text-primary hover:bg-primary/5 hover:border-primary transition-colors text-left w-full";
+							const cardInner = (
+								<>
 									<span className='text-2xl mt-0.5'>{isPdf ? "📄" : "📎"}</span>
 									<div className='flex flex-col min-w-0'>
 										{categoryLabel && (
@@ -331,6 +438,33 @@ export default function VendorViewPage() {
 											d='M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4'
 										/>
 									</svg>
+								</>
+							);
+
+							// PDFs open in an in-page popup (preview + download button);
+							// other documents just open/download in a new tab.
+							if (isPdf) {
+								return (
+									<button
+										key={i}
+										type='button'
+										onClick={() => {
+											setPdfModal({ src: filePath, name: originalName })
+										}}
+										className={cardClass}>
+										{cardInner}
+									</button>
+								);
+							}
+
+							return (
+								<a
+									key={i}
+									href={filePath}
+									target='_blank'
+									rel='noopener noreferrer'
+									className={cardClass}>
+									{cardInner}
 								</a>
 							);
 						})}

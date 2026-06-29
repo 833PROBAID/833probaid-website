@@ -55,11 +55,13 @@ function addSecurityHeaders(response, options = {}) {
 			"img-src 'self' data: https: blob:",
 			"font-src 'self' data: https://cdnjs.cloudflare.com https://fonts.gstatic.com",
 			"connect-src 'self' https: wss: ws:",
-			"frame-src 'self'",
+			"frame-src 'self' blob:",
 			"object-src 'none'",
 			"base-uri 'self'",
 			"form-action 'self'",
-			"frame-ancestors 'none'",
+			// 'self' (not 'none') so same-origin blob: PDFs can be framed in the
+			// in-app preview; still blocks cross-origin clickjacking.
+			"frame-ancestors 'self'",
 		];
 		response.headers.set("Content-Security-Policy", cspDirectives.join("; "));
 	}

@@ -7,7 +7,7 @@ import "./book-card.css";
 
 const D = {
   w: 1016,
-  h: 460,
+  h: 480,
   teal: "#14b3c2",
   tealMid: "#0a9aa8",
   tealDark: "#0097A7",

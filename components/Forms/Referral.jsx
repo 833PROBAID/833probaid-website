@@ -232,7 +232,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 			markTouched("howDidYouHear");
 			if (name === "other") markTouched("otherDetails");
 		} else if (name === "lettersIssued") {
-			markTouched("lettersIssued", "lettersDate", "courthouse");
+			markTouched("lettersIssued", "lettersDate");
 		} else if (name === "role") {
 			markTouched("role", "roleOther");
 		} else if (name === "clientRole") {
@@ -461,6 +461,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 			clientName: formData.clientName,
 			clientRole: formData.clientRole,
 			lettersIssued: formData.lettersIssued,
+			courthouse: formData.courthouse,
 			multipleProperties: formData.multipleProperties,
 			attorneyName: formData.attorneyName,
 			attorneyEmail: formData.attorneyEmail,
@@ -476,10 +477,10 @@ const Form = ({ readOnly = false, initialData = null }) => {
 		if (formData.clientRole === "Other" && isEmpty(formData.clientRoleOther))
 			errors.add("clientRoleOther");
 
-		// When the court has issued letters, the issue date and courthouse are required.
+		// When the court has issued letters, the issue date is required.
+		// (Courthouse is always required — handled in requiredFields above.)
 		if (formData.lettersIssued === "Yes") {
 			if (isEmpty(formData.lettersDate)) errors.add("lettersDate");
-			if (isEmpty(formData.courthouse)) errors.add("courthouse");
 		}
 
 		// Email format checks (referring email is required; attorney email allows "N/A")
@@ -1202,11 +1203,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 																reverseMortgage: false,
 																successorInInterest: false,
 																trustSale: false,
-															},
-															documentUpload: {
-																...formData.documentUpload,
-																lettersOfConservatorship: e.target.checked,
-															},
+															}
 														});
 													}}
 													width='180px'
@@ -1345,10 +1342,6 @@ const Form = ({ readOnly = false, initialData = null }) => {
 																successorTrustee: false,
 																reverseMortgage: false,
 																successorInInterest: false,
-															},
-															documentUpload: {
-																...formData.documentUpload,
-																trustCertification: e.target.checked,
 															},
 														});
 													}}

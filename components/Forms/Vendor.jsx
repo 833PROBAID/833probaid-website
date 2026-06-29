@@ -1697,6 +1697,11 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                             formData.translationServices.certifiedTranslator
                           }
                           onChange={(e) => {
+                            if (e.target.checked)
+                              markTouched(
+                                "translationServices.certificationFile",
+                                "translationServices.iContractTranslation"
+                              );
                             setFormData((prev) => ({
                               ...prev,
                               translationServices: {
@@ -1925,6 +1930,10 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                                       ?.other
                                   }
                                   onChange={(e) => {
+                                    if (e.target.checked)
+                                      markTouched(
+                                        "translationServices.otherSpecializationList"
+                                      );
                                     setFormData((prev) => ({
                                       ...prev,
                                       translationServices: {
