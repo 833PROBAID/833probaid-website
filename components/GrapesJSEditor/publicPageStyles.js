@@ -990,6 +990,13 @@ const publicPageStyles = `
 					color: var(--primary) !important;
 				}
 			}
+			.shadow-card p:last-child {
+  margin-bottom: 0 !important;
+}
+
+.points-wrapper {
+  padding: 1.5rem;
+}
 `;
 
 export default publicPageStyles;
