@@ -1,3 +1,5 @@
+"use client";
+
 import dynamic from "next/dynamic";
 import Hero from "../components/Home/Hero";
 import Navbar from "../components/Navbar";
@@ -8,6 +10,7 @@ import Link from "next/link";
 import HomeBooksMobileShowcaseClient from "@/components/HomeBooksMobileShowcaseClient";
 import BookCardBig from "./new-page/BookCardBig";
 import BookCardGrid from "./new-page/BookCardGrid";
+import useIsMobile from "@/hooks/useIsMobile";
 
 const Footer = dynamic(() => import("../components/Footer"));
 const HomeCard = dynamic(() => import("../components/HomeCard"));
@@ -17,6 +20,7 @@ const TrustCard = dynamic(() => import("../components/TrustCard"));
 const ReadyToGetStart = dynamic(() => import("@/components/ReadyToGetStart"));
 
 export default function HomePageClient({ initialHomeCardData = [] }) {
+  const isMobile = useIsMobile(); 
   const homeCardData = Array.isArray(initialHomeCardData)
     ? initialHomeCardData
     : [];
@@ -110,24 +114,25 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
               />
             </p>
           </div>
-          <section className="mx-auto w-full  grid-cols-1 place-items-center justify-center px-2 md:px-16 lg:px-22 xl:px-30 hidden sm:grid ">
-            {homeCardData.slice(0, 1).map((card, index) => (
-              <BookCardBig
-                key={card.id}
-                title={card.title}
-                subtitle={card.subtitle}
-                description={card.description}
-                imageSrc={card.imageSrc}
-                icon={card.icon}
-                slug={card.slug}
-                mirrored={index % 2 !== 0}
-                speed={3000}
-                priority={true}
-              />
-            ))}
+          {!isMobile && (
+            <section className="mx-auto w-full  grid-cols-1 place-items-center justify-center px-2 md:px-16 lg:px-22 xl:px-30 sm:grid ">
+              {homeCardData.slice(0, 1).map((card, index) => (
+                <BookCardBig
+                  key={card.id}
+                  title={card.title}
+                  subtitle={card.subtitle}
+                  description={card.description}
+                  imageSrc={card.imageSrc}
+                  icon={card.icon}
+                  slug={card.slug}
+                  mirrored={index % 2 !== 0}
+                  speed={3000}
+                  priority={true}
+                />
+              ))}
           </section>
-
-          <BookCardGrid cards={homeCardData.slice(1)} />
+          )}
+          <BookCardGrid cards={isMobile ? homeCardData : homeCardData.slice(1)} />
 
           {/* Desktop: Always show last big card */}
           {/* <div className="mt-4 hidden text-white sm:mt-10 md:mt-14 sm:block">

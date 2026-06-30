@@ -3,6 +3,7 @@
 import { memo, useState, useRef } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import HomeBorderImage from "@/components/HomeBorderImage";
 import "./book-card.css";
 
 const D = {
@@ -319,14 +320,12 @@ function BookCardInner({
                 )}
               </div>
 
-              <div className="relative w-full bg-white overflow-hidden rounded-2xl border-4 border-secondary shadow-lg shadow-black/30 sm:shadow-xl my-6 sm:shadow-black/40 md:shadow-2xl md:shadow-black/50">
-                <Image
-                  src={imageSrc || "/images/hero.png"}
+              <div className="relative w-full shrink-0 my-5">
+                <HomeBorderImage
+                  imageSrc={imageSrc}
+                  fallbackSrc="/images/hero.png"
                   alt={imageAlt || title}
-                  width={420}
-                  height={280}
-                  priority={priority}
-                  className="scale-106 h-full w-full object-cover transition-transform duration-500 ease-in-out hover:scale-110"
+                  className="block w-full aspect-1512/1040"
                 />
               </div>
 
