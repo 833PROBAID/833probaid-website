@@ -1191,6 +1191,7 @@ export const RadioGroup = ({
 						color={option.color || "teal"}
 						width={distributeWidth ? itemWidth : option.width || "auto"}
 						disabled={disabled || option.disabled}
+						error={option.error}
 						containerClass={distributeWidth ? "flex-1" : ""}
 					/>
 				))}

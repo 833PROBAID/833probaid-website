@@ -236,7 +236,13 @@ const Form = ({ readOnly = false, initialData = null }) => {
 		} else if (name === "role") {
 			markTouched("role", "roleOther");
 		} else if (name === "clientRole") {
-			markTouched("clientRole", "clientRoleOther");
+			markTouched(
+				"clientRole",
+				"clientRoleOther",
+				"clientRole.probateRole",
+				"clientRole.conservatorRole",
+				"clientRole.trustRole",
+			);
 		} else {
 			markTouched(name);
 		}
@@ -477,6 +483,16 @@ const Form = ({ readOnly = false, initialData = null }) => {
 		if (formData.clientRole === "Other" && isEmpty(formData.clientRoleOther))
 			errors.add("clientRoleOther");
 
+		// The selected Case Type constrains which Client Role is valid.
+		// (Case types are mutually exclusive, so at most one rule applies.)
+		const cr = formData.clientRole;
+		if (formData.caseType.probate && cr !== "Executor" && cr !== "Administrator")
+			errors.add("clientRole.probateRole");
+		if (formData.caseType.conservatorship && cr !== "Conservator")
+			errors.add("clientRole.conservatorRole");
+		if (formData.caseType.trustSale && cr !== "Trustee" && cr !== "Other")
+			errors.add("clientRole.trustRole");
+
 		// When the court has issued letters, the issue date is required.
 		// (Courthouse is always required — handled in requiredFields above.)
 		if (formData.lettersIssued === "Yes") {
@@ -610,6 +626,36 @@ const Form = ({ readOnly = false, initialData = null }) => {
 		setFieldErrors(new Set([...all].filter((k) => touched.has(k))));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [_formData, touched, readOnly]);
+
+	// The selected Case Type restricts which Client Role options are allowed.
+	// `null` means no restriction (no constraining case type is checked).
+	const allowedClientRoles = formData.caseType.probate
+		? ["Executor", "Administrator"]
+		: formData.caseType.conservatorship
+			? ["Conservator"]
+			: formData.caseType.trustSale
+				? ["Trustee", "Other"]
+				: null;
+
+	// If a Case Type is (or becomes) selected that disallows the currently
+	// chosen Client Role, clear it so only a valid option can be selected.
+	useEffect(() => {
+		if (readOnly) return;
+		if (
+			allowedClientRoles &&
+			formData.clientRole &&
+			!allowedClientRoles.includes(formData.clientRole)
+		) {
+			setFormData((prev) => ({ ...prev, clientRole: "", clientRoleOther: "" }));
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [
+		formData.caseType.probate,
+		formData.caseType.conservatorship,
+		formData.caseType.trustSale,
+		formData.clientRole,
+		readOnly,
+	]);
 
 	// After errors render, scroll the first highlighted field into view.
 	const scrollToFirstError = () => {
@@ -936,36 +982,60 @@ const Form = ({ readOnly = false, initialData = null }) => {
 											/>
 										</div>
 
-										<RadioGroup
-											name='preferredContact'
-											value={formData.preferredContact}
-											onChange={handleChange}
-											label='Your Preferred Method of Contact:'
-											error={fieldErrors.has("preferredContact")}
-											options={[
-												{
-													value: "Call",
-													label: "Call",
-													color: "teal",
-													width: "100px",
-												},
-												{
-													value: "Email",
-													label: "Email",
-													color: "orange",
-													width: "100px",
-												},
-												{
-													value: "Text",
-													label: "Text",
-													color: "teal",
-													width: "100px",
-												},
-											]}
-											width='full'
-											gap='gap-4'
-											containerClass='w-full flex justify-between'
-										/>
+										<div className='w-full flex justify-between items-center'>
+											<label className='block font-bold text-lg'>
+												{renderLabel("Your Preferred Method of Contact:")}
+											</label>
+											<div
+												className={`flex gap-4 ${
+													fieldErrors.has("preferredContact")
+														? "ring-2 ring-red-500 rounded p-1 w-max"
+														: ""
+												}`}>
+												{[
+													{ value: "Call", color: "teal" },
+													{ value: "Email", color: "orange" },
+													{ value: "Text", color: "teal" },
+												].map((opt) => {
+													const selected = formData.preferredContact
+														? formData.preferredContact
+																.split(",")
+																.map((s) => s.trim())
+																.filter(Boolean)
+														: [];
+													const isSelected = selected.includes(opt.value);
+													return (
+														<RadioButton
+															key={opt.value}
+															name='preferredContact'
+															value={opt.value}
+															selectedValue={isSelected ? opt.value : ""}
+															label={opt.value}
+															color={opt.color}
+															width='100px'
+															onChange={() => {
+																markTouched("preferredContact");
+																setFormData((prev) => {
+																	const cur = prev.preferredContact
+																		? prev.preferredContact
+																				.split(",")
+																				.map((s) => s.trim())
+																				.filter(Boolean)
+																		: [];
+																	const next = cur.includes(opt.value)
+																		? cur.filter((v) => v !== opt.value)
+																		: [...cur, opt.value];
+																	return {
+																		...prev,
+																		preferredContact: next.join(", "),
+																	};
+																});
+															}}
+														/>
+													);
+												})}
+											</div>
+										</div>
 
 										{/* <div className='w-full flex justify-between items-center'>
 											<label className='block font-bold text-lg'>
@@ -1091,7 +1161,8 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													onChange={(e) => {
 														markTouched(
 															"caseType",
-															"caseType.probateAuthority"
+															"caseType.probateAuthority",
+															"clientRole.probateRole"
 														);
 														setFormData({
 															...formData,
@@ -1185,7 +1256,8 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													onChange={(e) => {
 														markTouched(
 															"caseType",
-															"caseType.conservatorshipScope"
+															"caseType.conservatorshipScope",
+															"clientRole.conservatorRole"
 														);
 														setFormData({
 															...formData,
@@ -1324,7 +1396,8 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													onChange={(e) => {
 														markTouched(
 															"caseType",
-															"caseType.trustSaleRole"
+															"caseType.trustSaleRole",
+															"clientRole.trustRole"
 														);
 														setFormData({
 															...formData,
@@ -1510,30 +1583,50 @@ const Form = ({ readOnly = false, initialData = null }) => {
 														label: "Executor",
 														color: "teal",
 														width: "140px",
+														error: fieldErrors.has("clientRole.probateRole"),
+														disabled: allowedClientRoles
+															? !allowedClientRoles.includes("Executor")
+															: false,
 													},
 													{
 														value: "Administrator",
 														label: "Administrator",
 														color: "orange",
 														width: "180px",
+														error: fieldErrors.has("clientRole.probateRole"),
+														disabled: allowedClientRoles
+															? !allowedClientRoles.includes("Administrator")
+															: false,
 													},
 													{
 														value: "Conservator",
 														label: "Conservator",
 														color: "teal",
 														width: "160px",
+														error: fieldErrors.has("clientRole.conservatorRole"),
+														disabled: allowedClientRoles
+															? !allowedClientRoles.includes("Conservator")
+															: false,
 													},
 													{
 														value: "Trustee",
 														label: "Trustee",
 														color: "orange",
 														width: "120px",
+														error: fieldErrors.has("clientRole.trustRole"),
+														disabled: allowedClientRoles
+															? !allowedClientRoles.includes("Trustee")
+															: false,
 													},
 													{
 														value: "Other",
 														label: "Other",
 														color: "teal",
 														width: "100px",
+														error: fieldErrors.has("clientRole.trustRole"),
+														disabled: allowedClientRoles
+															? !allowedClientRoles.includes("Other")
+															: false,
 													},
 												]}
 												width='full'
