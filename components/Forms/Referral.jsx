@@ -315,7 +315,12 @@ const Form = ({ readOnly = false, initialData = null }) => {
 					return { ...prev, [group]: updatedGroup };
 				});
 			} else {
-				setFormData((prev) => ({ ...prev, [name]: checked }));
+				setFormData((prev) => ({
+					...prev,
+					[name]: checked,
+					// "Other" details are only kept while the Other box is checked.
+					...(name === "other" && !checked ? { otherDetails: "" } : {}),
+				}));
 			}
 		} else {
 			// When letters have been issued, require & auto-open the issue date.
@@ -336,6 +341,19 @@ const Form = ({ readOnly = false, initialData = null }) => {
 				if (value === "Other") {
 					setTimeout(() => howDidYouHearOtherRef.current?.focus(), 0);
 				}
+			} else if (name === "role") {
+				// The "Other" text is only kept while the Other radio is selected.
+				setFormData((prev) => ({
+					...prev,
+					role: value,
+					roleOther: value === "Other" ? prev.roleOther : "",
+				}));
+			} else if (name === "clientRole") {
+				setFormData((prev) => ({
+					...prev,
+					clientRole: value,
+					clientRoleOther: value === "Other" ? prev.clientRoleOther : "",
+				}));
 			} else {
 				setFormData((prev) => ({
 					...prev,
@@ -928,6 +946,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													value={formData.roleOther}
 													onChange={handleChange}
 													width='400px'
+													disabled={formData.role !== "Other"}
 													error={fieldErrors.has("roleOther")}
 												/>
 										</div>
@@ -1638,6 +1657,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 												value={formData.clientRoleOther}
 												onChange={handleChange}
 												width='290px'
+												disabled={formData.clientRole !== "Other"}
 												error={fieldErrors.has("clientRoleOther")}
 											/>
 										</div>
@@ -1889,6 +1909,10 @@ const Form = ({ readOnly = false, initialData = null }) => {
 												/>
 											</div>
 										</div>
+										{readOnly && formData.exportedProperties[0]?.accessRestrictionsDetails && formData.exportedProperties[0]?.accessRestrictionsDetails.length > 15 &&  <p className="font-bold text-gray-600 text-base">{formData.exportedProperties[0]
+																	?.accessRestrictionsDetails}</p>}
+										
+										<div>
 										<div className='flex items-center justify-between w-full gap-2'>
 											<label
 												className='block font-bold text-base flex-shrink-0'
@@ -1907,7 +1931,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 														onChange={(e) => handlePropertyChange(0, e)}
 														label='Yes'
 														color='teal'
-														width='143px'
+														width='70px'
 														error={fieldErrors.has("property.0.urgency")}
 													/>
 													<TextInput
@@ -1921,10 +1945,10 @@ const Form = ({ readOnly = false, initialData = null }) => {
 															""
 														}
 														onChange={(e) => handlePropertyChange(0, e)}
-														label='Details:'
+														label='Please Describe:'
 														containerClass='w-full max-w-none'
 														inputClass='placeholder:italic placeholder-[#FD7702]'
-														width='267px'
+														width='340px'
 														error={fieldErrors.has("property.0.urgencyDetails")}
 													/>
 												</div>
@@ -1950,6 +1974,8 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													width='auto'
 												/>
 											</div>
+										</div>
+										{readOnly && formData.exportedProperties[0]?.urgencyDetails && formData.exportedProperties[0]?.urgencyDetails.length > 15 &&  <p className="font-bold text-gray-600 text-base">{formData.exportedProperties[0]?.urgencyDetails}</p>}
 										</div>
 
 										<RadioGroup
@@ -2277,6 +2303,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													value={formData.requestedSupport.refereeFullName}
 													onChange={handleSupportFieldChange("refereeFullName")}
 													label="Referee's Full Name:"
+													disabled={!formData.requestedSupport.preparePhotos}
 													inputClass="!w-[160px]"
 													error={fieldErrors.has("refereeFullName")}
 												/>
@@ -2286,6 +2313,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													onChange={handleSupportFieldChange("refereePhone")}
 													label='Phone:'
 													inputClass="full placeholder:italic placeholder-[#FD7702]"
+													disabled={!formData.requestedSupport.preparePhotos}
 													error={fieldErrors.has("refereePhone")}
 													errorMessage={
 														!isEmpty(formData.requestedSupport.refereePhone) &&
@@ -2301,6 +2329,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													label='Email:'
 													type='email'
 													inputClass="full placeholder:italic placeholder-[#FD7702]"
+													disabled={!formData.requestedSupport.preparePhotos}
 													placeholder='e.g. name@firm.com'
 													error={fieldErrors.has("refereeEmail")}
 													errorMessage={
@@ -2476,6 +2505,14 @@ const Form = ({ readOnly = false, initialData = null }) => {
 												accept='.pdf,.doc,.docx,.jpg,.png,.zip'
 												width='full'
 												multiple
+												disabled={readOnly}
+												value={
+													readOnly && formData.uploadedFiles?.length
+														? {
+																originalName: `${formData.uploadedFiles.length} file(s) uploaded`,
+															}
+														: null
+												}
 												error={fieldErrors.has("uploadedFiles")}
 											/>
 											{fieldErrors.has("uploadedFiles") && (
@@ -2581,6 +2618,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													onChange={handleChange}
 													width='100%'
 													ref={howDidYouHearOtherRef}
+													disabled={!formData.other}
 													error={fieldErrors.has("otherDetails")}
 												/>
 											</div>
