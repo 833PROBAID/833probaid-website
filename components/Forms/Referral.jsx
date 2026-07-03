@@ -498,18 +498,29 @@ const Form = ({ readOnly = false, initialData = null }) => {
 		if (formData.role === "Other" && isEmpty(formData.roleOther))
 			errors.add("roleOther");
 
-		if (formData.clientRole === "Other" && isEmpty(formData.clientRoleOther))
+		// Client Role may hold multiple values (Trust Sale); parse before checks.
+		const clientRoles = formData.clientRole
+			? formData.clientRole.split(",").map((s) => s.trim()).filter(Boolean)
+			: [];
+		const hasRole = (r) => clientRoles.includes(r);
+
+		if (hasRole("Other") && isEmpty(formData.clientRoleOther))
 			errors.add("clientRoleOther");
 
-		// The selected Case Type constrains which Client Role is valid.
+		// The selected Case Type constrains which Client Role(s) are valid.
 		// (Case types are mutually exclusive, so at most one rule applies.)
-		const cr = formData.clientRole;
-		if (formData.caseType.probate && cr !== "Executor" && cr !== "Administrator")
+		if (
+			formData.caseType.probate &&
+			!hasRole("Executor") &&
+			!hasRole("Administrator")
+		)
 			errors.add("clientRole.probateRole");
-		if (formData.caseType.conservatorship && cr !== "Conservator")
+		if (formData.caseType.conservatorship && !hasRole("Conservator"))
 			errors.add("clientRole.conservatorRole");
-		if (formData.caseType.trustSale && cr !== "Trustee" && cr !== "Other")
+		if (formData.caseType.trustSale && !hasRole("Trustee") && !hasRole("Other"))
 			errors.add("clientRole.trustRole");
+		if (formData.caseType.successorInInterest && !hasRole("Other"))
+			errors.add("clientRole.successorRole");
 
 		// When the court has issued letters, the issue date is required.
 		// (Courthouse is always required — handled in requiredFields above.)
@@ -646,31 +657,51 @@ const Form = ({ readOnly = false, initialData = null }) => {
 	}, [_formData, touched, readOnly]);
 
 	// The selected Case Type restricts which Client Role options are allowed.
-	// `null` means no restriction (no constraining case type is checked).
+	// `null` means no restriction (Reverse Mortgage / none → all allowed).
 	const allowedClientRoles = formData.caseType.probate
 		? ["Executor", "Administrator"]
 		: formData.caseType.conservatorship
 			? ["Conservator"]
 			: formData.caseType.trustSale
 				? ["Trustee", "Other"]
-				: null;
+				: formData.caseType.successorInInterest
+					? ["Other"]
+					: null;
 
-	// If a Case Type is (or becomes) selected that disallows the currently
-	// chosen Client Role, clear it so only a valid option can be selected.
+	// Trust Sale is the only Case Type where more than one Client Role may be
+	// selected together (Trustee and/or Other). Elsewhere it's single-pick.
+	const isClientRoleMulti = formData.caseType.trustSale;
+
+	// Client Role is stored as a comma-joined string (to support the Trust Sale
+	// multi-select); parse it into an array for rendering/validation.
+	const selectedClientRoles = formData.clientRole
+		? formData.clientRole
+				.split(",")
+				.map((s) => s.trim())
+				.filter(Boolean)
+		: [];
+
+	// If the Case Type changes so a chosen Client Role is no longer allowed,
+	// drop just the invalid roles (keeps valid picks when toggling sub-options).
 	useEffect(() => {
-		if (readOnly) return;
-		if (
-			allowedClientRoles &&
-			formData.clientRole &&
-			!allowedClientRoles.includes(formData.clientRole)
-		) {
-			setFormData((prev) => ({ ...prev, clientRole: "", clientRoleOther: "" }));
+		if (readOnly || !allowedClientRoles) return;
+		const kept = selectedClientRoles.filter((r) =>
+			allowedClientRoles.includes(r),
+		);
+		if (kept.length !== selectedClientRoles.length) {
+			setFormData((prev) => ({
+				...prev,
+				clientRole: kept.join(", "),
+				clientRoleOther: kept.includes("Other") ? prev.clientRoleOther : "",
+			}));
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [
 		formData.caseType.probate,
 		formData.caseType.conservatorship,
 		formData.caseType.trustSale,
+		formData.caseType.reverseMortgage,
+		formData.caseType.successorInInterest,
 		formData.clientRole,
 		readOnly,
 	]);
@@ -1181,10 +1212,13 @@ const Form = ({ readOnly = false, initialData = null }) => {
 														markTouched(
 															"caseType",
 															"caseType.probateAuthority",
+															"clientRole",
 															"clientRole.probateRole"
 														);
 														setFormData({
 															...formData,
+															clientRole: "",
+															clientRoleOther: "",
 															caseType: {
 																...formData.caseType,
 																probate: e.target.checked,
@@ -1276,10 +1310,13 @@ const Form = ({ readOnly = false, initialData = null }) => {
 														markTouched(
 															"caseType",
 															"caseType.conservatorshipScope",
+															"clientRole",
 															"clientRole.conservatorRole"
 														);
 														setFormData({
 															...formData,
+															clientRole: "",
+															clientRoleOther: "",
 															caseType: {
 																...formData.caseType,
 																conservatorship: e.target.checked,
@@ -1416,10 +1453,13 @@ const Form = ({ readOnly = false, initialData = null }) => {
 														markTouched(
 															"caseType",
 															"caseType.trustSaleRole",
+															"clientRole",
 															"clientRole.trustRole"
 														);
 														setFormData({
 															...formData,
+															clientRole: "",
+															clientRoleOther: "",
 															caseType: {
 																...formData.caseType,
 																trustSale: e.target.checked,
@@ -1518,8 +1558,11 @@ const Form = ({ readOnly = false, initialData = null }) => {
 												label='Reverse Mortgage'
 												checked={formData.caseType.reverseMortgage}
 												onChange={(e) => {
+													markTouched("caseType", "clientRole");
 													setFormData({
 														...formData,
+														clientRole: "",
+														clientRoleOther: "",
 														caseType: {
 															...formData.caseType,
 															reverseMortgage: e.target.checked,
@@ -1547,8 +1590,15 @@ const Form = ({ readOnly = false, initialData = null }) => {
 												label='Successor in Interest'
 												checked={formData.caseType.successorInInterest}
 												onChange={(e) => {
+													markTouched(
+														"caseType",
+														"clientRole",
+														"clientRole.successorRole",
+													);
 													setFormData({
 														...formData,
+														clientRole: "",
+														clientRoleOther: "",
 														caseType: {
 															...formData.caseType,
 															successorInInterest: e.target.checked,
@@ -1590,74 +1640,102 @@ const Form = ({ readOnly = false, initialData = null }) => {
 											error={fieldErrors.has("clientName")}
 										/>
 										<div className='flex items-center gap-4'>
-											<RadioGroup
-												name='clientRole'
-												value={formData.clientRole}
-												onChange={handleChange}
-												label='Role in the Case:'
-												error={fieldErrors.has("clientRole")}
-												options={[
-													{
-														value: "Executor",
-														label: "Executor",
-														color: "teal",
-														width: "140px",
-														error: fieldErrors.has("clientRole.probateRole"),
-														disabled: allowedClientRoles
-															? !allowedClientRoles.includes("Executor")
-															: false,
-													},
-													{
-														value: "Administrator",
-														label: "Administrator",
-														color: "orange",
-														width: "180px",
-														error: fieldErrors.has("clientRole.probateRole"),
-														disabled: allowedClientRoles
-															? !allowedClientRoles.includes("Administrator")
-															: false,
-													},
-													{
-														value: "Conservator",
-														label: "Conservator",
-														color: "teal",
-														width: "160px",
-														error: fieldErrors.has("clientRole.conservatorRole"),
-														disabled: allowedClientRoles
-															? !allowedClientRoles.includes("Conservator")
-															: false,
-													},
-													{
-														value: "Trustee",
-														label: "Trustee",
-														color: "orange",
-														width: "120px",
-														error: fieldErrors.has("clientRole.trustRole"),
-														disabled: allowedClientRoles
-															? !allowedClientRoles.includes("Trustee")
-															: false,
-													},
-													{
-														value: "Other",
-														label: "Other",
-														color: "teal",
-														width: "100px",
-														error: fieldErrors.has("clientRole.trustRole"),
-														disabled: allowedClientRoles
-															? !allowedClientRoles.includes("Other")
-															: false,
-													},
-												]}
-												width='full'
-												gap='gap-4'
-												containerClass='w-full flex justify-between'
-											/>
+											{/* Client Role: single-pick for most Case Types, but Trust
+											    Sale allows Trustee and/or Other together. Uses the radio
+											    look regardless. */}
+											<div className='w-full flex justify-between items-center'>
+												<label className='block font-bold text-lg'>
+													{renderLabel("Role in the Case:")}
+												</label>
+												<div
+													className={`flex gap-4 ${
+														fieldErrors.has("clientRole")
+															? "ring-2 ring-red-500 rounded p-1 w-max"
+															: ""
+													}`}>
+													{[
+														{ value: "Executor", color: "teal", width: "140px" },
+														{
+															value: "Administrator",
+															color: "orange",
+															width: "180px",
+														},
+														{
+															value: "Conservator",
+															color: "teal",
+															width: "160px",
+														},
+														{ value: "Trustee", color: "orange", width: "120px" },
+														{ value: "Other", color: "teal", width: "100px" },
+													].map((opt) => {
+														const isSel = selectedClientRoles.includes(opt.value);
+														const disabled = allowedClientRoles
+															? !allowedClientRoles.includes(opt.value)
+															: false;
+														const optError =
+															opt.value === "Executor" ||
+															opt.value === "Administrator"
+																? fieldErrors.has("clientRole.probateRole")
+																: opt.value === "Conservator"
+																	? fieldErrors.has("clientRole.conservatorRole")
+																	: opt.value === "Trustee"
+																		? fieldErrors.has("clientRole.trustRole")
+																		: // Other — flagged by Trust Sale or Successor rules
+																			fieldErrors.has("clientRole.trustRole") ||
+																			fieldErrors.has("clientRole.successorRole");
+														return (
+															<RadioButton
+																key={opt.value}
+																name='clientRole'
+																value={opt.value}
+																selectedValue={isSel ? opt.value : ""}
+																label={opt.value}
+																color={opt.color}
+																width={opt.width}
+																disabled={disabled}
+																error={optError}
+																onChange={() => {
+																	markTouched(
+																		"clientRole",
+																		"clientRoleOther",
+																		"clientRole.probateRole",
+																		"clientRole.conservatorRole",
+																		"clientRole.trustRole",
+																		"clientRole.successorRole",
+																	);
+																	setFormData((prev) => {
+																		const cur = prev.clientRole
+																			? prev.clientRole
+																					.split(",")
+																					.map((s) => s.trim())
+																					.filter(Boolean)
+																			: [];
+																		// Trust Sale toggles; other types single-pick.
+																		const next = isClientRoleMulti
+																			? cur.includes(opt.value)
+																				? cur.filter((v) => v !== opt.value)
+																				: [...cur, opt.value]
+																			: [opt.value];
+																		return {
+																			...prev,
+																			clientRole: next.join(", "),
+																			clientRoleOther: next.includes("Other")
+																				? prev.clientRoleOther
+																				: "",
+																		};
+																	});
+																}}
+															/>
+														);
+													})}
+												</div>
+											</div>
 											<TextInput
 												name='clientRoleOther'
 												value={formData.clientRoleOther}
 												onChange={handleChange}
 												width='290px'
-												disabled={formData.clientRole !== "Other"}
+												disabled={!selectedClientRoles.includes("Other")}
 												error={fieldErrors.has("clientRoleOther")}
 											/>
 										</div>
