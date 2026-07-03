@@ -1201,7 +1201,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 									{/* Case Type */}
 									<FormSection title='Case Type' icon='fa-gavel'>
 										<div className='flex justify-start gap-2 w-full'>
-											<div className='w-[560px]'>
+											<div className='w-[545px]'>
 												<Checkbox
 													name='probate'
 													group='caseType'
@@ -1236,7 +1236,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													}}
 												/>
 											</div>
-											<div className='flex gap-[32px]'>
+											<div className='flex gap-[47px]'>
 												<Checkbox
 													name='fullAuthority'
 													group='caseType'
@@ -1300,7 +1300,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 											</div>
 										</div>
 										<div className='flex justify-start gap-2 w-full'>
-											<div className='w-[560px]'>
+											<div className='w-[545px]'>
 												<Checkbox
 													name='conservatorship'
 													group='caseType'
@@ -1337,7 +1337,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													width='180px'
 												/>
 											</div>
-											<div className='flex gap-[32px]'>
+											<div className='flex gap-[47px]'>
 												<Checkbox
 													name='ofTheEstate'
 													group='caseType'
@@ -1443,7 +1443,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 											</div>
 										</div>
 										<div className='flex justify-start gap-2 w-full'>
-											<div className='w-[560px]'>
+											<div className='w-[545px]'>
 												<Checkbox
 													name='trustSale'
 													group='caseType'
@@ -1480,7 +1480,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													width='200px'
 												/>
 											</div>
-											<div className='flex gap-[24px]'>
+											<div className='flex gap-[39px]'>
 												<Checkbox
 													name='trustee'
 													group='caseType'
@@ -1774,6 +1774,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 														</label>
 														<DatePicker
 															ref={lettersDateRef}
+															maxDate={new Date()}
 															selected={
 																formData.lettersDate
 																	? new Date(formData.lettersDate + "T00:00:00")
