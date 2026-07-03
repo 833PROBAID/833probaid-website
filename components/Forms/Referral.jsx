@@ -232,11 +232,17 @@ const Form = ({ readOnly = false, initialData = null }) => {
 			markTouched("howDidYouHear");
 			if (name === "other") markTouched("otherDetails");
 		} else if (name === "lettersIssued") {
-			markTouched("lettersIssued", "lettersDate", "courthouse");
+			markTouched("lettersIssued", "lettersDate");
 		} else if (name === "role") {
 			markTouched("role", "roleOther");
 		} else if (name === "clientRole") {
-			markTouched("clientRole", "clientRoleOther");
+			markTouched(
+				"clientRole",
+				"clientRoleOther",
+				"clientRole.probateRole",
+				"clientRole.conservatorRole",
+				"clientRole.trustRole",
+			);
 		} else {
 			markTouched(name);
 		}
@@ -309,7 +315,12 @@ const Form = ({ readOnly = false, initialData = null }) => {
 					return { ...prev, [group]: updatedGroup };
 				});
 			} else {
-				setFormData((prev) => ({ ...prev, [name]: checked }));
+				setFormData((prev) => ({
+					...prev,
+					[name]: checked,
+					// "Other" details are only kept while the Other box is checked.
+					...(name === "other" && !checked ? { otherDetails: "" } : {}),
+				}));
 			}
 		} else {
 			// When letters have been issued, require & auto-open the issue date.
@@ -330,6 +341,19 @@ const Form = ({ readOnly = false, initialData = null }) => {
 				if (value === "Other") {
 					setTimeout(() => howDidYouHearOtherRef.current?.focus(), 0);
 				}
+			} else if (name === "role") {
+				// The "Other" text is only kept while the Other radio is selected.
+				setFormData((prev) => ({
+					...prev,
+					role: value,
+					roleOther: value === "Other" ? prev.roleOther : "",
+				}));
+			} else if (name === "clientRole") {
+				setFormData((prev) => ({
+					...prev,
+					clientRole: value,
+					clientRoleOther: value === "Other" ? prev.clientRoleOther : "",
+				}));
 			} else {
 				setFormData((prev) => ({
 					...prev,
@@ -461,6 +485,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 			clientName: formData.clientName,
 			clientRole: formData.clientRole,
 			lettersIssued: formData.lettersIssued,
+			courthouse: formData.courthouse,
 			multipleProperties: formData.multipleProperties,
 			attorneyName: formData.attorneyName,
 			attorneyEmail: formData.attorneyEmail,
@@ -473,13 +498,34 @@ const Form = ({ readOnly = false, initialData = null }) => {
 		if (formData.role === "Other" && isEmpty(formData.roleOther))
 			errors.add("roleOther");
 
-		if (formData.clientRole === "Other" && isEmpty(formData.clientRoleOther))
+		// Client Role may hold multiple values (Trust Sale); parse before checks.
+		const clientRoles = formData.clientRole
+			? formData.clientRole.split(",").map((s) => s.trim()).filter(Boolean)
+			: [];
+		const hasRole = (r) => clientRoles.includes(r);
+
+		if (hasRole("Other") && isEmpty(formData.clientRoleOther))
 			errors.add("clientRoleOther");
 
-		// When the court has issued letters, the issue date and courthouse are required.
+		// The selected Case Type constrains which Client Role(s) are valid.
+		// (Case types are mutually exclusive, so at most one rule applies.)
+		if (
+			formData.caseType.probate &&
+			!hasRole("Executor") &&
+			!hasRole("Administrator")
+		)
+			errors.add("clientRole.probateRole");
+		if (formData.caseType.conservatorship && !hasRole("Conservator"))
+			errors.add("clientRole.conservatorRole");
+		if (formData.caseType.trustSale && !hasRole("Trustee") && !hasRole("Other"))
+			errors.add("clientRole.trustRole");
+		if (formData.caseType.successorInInterest && !hasRole("Other"))
+			errors.add("clientRole.successorRole");
+
+		// When the court has issued letters, the issue date is required.
+		// (Courthouse is always required — handled in requiredFields above.)
 		if (formData.lettersIssued === "Yes") {
 			if (isEmpty(formData.lettersDate)) errors.add("lettersDate");
-			if (isEmpty(formData.courthouse)) errors.add("courthouse");
 		}
 
 		// Email format checks (referring email is required; attorney email allows "N/A")
@@ -529,7 +575,28 @@ const Form = ({ readOnly = false, initialData = null }) => {
 		if (!Object.values(formData.caseType).some(Boolean))
 			errors.add("caseType");
 
-		// Rule 2: at least one requestedSupport checkbox must be checked
+		if (
+			formData.caseType.probate &&
+			!formData.caseType.fullAuthority &&
+			!formData.caseType.limitedAuthority
+		)
+			errors.add("caseType.probateAuthority");
+
+		if (
+			formData.caseType.conservatorship &&
+			!formData.caseType.ofTheEstate &&
+			!formData.caseType.ofThePerson &&
+			!formData.caseType.both
+		)
+			errors.add("caseType.conservatorshipScope");
+
+		if (
+			formData.caseType.trustSale &&
+			!formData.caseType.trustee &&
+			!formData.caseType.successorTrustee
+		)
+			errors.add("caseType.trustSaleRole");
+
 		const supportBoxes = [
 			"contactClient",
 			"waitForIntro",
@@ -588,6 +655,56 @@ const Form = ({ readOnly = false, initialData = null }) => {
 		setFieldErrors(new Set([...all].filter((k) => touched.has(k))));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [_formData, touched, readOnly]);
+
+	// The selected Case Type restricts which Client Role options are allowed.
+	// `null` means no restriction (Reverse Mortgage / none → all allowed).
+	const allowedClientRoles = formData.caseType.probate
+		? ["Executor", "Administrator"]
+		: formData.caseType.conservatorship
+			? ["Conservator"]
+			: formData.caseType.trustSale
+				? ["Trustee", "Other"]
+				: formData.caseType.successorInInterest
+					? ["Other"]
+					: null;
+
+	// Trust Sale is the only Case Type where more than one Client Role may be
+	// selected together (Trustee and/or Other). Elsewhere it's single-pick.
+	const isClientRoleMulti = formData.caseType.trustSale;
+
+	// Client Role is stored as a comma-joined string (to support the Trust Sale
+	// multi-select); parse it into an array for rendering/validation.
+	const selectedClientRoles = formData.clientRole
+		? formData.clientRole
+				.split(",")
+				.map((s) => s.trim())
+				.filter(Boolean)
+		: [];
+
+	// If the Case Type changes so a chosen Client Role is no longer allowed,
+	// drop just the invalid roles (keeps valid picks when toggling sub-options).
+	useEffect(() => {
+		if (readOnly || !allowedClientRoles) return;
+		const kept = selectedClientRoles.filter((r) =>
+			allowedClientRoles.includes(r),
+		);
+		if (kept.length !== selectedClientRoles.length) {
+			setFormData((prev) => ({
+				...prev,
+				clientRole: kept.join(", "),
+				clientRoleOther: kept.includes("Other") ? prev.clientRoleOther : "",
+			}));
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [
+		formData.caseType.probate,
+		formData.caseType.conservatorship,
+		formData.caseType.trustSale,
+		formData.caseType.reverseMortgage,
+		formData.caseType.successorInInterest,
+		formData.clientRole,
+		readOnly,
+	]);
 
 	// After errors render, scroll the first highlighted field into view.
 	const scrollToFirstError = () => {
@@ -860,7 +977,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													value={formData.roleOther}
 													onChange={handleChange}
 													width='400px'
-													autoFocus
+													disabled={formData.role !== "Other"}
 													error={fieldErrors.has("roleOther")}
 												/>
 										</div>
@@ -915,36 +1032,106 @@ const Form = ({ readOnly = false, initialData = null }) => {
 											/>
 										</div>
 
-										<RadioGroup
-											name='preferredContact'
-											value={formData.preferredContact}
-											onChange={handleChange}
-											label='Your Preferred Method of Contact:'
-											error={fieldErrors.has("preferredContact")}
-											options={[
-												{
-													value: "Call",
-													label: "Call",
-													color: "teal",
-													width: "100px",
-												},
-												{
-													value: "Email",
-													label: "Email",
-													color: "orange",
-													width: "100px",
-												},
-												{
-													value: "Text",
-													label: "Text",
-													color: "teal",
-													width: "100px",
-												},
-											]}
-											width='full'
-											gap='gap-4'
-											containerClass='w-full flex justify-between'
-										/>
+										<div className='w-full flex justify-between items-center'>
+											<label className='block font-bold text-lg'>
+												{renderLabel("Your Preferred Method of Contact:")}
+											</label>
+											<div
+												className={`flex gap-4 ${
+													fieldErrors.has("preferredContact")
+														? "ring-2 ring-red-500 rounded p-1 w-max"
+														: ""
+												}`}>
+												{[
+													{ value: "Call", color: "teal" },
+													{ value: "Email", color: "orange" },
+													{ value: "Text", color: "teal" },
+												].map((opt) => {
+													const selected = formData.preferredContact
+														? formData.preferredContact
+																.split(",")
+																.map((s) => s.trim())
+																.filter(Boolean)
+														: [];
+													const isSelected = selected.includes(opt.value);
+													return (
+														<RadioButton
+															key={opt.value}
+															name='preferredContact'
+															value={opt.value}
+															selectedValue={isSelected ? opt.value : ""}
+															label={opt.value}
+															color={opt.color}
+															width='100px'
+															onChange={() => {
+																markTouched("preferredContact");
+																setFormData((prev) => {
+																	const cur = prev.preferredContact
+																		? prev.preferredContact
+																				.split(",")
+																				.map((s) => s.trim())
+																				.filter(Boolean)
+																		: [];
+																	const next = cur.includes(opt.value)
+																		? cur.filter((v) => v !== opt.value)
+																		: [...cur, opt.value];
+																	return {
+																		...prev,
+																		preferredContact: next.join(", "),
+																	};
+																});
+															}}
+														/>
+													);
+												})}
+											</div>
+										</div>
+
+										{/* <div className='w-full flex justify-between items-center'>
+											<label className='block font-bold text-lg'>
+												{renderLabel(
+													"Your Preferred Method of Contact:"
+												)}
+											</label>
+											<div className='flex gap-4'>
+												{["Call", "Email", "Text"].map((method) => {
+													const selected = formData.preferredContact
+														? formData.preferredContact
+																.split(",")
+																.map((s) => s.trim())
+																.filter(Boolean)
+														: [];
+													return (
+														<Checkbox
+															key={method}
+															name={method}
+															label={method}
+															width='100px'
+															checked={selected.includes(method)}
+															error={fieldErrors.has("preferredContact")}
+															onChange={() => {
+																markTouched("preferredContact");
+																setFormData((prev) => {
+																	const cur = prev.preferredContact
+																		? prev.preferredContact
+																				.split(",")
+																				.map((s) => s.trim())
+																				.filter(Boolean)
+																		: [];
+																	const next = cur.includes(method)
+																		? cur.filter((v) => v !== method)
+																		: [...cur, method];
+																	return {
+																		...prev,
+																		preferredContact: next.join(", "),
+																	};
+																});
+															}}
+														/>
+													);
+												})}
+											</div>
+										</div> */}
 
 										<div className='pt-3 font-bold'>
 											<div
@@ -1014,7 +1201,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 									{/* Case Type */}
 									<FormSection title='Case Type' icon='fa-gavel'>
 										<div className='flex justify-start gap-2 w-full'>
-											<div className='w-[560px]'>
+											<div className='w-[545px]'>
 												<Checkbox
 													name='probate'
 													group='caseType'
@@ -1022,8 +1209,16 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													containerClass="w-fit"
 													checked={formData.caseType.probate}
 													onChange={(e) => {
+														markTouched(
+															"caseType",
+															"caseType.probateAuthority",
+															"clientRole",
+															"clientRole.probateRole"
+														);
 														setFormData({
 															...formData,
+															clientRole: "",
+															clientRoleOther: "",
 															caseType: {
 																...formData.caseType,
 																probate: e.target.checked,
@@ -1041,7 +1236,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													}}
 												/>
 											</div>
-											<div className='flex gap-[32px]'>
+											<div className='flex gap-[47px]'>
 												<Checkbox
 													name='fullAuthority'
 													group='caseType'
@@ -1068,6 +1263,9 @@ const Form = ({ readOnly = false, initialData = null }) => {
 														});
 													}}
 													width='160px'
+													error={fieldErrors.has(
+														"caseType.probateAuthority"
+													)}
 												/>
 												<Checkbox
 													name='limitedAuthority'
@@ -1095,19 +1293,30 @@ const Form = ({ readOnly = false, initialData = null }) => {
 														});
 													}}
 													width='400px'
+													error={fieldErrors.has(
+														"caseType.probateAuthority"
+													)}
 												/>
 											</div>
 										</div>
 										<div className='flex justify-start gap-2 w-full'>
-											<div className='w-[560px]'>
+											<div className='w-[545px]'>
 												<Checkbox
 													name='conservatorship'
 													group='caseType'
 													label='Conservatorship'
 													checked={formData.caseType.conservatorship}
 													onChange={(e) => {
+														markTouched(
+															"caseType",
+															"caseType.conservatorshipScope",
+															"clientRole",
+															"clientRole.conservatorRole"
+														);
 														setFormData({
 															...formData,
+															clientRole: "",
+															clientRoleOther: "",
 															caseType: {
 																...formData.caseType,
 																conservatorship: e.target.checked,
@@ -1122,17 +1331,13 @@ const Form = ({ readOnly = false, initialData = null }) => {
 																reverseMortgage: false,
 																successorInInterest: false,
 																trustSale: false,
-															},
-															documentUpload: {
-																...formData.documentUpload,
-																lettersOfConservatorship: e.target.checked,
-															},
+															}
 														});
 													}}
 													width='180px'
 												/>
 											</div>
-											<div className='flex gap-[32px]'>
+											<div className='flex gap-[47px]'>
 												<Checkbox
 													name='ofTheEstate'
 													group='caseType'
@@ -1163,6 +1368,9 @@ const Form = ({ readOnly = false, initialData = null }) => {
 														});
 													}}
 													width='160px'
+													error={fieldErrors.has(
+														"caseType.conservatorshipScope"
+													)}
 												/>
 												<Checkbox
 													name='ofThePerson'
@@ -1194,6 +1402,9 @@ const Form = ({ readOnly = false, initialData = null }) => {
 														});
 													}}
 													width='170px'
+													error={fieldErrors.has(
+														"caseType.conservatorshipScope"
+													)}
 												/>
 												<Checkbox
 													name='both'
@@ -1225,19 +1436,30 @@ const Form = ({ readOnly = false, initialData = null }) => {
 														});
 													}}
 													width='150px'
+													error={fieldErrors.has(
+														"caseType.conservatorshipScope"
+													)}
 												/>
 											</div>
 										</div>
 										<div className='flex justify-start gap-2 w-full'>
-											<div className='w-[560px]'>
+											<div className='w-[545px]'>
 												<Checkbox
 													name='trustSale'
 													group='caseType'
 													label='Trust Sale'
 													checked={formData.caseType.trustSale}
 													onChange={(e) => {
+														markTouched(
+															"caseType",
+															"caseType.trustSaleRole",
+															"clientRole",
+															"clientRole.trustRole"
+														);
 														setFormData({
 															...formData,
+															clientRole: "",
+															clientRoleOther: "",
 															caseType: {
 																...formData.caseType,
 																trustSale: e.target.checked,
@@ -1253,16 +1475,12 @@ const Form = ({ readOnly = false, initialData = null }) => {
 																reverseMortgage: false,
 																successorInInterest: false,
 															},
-															documentUpload: {
-																...formData.documentUpload,
-																trustCertification: e.target.checked,
-															},
 														});
 													}}
 													width='200px'
 												/>
 											</div>
-											<div className='flex gap-[24px]'>
+											<div className='flex gap-[39px]'>
 												<Checkbox
 													name='trustee'
 													group='caseType'
@@ -1293,6 +1511,9 @@ const Form = ({ readOnly = false, initialData = null }) => {
 														});
 													}}
 													width='168px'
+													error={fieldErrors.has(
+														"caseType.trustSaleRole"
+													)}
 												/>
 												<Checkbox
 													name='successorTrustee'
@@ -1324,6 +1545,9 @@ const Form = ({ readOnly = false, initialData = null }) => {
 														});
 													}}
 													width='250px'
+													error={fieldErrors.has(
+														"caseType.trustSaleRole"
+													)}
 												/>
 											</div>
 										</div>
@@ -1334,8 +1558,11 @@ const Form = ({ readOnly = false, initialData = null }) => {
 												label='Reverse Mortgage'
 												checked={formData.caseType.reverseMortgage}
 												onChange={(e) => {
+													markTouched("caseType", "clientRole");
 													setFormData({
 														...formData,
+														clientRole: "",
+														clientRoleOther: "",
 														caseType: {
 															...formData.caseType,
 															reverseMortgage: e.target.checked,
@@ -1363,8 +1590,15 @@ const Form = ({ readOnly = false, initialData = null }) => {
 												label='Successor in Interest'
 												checked={formData.caseType.successorInInterest}
 												onChange={(e) => {
+													markTouched(
+														"caseType",
+														"clientRole",
+														"clientRole.successorRole",
+													);
 													setFormData({
 														...formData,
+														clientRole: "",
+														clientRoleOther: "",
 														caseType: {
 															...formData.caseType,
 															successorInInterest: e.target.checked,
@@ -1406,54 +1640,102 @@ const Form = ({ readOnly = false, initialData = null }) => {
 											error={fieldErrors.has("clientName")}
 										/>
 										<div className='flex items-center gap-4'>
-											<RadioGroup
-												name='clientRole'
-												value={formData.clientRole}
-												onChange={handleChange}
-												label='Role in the Case:'
-												error={fieldErrors.has("clientRole")}
-												options={[
-													{
-														value: "Executor",
-														label: "Executor",
-														color: "teal",
-														width: "140px",
-													},
-													{
-														value: "Administrator",
-														label: "Administrator",
-														color: "orange",
-														width: "180px",
-													},
-													{
-														value: "Conservator",
-														label: "Conservator",
-														color: "teal",
-														width: "160px",
-													},
-													{
-														value: "Trustee",
-														label: "Trustee",
-														color: "orange",
-														width: "120px",
-													},
-													{
-														value: "Other",
-														label: "Other",
-														color: "teal",
-														width: "100px",
-													},
-												]}
-												width='full'
-												gap='gap-4'
-												containerClass='w-full flex justify-between'
-											/>
+											{/* Client Role: single-pick for most Case Types, but Trust
+											    Sale allows Trustee and/or Other together. Uses the radio
+											    look regardless. */}
+											<div className='w-full flex justify-between items-center'>
+												<label className='block font-bold text-lg'>
+													{renderLabel("Role in the Case:")}
+												</label>
+												<div
+													className={`flex gap-4 ${
+														fieldErrors.has("clientRole")
+															? "ring-2 ring-red-500 rounded p-1 w-max"
+															: ""
+													}`}>
+													{[
+														{ value: "Executor", color: "teal", width: "140px" },
+														{
+															value: "Administrator",
+															color: "orange",
+															width: "180px",
+														},
+														{
+															value: "Conservator",
+															color: "teal",
+															width: "160px",
+														},
+														{ value: "Trustee", color: "orange", width: "120px" },
+														{ value: "Other", color: "teal", width: "100px" },
+													].map((opt) => {
+														const isSel = selectedClientRoles.includes(opt.value);
+														const disabled = allowedClientRoles
+															? !allowedClientRoles.includes(opt.value)
+															: false;
+														const optError =
+															opt.value === "Executor" ||
+															opt.value === "Administrator"
+																? fieldErrors.has("clientRole.probateRole")
+																: opt.value === "Conservator"
+																	? fieldErrors.has("clientRole.conservatorRole")
+																	: opt.value === "Trustee"
+																		? fieldErrors.has("clientRole.trustRole")
+																		: // Other — flagged by Trust Sale or Successor rules
+																			fieldErrors.has("clientRole.trustRole") ||
+																			fieldErrors.has("clientRole.successorRole");
+														return (
+															<RadioButton
+																key={opt.value}
+																name='clientRole'
+																value={opt.value}
+																selectedValue={isSel ? opt.value : ""}
+																label={opt.value}
+																color={opt.color}
+																width={opt.width}
+																disabled={disabled}
+																error={optError}
+																onChange={() => {
+																	markTouched(
+																		"clientRole",
+																		"clientRoleOther",
+																		"clientRole.probateRole",
+																		"clientRole.conservatorRole",
+																		"clientRole.trustRole",
+																		"clientRole.successorRole",
+																	);
+																	setFormData((prev) => {
+																		const cur = prev.clientRole
+																			? prev.clientRole
+																					.split(",")
+																					.map((s) => s.trim())
+																					.filter(Boolean)
+																			: [];
+																		// Trust Sale toggles; other types single-pick.
+																		const next = isClientRoleMulti
+																			? cur.includes(opt.value)
+																				? cur.filter((v) => v !== opt.value)
+																				: [...cur, opt.value]
+																			: [opt.value];
+																		return {
+																			...prev,
+																			clientRole: next.join(", "),
+																			clientRoleOther: next.includes("Other")
+																				? prev.clientRoleOther
+																				: "",
+																		};
+																	});
+																}}
+															/>
+														);
+													})}
+												</div>
+											</div>
 											<TextInput
 												name='clientRoleOther'
 												value={formData.clientRoleOther}
 												onChange={handleChange}
 												width='290px'
-												autoFocus
+												disabled={!selectedClientRoles.includes("Other")}
 												error={fieldErrors.has("clientRoleOther")}
 											/>
 										</div>
@@ -1492,6 +1774,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 														</label>
 														<DatePicker
 															ref={lettersDateRef}
+															maxDate={new Date()}
 															selected={
 																formData.lettersDate
 																	? new Date(formData.lettersDate + "T00:00:00")
@@ -1705,6 +1988,10 @@ const Form = ({ readOnly = false, initialData = null }) => {
 												/>
 											</div>
 										</div>
+										{readOnly && formData.exportedProperties[0]?.accessRestrictionsDetails && formData.exportedProperties[0]?.accessRestrictionsDetails.length > 15 &&  <p className="font-bold text-gray-600 text-base">{formData.exportedProperties[0]
+																	?.accessRestrictionsDetails}</p>}
+										
+										<div>
 										<div className='flex items-center justify-between w-full gap-2'>
 											<label
 												className='block font-bold text-base flex-shrink-0'
@@ -1723,7 +2010,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 														onChange={(e) => handlePropertyChange(0, e)}
 														label='Yes'
 														color='teal'
-														width='143px'
+														width='70px'
 														error={fieldErrors.has("property.0.urgency")}
 													/>
 													<TextInput
@@ -1737,10 +2024,10 @@ const Form = ({ readOnly = false, initialData = null }) => {
 															""
 														}
 														onChange={(e) => handlePropertyChange(0, e)}
-														label='Details:'
+														label='Please Describe:'
 														containerClass='w-full max-w-none'
 														inputClass='placeholder:italic placeholder-[#FD7702]'
-														width='267px'
+														width='340px'
 														error={fieldErrors.has("property.0.urgencyDetails")}
 													/>
 												</div>
@@ -1766,6 +2053,8 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													width='auto'
 												/>
 											</div>
+										</div>
+										{readOnly && formData.exportedProperties[0]?.urgencyDetails && formData.exportedProperties[0]?.urgencyDetails.length > 15 &&  <p className="font-bold text-gray-600 text-base">{formData.exportedProperties[0]?.urgencyDetails}</p>}
 										</div>
 
 										<RadioGroup
@@ -2093,6 +2382,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													value={formData.requestedSupport.refereeFullName}
 													onChange={handleSupportFieldChange("refereeFullName")}
 													label="Referee's Full Name:"
+													disabled={!formData.requestedSupport.preparePhotos}
 													inputClass="!w-[160px]"
 													error={fieldErrors.has("refereeFullName")}
 												/>
@@ -2102,6 +2392,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													onChange={handleSupportFieldChange("refereePhone")}
 													label='Phone:'
 													inputClass="full placeholder:italic placeholder-[#FD7702]"
+													disabled={!formData.requestedSupport.preparePhotos}
 													error={fieldErrors.has("refereePhone")}
 													errorMessage={
 														!isEmpty(formData.requestedSupport.refereePhone) &&
@@ -2117,6 +2408,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													label='Email:'
 													type='email'
 													inputClass="full placeholder:italic placeholder-[#FD7702]"
+													disabled={!formData.requestedSupport.preparePhotos}
 													placeholder='e.g. name@firm.com'
 													error={fieldErrors.has("refereeEmail")}
 													errorMessage={
@@ -2292,6 +2584,14 @@ const Form = ({ readOnly = false, initialData = null }) => {
 												accept='.pdf,.doc,.docx,.jpg,.png,.zip'
 												width='full'
 												multiple
+												disabled={readOnly}
+												value={
+													readOnly && formData.uploadedFiles?.length
+														? {
+																originalName: `${formData.uploadedFiles.length} file(s) uploaded`,
+															}
+														: null
+												}
 												error={fieldErrors.has("uploadedFiles")}
 											/>
 											{fieldErrors.has("uploadedFiles") && (
@@ -2397,7 +2697,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													onChange={handleChange}
 													width='100%'
 													ref={howDidYouHearOtherRef}
-													autoFocus
+													disabled={!formData.other}
 													error={fieldErrors.has("otherDetails")}
 												/>
 											</div>

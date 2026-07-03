@@ -3,6 +3,7 @@
 import { memo, useState, useRef } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import HomeBorderImage from "@/components/HomeBorderImage";
 import "./book-card.css";
 
 const D = {
@@ -168,11 +169,11 @@ function BookCardInner({
     e.stopPropagation();
     setFlipping(true);
     setOpen(true);
-    if (slug) {
-      router.prefetch(`/homebooks/${slug}`);
-      setTimeout(() => router.push(`/homebooks/${slug}`), speed - 800);
-    }
-    setTimeout(() => setFlipping(false), speed + 300);
+    // if (slug) {
+    //   router.prefetch(`/homebooks/${slug}`);
+    //   setTimeout(() => router.push(`/homebooks/${slug}`), speed - 800);
+    // }
+    // setTimeout(() => setFlipping(false), speed + 300);
   };
 
   return (
@@ -306,9 +307,10 @@ function BookCardInner({
                 gap: "clamp(8px,2vw,14px)",
                 rowGap: "clamp(8px,2vw,14px)",
                 boxSizing: "border-box",
+                justifyContent: 'center'
               }}
             >
-              <div className="bg-white flex flex-col items-center justify-center py-4 text-center border-4 rounded-3xl border-l-18 border-secondary transition-transform duration-300 ease-in-out hover:scale-105 shadow-lg shadow-black/30 sm:shadow-xl sm:shadow-black/40 md:shadow-2xl md:shadow-black/50">
+              {/* <div className="bg-white flex flex-col items-center justify-center py-4 text-center border-4 rounded-3xl border-l-18 border-secondary transition-transform duration-300 ease-in-out hover:scale-105 shadow-lg shadow-black/30 sm:shadow-xl sm:shadow-black/40 md:shadow-2xl md:shadow-black/50">
                 <h1 className="font-anton text-2xl uppercase leading-tight text-primary hover:text-secondary">
                   {title}
                 </h1>
@@ -317,26 +319,24 @@ function BookCardInner({
                     {subtitle}
                   </p>
                 )}
-              </div>
+              </div> */}
 
-              <div className="relative w-full bg-white overflow-hidden rounded-2xl border-4 border-secondary shadow-lg shadow-black/30 sm:shadow-xl my-6 sm:shadow-black/40 md:shadow-2xl md:shadow-black/50">
-                <Image
-                  src={imageSrc || "/images/hero.png"}
+              <div className="relative w-full shrink-0">
+                <HomeBorderImage
+                  imageSrc={imageSrc}
+                  fallbackSrc="/images/hero.png"
                   alt={imageAlt || title}
-                  width={420}
-                  height={280}
-                  priority={priority}
-                  className="scale-106 h-full w-full object-cover transition-transform duration-500 ease-in-out hover:scale-110"
+                  className="block w-full aspect-1512/1040"
                 />
               </div>
 
-              {description && (
+              {/* {description && (
                 <div className="p-4 bg-white rounded-2xl border-4 border-secondary mt-4">
                   <p className="text-secondary font-semibold text-sm">
                     {description}
                   </p>
                 </div>
-              )}
+              )} */}
             </div>
           </div>
         </div>

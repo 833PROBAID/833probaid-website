@@ -27,6 +27,8 @@ export default function BlogGrapesEditor({ initialContent, onSave }) {
 	const EXTRA_CSS =
 		".border-left-secondary{border-left-color:var(--secondary,var(--color-secondary,#fe7702))}";
 
+	const TEXT_NO_MARGIN = ".text-no-margin{margin-bottom: 0px !important}";
+
 	// Function to get current editor content
 	const getCurrentContent = () => {
 		if (instanceRef.current) {
@@ -34,6 +36,9 @@ export default function BlogGrapesEditor({ initialContent, onSave }) {
 			let css = instanceRef.current.getCss();
 			if (!css.includes(".border-left-secondary")) {
 				css += EXTRA_CSS;
+			}
+			if (!css.includes(".text-no-margin")) {
+				css += TEXT_NO_MARGIN;
 			}
 			const state = JSON.stringify(instanceRef.current.getProjectData());
 			return { html, css, state };

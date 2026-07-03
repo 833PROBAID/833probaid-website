@@ -133,30 +133,49 @@ const INITIAL_FORM_DATA = {
   },
 };
 
-const buildFormData = (data) => ({
-  ...INITIAL_FORM_DATA,
-  ...data,
-  paymentMethods: {
-    ...INITIAL_FORM_DATA.paymentMethods,
-    ...(data?.paymentMethods || {}),
-  },
-  daysAvailable: {
-    ...INITIAL_FORM_DATA.daysAvailable,
-    ...(data?.daysAvailable || {}),
-  },
-  servicesOffered: {
-    ...INITIAL_FORM_DATA.servicesOffered,
-    ...(data?.servicesOffered || {}),
-  },
-  translationServices: {
-    ...INITIAL_FORM_DATA.translationServices,
-    ...(data?.translationServices || {}),
-    specializations: {
-      ...INITIAL_FORM_DATA.translationServices.specializations,
-      ...(data?.translationServices?.specializations || {}),
+const buildFormData = (data) => {
+  // Saved uploads live in `uploadedFiles`, tagged by `fieldName`. Map them back
+  // onto the individual file fields so each upload control shows its "has file"
+  // (green) state in read-only / prefill views.
+  const filesByField = {};
+  (data?.uploadedFiles || []).forEach((f) => {
+    if (f && f.fieldName) filesByField[f.fieldName] = f;
+  });
+
+  return {
+    ...INITIAL_FORM_DATA,
+    ...data,
+    w9Form: data?.w9Form || filesByField.w9Form || null,
+    serviceFeeSheet:
+      data?.serviceFeeSheet || filesByField.serviceFeeSheet || null,
+    coiFile: data?.coiFile || filesByField.coiFile || null,
+    bondCertFile: data?.bondCertFile || filesByField.bondCertFile || null,
+    paymentMethods: {
+      ...INITIAL_FORM_DATA.paymentMethods,
+      ...(data?.paymentMethods || {}),
     },
-  },
-});
+    daysAvailable: {
+      ...INITIAL_FORM_DATA.daysAvailable,
+      ...(data?.daysAvailable || {}),
+    },
+    servicesOffered: {
+      ...INITIAL_FORM_DATA.servicesOffered,
+      ...(data?.servicesOffered || {}),
+    },
+    translationServices: {
+      ...INITIAL_FORM_DATA.translationServices,
+      ...(data?.translationServices || {}),
+      certificationFile:
+        data?.translationServices?.certificationFile ||
+        filesByField.certificationFile ||
+        null,
+      specializations: {
+        ...INITIAL_FORM_DATA.translationServices.specializations,
+        ...(data?.translationServices?.specializations || {}),
+      },
+    },
+  };
+};
 
 // Text fields that must always be filled
 const REQUIRED_TEXT_FIELDS = [
@@ -243,6 +262,18 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
     else if (name === "insuredSecond") touchedKeys.push("coiFile");
     else if (group === "servicesOffered" && name === "others")
       touchedKeys.push("othersList");
+    else if (
+      group === "servicesOffered" &&
+      name === "translationInterpretationServices" &&
+      checked
+    )
+      touchedKeys.push(
+        "translationServices.languagesOffered",
+        "translationServices.areasServed",
+        "translationServices.inPersonHourlyRate",
+        "translationServices.phoneVirtualHourlyRate",
+        "translationServices.availability"
+      );
     markTouched(...touchedKeys);
 
     if (type === "checkbox") {
@@ -253,11 +284,39 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
             ...prev[group],
             [name]: checked,
           },
+          // "Other (List)" text is only kept while the Other box is checked.
+          ...(group === "servicesOffered" && name === "others" && !checked
+            ? { othersList: "" }
+            : {}),
         }));
       } else {
         setFormData((prev) => ({ ...prev, [name]: checked }));
       }
     } else {
+      if (name === "cancellationAmount") {
+        const numericValue = value.replace(/[^0-9]/g, "");
+        setFormData((prev) => ({
+          ...prev,
+          [name]: numericValue,
+        }));
+        return;
+      }
+      if (
+        name === "translationServices.inPersonHourlyRate" ||
+        name === "translationServices.phoneVirtualHourlyRate"
+      ) {
+        const field = name.split(".")[1];
+        const numericValue = value.replace(/[^0-9]/g, "");
+      
+        setFormData((prev) => ({
+          ...prev,
+          translationServices: {
+            ...prev.translationServices,
+            [field]: numericValue,
+          },
+        }));
+        return;
+      }
       // Handle nested translation services fields
       if (name.startsWith("translationServices.")) {
         const fieldName = name.replace("translationServices.", "");
@@ -410,14 +469,10 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
       if (ts.certifiedInterpreter) {
         if (isEmpty(ts.certifyingAuthority))
           errors.add("translationServices.certifyingAuthority");
-        if (isEmpty(ts.licenseNumber))
-          errors.add("translationServices.licenseNumber");
       }
       if (ts.certifiedTranslator) {
         if (isEmpty(ts.certifyingOrganization))
           errors.add("translationServices.certifyingOrganization");
-        if (isEmpty(ts.translatorLicenseNumber))
-          errors.add("translationServices.translatorLicenseNumber");
         if (isEmpty(ts.languagePairs))
           errors.add("translationServices.languagePairs");
         if (isEmpty(ts.yearsOfExperience))
@@ -540,7 +595,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
       setSubmitError(err.message || "Submission failed");
     }
   };
-
+  console.log(3423424, formData)
   return (
     <div
       className="w-full mt-7"
@@ -1359,6 +1414,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                           value={formData.othersList}
                           onChange={handleChange}
                           width="full"
+                          disabled={!formData.servicesOffered.others}
                           error={fieldErrors.has("othersList")}
                         />
                       </div>
@@ -1558,11 +1614,19 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                               formData.translationServices.otherAvailability
                             }
                             onChange={(e) => {
+                              markTouched(
+                                "translationServices.availability",
+                                "translationServices.otherAvailabilityList"
+                              );
                               setFormData((prev) => ({
                                 ...prev,
                                 translationServices: {
                                   ...prev.translationServices,
                                   otherAvailability: e.target.checked,
+                                  // Keep the list text only while Other is checked.
+                                  ...(e.target.checked
+                                    ? {}
+                                    : { otherAvailabilityList: "" }),
                                 },
                               }));
                             }}
@@ -1575,6 +1639,9 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                             }
                             onChange={handleChange}
                             width="full"
+                            disabled={
+                              !formData.translationServices.otherAvailability
+                            }
                             error={fieldErrors.has(
                               "translationServices.otherAvailabilityList"
                             )}
@@ -1648,9 +1715,6 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                                 }
                                 onChange={handleChange}
                                 width="300px"
-                                error={fieldErrors.has(
-                                  "translationServices.licenseNumber"
-                                )}
                               />
                             </div>
                           </div>
@@ -1664,6 +1728,11 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                             formData.translationServices.certifiedTranslator
                           }
                           onChange={(e) => {
+                            if (e.target.checked)
+                              markTouched(
+                                "translationServices.certificationFile",
+                                "translationServices.iContractTranslation"
+                              );
                             setFormData((prev) => ({
                               ...prev,
                               translationServices: {
@@ -1709,9 +1778,6 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                                 }
                                 onChange={handleChange}
                                 width="100%"
-                                error={fieldErrors.has(
-                                  "translationServices.translatorLicenseNumber"
-                                )}
                               />
                             </div>
                             <div
@@ -1895,10 +1961,18 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                                       ?.other
                                   }
                                   onChange={(e) => {
+                                    if (e.target.checked)
+                                      markTouched(
+                                        "translationServices.otherSpecializationList"
+                                      );
                                     setFormData((prev) => ({
                                       ...prev,
                                       translationServices: {
                                         ...prev.translationServices,
+                                        // Keep the list text only while Other is checked.
+                                        ...(e.target.checked
+                                          ? {}
+                                          : { otherSpecializationList: "" }),
                                         specializations: {
                                           ...prev.translationServices
                                             ?.specializations,
@@ -1917,6 +1991,10 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                                   }
                                   onChange={handleChange}
                                   width="full"
+                                  disabled={
+                                    !formData.translationServices.specializations
+                                      ?.other
+                                  }
                                   error={fieldErrors.has(
                                     "translationServices.otherSpecializationList"
                                   )}

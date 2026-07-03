@@ -78,6 +78,9 @@ const referralSchema = new mongoose.Schema(
 			willOrderPrivateAppraisal: { type: String, default: "" },
 			coordinateVendors: { type: Boolean, default: false },
 			notReadyForListing: { type: Boolean, default: false },
+			refereeFullName: { type: String, default: "" },
+			refereePhone: { type: String, default: "" },
+			refereeEmail: { type: String, default: "" },
 		},
 
 		// Document Upload flags

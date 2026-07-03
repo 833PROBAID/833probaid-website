@@ -16,6 +16,7 @@ import {
 } from "@/app/services/homeBookService";
 import HomeBookContentClient from "./HomeBookContentClient";
 import { scopeCSS } from "@/app/utils/scopeCSS";
+import { stripEmptyHtml } from "@/app/utils/stripEmptyHtml";
 
 /**
  * Deduplicate the DB/cache lookup across generateMetadata and the page
@@ -145,6 +146,8 @@ export default async function HomeBookDetailPage({ params }) {
     }
   }
 
+  const contentHtml = stripEmptyHtml(grapesContent?.html || "");
+
   return (
     <section className="font-montserrat">
       {structuredDataScript && (
@@ -161,7 +164,7 @@ export default async function HomeBookDetailPage({ params }) {
           subtitle={heroData.subtitle}
         />
 
-        {grapesContent?.html ? (
+        {contentHtml ? (
           <div className="mt-8">
             <style
               dangerouslySetInnerHTML={{
@@ -176,7 +179,7 @@ export default async function HomeBookDetailPage({ params }) {
                 position: "relative",
                 zIndex: 1,
               }}
-              dangerouslySetInnerHTML={{ __html: grapesContent.html }}
+              dangerouslySetInnerHTML={{ __html: contentHtml }}
             />
             <HomeBookContentClient />
           </div>

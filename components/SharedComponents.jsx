@@ -178,6 +178,7 @@ export const TextInput = React.forwardRef(
 			onChange,
 			label,
 			placeholder,
+			placeholderClass = "",
 			type = "text",
 			disabled = false,
 			width = "full",
@@ -335,7 +336,7 @@ export const TextInput = React.forwardRef(
 							if (onBlur) onBlur(e);
 						}}
 						autoComplete='off'
-						className={`w-full h-10 ${borderSize} ${borderColor} ${padding} bg-gray-200 focus:outline-none focus:ring-2 focus:ring-[#FD7702] focus:ring-offset-0 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-bold ${textStyle} ${inputClass}`}
+						className={`w-full h-10 ${borderSize} ${borderColor} ${padding} bg-gray-200 focus:outline-none focus:ring-2 focus:ring-[#FD7702] focus:ring-offset-0 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-bold ${textStyle} ${inputClass} ${placeholderClass}`}
 						{...props}
 					/>
 					{/* Loading indicator */}
@@ -1190,6 +1191,7 @@ export const RadioGroup = ({
 						color={option.color || "teal"}
 						width={distributeWidth ? itemWidth : option.width || "auto"}
 						disabled={disabled || option.disabled}
+						error={option.error}
 						containerClass={distributeWidth ? "flex-1" : ""}
 					/>
 				))}
