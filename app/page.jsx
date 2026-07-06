@@ -60,6 +60,7 @@ function mapHomeBookForCard(homeBook) {
     description: homeBook?.description || "",
     slug: homeBook?.slug || "",
     image: homeBook?.image || "/images/footer-logo.png",
+    imageSrc: homeBook?.image || "",
   };
 }
 
