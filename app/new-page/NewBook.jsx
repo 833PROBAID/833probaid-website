@@ -169,11 +169,11 @@ function BookCardInner({
     e.stopPropagation();
     setFlipping(true);
     setOpen(true);
-    // if (slug) {
-    //   router.prefetch(`/homebooks/${slug}`);
-    //   setTimeout(() => router.push(`/homebooks/${slug}`), speed - 800);
-    // }
-    // setTimeout(() => setFlipping(false), speed + 300);
+    if (slug) {
+      router.prefetch(`/homebooks/${slug}`);
+      setTimeout(() => router.push(`/homebooks/${slug}`), speed - 800);
+    }
+    setTimeout(() => setFlipping(false), speed + 300);
   };
 
   return (
