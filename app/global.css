@@ -890,6 +890,13 @@ body {
   font-size: 17px !important;
 }
 
+/* Days outside the allowed range (e.g. future dates blocked by maxDate) must
+   read as unavailable — the rule above would otherwise force them teal. */
+.react-datepicker__day--disabled,
+.react-datepicker__day--disabled:hover {
+  color: #ccc !important;
+}
+
 .react-datepicker__day--selected {
   color: white !important;
   background-color: #0097a7 !important;

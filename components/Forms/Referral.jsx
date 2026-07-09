@@ -652,7 +652,11 @@ const Form = ({ readOnly = false, initialData = null }) => {
 	useEffect(() => {
 		if (readOnly || touched.size === 0) return;
 		const all = buildErrors();
-		setFieldErrors(new Set([...all].filter((k) => touched.has(k))));
+		const visible = new Set([...all].filter((k) => touched.has(k)));
+
+		if (all.has("courthouse") && Object.values(formData.caseType).some(Boolean))
+			visible.add("courthouse");
+		setFieldErrors(visible);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [_formData, touched, readOnly]);
 
@@ -1866,7 +1870,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 											label='Full Property Address:'
 											width='full'
 											required
-											error={fieldErrors.has("property.0.address")}
+											error={fieldErrors.has("courthouse")}
 											placeholder="123 Main St, Los Angeles, CA 90041"
 											inputClass="placeholder:italic placeholder-[#FD7702]"
 										/>
@@ -1988,8 +1992,17 @@ const Form = ({ readOnly = false, initialData = null }) => {
 												/>
 											</div>
 										</div>
-										{readOnly && formData.exportedProperties[0]?.accessRestrictionsDetails && formData.exportedProperties[0]?.accessRestrictionsDetails.length > 15 &&  <p className="font-bold text-gray-600 text-base">{formData.exportedProperties[0]
-																	?.accessRestrictionsDetails}</p>}
+										{formData.exportedProperties[0]?.accessRestrictionsDetails && formData.exportedProperties[0]?.accessRestrictionsDetails.length > 18 && (
+											<TextInput
+												name='accessRestrictionsDetails'
+												value={formData.exportedProperties[0]?.accessRestrictionsDetails || ""}
+												onChange={(e) => handlePropertyChange(0, e)}
+												width='full'
+												disabled={readOnly}
+												inputClass='placeholder:italic placeholder-[#FD7702]'
+												error={fieldErrors.has("property.0.accessRestrictionsDetails")}
+											/>
+										)}
 										
 										<div>
 										<div className='flex items-center justify-between w-full gap-2'>
@@ -2054,8 +2067,18 @@ const Form = ({ readOnly = false, initialData = null }) => {
 												/>
 											</div>
 										</div>
-										{readOnly && formData.exportedProperties[0]?.urgencyDetails && formData.exportedProperties[0]?.urgencyDetails.length > 15 &&  <p className="font-bold text-gray-600 text-base">{formData.exportedProperties[0]?.urgencyDetails}</p>}
 										</div>
+										{formData.exportedProperties[0]?.urgencyDetails && formData.exportedProperties[0]?.urgencyDetails.length > 18 && (
+											<TextInput
+												name='urgencyDetails'
+												value={formData.exportedProperties[0]?.urgencyDetails || ""}
+												onChange={(e) => handlePropertyChange(0, e)}
+												width='full'
+												disabled={readOnly}
+												inputClass='placeholder:italic placeholder-[#FD7702]'
+												error={fieldErrors.has("property.0.urgencyDetails")}
+											/>
+										)}
 
 										<RadioGroup
 											name='multipleProperties'
@@ -2068,7 +2091,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													value: "Yes",
 													label: "Yes – Details Below",
 													color: "teal",
-													width: "210px",
+													width: "215px",
 												},
 												{
 													value: "No",
@@ -2309,7 +2332,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 																	value: "Yes",
 																	label: "Yes – Details Below",
 																	color: "teal",
-																	width: "210px",
+																	width: "215px",
 																},
 																{
 																	value: "No",
