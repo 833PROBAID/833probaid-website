@@ -52,7 +52,12 @@ export default function BooksHero({ bannerImage, title, subtitle }) {
 					{withSuper(subtitle)}
 				</p>
 			</div>
-			<div className='w-full my-8 sm:my-12 rounded-3xl shadow-lg shadow-black/30 sm:shadow-xl sm:shadow-black/40 md:shadow-2xl md:shadow-black/50'>
+			<div
+				className='w-full my-8 sm:my-12 rounded-3xl'
+				style={{
+					boxShadow:
+						"rgba(0, 0, 0, 0.4) 0px 8px 12px, rgba(0, 0, 0, 0.4) 0px -5px 12px 1px",
+				}}>
 				{svgMarkup ? (
 					// eslint-disable-next-line react/no-danger
 					<div dangerouslySetInnerHTML={{ __html: svgMarkup }} />

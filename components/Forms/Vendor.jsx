@@ -182,8 +182,6 @@ const REQUIRED_TEXT_FIELDS = [
   "businessName",
   "yourName",
   "email",
-  "officePhone",
-  "cellPhone",
   "headquarters",
   "specificAreas",
   "notesOrSpecialRequirements",
@@ -407,6 +405,13 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
     // Email must be a valid format (when provided)
     if (!isEmpty(formData.email) && !isValidEmail(formData.email))
       errors.add("email");
+
+    // At least one phone (office or cell) is required — if both are empty,
+    // both fields are flagged; filling either one satisfies the requirement.
+    if (isEmpty(formData.officePhone) && isEmpty(formData.cellPhone)) {
+      errors.add("officePhone");
+      errors.add("cellPhone");
+    }
 
     // Phone fields must be valid US numbers (when provided)
     ["officePhone", "cellPhone"].forEach((f) => {
@@ -1129,7 +1134,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                         <Checkbox
                           name="escrowOnly"
                           group="paymentMethods"
-                          label="Escrow pay only"
+                          label="Escrow Pay"
                           checked={formData.paymentMethods.escrowOnly}
                           onChange={handleChange}
                           width="140px"
@@ -1418,6 +1423,19 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                           error={fieldErrors.has("othersList")}
                         />
                       </div>
+                      {formData.othersList &&
+                        formData.othersList.length > 110 && (
+                          <div className="col-span-2">
+                            <TextInput
+                              name="othersList"
+                              value={formData.othersList}
+                              onChange={handleChange}
+                              width="full"
+                              disabled={!formData.servicesOffered.others}
+                              error={fieldErrors.has("othersList")}
+                            />
+                          </div>
+                        )}
                     </div>
                     {fieldErrors.has("servicesOffered") && (
                       <p className="text-red-500 font-bold text-base">
@@ -1463,6 +1481,18 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                           "translationServices.areasServed"
                         )}
                       />
+                      {formData.translationServices.areasServed &&
+                        formData.translationServices.areasServed.length > 110 && (
+                          <TextInput
+                            name="translationServices.areasServed"
+                            value={formData.translationServices.areasServed}
+                            onChange={handleChange}
+                            width="full"
+                            error={fieldErrors.has(
+                              "translationServices.areasServed"
+                            )}
+                          />
+                        )}
 
                       <div
                         style={{
@@ -1647,6 +1677,25 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                             )}
                           />
                         </div>
+                        {formData.translationServices.otherAvailabilityList &&
+                          formData.translationServices.otherAvailabilityList
+                            .length > 130 && (
+                            <TextInput
+                              name="translationServices.otherAvailabilityList"
+                              value={
+                                formData.translationServices
+                                  .otherAvailabilityList
+                              }
+                              onChange={handleChange}
+                              width="full"
+                              disabled={
+                                !formData.translationServices.otherAvailability
+                              }
+                              error={fieldErrors.has(
+                                "translationServices.otherAvailabilityList"
+                              )}
+                            />
+                          )}
                         {fieldErrors.has("translationServices.availability") && (
                           <p className="text-red-500 font-bold text-base">
                             Please select at least one availability option.
