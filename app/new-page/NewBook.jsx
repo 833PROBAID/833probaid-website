@@ -321,7 +321,7 @@ function BookCardInner({
                 )}
               </div> */}
 
-              <div className="relative w-full shrink-0">
+              <div className="relative w-full shrink-0 rounded-2xl shadow-lg shadow-black/30 sm:shadow-xl sm:shadow-black/40 md:shadow-2xl md:shadow-black/50">
                 <HomeBorderImage
                   imageSrc={imageSrc}
                   fallbackSrc="/images/hero.png"
@@ -330,13 +330,13 @@ function BookCardInner({
                 />
               </div>
 
-              {/* {description && (
+              {description && (
                 <div className="p-4 bg-white rounded-2xl border-4 border-secondary mt-4">
                   <p className="text-secondary font-semibold text-sm">
                     {description}
                   </p>
                 </div>
-              )} */}
+              )}
             </div>
           </div>
         </div>
