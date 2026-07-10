@@ -3,6 +3,7 @@
 import { memo, useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import HomeBorderImage from "@/components/HomeBorderImage";
 import "./book-card.css";
 
 const D = {
@@ -310,16 +311,23 @@ function BookCardInner({
                 justifyContent: "center"
               }}
             >
-              <div className="bg-white flex flex-col items-center justify-center py-4 text-center border-4 rounded-3xl border-l-18 border-secondary transition-transform duration-300 ease-in-out hover:scale-105 shadow-lg shadow-black/30 sm:shadow-xl sm:shadow-black/40 md:shadow-2xl md:shadow-black/50">
-                <h1 className="font-anton text-2xl uppercase leading-tight text-primary hover:text-secondary">
-                  {title}
-                </h1>
-                {subtitle && (
-                  <p className="font-montserrat mt-4 text-sm font-bold uppercase text-secondary hover:text-primary">
-                    {subtitle}
-                  </p>
-                )}
-              </div>
+              <HomeBorderImage
+                imageSrc={imageSrc}
+                fallbackSrc="/images/hero.png"
+                alt={title}
+                className="block h-full w-[80%] mx-auto shadow-lg shadow-black/30 sm:shadow-xl sm:shadow-black/40 md:shadow-2xl md:shadow-black/50"
+              >
+                <div className="flex flex-col items-center text-center">
+                  <h1 className="font-anton text-2xl uppercase leading-tight text-primary hover:text-secondary">
+                    {title}
+                  </h1>
+                  {subtitle && (
+                    <p className="font-montserrat mt-2 text-sm font-bold uppercase text-secondary hover:text-primary">
+                      {subtitle}
+                    </p>
+                  )}
+                </div>
+              </HomeBorderImage>
             </div>
           </div>
         </div>
