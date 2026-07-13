@@ -46,6 +46,16 @@ const Hero = () => {
                 </div>
                 <div className="flex items-center gap-3 lg:gap-4 group cursor-pointer">
                   <img
+                    src="/icons/handshake-icon.svg"
+                    alt="group icon"
+                    className="h-auto w-10 shrink-0 transition-transform duration-500 ease-out group-hover:rotate-12 group-hover:scale-110 sm:w-12 lg:w-16"
+                  />
+                  <p className="transition-transform duration-300 ease-out group-hover:translate-x-2">
+                    Preferred by fiduciaries
+                  </p>
+                </div>
+                <div className="flex items-center gap-3 lg:mb-45 lg:gap-4 group cursor-pointer">
+                  <img
                     src="/icons/group-icon.svg"
                     alt="group icon"
                     className="h-auto w-10 shrink-0 transition-transform duration-500 ease-out group-hover:rotate-12 group-hover:scale-110 sm:w-12 lg:w-16"
@@ -55,11 +65,6 @@ const Hero = () => {
                   </p>
                 </div>
               </div>
-
-              <CTAButton
-                label="Process Overview"
-                className="cursor-pointer lg:mb-45 w-max px-4 h-12 lg:h-16"
-              />
             </div>
 
             {/* Right Image Section - Hero Person */}

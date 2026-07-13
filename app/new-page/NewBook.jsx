@@ -321,12 +321,12 @@ function BookCardInner({
                 )}
               </div> */}
 
-              <div className="relative w-full shrink-0 rounded-2xl shadow-lg shadow-black/30 sm:shadow-xl sm:shadow-black/40 md:shadow-2xl md:shadow-black/50">
+              <div className="relative w-full shrink-0 rounded-2xl">
                 <HomeBorderImage
                   imageSrc={imageSrc}
                   fallbackSrc="/images/hero.png"
                   alt={imageAlt || title}
-                  className="block w-full aspect-1512/1040"
+                  className="block w-full rounded-3xl aspect-1512/1040 shadow-[0_0_4px_3px_rgba(0,0,0,0.6)] md:shadow-[0_0_16px_4px_rgba(0,0,0,0.8)]" 
                 />
               </div>
 
