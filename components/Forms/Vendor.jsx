@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from "react";
 import {
   Checkbox,
   TextInput,
+  TextArea,
   PhoneInput,
   FileUpload,
   RadioButton,
@@ -236,6 +237,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
   // Zoom control state
   const [zoomLevel, setZoomLevel] = useState(1);
   const formContainerRef = useRef(null);
+  const deferredPaymentRef = useRef(null);
 
   const markTouched = (...keys) => {
     setTouched((prev) => {
@@ -286,11 +288,38 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
           ...(group === "servicesOffered" && name === "others" && !checked
             ? { othersList: "" }
             : {}),
+          // Escrow Pay implies deferred payment from escrow is accepted.
+          ...(group === "paymentMethods" && name === "escrowOnly" && checked
+            ? { acceptDeferredPayment: "yes" }
+            : {}),
         }));
+        // Checking Escrow Pay auto-answers the deferred-payment question;
+        // bring that field into view so the change is visible.
+        if (group === "paymentMethods" && name === "escrowOnly" && checked) {
+          markTouched("acceptDeferredPayment", "w9Form");
+          requestAnimationFrame(() =>
+            deferredPaymentRef.current?.scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+            })
+          );
+        }
       } else {
         setFormData((prev) => ({ ...prev, [name]: checked }));
       }
     } else {
+      // Accepting deferred payment from escrow implies the Escrow Pay method.
+      if (name === "acceptDeferredPayment") {
+        setFormData((prev) => ({
+          ...prev,
+          acceptDeferredPayment: value,
+          paymentMethods: {
+            ...prev.paymentMethods,
+            ...(value === "yes" ? { escrowOnly: true } : {}),
+          },
+        }));
+        return;
+      }
       if (name === "cancellationAmount") {
         const numericValue = value.replace(/[^0-9]/g, "");
         setFormData((prev) => ({
@@ -786,6 +815,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                     title="Payment Terms & Work Agreement"
                     icon="fa-dollar-sign"
                   >
+                    <div ref={deferredPaymentRef}>
                     <RadioGroup
                       name="acceptDeferredPayment"
                       value={formData.acceptDeferredPayment}
@@ -810,6 +840,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                       containerClass="flex justify-between items-center"
                       gap="gap-[25px]"
                     />
+                    </div>
 
                     <div className="flex items-center gap-4">
                       <label className="text-base italic flex items-center gap-2">
@@ -1424,15 +1455,20 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                         />
                       </div>
                       {formData.othersList &&
-                        formData.othersList.length > 110 && (
-                          <div className="col-span-2">
-                            <TextInput
+                        formData.othersList.length > 75 && (
+                          <div className="col-span-3">
+                            <TextArea
                               name="othersList"
                               value={formData.othersList}
                               onChange={handleChange}
                               width="full"
+                              rows={2}
                               disabled={!formData.servicesOffered.others}
-                              error={fieldErrors.has("othersList")}
+                              inputClass={
+                                fieldErrors.has("othersList")
+                                  ? "!border-red-500"
+                                  : ""
+                              }
                             />
                           </div>
                         )}
@@ -1483,14 +1519,17 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                       />
                       {formData.translationServices.areasServed &&
                         formData.translationServices.areasServed.length > 110 && (
-                          <TextInput
+                          <TextArea
                             name="translationServices.areasServed"
                             value={formData.translationServices.areasServed}
                             onChange={handleChange}
                             width="full"
-                            error={fieldErrors.has(
-                              "translationServices.areasServed"
-                            )}
+                            rows={2}
+                            inputClass={
+                              fieldErrors.has("translationServices.areasServed")
+                                ? "!border-red-500"
+                                : ""
+                            }
                           />
                         )}
 
@@ -1679,8 +1718,8 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                         </div>
                         {formData.translationServices.otherAvailabilityList &&
                           formData.translationServices.otherAvailabilityList
-                            .length > 130 && (
-                            <TextInput
+                            .length > 110 && (
+                            <TextArea
                               name="translationServices.otherAvailabilityList"
                               value={
                                 formData.translationServices
@@ -1688,12 +1727,17 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                               }
                               onChange={handleChange}
                               width="full"
+                              rows={2}
                               disabled={
                                 !formData.translationServices.otherAvailability
                               }
-                              error={fieldErrors.has(
-                                "translationServices.otherAvailabilityList"
-                              )}
+                              inputClass={
+                                fieldErrors.has(
+                                  "translationServices.otherAvailabilityList"
+                                )
+                                  ? "!border-red-500"
+                                  : ""
+                              }
                             />
                           )}
                         {fieldErrors.has("translationServices.availability") && (

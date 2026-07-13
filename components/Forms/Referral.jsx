@@ -1,9 +1,10 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {
 	Checkbox,
 	TextInput,
+	TextArea,
 	PhoneInput,
 	FileUpload,
 	RadioButton,
@@ -208,9 +209,10 @@ const Form = ({ readOnly = false, initialData = null }) => {
 		"trustCertification",
 	];
 
-	// In Requested Support these two can't be checked together; checking one
-	// clears the other (and "Prepare Photos" also clears the appraisal radio).
-	const EXCLUSIVE_SUPPORT = ["preparePhotos", "refereeAssigned"];
+	// Requested Support boxes that each unlock dependent required fields; used
+	// to mark those dependents touched for live validation. Both may be checked
+	// together.
+	const SUPPORT_WITH_DEPENDENTS = ["preparePhotos", "refereeAssigned"];
 
 	// Handler for main form fields
 	const handleChange = (e) => {
@@ -220,7 +222,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 		// Mark only the field(s) being edited so live validation applies to them.
 		if (group) {
 			markTouched(group);
-			if (group === "requestedSupport" && EXCLUSIVE_SUPPORT.includes(name))
+			if (group === "requestedSupport" && SUPPORT_WITH_DEPENDENTS.includes(name))
 				markTouched(
 					"willOrderPrivateAppraisal",
 					"refereeFullName",
@@ -293,15 +295,11 @@ const Form = ({ readOnly = false, initialData = null }) => {
 							if (k !== name) updatedGroup[k] = false;
 						});
 					}
-					// Requested Support: "Prepare Photos" and "No Referee Assigned" are
-					// mutually exclusive, and the appraisal radio only applies while
-					// "No Referee Assigned" is checked.
+					// Requested Support: the appraisal radio only applies while
+					// "No Referee Assigned" is checked, and the referee fields only
+					// while "Prepare Photos" is checked. The two boxes can be checked
+					// together.
 					if (group === "requestedSupport") {
-						if (checked && EXCLUSIVE_SUPPORT.includes(name)) {
-							EXCLUSIVE_SUPPORT.forEach((k) => {
-								if (k !== name) updatedGroup[k] = false;
-							});
-						}
 						// The appraisal radio applies only while "No Referee Assigned"
 						// is checked; the referee fields only while "Prepare Photos" is.
 						if (!updatedGroup.refereeAssigned)
@@ -1992,15 +1990,19 @@ const Form = ({ readOnly = false, initialData = null }) => {
 												/>
 											</div>
 										</div>
-										{formData.exportedProperties[0]?.accessRestrictionsDetails && formData.exportedProperties[0]?.accessRestrictionsDetails.length > 18 && (
-											<TextInput
+										{formData.exportedProperties[0]?.accessRestrictionsDetails && formData.exportedProperties[0]?.accessRestrictionsDetails.length > 16 && (
+											<TextArea
 												name='accessRestrictionsDetails'
 												value={formData.exportedProperties[0]?.accessRestrictionsDetails || ""}
 												onChange={(e) => handlePropertyChange(0, e)}
 												width='full'
+												rows={2}
 												disabled={readOnly}
-												inputClass='placeholder:italic placeholder-[#FD7702]'
-												error={fieldErrors.has("property.0.accessRestrictionsDetails")}
+												inputClass={`placeholder:italic placeholder-[#FD7702] ${
+													fieldErrors.has("property.0.accessRestrictionsDetails")
+														? "!border-red-500"
+														: ""
+												}`}
 											/>
 										)}
 										
@@ -2068,15 +2070,19 @@ const Form = ({ readOnly = false, initialData = null }) => {
 											</div>
 										</div>
 										</div>
-										{formData.exportedProperties[0]?.urgencyDetails && formData.exportedProperties[0]?.urgencyDetails.length > 18 && (
-											<TextInput
+										{formData.exportedProperties[0]?.urgencyDetails && formData.exportedProperties[0]?.urgencyDetails.length > 16 && (
+											<TextArea
 												name='urgencyDetails'
 												value={formData.exportedProperties[0]?.urgencyDetails || ""}
 												onChange={(e) => handlePropertyChange(0, e)}
 												width='full'
+												rows={2}
 												disabled={readOnly}
-												inputClass='placeholder:italic placeholder-[#FD7702]'
-												error={fieldErrors.has("property.0.urgencyDetails")}
+												inputClass={`placeholder:italic placeholder-[#FD7702] ${
+													fieldErrors.has("property.0.urgencyDetails")
+														? "!border-red-500"
+														: ""
+												}`}
 											/>
 										)}
 
