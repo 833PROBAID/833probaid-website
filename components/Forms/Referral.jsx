@@ -183,7 +183,9 @@ const Form = ({ readOnly = false, initialData = null }) => {
 
 	// Update a single text/phone field inside the requestedSupport group.
 	const handleSupportFieldChange = (field) => (e) => {
-		const { value } = e.target;
+		let { value } = e.target;
+		// The referee's full name must not contain numbers.
+		if (field === "refereeFullName") value = value.replace(/[0-9]/g, "");
 		markTouched(field);
 		setFormData((prev) => ({
 			...prev,
@@ -2684,7 +2686,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 												{formData.uploadedFiles.length > 0 && (
 													<div>
 														<p className='font-bold'>Uploaded files:</p>
-														<ul className='list-disc pl-5'>
+														<ul className='list-disc pl-5 text-green-700'>
 															{formData.uploadedFiles.map((file, index) => (
 																<li key={index}>
 																	{file instanceof File
