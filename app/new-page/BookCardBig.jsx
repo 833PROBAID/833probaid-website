@@ -308,7 +308,7 @@ function BookCardInner({
                 gap: "clamp(8px,2vw,14px)",
                 rowGap: "clamp(8px,2vw,14px)",
                 boxSizing: "border-box",
-                justifyContent: "center"
+                justifyContent: "center",
               }}
             >
               <HomeBorderImage

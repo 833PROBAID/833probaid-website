@@ -78,6 +78,7 @@ const INITIAL_FORM_DATA = {
 		successorTrustee: false,
 		reverseMortgage: false,
 		successorInInterest: false,
+		otherCaseType: false,
 		notSure: false,
 	},
 
@@ -458,6 +459,15 @@ const Form = ({ readOnly = false, initialData = null }) => {
 	const howDidYouHearOtherRef = useRef(null);
 	const lettersDateRef = useRef(null);
 
+	// Fields whose inline TextInput has overflowed onto more than one line, so an
+	// expanded TextArea should be revealed. Driven by TextInput's onOverflowChange
+	// (measured from the DOM — no hardcoded character count).
+	const [overflowedFields, setOverflowedFields] = useState({});
+	const setFieldOverflow = (key) => (overflow) =>
+		setOverflowedFields((prev) =>
+			prev[key] === overflow ? prev : { ...prev, [key]: overflow },
+		);
+
 	// Zoom control state
 	const [zoomLevel, setZoomLevel] = useState(1);
 	const formContainerRef = useRef(null);
@@ -515,9 +525,11 @@ const Form = ({ readOnly = false, initialData = null }) => {
 			errors.add("clientRole.probateRole");
 		if (formData.caseType.conservatorship && !hasRole("Conservator"))
 			errors.add("clientRole.conservatorRole");
-		if (formData.caseType.trustSale && !hasRole("Trustee") && !hasRole("Other"))
+		if (formData.caseType.trustSale && !hasRole("Trustee"))
 			errors.add("clientRole.trustRole");
 		if (formData.caseType.successorInInterest && !hasRole("Other"))
+			errors.add("clientRole.successorRole");
+		if (formData.caseType.otherCaseType && !hasRole("Other"))
 			errors.add("clientRole.successorRole");
 
 		// When the court has issued letters, the issue date is required.
@@ -665,14 +677,15 @@ const Form = ({ readOnly = false, initialData = null }) => {
 		: formData.caseType.conservatorship
 			? ["Conservator"]
 			: formData.caseType.trustSale
-				? ["Trustee", "Other"]
+				? ["Trustee"]
 				: formData.caseType.successorInInterest
 					? ["Other"]
-					: null;
+					: formData.caseType.otherCaseType
+						? ["Other"]
+						: null;
 
-	// Trust Sale is the only Case Type where more than one Client Role may be
-	// selected together (Trustee and/or Other). Elsewhere it's single-pick.
-	const isClientRoleMulti = formData.caseType.trustSale;
+	// Every Case Type is single-pick for Client Role.
+	const isClientRoleMulti = false;
 
 	// Client Role is stored as a comma-joined string (to support the Trust Sale
 	// multi-select); parse it into an array for rendering/validation.
@@ -704,6 +717,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 		formData.caseType.trustSale,
 		formData.caseType.reverseMortgage,
 		formData.caseType.successorInInterest,
+		formData.caseType.otherCaseType,
 		formData.clientRole,
 		readOnly,
 	]);
@@ -1224,6 +1238,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 															caseType: {
 																...formData.caseType,
 																probate: e.target.checked,
+																otherCaseType: false,
 																conservatorship: false,
 																fullAuthority: false,
 																limitedAuthority: false,
@@ -1250,6 +1265,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 															caseType: {
 																...formData.caseType,
 																fullAuthority: e.target.checked,
+																otherCaseType: false,
 																limitedAuthority: false,
 																probate: true,
 																conservatorship: false,
@@ -1280,6 +1296,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 															caseType: {
 																...formData.caseType,
 																limitedAuthority: e.target.checked,
+																otherCaseType: false,
 																fullAuthority: false,
 																probate: true,
 																conservatorship: false,
@@ -1322,6 +1339,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 															caseType: {
 																...formData.caseType,
 																conservatorship: e.target.checked,
+																otherCaseType: false,
 																probate: false,
 																fullAuthority: false,
 																limitedAuthority: false,
@@ -1351,6 +1369,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 															caseType: {
 																...formData.caseType,
 																ofTheEstate: e.target.checked,
+																otherCaseType: false,
 																ofThePerson: false,
 																both: false,
 																probate: false,
@@ -1362,10 +1381,6 @@ const Form = ({ readOnly = false, initialData = null }) => {
 																reverseMortgage: false,
 																successorInInterest: false,
 																trustSale: false,
-															},
-															documentUpload: {
-																...formData.documentUpload,
-																lettersOfConservatorship: e.target.checked,
 															},
 														});
 													}}
@@ -1385,6 +1400,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 															caseType: {
 																...formData.caseType,
 																ofThePerson: e.target.checked,
+																otherCaseType: false,
 																ofTheEstate: false,
 																both: false,
 																probate: false,
@@ -1396,10 +1412,6 @@ const Form = ({ readOnly = false, initialData = null }) => {
 																reverseMortgage: false,
 																successorInInterest: false,
 																trustSale: false,
-															},
-															documentUpload: {
-																...formData.documentUpload,
-																lettersOfConservatorship: e.target.checked,
 															},
 														});
 													}}
@@ -1419,6 +1431,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 															caseType: {
 																...formData.caseType,
 																both: e.target.checked,
+																otherCaseType: false,
 																ofThePerson: true,
 																ofTheEstate: true,
 																probate: false,
@@ -1430,10 +1443,6 @@ const Form = ({ readOnly = false, initialData = null }) => {
 																reverseMortgage: false,
 																successorInInterest: false,
 																trustSale: false,
-															},
-															documentUpload: {
-																...formData.documentUpload,
-																lettersOfConservatorship: e.target.checked,
 															},
 														});
 													}}
@@ -1465,6 +1474,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 															caseType: {
 																...formData.caseType,
 																trustSale: e.target.checked,
+																otherCaseType: false,
 																probate: false,
 																conservatorship: false,
 																fullAuthority: false,
@@ -1494,6 +1504,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 															caseType: {
 																...formData.caseType,
 																trustee: e.target.checked,
+																otherCaseType: false,
 																successorTrustee: false,
 																probate: false,
 																conservatorship: false,
@@ -1505,10 +1516,6 @@ const Form = ({ readOnly = false, initialData = null }) => {
 																trustSale: true,
 																reverseMortgage: false,
 																successorInInterest: false,
-															},
-															documentUpload: {
-																...formData.documentUpload,
-																trustCertification: e.target.checked,
 															},
 														});
 													}}
@@ -1528,6 +1535,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 															caseType: {
 																...formData.caseType,
 																successorTrustee: e.target.checked,
+																otherCaseType: false,
 																probate: false,
 																conservatorship: false,
 																fullAuthority: false,
@@ -1539,10 +1547,6 @@ const Form = ({ readOnly = false, initialData = null }) => {
 																trustee: false,
 																reverseMortgage: false,
 																successorInInterest: false,
-															},
-															documentUpload: {
-																...formData.documentUpload,
-																trustCertification: e.target.checked,
 															},
 														});
 													}}
@@ -1568,6 +1572,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 														caseType: {
 															...formData.caseType,
 															reverseMortgage: e.target.checked,
+															otherCaseType: false,
 															probate: false,
 															conservatorship: false,
 															fullAuthority: false,
@@ -1604,6 +1609,44 @@ const Form = ({ readOnly = false, initialData = null }) => {
 														caseType: {
 															...formData.caseType,
 															successorInInterest: e.target.checked,
+															otherCaseType: false,
+															probate: false,
+															conservatorship: false,
+															fullAuthority: false,
+															limitedAuthority: false,
+															ofTheEstate: false,
+															ofThePerson: false,
+															both: false,
+															trustSale: false,
+															trustee: false,
+															successorTrustee: false,
+															reverseMortgage: false,
+														},
+													});
+												}}
+												width='240px'
+											/>
+										</div>
+										<div className='flex justify-start gap-2 w-full'>
+											<Checkbox
+												name='otherCaseType'
+												group='caseType'
+												label='Other'
+												checked={formData.caseType.otherCaseType}
+												onChange={(e) => {
+													markTouched(
+														"caseType",
+														"clientRole",
+														"clientRole.successorRole",
+													);
+													setFormData({
+														...formData,
+														clientRole: "",
+														clientRoleOther: "",
+														caseType: {
+															...formData.caseType,
+															otherCaseType: e.target.checked,
+															successorInInterest: false,
 															probate: false,
 															conservatorship: false,
 															fullAuthority: false,
@@ -1683,7 +1726,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 																	: opt.value === "Trustee"
 																		? fieldErrors.has("clientRole.trustRole")
 																		: // Other — flagged by Trust Sale or Successor rules
-																			fieldErrors.has("clientRole.trustRole") ||
+																			// fieldErrors.has("clientRole.trustRole") ||
 																			fieldErrors.has("clientRole.successorRole");
 														return (
 															<RadioButton
@@ -1793,7 +1836,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 																};
 																handleChange(event);
 															}}
-															className={`border-[3px] px-2 py-1 bg-gray-200 placeholder:italic placeholder-[#FD7702] w-[240px] font-bold focus:outline-none focus:ring-2 focus:ring-[#FD7702] focus:ring-offset-0 ${
+															className={`border-[3px] px-2 py-1 bg-gray-200 placeholder:italic placeholder-[#FD7702] w-[240px] font-bold focus:outline-none focus:ring-2 focus:ring-[#FD7702] focus:ring-offset-0 disabled:text-secondary disabled:[-webkit-text-fill-color:var(--color-secondary)] disabled:cursor-not-allowed ${
 																fieldErrors.has("lettersDate")
 																	? "border-red-500"
 																	: "border-[#0097A7]"
@@ -1827,7 +1870,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 																};
 																handleChange(event);
 															}}
-															className='border-[3px] border-[#0097A7] px-2 py-1 bg-gray-200 placeholder:italic placeholder-[#FD7702] w-[230px] font-bold focus:outline-none focus:ring-2 focus:ring-[#FD7702] focus:ring-offset-0'
+															className='border-[3px] border-[#0097A7] px-2 py-1 bg-gray-200 placeholder:italic placeholder-[#FD7702] w-[230px] font-bold focus:outline-none focus:ring-2 focus:ring-[#FD7702] focus:ring-offset-0 disabled:text-secondary disabled:[-webkit-text-fill-color:var(--color-secondary)] disabled:cursor-not-allowed'
 															placeholderText='Select date'
 															popperPlacement="bottom-end"
 															dateFormat='yyyy-MM-dd'
@@ -1960,6 +2003,9 @@ const Form = ({ readOnly = false, initialData = null }) => {
 														error={fieldErrors.has(
 															"property.0.accessRestrictionsDetails"
 														)}
+														onOverflowChange={setFieldOverflow(
+															"property.0.accessRestrictionsDetails"
+														)}
 													/>
 												</div>
 												<RadioGroup
@@ -1990,13 +2036,14 @@ const Form = ({ readOnly = false, initialData = null }) => {
 												/>
 											</div>
 										</div>
-										{formData.exportedProperties[0]?.accessRestrictionsDetails && formData.exportedProperties[0]?.accessRestrictionsDetails.length > 16 && (
+										{formData.exportedProperties[0]?.accessRestrictionsDetails &&
+											overflowedFields["property.0.accessRestrictionsDetails"] && (
 											<TextArea
 												name='accessRestrictionsDetails'
 												value={formData.exportedProperties[0]?.accessRestrictionsDetails || ""}
 												onChange={(e) => handlePropertyChange(0, e)}
 												width='full'
-												rows={2}
+												rows={1}
 												disabled={readOnly}
 												inputClass={`placeholder:italic placeholder-[#FD7702] ${
 													fieldErrors.has("property.0.accessRestrictionsDetails")
@@ -2044,6 +2091,9 @@ const Form = ({ readOnly = false, initialData = null }) => {
 														inputClass='placeholder:italic placeholder-[#FD7702]'
 														width='340px'
 														error={fieldErrors.has("property.0.urgencyDetails")}
+														onOverflowChange={setFieldOverflow(
+															"property.0.urgencyDetails"
+														)}
 													/>
 												</div>
 												<RadioGroup
@@ -2070,13 +2120,14 @@ const Form = ({ readOnly = false, initialData = null }) => {
 											</div>
 										</div>
 										</div>
-										{formData.exportedProperties[0]?.urgencyDetails && formData.exportedProperties[0]?.urgencyDetails.length > 16 && (
+										{formData.exportedProperties[0]?.urgencyDetails &&
+											overflowedFields["property.0.urgencyDetails"] && (
 											<TextArea
 												name='urgencyDetails'
 												value={formData.exportedProperties[0]?.urgencyDetails || ""}
 												onChange={(e) => handlePropertyChange(0, e)}
 												width='full'
-												rows={2}
+												rows={1}
 												disabled={readOnly}
 												inputClass={`placeholder:italic placeholder-[#FD7702] ${
 													fieldErrors.has("property.0.urgencyDetails")
@@ -2468,10 +2519,13 @@ const Form = ({ readOnly = false, initialData = null }) => {
 														}
 														onChange={(e) => {
 															markTouched("willOrderPrivateAppraisal");
+															// Picking an appraisal answer implies there is no
+															// referee — auto-check "No Referee Assigned".
 															setFormData((prev) => ({
 																...prev,
 																requestedSupport: {
 																	...prev.requestedSupport,
+																	refereeAssigned: true,
 																	willOrderPrivateAppraisal: e.target.value,
 																},
 															}));
@@ -2615,10 +2669,8 @@ const Form = ({ readOnly = false, initialData = null }) => {
 												multiple
 												disabled={readOnly}
 												value={
-													readOnly && formData.uploadedFiles?.length
-														? {
-																originalName: `${formData.uploadedFiles.length} file(s) uploaded`,
-															}
+													formData.uploadedFiles?.length
+														? formData.uploadedFiles
 														: null
 												}
 												error={fieldErrors.has("uploadedFiles")}
@@ -2728,7 +2780,25 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													ref={howDidYouHearOtherRef}
 													disabled={!formData.other}
 													error={fieldErrors.has("otherDetails")}
+													onOverflowChange={setFieldOverflow("otherDetails")}
 												/>
+											</div>
+											<div className="col-span-2">
+												{formData.other && overflowedFields.otherDetails && (
+													<TextArea
+														name='otherDetails'
+														value={formData.otherDetails}
+														onChange={handleChange}
+														width='full'
+														rows={1}
+														disabled={readOnly}
+														inputClass={`${
+															fieldErrors.has("otherDetails")
+																? "!border-red-500"
+																: ""
+														}`}
+													/>
+												)}
 											</div>
 										</div>
 										{fieldErrors.has("howDidYouHear") && (
