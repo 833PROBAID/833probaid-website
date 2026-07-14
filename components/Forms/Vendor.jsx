@@ -225,6 +225,15 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
   const [touched, setTouched] = useState(new Set());
   const [_formData, setFormData] = useState(INITIAL_FORM_DATA);
 
+  // Fields whose inline TextInput has overflowed onto more than one line, so an
+  // expanded TextArea should be revealed. Driven by TextInput's onOverflowChange
+  // (measured from the DOM — no hardcoded character count).
+  const [overflowedFields, setOverflowedFields] = useState({});
+  const setFieldOverflow = (key) => (overflow) =>
+    setOverflowedFields((prev) =>
+      prev[key] === overflow ? prev : { ...prev, [key]: overflow },
+    );
+
   const formData =
     readOnly && initialData ? buildFormData(initialData) : _formData;
 
@@ -1452,17 +1461,18 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                           width="full"
                           disabled={!formData.servicesOffered.others}
                           error={fieldErrors.has("othersList")}
+                          onOverflowChange={setFieldOverflow("othersList")}
                         />
                       </div>
                       {formData.othersList &&
-                        formData.othersList.length > 75 && (
+                        overflowedFields.othersList && (
                           <div className="col-span-3">
                             <TextArea
                               name="othersList"
                               value={formData.othersList}
                               onChange={handleChange}
                               width="full"
-                              rows={2}
+                              rows={1}
                               disabled={!formData.servicesOffered.others}
                               inputClass={
                                 fieldErrors.has("othersList")
@@ -1516,15 +1526,18 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                         error={fieldErrors.has(
                           "translationServices.areasServed"
                         )}
+                        onOverflowChange={setFieldOverflow(
+                          "translationServices.areasServed"
+                        )}
                       />
                       {formData.translationServices.areasServed &&
-                        formData.translationServices.areasServed.length > 110 && (
+                        overflowedFields["translationServices.areasServed"] && (
                           <TextArea
                             name="translationServices.areasServed"
                             value={formData.translationServices.areasServed}
                             onChange={handleChange}
                             width="full"
-                            rows={2}
+                            rows={1}
                             inputClass={
                               fieldErrors.has("translationServices.areasServed")
                                 ? "!border-red-500"
@@ -1714,11 +1727,15 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                             error={fieldErrors.has(
                               "translationServices.otherAvailabilityList"
                             )}
+                            onOverflowChange={setFieldOverflow(
+                              "translationServices.otherAvailabilityList"
+                            )}
                           />
                         </div>
                         {formData.translationServices.otherAvailabilityList &&
-                          formData.translationServices.otherAvailabilityList
-                            .length > 110 && (
+                          overflowedFields[
+                            "translationServices.otherAvailabilityList"
+                          ] && (
                             <TextArea
                               name="translationServices.otherAvailabilityList"
                               value={
@@ -1727,7 +1744,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                               }
                               onChange={handleChange}
                               width="full"
-                              rows={2}
+                              rows={1}
                               disabled={
                                 !formData.translationServices.otherAvailability
                               }

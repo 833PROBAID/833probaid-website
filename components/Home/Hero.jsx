@@ -41,7 +41,7 @@ const Hero = () => {
                     className="h-auto w-10 shrink-0 transition-transform duration-500 ease-out group-hover:rotate-12 group-hover:scale-110 sm:w-12 lg:w-16"
                   />
                   <p className="transition-transform duration-300 ease-out group-hover:translate-x-2">
-                    Trusted by attorneys
+                    Trusted by Attorneys
                   </p>
                 </div>
                 <div className="flex items-center gap-3 lg:gap-4 group cursor-pointer">
@@ -51,7 +51,7 @@ const Hero = () => {
                     className="h-auto w-10 shrink-0 transition-transform duration-500 ease-out group-hover:rotate-12 group-hover:scale-110 sm:w-12 lg:w-16"
                   />
                   <p className="transition-transform duration-300 ease-out group-hover:translate-x-2">
-                    Preferred by fiduciaries
+                    Preferred by Fiduciaries
                   </p>
                 </div>
                 <div className="flex items-center gap-3 lg:mb-45 lg:gap-4 group cursor-pointer">
@@ -61,7 +61,7 @@ const Hero = () => {
                     className="h-auto w-10 shrink-0 transition-transform duration-500 ease-out group-hover:rotate-12 group-hover:scale-110 sm:w-12 lg:w-16"
                   />
                   <p className="transition-transform duration-300 ease-out group-hover:translate-x-2">
-                    Relied on by families
+                    Relied on by Families
                   </p>
                 </div>
               </div>

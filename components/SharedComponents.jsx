@@ -196,6 +196,7 @@ export const TextInput = React.forwardRef(
 			variant,
 			error = false,
 			errorMessage = "",
+			onOverflowChange,
 			...props
 		},
 		ref,
@@ -211,7 +212,45 @@ export const TextInput = React.forwardRef(
 		const [filteredSuggestions, setFilteredSuggestions] = React.useState([]);
 		const [selectedIndex, setSelectedIndex] = React.useState(-1);
 		const dropdownRef = React.useRef(null);
-		const inputRef = React.useRef(ref);
+
+		// Keep an internal handle on the <input> node (while still forwarding the
+		// external ref) so the component can measure its own overflow.
+		const domRef = React.useRef(null);
+		const setRefs = React.useCallback(
+			(node) => {
+				domRef.current = node;
+				if (typeof ref === "function") ref(node);
+				else if (ref) ref.current = node;
+			},
+			[ref],
+		);
+
+		// Report whether the text no longer fits on one line (content wider than
+		// the box). Lets callers reveal an expanded TextArea without a hardcoded
+		// character count. Re-measures on value change and on width changes.
+		const lastOverflow = React.useRef(null);
+		const measureOverflow = React.useCallback(() => {
+			const el = domRef.current;
+			if (!el || !onOverflowChange) return;
+			const overflow = el.scrollWidth > el.clientWidth;
+			if (lastOverflow.current !== overflow) {
+				lastOverflow.current = overflow;
+				onOverflowChange(overflow);
+			}
+		}, [onOverflowChange]);
+
+		React.useEffect(() => {
+			measureOverflow();
+		}, [value, measureOverflow]);
+
+		React.useEffect(() => {
+			if (!onOverflowChange || typeof ResizeObserver === "undefined") return;
+			const el = domRef.current;
+			if (!el) return;
+			const ro = new ResizeObserver(() => measureOverflow());
+			ro.observe(el);
+			return () => ro.disconnect();
+		}, [onOverflowChange, measureOverflow]);
 
 		// Update filtered suggestions when suggestions prop changes (from API)
 		React.useEffect(() => {
@@ -304,7 +343,7 @@ export const TextInput = React.forwardRef(
 				)}
 				<div className='relative w-full' ref={dropdownRef}>
 					<input
-						ref={ref || inputRef}
+						ref={setRefs}
 						type={type}
 						name={name}
 						value={value}
@@ -336,7 +375,7 @@ export const TextInput = React.forwardRef(
 							if (onBlur) onBlur(e);
 						}}
 						autoComplete='off'
-						className={`w-full h-10 ${borderSize} ${borderColor} ${padding} bg-gray-200 focus:outline-none focus:ring-2 focus:ring-[#FD7702] focus:ring-offset-0 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-bold ${textStyle} ${inputClass} ${placeholderClass}`}
+						className={`w-full h-10 ${borderSize} ${borderColor} ${padding} bg-gray-200 focus:outline-none focus:ring-2 focus:ring-[#FD7702] focus:ring-offset-0 transition-colors disabled:opacity-100 disabled:text-secondary disabled:[-webkit-text-fill-color:var(--color-secondary)] disabled:cursor-not-allowed font-bold ${textStyle} ${inputClass} ${placeholderClass}`}
 						{...props}
 					/>
 					{/* Loading indicator */}
@@ -663,7 +702,7 @@ export const PhoneInput = React.forwardRef(
 							disabled={disabled}
 							inputMode='numeric'
 							autoComplete='off'
-							className={`w-full h-10 border-[3.5px] ${borderColor} px-2 py-1 bg-gray-200 focus:outline-none focus:ring-2 focus:ring-[#FD7702] focus:ring-offset-0 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-bold ${inputClass}`}
+							className={`w-full h-10 border-[3.5px] ${borderColor} px-2 py-1 bg-gray-200 focus:outline-none focus:ring-2 focus:ring-[#FD7702] focus:ring-offset-0 transition-colors disabled:opacity-100 disabled:text-secondary disabled:[-webkit-text-fill-color:var(--color-secondary)] disabled:cursor-not-allowed font-bold ${inputClass}`}
 							{...props}
 						/>
 					</div>
@@ -711,6 +750,9 @@ export const TextArea = React.forwardRef(
 		const textStyle = isLarge ? "text-xl font-bold" : "";
 		const labelSize = isLarge ? "text-xl" : "text-base";
 		const widthConfig = getWidthStyles(width);
+		// A single-row textarea should collapse to the same height as a TextInput
+		// (h-10 = 40px) while still growing as more lines are typed.
+		const isSingleRow = rows === 1;
 		const [showDropdown, setShowDropdown] = React.useState(false);
 		const [filteredSuggestions, setFilteredSuggestions] = React.useState([]);
 		const [selectedIndex, setSelectedIndex] = React.useState(-1);
@@ -722,9 +764,11 @@ export const TextArea = React.forwardRef(
 			const textarea = textareaRef.current;
 			if (textarea) {
 				textarea.style.height = "auto";
-				textarea.style.height = textarea.scrollHeight + "px";
+				const minHeight = isSingleRow ? 40 : 0;
+				textarea.style.height =
+					Math.max(textarea.scrollHeight, minHeight) + "px";
 			}
-		}, []);
+		}, [isSingleRow]);
 
 		// Adjust height when value changes
 		React.useEffect(() => {
@@ -850,12 +894,10 @@ export const TextArea = React.forwardRef(
 						onBlur={(e) => {
 							if (onBlur) onBlur(e);
 						}}
-						onInput={(e) => {
-							// Auto-resize textarea
-							e.target.style.height = "auto";
-							e.target.style.height = e.target.scrollHeight + "px";
-						}}
-						className={`w-full ${borderSize} border-[#0097A7] ${padding} bg-gray-200 focus:outline-none focus:ring-2 focus:ring-[#FD7702] focus:ring-offset-0 transition-colors disabled:opacity-50 disabled:cursor-not-allowed resize-none overflow-hidden leading-relaxed font-bold ${textStyle} ${inputClass}`}
+						onInput={adjustHeight}
+						className={`w-full ${borderSize} border-[#0097A7] ${padding} bg-gray-200 focus:outline-none focus:ring-2 focus:ring-[#FD7702] focus:ring-offset-0 transition-colors disabled:opacity-100 disabled:text-secondary disabled:[-webkit-text-fill-color:var(--color-secondary)] disabled:cursor-not-allowed resize-none overflow-hidden ${
+							isSingleRow ? "h-10 leading-normal" : "leading-relaxed"
+						} font-bold ${textStyle} ${inputClass}`}
 						{...props}
 					/>
 					{isLoadingSuggestions && showDropdown && (
@@ -1009,13 +1051,20 @@ export const FileUpload = ({
 	error = false,
 }) => {
 	const widthConfig = getWidthStyles(width);
-	const fileName =
+	// `value` may be a single File / metadata object, or (for multiple uploads)
+	// an array of them. Arrays collapse to a count summary.
+	const fileList = Array.isArray(value) ? value.filter(Boolean) : [];
+	const singleName =
 		value instanceof File
 			? value.name
-			: value && typeof value === "object"
+			: value && !Array.isArray(value) && typeof value === "object"
 				? value.originalName || value.name || null
 				: null;
-	const hasFile = !!fileName;
+	const hasFile = fileList.length > 0 || !!singleName;
+	const displayText =
+		fileList.length > 0
+			? `Uploaded ${fileList.length} File${fileList.length === 1 ? "" : "s"}`
+			: singleName;
 
 	return (
 		<label
@@ -1041,8 +1090,8 @@ export const FileUpload = ({
 			/>
 			<div className='flex items-center justify-center gap-2 overflow-hidden'>
 				<i className={hasFile ? "fas fa-check-circle flex-shrink-0" : "fas fa-paperclip flex-shrink-0"}></i>
-				<span className='truncate' title={fileName || label}>
-					{fileName || label}
+				<span className='truncate' title={displayText || label}>
+					{displayText || label}
 				</span>
 			</div>
 		</label>
