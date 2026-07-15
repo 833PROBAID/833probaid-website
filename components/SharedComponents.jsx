@@ -757,20 +757,42 @@ export const TextArea = React.forwardRef(
 		const [filteredSuggestions, setFilteredSuggestions] = React.useState([]);
 		const [selectedIndex, setSelectedIndex] = React.useState(-1);
 		const dropdownRef = React.useRef(null);
-		const textareaRef = React.useRef(ref);
 
-		// Auto-resize textarea based on content
+		// Keep an internal handle on the <textarea> node (while still forwarding
+		// the external ref) so the component can size itself.
+		const textareaRef = React.useRef(null);
+		const setRefs = React.useCallback(
+			(node) => {
+				textareaRef.current = node;
+				if (typeof ref === "function") ref(node);
+				else if (ref) ref.current = node;
+			},
+			[ref],
+		);
+
 		const adjustHeight = React.useCallback(() => {
 			const textarea = textareaRef.current;
 			if (textarea) {
 				textarea.style.height = "auto";
+				const styles = window.getComputedStyle(textarea);
+				const border =
+					parseFloat(styles.borderTopWidth) +
+					parseFloat(styles.borderBottomWidth);
 				const minHeight = isSingleRow ? 40 : 0;
 				textarea.style.height =
-					Math.max(textarea.scrollHeight, minHeight) + "px";
+					Math.max(textarea.scrollHeight + border, minHeight) + "px";
 			}
 		}, [isSingleRow]);
 
-		// Adjust height when value changes
+		const handlePaste = (e) => {
+			if (!isSingleRow) return;
+			const pasted = e.clipboardData?.getData("text") ?? "";
+			const collapsed = pasted.replace(/\s+/g, " ");
+			if (collapsed === pasted) return;
+			e.preventDefault();
+			document.execCommand("insertText", false, collapsed);
+		};
+
 		React.useEffect(() => {
 			adjustHeight();
 		}, [value, adjustHeight]);
@@ -864,7 +886,7 @@ export const TextArea = React.forwardRef(
 				)}
 				<div className='relative w-full' ref={dropdownRef}>
 					<textarea
-						ref={ref || textareaRef}
+						ref={setRefs}
 						name={name}
 						value={value}
 						onChange={(e) => {
@@ -876,6 +898,7 @@ export const TextArea = React.forwardRef(
 							}
 						}}
 						onKeyDown={handleKeyDown}
+						onPaste={handlePaste}
 						placeholder={placeholder}
 						disabled={disabled}
 						required={required}
