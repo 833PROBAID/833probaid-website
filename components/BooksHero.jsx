@@ -44,7 +44,11 @@ export default function BooksHero({ bannerImage, title, subtitle }) {
 
 	return (
 		<div>
-			<div className='group flex flex-col items-center justify-center p-4 text-center sm:p-7 md:p-10 my-8 sm:my-12 rounded-3xl border-l-4 border-secondary transition-transform duration-300 ease-in-out hover:border-l-8 hover:translate-x-2 shadow-lg shadow-black/30 sm:shadow-xl sm:shadow-black/40 md:shadow-2xl md:shadow-black/50'>
+			<div className='group flex flex-col items-center justify-center p-4 text-center sm:p-7 md:p-10 my-8 sm:my-12 rounded-3xl border-l-8 border-secondary transition-transform duration-300 ease-in-out hover:border-l-12 hover:translate-x-2'
+				style={{
+					boxShadow:
+						"rgba(0, 0, 0, 0.4) 0px 8px 12px 0px, rgba(0, 0, 0, 0.4) 0px -5px 12px 1px",
+				}}>
 				<h1 className='font-anton text-3xl uppercase leading-tight text-primary group-hover:text-secondary sm:text-4xl md:text-5xl'>
 					{withSuper(title)}
 				</h1>
@@ -56,11 +60,16 @@ export default function BooksHero({ bannerImage, title, subtitle }) {
 				className='w-full my-8 sm:my-12 rounded-3xl'
 				style={{
 					boxShadow:
-						"rgba(0, 0, 0, 0.4) 0px 8px 12px, rgba(0, 0, 0, 0.4) 0px -5px 12px 1px",
+						"rgba(0, 0, 0, 0.4) 0px 8px 12px, rgba(0, 0, 0, 0.4) 0px 5px 12px 1px",
 				}}>
 				{svgMarkup ? (
 					// eslint-disable-next-line react/no-danger
-					<div dangerouslySetInnerHTML={{ __html: svgMarkup }} />
+					<div className="rounded-3xl" style={{
+						boxShadow:
+						"rgba(0, 0, 0, 0.4) 0px 8px 12px, rgba(0, 0, 0, 0.4) 0px -5px 12px 1px",
+					}}>
+						<div dangerouslySetInnerHTML={{ __html: svgMarkup }} />
+					</div>
 				) : (
 					<img src={bannerImage} alt={title} className='w-full' />
 				)}

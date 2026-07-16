@@ -297,9 +297,10 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
           ...(group === "servicesOffered" && name === "others" && !checked
             ? { othersList: "" }
             : {}),
-          // Escrow Pay implies deferred payment from escrow is accepted.
-          ...(group === "paymentMethods" && name === "escrowOnly" && checked
-            ? { acceptDeferredPayment: "yes" }
+          // Escrow Pay implies deferred payment from escrow is accepted;
+          // unchecking it clears that answer.
+          ...(group === "paymentMethods" && name === "escrowOnly"
+            ? { acceptDeferredPayment: checked ? "yes" : "" }
             : {}),
         }));
         // Checking Escrow Pay auto-answers the deferred-payment question;
@@ -324,7 +325,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
           acceptDeferredPayment: value,
           paymentMethods: {
             ...prev.paymentMethods,
-            ...(value === "yes" ? { escrowOnly: true } : {}),
+            escrowOnly: value === "yes",
           },
         }));
         return;
@@ -339,7 +340,8 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
       }
       if (
         name === "translationServices.inPersonHourlyRate" ||
-        name === "translationServices.phoneVirtualHourlyRate"
+        name === "translationServices.phoneVirtualHourlyRate" ||
+        name === "translationServices.turnaroundTime"
       ) {
         const field = name.split(".")[1];
         const numericValue = value.replace(/[^0-9]/g, "");
@@ -364,10 +366,16 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
           },
         }));
       } else {
+        const clearsInsuredFile = name === "insuredSecond" && value === "no";
+        const clearsBondedFile = name === "bonded" && value === "no";
         setFormData((prev) => ({
           ...prev,
           [name]: value,
+          ...(clearsInsuredFile ? { coiFile: null } : {}),
+          ...(clearsBondedFile ? { bondCertFile: null } : {}),
         }));
+        if (clearsInsuredFile || clearsBondedFile)
+          setFileResetKey((k) => k + 1);
       }
     }
   };
@@ -629,6 +637,15 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
             return prev - 1;
           });
         }, 1000);
+
+        const scrollY = window.scrollY;
+
+        requestAnimationFrame(() => {
+          window.scrollTo({
+            top: scrollY,
+            behavior: "instant",
+          });
+        });
       } else {
         setSubmitStatus("error");
         setSubmitError(result.error || "Submission failed");
@@ -1113,7 +1130,25 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                       label="Do You Serve Specific Counties or Cities Only?"
                       width="full"
                       error={fieldErrors.has("specificAreas")}
+                      onOverflowChange={setFieldOverflow(
+                        "specificAreas"
+                      )}
                     />
+                      {formData.specificAreas &&
+                        overflowedFields["specificAreas"] && (
+                          <TextArea
+                            name="specificAreas"
+                            value={formData.specificAreas}
+                            onChange={handleChange}
+                            width="full"
+                            rows={1}
+                            inputClass={
+                              fieldErrors.has("specificAreas")
+                                ? "!border-red-500"
+                                : ""
+                            }
+                          />
+                      )}
                   </FormSection>
 
                   {/* Payment Methods */}
@@ -1515,7 +1550,25 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                         error={fieldErrors.has(
                           "translationServices.languagesOffered"
                         )}
+                        onOverflowChange={setFieldOverflow(
+                          "translationServices.languagesOffered"
+                        )}
                       />
+                      {formData.translationServices.languagesOffered &&
+                        overflowedFields["translationServices.languagesOffered"] && (
+                          <TextArea
+                            name="translationServices.languagesOffered"
+                            value={formData.translationServices.languagesOffered}
+                            onChange={handleChange}
+                            width="full"
+                            rows={1}
+                            inputClass={
+                              fieldErrors.has("translationServices.languagesOffered")
+                                ? "!border-red-500"
+                                : ""
+                            }
+                          />
+                      )}
 
                       <TextInput
                         name="translationServices.areasServed"
@@ -2061,54 +2114,74 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                                 }}
                                 width="full"
                               />
-                              <div className="flex items-center gap-2">
-                                <Checkbox
-                                  name="other"
-                                  group="translationServices.specializations"
-                                  label="Other:"
-                                  checked={
-                                    formData.translationServices.specializations
-                                      ?.other
-                                  }
-                                  onChange={(e) => {
-                                    if (e.target.checked)
-                                      markTouched(
-                                        "translationServices.otherSpecializationList"
-                                      );
-                                    setFormData((prev) => ({
-                                      ...prev,
-                                      translationServices: {
-                                        ...prev.translationServices,
-                                        // Keep the list text only while Other is checked.
-                                        ...(e.target.checked
-                                          ? {}
-                                          : { otherSpecializationList: "" }),
-                                        specializations: {
-                                          ...prev.translationServices
-                                            ?.specializations,
-                                          other: e.target.checked,
+                              <div className="flex flex-col gap-4">
+                                <div className="flex items-center gap-2">
+                                  <Checkbox
+                                    name="other"
+                                    group="translationServices.specializations"
+                                    label="Other:"
+                                    checked={
+                                      formData.translationServices.specializations
+                                        ?.other
+                                    }
+                                    onChange={(e) => {
+                                      if (e.target.checked)
+                                        markTouched(
+                                          "translationServices.otherSpecializationList"
+                                        );
+                                      setFormData((prev) => ({
+                                        ...prev,
+                                        translationServices: {
+                                          ...prev.translationServices,
+                                          // Keep the list text only while Other is checked.
+                                          ...(e.target.checked
+                                            ? {}
+                                            : { otherSpecializationList: "" }),
+                                          specializations: {
+                                            ...prev.translationServices
+                                              ?.specializations,
+                                            other: e.target.checked,
+                                          },
                                         },
-                                      },
-                                    }));
-                                  }}
-                                  width="100px"
-                                />
-                                <TextInput
-                                  name="translationServices.otherSpecializationList"
-                                  value={
-                                    formData.translationServices
-                                      .otherSpecializationList
-                                  }
-                                  onChange={handleChange}
-                                  width="full"
-                                  disabled={
-                                    !formData.translationServices.specializations
-                                      ?.other
-                                  }
-                                  error={fieldErrors.has(
-                                    "translationServices.otherSpecializationList"
-                                  )}
-                                />
+                                      }));
+                                    }}
+                                    width="100px"
+                                  />
+                                  <TextInput
+                                    name="translationServices.otherSpecializationList"
+                                    value={
+                                      formData.translationServices
+                                        .otherSpecializationList
+                                    }
+                                    onChange={handleChange}
+                                    width="full"
+                                    disabled={
+                                      !formData.translationServices.specializations
+                                        ?.other
+                                    }
+                                    error={fieldErrors.has(
+                                      "translationServices.otherSpecializationList"
+                                    )}
+                                    onOverflowChange={setFieldOverflow(
+                                      "translationServices.otherSpecializationList"
+                                    )}
+                                  />
+                                </div>
+                                {formData.translationServices.otherAvailabilityList &&
+                                  overflowedFields["translationServices.otherSpecializationList"] && (
+                                    <TextArea
+                                      name="translationServices.otherSpecializationList"
+                                      value={formData.translationServices.otherSpecializationList}
+                                      onChange={handleChange}
+                                      width="full"
+                                      rows={1}
+                                      inputClass={
+                                        fieldErrors.has("translationServices.otherSpecializationList")
+                                          ? "!border-red-500"
+                                          : ""
+                                      }
+                                    />
+                                )}
                               </div>
                               {fieldErrors.has(
                                 "translationServices.specializations"
@@ -2404,7 +2477,25 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
                       label="Surety Company:"
                       width="full"
                       error={fieldErrors.has("suretyCompany")}
+                      onOverflowChange={setFieldOverflow(
+                        "suretyCompany"
+                      )}
                     />
+                    {formData.suretyCompany &&
+                      overflowedFields["suretyCompany"] && (
+                        <TextArea
+                          name="suretyCompany"
+                          value={formData.suretyCompany}
+                          onChange={handleChange}
+                          width="full"
+                          rows={1}
+                          inputClass={
+                            fieldErrors.has("suretyCompany")
+                              ? "!border-red-500"
+                              : ""
+                          }
+                        />
+                    )}
                   </FormSection>
 
                   {/* Legal & Ethical Conduct Agreements */}

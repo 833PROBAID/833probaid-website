@@ -2,6 +2,40 @@ import React from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
+// Shared, lazily-created canvas used to measure text width so an overflow
+// TextArea can show only the characters that don't fit in its sibling input.
+let _measureCanvas = null;
+const getMeasureCtx = () => {
+	if (typeof document === "undefined") return null;
+	if (!_measureCanvas) _measureCanvas = document.createElement("canvas");
+	return _measureCanvas.getContext("2d");
+};
+
+// How many leading characters of `text` fit on one line inside `inputEl`.
+// Returns text.length when everything fits.
+const countFittingChars = (inputEl, text) => {
+	const ctx = getMeasureCtx();
+	if (!ctx) return text.length;
+	const style = window.getComputedStyle(inputEl);
+	ctx.font = [style.fontStyle, style.fontWeight, style.fontSize, style.fontFamily]
+		.filter(Boolean)
+		.join(" ");
+	const avail =
+		inputEl.clientWidth -
+		(parseFloat(style.paddingLeft) || 0) -
+		(parseFloat(style.paddingRight) || 0);
+	if (avail <= 0 || ctx.measureText(text).width <= avail) return text.length;
+	// Binary-search the largest prefix whose rendered width still fits.
+	let lo = 0;
+	let hi = text.length;
+	while (lo < hi) {
+		const mid = Math.ceil((lo + hi) / 2);
+		if (ctx.measureText(text.slice(0, mid)).width <= avail) lo = mid;
+		else hi = mid - 1;
+	}
+	return lo;
+};
+
 export const renderLabel = (text, color, variant) => {
 	const colorCode = color === "teal" ? "#0097A7" : "#FD7702";
 	const isLarge = variant === "invoice";
@@ -797,6 +831,100 @@ export const TextArea = React.forwardRef(
 			adjustHeight();
 		}, [value, adjustHeight]);
 
+		const [splitIndex, setSplitIndex] = React.useState(null);
+		const fullValue = value == null ? "" : String(value);
+
+		React.useLayoutEffect(() => {
+			if (!isSingleRow || typeof document === "undefined") {
+				setSplitIndex(null);
+				return;
+			}
+			const input = document.querySelector(`input[name="${name}"]`);
+			if (!input) {
+				setSplitIndex(null);
+				return;
+			}
+			const recompute = () => {
+				const text = value == null ? "" : String(value);
+				if (input.scrollWidth <= input.clientWidth) {
+					setSplitIndex(null);
+					return;
+				}
+				const fit = countFittingChars(input, text);
+				setSplitIndex(fit < text.length ? fit : null);
+				if (document.activeElement !== input) input.scrollLeft = 0;
+			};
+			recompute();
+			let ro;
+			if (typeof ResizeObserver !== "undefined") {
+				ro = new ResizeObserver(recompute);
+				ro.observe(input);
+			}
+			return () => ro && ro.disconnect();
+		}, [value, isSingleRow, name]);
+
+		// When the continuation first appears while the sibling input still holds
+		// focus (i.e. the user is actively typing and just overflowed), move the
+		// caret here so typing continues seamlessly. Skipped for prefilled/resize
+		// cases where the input isn't focused, so focus is never stolen.
+		const didFocusTransfer = React.useRef(false);
+		React.useEffect(() => {
+			if (!isSingleRow || splitIndex == null || didFocusTransfer.current)
+				return;
+			const active = document.activeElement;
+			const el = textareaRef.current;
+			if (el && active && active.tagName === "INPUT" && active.name === name) {
+				el.focus();
+				const end = el.value.length;
+				el.setSelectionRange(end, end);
+			}
+			didFocusTransfer.current = true;
+		}, [splitIndex, isSingleRow, name]);
+
+		// Value shown in this textarea and the prefix that stays in the input.
+		const displayValue = splitIndex == null ? value : fullValue.slice(splitIndex);
+		const prefixValue = splitIndex == null ? "" : fullValue.slice(0, splitIndex);
+
+		// Move the caret back to the end of the sibling input. Used when the
+		// continuation is emptied/backspaced away so deletion keeps flowing onto
+		// the first line instead of the cursor getting stranded.
+		const focusInputEnd = () => {
+			const input = document.querySelector(`input[name="${name}"]`);
+			if (!input) return;
+			input.focus();
+			const end = input.value.length;
+			input.setSelectionRange?.(end, end);
+		};
+
+		// Rebuild the full field value (input prefix + edited continuation) before
+		// handing the change up, so the parent's state stays whole.
+		const emitChange = (e) => {
+			if (splitIndex == null) return onChange(e);
+			const newContinuation = e.target.value;
+			const full = prefixValue + newContinuation;
+			onChange({
+				target: { name, value: full, type: "textarea", checked: false, dataset: {} },
+			});
+			// Emptied the continuation: this textarea is about to unmount, so send
+			// the caret back to the input to continue on the first line.
+			if (newContinuation === "")
+				requestAnimationFrame(focusInputEnd);
+		};
+
+		// Backspace at the very start of the continuation returns to the input's
+		// end, so the user can keep deleting into the first line.
+		const handleContinuationKeyDown = (e) => {
+			if (isSingleRow && splitIndex != null && e.key === "Backspace") {
+				const ta = textareaRef.current;
+				if (ta && ta.selectionStart === 0 && ta.selectionEnd === 0) {
+					e.preventDefault();
+					focusInputEnd();
+					return;
+				}
+			}
+			handleKeyDown(e);
+		};
+
 		// Update filtered suggestions when suggestions prop changes (from API)
 		React.useEffect(() => {
 			if (showSuggestions && suggestions && suggestions.length > 0) {
@@ -888,9 +1016,9 @@ export const TextArea = React.forwardRef(
 					<textarea
 						ref={setRefs}
 						name={name}
-						value={value}
+						value={displayValue}
 						onChange={(e) => {
-							onChange(e);
+							emitChange(e);
 							adjustHeight();
 							if (showSuggestions && onSearchSuggestions) {
 								onSearchSuggestions(name, e.target.value);
