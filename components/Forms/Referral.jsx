@@ -997,8 +997,24 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													width='400px'
 													disabled={formData.role !== "Other"}
 													error={fieldErrors.has("roleOther")}
+													onOverflowChange={setFieldOverflow("roleOther")}
 												/>
 										</div>
+										{formData.roleOther && overflowedFields.roleOther && (
+											<TextArea
+												name='roleOther'
+												value={formData.roleOther}
+												onChange={handleChange}
+												width='full'
+												rows={1}
+												disabled={readOnly}
+												inputClass={`${
+													fieldErrors.has("roleOther")
+														? "!border-red-500"
+														: ""
+												}`}
+											/>
+										)}
 
 										<TextInput
 											name='firmName'
@@ -1784,8 +1800,25 @@ const Form = ({ readOnly = false, initialData = null }) => {
 												width='290px'
 												disabled={!selectedClientRoles.includes("Other")}
 												error={fieldErrors.has("clientRoleOther")}
+												onOverflowChange={setFieldOverflow("clientRoleOther")}
 											/>
 										</div>
+										{formData.clientRoleOther &&
+											overflowedFields.clientRoleOther && (
+											<TextArea
+												name='clientRoleOther'
+												value={formData.clientRoleOther}
+												onChange={handleChange}
+												width='full'
+												rows={1}
+												disabled={readOnly}
+												inputClass={`${
+													fieldErrors.has("clientRoleOther")
+														? "!border-red-500"
+														: ""
+												}`}
+											/>
+										)}
 										<div className='flex justify-between items-center'>
 											<label className='block font-bold text-base'>
 												Has the Court Issued Letters Yet?
@@ -1897,7 +1930,23 @@ const Form = ({ readOnly = false, initialData = null }) => {
 											label='Courthouse Handling File:'
 											width='full'
 											error={fieldErrors.has("courthouse")}
+											onOverflowChange={setFieldOverflow("courthouse")}
 										/>
+										{formData.courthouse && overflowedFields.courthouse && (
+											<TextArea
+												name='courthouse'
+												value={formData.courthouse}
+												onChange={handleChange}
+												width='full'
+												rows={1}
+												disabled={readOnly}
+												inputClass={`${
+													fieldErrors.has("courthouse")
+														? "!border-red-500"
+														: ""
+												}`}
+											/>
+										)}
 									</FormSection>
 
 									{/* Property Information */}
@@ -1913,7 +1962,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 											label='Full Property Address:'
 											width='full'
 											required
-											error={fieldErrors.has("courthouse")}
+											error={fieldErrors.has("property.0.address")}
 											placeholder="123 Main St, Los Angeles, CA 90041"
 											inputClass="placeholder:italic placeholder-[#FD7702]"
 										/>
@@ -2278,6 +2327,9 @@ const Form = ({ readOnly = false, initialData = null }) => {
 																		error={fieldErrors.has(
 																			`property.${index + 1}.accessRestrictionsDetails`
 																		)}
+																		onOverflowChange={setFieldOverflow(
+																			`property.${index + 1}.accessRestrictionsDetails`
+																		)}
 																	/>
 																</div>
 																<RadioGroup
@@ -2307,6 +2359,22 @@ const Form = ({ readOnly = false, initialData = null }) => {
 																/>
 															</div>
 														</div>
+														{property.accessRestrictionsDetails &&
+															overflowedFields[`property.${index + 1}.accessRestrictionsDetails`] && (
+															<TextArea
+																name='accessRestrictionsDetails'
+																value={property.accessRestrictionsDetails || ""}
+																onChange={(e) => handlePropertyChange(index + 1, e)}
+																width='full'
+																rows={1}
+																disabled={readOnly}
+																inputClass={`placeholder:italic placeholder-[#FD7702] ${
+																	fieldErrors.has(`property.${index + 1}.accessRestrictionsDetails`)
+																		? "!border-red-500"
+																		: ""
+																}`}
+															/>
+														)}
 														<div className='flex items-center justify-between w-full gap-2'>
 															<label
 																className='block font-bold text-base flex-shrink-0'
@@ -2325,7 +2393,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 																		}
 																		label='Yes'
 																		color='teal'
-																		width='143px'
+																		width='70px'
 																		error={fieldErrors.has(
 																			`property.${index + 1}.urgency`
 																		)}
@@ -2340,11 +2408,14 @@ const Form = ({ readOnly = false, initialData = null }) => {
 																		onChange={(e) =>
 																			handlePropertyChange(index + 1, e)
 																		}
-																		label='Details:'
+																		label='Please Describe:'
 																		containerClass='w-full max-w-none'
 																		inputClass='placeholder:italic placeholder-[#FD7702]'
-																		width='267px'
+																		width='340px'
 																		error={fieldErrors.has(
+																			`property.${index + 1}.urgencyDetails`
+																		)}
+																		onOverflowChange={setFieldOverflow(
 																			`property.${index + 1}.urgencyDetails`
 																		)}
 																	/>
@@ -2376,6 +2447,22 @@ const Form = ({ readOnly = false, initialData = null }) => {
 																/>
 															</div>
 														</div>
+														{property.urgencyDetails &&
+															overflowedFields[`property.${index + 1}.urgencyDetails`] && (
+															<TextArea
+																name='urgencyDetails'
+																value={property.urgencyDetails || ""}
+																onChange={(e) => handlePropertyChange(index + 1, e)}
+																width='full'
+																rows={1}
+																disabled={readOnly}
+																inputClass={`placeholder:italic placeholder-[#FD7702] ${
+																	fieldErrors.has(`property.${index + 1}.urgencyDetails`)
+																		? "!border-red-500"
+																		: ""
+																}`}
+															/>
+														)}
 														<RadioGroup
 															name='multipleProperties'
 															value={property.multipleProperties}

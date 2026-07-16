@@ -64,6 +64,7 @@ const referralSchema = new mongoose.Schema(
 			successorTrustee: { type: Boolean, default: false },
 			reverseMortgage: { type: Boolean, default: false },
 			successorInInterest: { type: Boolean, default: false },
+			otherCaseType: { type: Boolean, default: false },
 			notSure: { type: Boolean, default: false },
 		},
 

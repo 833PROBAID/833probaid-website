@@ -46,7 +46,7 @@ const Hero = () => {
                 </div>
                 <div className="flex items-center gap-3 lg:gap-4 group cursor-pointer">
                   <img
-                    src="/icons/handshake-icon.svg"
+                    src="/icons/handshake-icon.png"
                     alt="group icon"
                     className="h-auto w-10 shrink-0 transition-transform duration-500 ease-out group-hover:rotate-12 group-hover:scale-110 sm:w-12 lg:w-16"
                   />
