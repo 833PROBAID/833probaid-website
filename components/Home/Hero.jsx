@@ -36,7 +36,7 @@ const Hero = () => {
               <div className="font-montserrat my-6 space-y-3 font-bold lg:my-8 lg:space-y-4 lg:text-xl xl:text-2xl">
                 <div className="flex items-center gap-3 lg:gap-4 group cursor-pointer">
                   <img
-                    src="/icons/trust-icon.svg"
+                    src="/icons/trust-icon.png"
                     alt="trust icon"
                     className="h-auto w-10 shrink-0 transition-transform duration-500 ease-out group-hover:rotate-12 group-hover:scale-110 sm:w-12 lg:w-16"
                   />
@@ -56,7 +56,7 @@ const Hero = () => {
                 </div>
                 <div className="flex items-center gap-3 lg:mb-45 lg:gap-4 group cursor-pointer">
                   <img
-                    src="/icons/group-icon.svg"
+                    src="/icons/group-icon.png"
                     alt="group icon"
                     className="h-auto w-10 shrink-0 transition-transform duration-500 ease-out group-hover:rotate-12 group-hover:scale-110 sm:w-12 lg:w-16"
                   />

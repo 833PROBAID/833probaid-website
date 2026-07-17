@@ -260,22 +260,62 @@ export const TextInput = React.forwardRef(
 		);
 
 		// Report whether the text no longer fits on one line (content wider than
-		// the box). Lets callers reveal an expanded TextArea without a hardcoded
-		// character count. Re-measures on value change and on width changes.
+		// the box). Once it overflows, the whole value is moved into an expanded
+		// TextArea (revealed by the caller) and this input is cleared, so the full
+		// entry shows on the line below instead of being split across both fields.
+		// Overflow is measured against the full `value` with a canvas (not the
+		// rendered text) so detection keeps working while the input shows "".
+		const [isOverflowing, setIsOverflowing] = React.useState(false);
 		const lastOverflow = React.useRef(null);
+		// Set when overflow clears while the sibling TextArea still holds focus, so
+		// the caret can be pulled back into this input once it reappears — keeps
+		// deletion flowing without the user having to click the first line again.
+		const restoreFocus = React.useRef(false);
 		const measureOverflow = React.useCallback(() => {
 			const el = domRef.current;
 			if (!el || !onOverflowChange) return;
-			const overflow = el.scrollWidth > el.clientWidth;
+			const text = value == null ? "" : String(value);
+			const overflow =
+				text.length > 0 && countFittingChars(el, text) < text.length;
 			if (lastOverflow.current !== overflow) {
+				// Runs before the state flips, so the TextArea below is still mounted
+				// here: note whether it's the one being edited so focus can follow the
+				// text back up to this input.
+				if (!overflow) {
+					const ta = document.querySelector(`textarea[name="${name}"]`);
+					restoreFocus.current = !!ta && document.activeElement === ta;
+				}
 				lastOverflow.current = overflow;
+				setIsOverflowing(overflow);
 				onOverflowChange(overflow);
 			}
-		}, [onOverflowChange]);
+		}, [onOverflowChange, value, name]);
 
 		React.useEffect(() => {
 			measureOverflow();
 		}, [value, measureOverflow]);
+
+		// Keep the caret with the text as it moves between the two fields: hand it
+		// to the TextArea below when the value overflows while typing here, and take
+		// it back to the end of this input when the value shrinks to fit again.
+		React.useEffect(() => {
+			const el = domRef.current;
+			if (!el) return;
+			if (isOverflowing) {
+				if (document.activeElement !== el) return;
+				const ta = document.querySelector(`textarea[name="${name}"]`);
+				if (ta) {
+					ta.focus();
+					const end = ta.value.length;
+					ta.setSelectionRange?.(end, end);
+				}
+			} else if (restoreFocus.current) {
+				restoreFocus.current = false;
+				el.focus();
+				const end = el.value.length;
+				el.setSelectionRange?.(end, end);
+			}
+		}, [isOverflowing, name]);
 
 		React.useEffect(() => {
 			if (!onOverflowChange || typeof ResizeObserver === "undefined") return;
@@ -380,7 +420,7 @@ export const TextInput = React.forwardRef(
 						ref={setRefs}
 						type={type}
 						name={name}
-						value={value}
+						value={isOverflowing ? "" : value}
 						onChange={(e) => {
 							onChange(e);
 							// Trigger search suggestions when typing
@@ -394,6 +434,17 @@ export const TextInput = React.forwardRef(
 						disabled={disabled}
 						required={required}
 						onFocus={(e) => {
+							if (isOverflowing) {
+								const ta = document.querySelector(
+									`textarea[name="${name}"]`,
+								);
+								if (ta) {
+									ta.focus();
+									const end = ta.value.length;
+									ta.setSelectionRange?.(end, end);
+									return;
+								}
+							}
 							if (onFocus) onFocus(e);
 							if (showSuggestions) {
 								// Trigger initial search on focus
@@ -415,7 +466,7 @@ export const TextInput = React.forwardRef(
 					{/* Loading indicator */}
 					{isLoadingSuggestions && showDropdown && (
 						<div
-							className='absolute z-[100] w-full mt-2 bg-white rounded-xl p-3 text-center text-gray-500'
+							className='absolute z-100 w-full mt-2 bg-white rounded-xl p-3 text-center text-gray-500'
 							style={{
 								boxShadow:
 									"0 20px 25px -5px rgba(0, 151, 167, 0.15), 0 10px 10px -5px rgba(0, 151, 167, 0.1), 0 0 0 1px rgba(0, 151, 167, 0.1)",
@@ -428,7 +479,7 @@ export const TextInput = React.forwardRef(
 						!isLoadingSuggestions &&
 						filteredSuggestions.length > 0 && (
 							<div
-								className='absolute z-[100] w-full mt-2 bg-white rounded-xl overflow-hidden animate-fadeIn'
+								className='absolute z-100 w-full mt-2 bg-white rounded-xl overflow-hidden animate-fadeIn'
 								style={{
 									boxShadow:
 										"0 20px 25px -5px rgba(0, 151, 167, 0.15), 0 10px 10px -5px rgba(0, 151, 167, 0.1), 0 0 0 1px rgba(0, 151, 167, 0.1)",
@@ -513,7 +564,7 @@ export const TextInput = React.forwardRef(
 							`}</style>
 
 								{/* Header */}
-								<div className='px-4 py-3 bg-gradient-to-r from-[#0097A7] via-[#00a8bb] to-[#0097A7] bg-size-200 bg-animate'>
+								<div className='px-4 py-3 bg-linear-to-r from-[#0097A7] via-[#00a8bb] to-[#0097A7] bg-size-200 bg-animate'>
 									<div className='flex items-center justify-between'>
 										<div className='flex items-center gap-2.5'>
 											<div className='w-8 h-8 rounded-lg bg-white/20 backdrop-blur-sm flex items-center justify-center'>

@@ -668,6 +668,11 @@ const Form = ({ readOnly = false, initialData = null }) => {
 
 		if (all.has("courthouse") && Object.values(formData.caseType).some(Boolean))
 			visible.add("courthouse");
+		if (
+			all.has("property.0.address") &&
+			Object.values(formData.caseType).some(Boolean)
+		)
+			visible.add("property.0.address");
 		setFieldErrors(visible);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [_formData, touched, readOnly]);
@@ -2533,9 +2538,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 												checked={formData.requestedSupport.conductWalkthrough}
 												onChange={handleChange}
 											/>
-											<div className={`flex gap-3 items-center w-full ${(!isEmpty(formData.requestedSupport.refereePhone) &&
-														!isValidUSPhone(formData.requestedSupport.refereePhone)) || (!isEmpty(formData.requestedSupport.refereeEmail) &&
-														!isValidEmail(formData.requestedSupport.refereeEmail)) ? 'mb-[35px]' : ''}`}>
+											<div className="flex gap-3 items-center w-full">
 												<Checkbox
 													name='preparePhotos'
 													group='requestedSupport'
@@ -2545,50 +2548,54 @@ const Form = ({ readOnly = false, initialData = null }) => {
 													width='300px'
 												/>
 												<span className="font-bold text-xl text-[#FD7702]">/</span>
-												<div className="flex gap-2 items-center">
 												<TextInput
 													name='refereeFullName'
 													value={formData.requestedSupport.refereeFullName}
 													onChange={handleSupportFieldChange("refereeFullName")}
 													label="Referee's Full Name:"
 													disabled={!formData.requestedSupport.preparePhotos}
-													inputClass="!w-[160px]"
+													inputClass="!w-full"
 													error={fieldErrors.has("refereeFullName")}
 												/>
-												<PhoneInput
-													name='refereePhone'
-													value={formData.requestedSupport.refereePhone}
-													onChange={handleSupportFieldChange("refereePhone")}
-													label='Phone:'
-													inputClass="full placeholder:italic placeholder-[#FD7702]"
-													disabled={!formData.requestedSupport.preparePhotos}
-													error={fieldErrors.has("refereePhone")}
-													errorMessage={
-														!isEmpty(formData.requestedSupport.refereePhone) &&
-														!isValidUSPhone(formData.requestedSupport.refereePhone)
+											</div>
+											{formData.requestedSupport.preparePhotos && (
+												<div className={`flex gap-2 items-center ml-75 ${(!isEmpty(formData.requestedSupport.refereePhone) &&
+															!isValidUSPhone(formData.requestedSupport.refereePhone)) || (!isEmpty(formData.requestedSupport.refereeEmail) &&
+															!isValidEmail(formData.requestedSupport.refereeEmail)) ? 'mb-[35px]' : ''}`}>
+													<PhoneInput
+														name='refereePhone'
+														value={formData.requestedSupport.refereePhone}
+														onChange={handleSupportFieldChange("refereePhone")}
+														label='Phone:'
+														inputClass="!w-50 placeholder:italic placeholder-[#FD7702]"
+														disabled={!formData.requestedSupport.preparePhotos}
+														error={fieldErrors.has("refereePhone")}
+														errorMessage={
+															!isEmpty(formData.requestedSupport.refereePhone) &&
+															!isValidUSPhone(formData.requestedSupport.refereePhone)
 															? "Please enter a valid 10-digit US phone number."
 															: ""
-													}
-												/>
-												<TextInput
-													name='refereeEmail'
-													value={formData.requestedSupport.refereeEmail}
-													onChange={handleSupportFieldChange("refereeEmail")}
-													label='Email:'
-													type='email'
-													inputClass="full placeholder:italic placeholder-[#FD7702]"
-													disabled={!formData.requestedSupport.preparePhotos}
-													placeholder='e.g. name@firm.com'
-													error={fieldErrors.has("refereeEmail")}
-													errorMessage={
-														!isEmpty(formData.requestedSupport.refereeEmail) &&
-														!isValidEmail(formData.requestedSupport.refereeEmail)
+														}
+														/>
+													<TextInput
+														name='refereeEmail'
+														value={formData.requestedSupport.refereeEmail}
+														onChange={handleSupportFieldChange("refereeEmail")}
+														label='Email:'
+														type='email'
+														inputClass="!w-125 placeholder:italic placeholder-[#FD7702]"
+														disabled={!formData.requestedSupport.preparePhotos}
+														placeholder='e.g. name@firm.com'
+														error={fieldErrors.has("refereeEmail")}
+														errorMessage={
+															!isEmpty(formData.requestedSupport.refereeEmail) &&
+															!isValidEmail(formData.requestedSupport.refereeEmail)
 															? "Please enter a valid email address."
 															: ""
-													}
-												/>
+														}
+														/>
 												</div>
-											</div>
+											)}
 											<div className='flex gap-1 items-start justify-between w-full'>
 												<Checkbox
 													name='refereeAssigned'
