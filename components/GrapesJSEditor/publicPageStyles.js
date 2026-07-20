@@ -247,7 +247,7 @@ const publicPageStyles = `
 			.category-banner {
 				padding: 1.5rem;
 				border-radius: 1rem;
-				border-left: 4px solid;
+				border-left: 12px solid;
 				transition:
 					transform 0.3s ease,
 					border-left-width 0.3s ease;
@@ -255,7 +255,7 @@ const publicPageStyles = `
 
 			.category-banner:hover {
 				transform: translateX(8px);
-				border-left-width: 8px;
+				border-left-width: 16px;
 			}
 
 			.category-banner h2 {
@@ -862,7 +862,7 @@ const publicPageStyles = `
 
 				.category-banner:hover {
 					transform: none !important;
-					border-left-width: 4px !important;
+					border-left-width: 12px !important;
 				}
 
 				.shadow-card {

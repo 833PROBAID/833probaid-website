@@ -44,7 +44,7 @@ export default function BooksHero({ bannerImage, title, subtitle }) {
 
 	return (
 		<div>
-			<div className='group flex flex-col items-center justify-center p-4 text-center sm:p-7 md:p-10 my-8 sm:my-12 rounded-3xl border-l-8 border-secondary transition-transform duration-300 ease-in-out hover:border-l-12 hover:translate-x-2'
+			<div className='group flex flex-col items-center justify-center p-4 text-center sm:p-7 md:p-10 my-8 sm:my-12 !rounded-3xl !border-l-12 border-secondary transition-0.3 duration-300 ease-in-out hover:!border-l-16 hover:translate-x-2'
 				style={{
 					boxShadow:
 						"rgba(0, 0, 0, 0.4) 0px 8px 12px 0px, rgba(0, 0, 0, 0.4) 0px -5px 12px 1px",
