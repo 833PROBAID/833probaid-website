@@ -156,7 +156,8 @@ export default async function HomeBookDetailPage({ params }) {
           dangerouslySetInnerHTML={{ __html: structuredDataScript }}
         />
       )}
-      <div className="hidden mt-0! mb-0! !mb-0" />
+      <div className="hidden mt-0! !mb-0 !p-6 !pb-[2.7rem]" />
+      <div className="hidden !pb-6 !pt-6" />
       <Navbar />
       <section className="mx-auto mt-5 max-w-7xl px-4 md:px-0">
         <BooksHero
