@@ -1883,7 +1883,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 															}`}
 															placeholderText='Select date'
 															popperPlacement="bottom-end"
-															dateFormat='yyyy-MM-dd'
+															dateFormat='MM-dd-yyyy'
 														/>
 													</div>
 													<div className='flex justify-center items-center'>
@@ -1913,7 +1913,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 															className='border-[3px] border-[#0097A7] px-2 py-1 bg-gray-200 placeholder:italic placeholder-[#FD7702] w-[230px] font-bold focus:outline-none focus:ring-2 focus:ring-[#FD7702] focus:ring-offset-0 disabled:text-secondary disabled:[-webkit-text-fill-color:var(--color-secondary)] disabled:cursor-not-allowed'
 															placeholderText='Select date'
 															popperPlacement="bottom-end"
-															dateFormat='yyyy-MM-dd'
+															dateFormat='MM-dd-yyyy'
 														/>
 													</div>
 												</div>
@@ -2559,7 +2559,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 												/>
 											</div>
 											{formData.requestedSupport.preparePhotos && (
-												<div className={`flex gap-2 items-center ml-75 ${(!isEmpty(formData.requestedSupport.refereePhone) &&
+												<div className={`flex gap-2 items-center ml-102.25 ${(!isEmpty(formData.requestedSupport.refereePhone) &&
 															!isValidUSPhone(formData.requestedSupport.refereePhone)) || (!isEmpty(formData.requestedSupport.refereeEmail) &&
 															!isValidEmail(formData.requestedSupport.refereeEmail)) ? 'mb-[35px]' : ''}`}>
 													<PhoneInput
@@ -2567,7 +2567,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 														value={formData.requestedSupport.refereePhone}
 														onChange={handleSupportFieldChange("refereePhone")}
 														label='Phone:'
-														inputClass="!w-50 placeholder:italic placeholder-[#FD7702]"
+														inputClass="!w-40 placeholder:italic placeholder-[#FD7702]"
 														disabled={!formData.requestedSupport.preparePhotos}
 														error={fieldErrors.has("refereePhone")}
 														errorMessage={
@@ -2583,7 +2583,7 @@ const Form = ({ readOnly = false, initialData = null }) => {
 														onChange={handleSupportFieldChange("refereeEmail")}
 														label='Email:'
 														type='email'
-														inputClass="!w-125 placeholder:italic placeholder-[#FD7702]"
+														inputClass="!w-110 placeholder:italic placeholder-[#FD7702]"
 														disabled={!formData.requestedSupport.preparePhotos}
 														placeholder='e.g. name@firm.com'
 														error={fieldErrors.has("refereeEmail")}
