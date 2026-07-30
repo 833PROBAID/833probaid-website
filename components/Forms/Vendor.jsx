@@ -658,13 +658,13 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
   console.log(3423424, formData)
   return (
     <div
-      className="w-full mt-7"
+      className="w-full mt-[2.5rem]"
       ref={formContainerRef}
       style={{ fontFamily: "var(--font-poppins), sans-serif" }}
       data-no-scope
     >
       {/* Zoom Controls */}
-      <div className="sticky top-3 z-50 flex justify-center mb-4 pointer-events-none">
+      <div className="sticky mb-[2.5rem] top-3 z-50 flex justify-center mb-4 pointer-events-none">
         <div
           className="pointer-events-auto flex items-center gap-1 rounded-full px-3 py-1.5"
           style={{

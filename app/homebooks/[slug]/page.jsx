@@ -204,7 +204,7 @@ export default async function HomeBookDetailPage({ params }) {
         />
       )}
       <div className="hidden mt-0! !mb-0 !p-6 !pb-[2.5rem]" />
-      <div className="hidden !pt-[2.5rem] !mb-[1.5rem] !mb-[1.2rem] !mt-[1.5rem] !mt-[2.5rem] !mt-6" />
+      <div className="hidden !pt-[2.5rem] !mb-[1.5rem] !mb-[1.2rem] !mt-[1.5rem] !mt-[2.5rem] !mb-[2.5rem] !mt-6" />
       <div className="hidden !mt-0 mb-[0.5rem] !py-[2.5rem] !mb-[-0.1em] !mb-[-0.07em]" />
       <div className="hidden !-mt-2 !items-center !mt-[-1rem] !p-[2.5rem] !w-[92%] !mb-[2rem] !mb-[0.8rem] !p-[1.5rem]"></div>
       <Navbar />
@@ -244,7 +244,7 @@ export default async function HomeBookDetailPage({ params }) {
           </div>
         )}
 
-        <section className="font-roboto container mx-auto flex max-w-7xl items-center justify-between px-4 text-xl font-black md:text-2xl lg:text-3xl mt-8 xl:text-4xl">
+        <section className="font-roboto container mx-auto flex max-w-7xl items-center justify-between px-4 text-xl font-black md:text-2xl lg:text-3xl mt-[2.5rem] !my-[1rem] xl:text-4xl">
          
           {previousHomeBook?.slug ? (
             <Link
