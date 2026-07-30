@@ -1,3 +1,11 @@
+/**
+ * Design-system stylesheet for GrapesJS-authored content.
+ *
+ * IMPORTANT: this file must stay byte-identical to public/grapesjs-preview.css.
+ * The editor canvas loads the .css file (BlogGrapesEditor.jsx canvas.styles);
+ * public pages import this module and inject it scoped (see
+ * app/homebooks/[slug]/page.jsx). Edit one, mirror it into the other.
+ */
 const publicPageStyles = `
 /* =========================================
 			   1. VARIABLES & RESET
@@ -247,7 +255,7 @@ const publicPageStyles = `
 			.category-banner {
 				padding: 1.5rem;
 				border-radius: 1rem;
-				border-left: 12px solid;
+				border-left: 4px solid;
 				transition:
 					transform 0.3s ease,
 					border-left-width 0.3s ease;
@@ -255,7 +263,7 @@ const publicPageStyles = `
 
 			.category-banner:hover {
 				transform: translateX(8px);
-				border-left-width: 16px;
+				border-left-width: 8px;
 			}
 
 			.category-banner h2 {
@@ -311,7 +319,7 @@ const publicPageStyles = `
 
 			@media (min-width: 768px) {
 				.content-block {
-					padding: 2.7rem !important;
+					padding: 2.5rem !important;
 				}
 			}
 
@@ -575,6 +583,8 @@ const publicPageStyles = `
 			.callout-filter {
 				filter: drop-shadow(4px -6px 10px rgba(0, 0, 0, 0.5))
 					drop-shadow(6px 5px 10px rgba(0, 0, 0, 0.5));
+				transform: translateZ(0);
+				will-change: filter;
 			}
 
 			.bg-primary {
@@ -787,6 +797,47 @@ const publicPageStyles = `
 			}
 
 			/* =========================================
+			   6. CONCLUSION BLOCK
+			   ========================================= */
+
+			.conclusion-block {
+				position: relative;
+				width: 100%;
+				background-color: #0097a7;
+				border-radius: 16px;
+				padding: 31px;
+				transition: transform 0.3s ease
+			}
+
+			.conclusion-block:hover {
+				transform: translateY(-5px)
+			}
+
+			.conclusion-block .conclusion-content {
+				background-color: white;
+				border-radius: 16px;
+				clip-path: polygon(0% 0%, 100% 0%, 100% 68%, 91% 100%, 0% 100%);
+				padding: 1.5rem;
+			}
+
+			.conclusion-block:hover .contact-item .text-secondary {
+				color: var(--secondary);
+			}
+			.conclusion-block:hover .contact-item .text-primary {
+				color: var(--primary);
+			}
+
+			.conclusion-block:hover .text-secondary {
+				color: var(--primary);
+				transition: color 0.3s ease;
+			}
+
+			.conclusion-block:hover .text-primary {
+				color: var(--secondary);
+				transition: color 0.3s ease;
+			}
+
+			/* =========================================
 			   6. SOLD CTA INLINE HIGHLIGHT
 			   ========================================= */
 			.sold-cta {
@@ -837,6 +888,14 @@ const publicPageStyles = `
 				transition: color 0.3s ease;
 			}
 
+			.border-left-secondary {
+				border-left-color: var(--secondary) !important;
+			}
+
+			.text-no-margin {
+				margin-bottom: 0px !important;
+			}
+
 			/* =========================================
 			   PHONE ONLY (max-width: 767px)
 			   Disable all hover animations & transitions
@@ -862,7 +921,7 @@ const publicPageStyles = `
 
 				.category-banner:hover {
 					transform: none !important;
-					border-left-width: 12px !important;
+					border-left-width: 4px !important;
 				}
 
 				.shadow-card {
