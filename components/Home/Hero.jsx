@@ -33,12 +33,12 @@ const Hero = () => {
                 className="h-auto w-full transition-transform duration-500 ease-out hover:scale-105"
               />
 
-              <div className="font-montserrat my-6 space-y-3 font-bold lg:my-8 lg:space-y-4 lg:text-xl xl:text-2xl">
+              <div className="font-montserrat my-6 !mt-[4.5rem] space-y-3 font-bold lg:my-8 lg:space-y-4 lg:text-xl xl:text-2xl">
                 <div className="flex items-center gap-3 lg:gap-4 group cursor-pointer">
                   <img
                     src="/icons/trust-icon.png"
                     alt="trust icon"
-                    className="h-auto w-10 shrink-0 transition-transform duration-500 ease-out group-hover:rotate-12 group-hover:scale-110 sm:w-12 lg:w-16"
+                    className="h-auto w-10 shrink-0 transition-transform duration-500 ease-out group-hover:rotate-12 group-hover:scale-110 sm:w-12 lg:w-25"
                   />
                   <p className="transition-transform duration-300 ease-out group-hover:translate-x-2">
                     Trusted by Attorneys
@@ -48,7 +48,7 @@ const Hero = () => {
                   <img
                     src="/icons/handshake-icon.png"
                     alt="group icon"
-                    className="h-auto w-10 shrink-0 transition-transform duration-500 ease-out group-hover:rotate-12 group-hover:scale-110 sm:w-12 lg:w-16"
+                    className="h-auto w-10 shrink-0 transition-transform duration-500 ease-out group-hover:rotate-12 group-hover:scale-110 sm:w-12 lg:w-25"
                   />
                   <p className="transition-transform duration-300 ease-out group-hover:translate-x-2">
                     Preferred by Fiduciaries
@@ -58,7 +58,7 @@ const Hero = () => {
                   <img
                     src="/icons/group-icon.png"
                     alt="group icon"
-                    className="h-auto w-10 shrink-0 transition-transform duration-500 ease-out group-hover:rotate-12 group-hover:scale-110 sm:w-12 lg:w-16"
+                    className="h-auto w-10 shrink-0 transition-transform duration-500 ease-out group-hover:rotate-12 group-hover:scale-110 sm:w-12 lg:w-25"
                   />
                   <p className="transition-transform duration-300 ease-out group-hover:translate-x-2">
                     Relied on by Families
