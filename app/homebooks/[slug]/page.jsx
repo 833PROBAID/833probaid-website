@@ -244,7 +244,7 @@ export default async function HomeBookDetailPage({ params }) {
           </div>
         )}
 
-        <section className="font-roboto container mx-auto flex max-w-7xl items-center justify-between px-4 text-xl font-black md:text-2xl lg:text-3xl mt-[2.5rem] !my-[1rem] xl:text-4xl">
+        <section className="font-roboto container mx-auto flex max-w-7xl items-center justify-between px-4 text-xl font-black md:text-2xl lg:text-3xl !mt-[2.5rem] !my-[1rem] xl:text-4xl">
          
           {previousHomeBook?.slug ? (
             <Link
