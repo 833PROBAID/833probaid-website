@@ -17,6 +17,53 @@ import {
 import HomeBookContentClient from "./HomeBookContentClient";
 import { scopeCSS } from "@/app/utils/scopeCSS";
 import { stripEmptyHtml } from "@/app/utils/stripEmptyHtml";
+import publicPageStyles from "@/components/GrapesJSEditor/publicPageStyles";
+
+/**
+ * The GrapesJS design system, scoped to the content container. The editor
+ * canvas loads the same stylesheet via canvas.styles, but those rules live in
+ * an external <link> and therefore never enter GrapesJS's CssComposer — so
+ * they are absent from the saved grapesContent.css. Injecting it here is what
+ * makes block classes (.conclusion-block, .content-block, …) render on the
+ * public page. It goes BEFORE the row's own CSS so per-row rules still win.
+ *
+ * Comments are stripped first: scopeCSS folds anything preceding a rule into
+ * its selector, so a CSS comment block would corrupt the rule that follows it
+ * (13 rules here, including .conclusion-block). GrapesJS-generated CSS has no
+ * comments, which is why scopeCSS never needed to handle this before.
+ */
+const designSystemCSS = scopeCSS(
+  publicPageStyles.replace(/\/\*[\s\S]*?\*\//g, ""),
+  ".homebook-content"
+);
+
+/**
+ * Promotes drop-shadow'd elements onto their own compositor layer.
+ *
+ * GrapesJS rewrites a component's inline style into an id rule in the saved
+ * CSS (`#iw8ddv{filter:drop-shadow(…)}`), so already-saved rows carry no class
+ * or style attribute to hook onto — the only place left to reach them is the
+ * CSS itself, on the way to the page. Newly dragged blocks get these hints
+ * from the block markup instead, so this is a no-op for them.
+ *
+ * transform is only added when the rule doesn't already set one, since
+ * translateZ(0) would otherwise clobber the author's own transform.
+ */
+function promoteDropShadowLayers(css) {
+  if (!css) return "";
+  return css.replace(/([^{}]+)\{([^{}]*)\}/g, (match, selector, declarations) => {
+    if (!/filter\s*:[^;]*drop-shadow/i.test(declarations)) return match;
+    const decls = declarations.trim().replace(/;$/, "");
+    const additions = [];
+    if (!/(^|;)\s*transform\s*:/i.test(decls)) {
+      additions.push("transform:translateZ(0)");
+    }
+    if (!/(^|;)\s*will-change\s*:/i.test(decls)) {
+      additions.push("will-change:filter");
+    }
+    return additions.length ? `${selector}{${decls};${additions.join(";")}}` : match;
+  });
+}
 
 /**
  * Deduplicate the DB/cache lookup across generateMetadata and the page
@@ -157,9 +204,9 @@ export default async function HomeBookDetailPage({ params }) {
         />
       )}
       <div className="hidden mt-0! !mb-0 !p-6 !pb-[2.5rem]" />
-      <div className="hidden !pb-6 !pt-6 !mb-[1.5rem] !mb-[1.2rem] !mt-[1.5rem] !mt-[2.5rem] !mt-6" />
-      <div className="hidden !pt-9 !py-6 !mt-0 mb-[0.5rem] !py-[2.5rem] !mb-[-0.1em] !mb-[-0.07em]" />
-      <div className="hidden !-mt-2 !p-[2.5rem] !mb-[2rem] !mb-[0.8rem] !p-[1.5rem]"></div>
+      <div className="hidden !pt-[2.5rem] !mb-[1.5rem] !mb-[1.2rem] !mt-[1.5rem] !mt-[2.5rem] !mt-6" />
+      <div className="hidden !mt-0 mb-[0.5rem] !py-[2.5rem] !mb-[-0.1em] !mb-[-0.07em]" />
+      <div className="hidden !-mt-2 !items-center !mt-[-1rem] !p-[2.5rem] !w-[92%] !mb-[2rem] !mb-[0.8rem] !p-[1.5rem]"></div>
       <Navbar />
       <section className="mx-auto mt-5 max-w-7xl px-4 md:px-0">
         <BooksHero
@@ -169,10 +216,14 @@ export default async function HomeBookDetailPage({ params }) {
         />
 
         {contentHtml ? (
-          <div className="mt-[12rem]">
+          <div className="mt-[12rem] mb-3">
+            <style dangerouslySetInnerHTML={{ __html: designSystemCSS }} />
             <style
               dangerouslySetInnerHTML={{
-                __html: scopeCSS(grapesContent.css || "", ".homebook-content"),
+                __html: scopeCSS(
+                  promoteDropShadowLayers(grapesContent.css || ""),
+                  ".homebook-content"
+                ),
               }}
             />
             <div
