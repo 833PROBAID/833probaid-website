@@ -804,6 +804,9 @@
 			.conclusion-block:hover {
 				transform: translateY(-5px)
 			}
+			.conclusion-block .conclusion-content .contact-item {
+				color: var(--black)
+			}
 
 			.conclusion-block .conclusion-content {
 				background-color: white;
@@ -812,7 +815,7 @@
 				padding: 1.5rem;
 			}
 
-			.conclusion-block:hover .contact-item .text-secondary {
+			/* .conclusion-block:hover .contact-item .text-secondary {
 				color: var(--secondary);
 			}
 			.conclusion-block:hover .contact-item .text-primary {
@@ -827,7 +830,7 @@
 			.conclusion-block:hover .text-primary {
 				color: var(--secondary);
 				transition: color 0.3s ease;
-			}
+			} */
 
 			/* =========================================
 			   6. SOLD CTA INLINE HIGHLIGHT
@@ -836,6 +839,62 @@
 				text-transform: uppercase;
 				text-decoration: underline;
 				cursor: pointer;
+			}
+
+			/* =========================================
+			   6c. CTA LINK BUTTON
+			   Source: LearnMoreButton in app/new-page/BookCard.jsx,
+			   rendered as an <a> instead of a <button>.
+			   ========================================= */
+
+			.cta-link {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.5rem;
+				height: 60px;
+				padding: 0 0.5rem 0 0.625rem;
+				border-radius: 8px;
+				background: #fe7702;
+				cursor: pointer;
+				text-decoration: none;
+				box-shadow:
+					0px 2.73px 6.64px 0px #000000ad,
+					inset 5.46px -5.46px 3.64px 0px #00000040,
+					inset -3.64px 4.55px 3.64px 0px #ffffff40,
+					-1.82px -0.91px 3.64px 0px #00000099;
+				transform: scale(1) rotate(0deg);
+				transition: transform 600ms cubic-bezier(0.34, 1.4, 0.64, 1);
+				will-change: transform;
+			}
+
+			.cta-link:hover {
+				text-decoration: none;
+				transform: scale(1.08) rotate(-3deg);
+			}
+
+			/* Mirrored cards tilt the other way on hover */
+			.cta-link.cta-link-mirrored:hover {
+				transform: scale(1.08) rotate(3deg);
+			}
+
+			.cta-link-text {
+				font-family: var(--font-montserrat);
+				font-size: 22px;
+				font-weight: 900;
+				text-transform: uppercase;
+				text-decoration: none;
+				letter-spacing: 0.025em;
+				color: #ffffff;
+				text-shadow:
+					0 4px 4.6px rgba(0, 0, 0, 0.62),
+					0 0 6px rgba(255, 255, 255, 0.25);
+			}
+
+			.cta-link-arrow {
+				width: 45px;
+				height: 45px;
+				flex-shrink: 0;
+				object-fit: contain;
 			}
 
 			.site-footer {

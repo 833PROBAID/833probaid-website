@@ -62,17 +62,12 @@ export default function BooksHero({ bannerImage, title, subtitle }) {
 					boxShadow:
 						"rgba(0, 0, 0, 0.4) 0px 8px 12px, rgba(0, 0, 0, 0.4) 0px 5px 12px 1px",
 				}}>
-				{svgMarkup ? (
-					// eslint-disable-next-line react/no-danger
 					<div className="rounded-3xl" style={{
 						boxShadow:
 						"rgba(0, 0, 0, 0.4) 0px 8px 12px, rgba(0, 0, 0, 0.4) 0px -5px 12px 1px",
 					}}>
 						<div dangerouslySetInnerHTML={{ __html: svgMarkup }} />
 					</div>
-				) : (
-					<img src={bannerImage} alt={title} className='w-full' />
-				)}
 			</div>
 		</div>
 	);
