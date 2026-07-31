@@ -303,6 +303,21 @@ const loadCustomBlocks = (editor) => {
 </section>
 `,
   });
+
+  // ===================== CTA LINK =====================
+  // Styles: .cta-link* in publicPageStyles.js / public/grapesjs-preview.css
+  // (ported from LearnMoreButton in app/new-page/BookCard.jsx).
+  // An <a>, not a <button>, so GrapesJS types it as a link component and
+  // exposes href/target/title in the settings panel.
+  blockManager.add("cta-link", {
+    label: "CTA Link",
+    media: '<i class="fa fa-hand-pointer"></i>',
+    category: "Content",
+    content: `<a class="cta-link" href="#" target="_self">
+	<span class="cta-link-text">Learn More</span>
+	<img class="cta-link-arrow" src="/arrow-right.png" alt="arrow right" />
+</a>`,
+  });
 };
 
 export default loadCustomBlocks;

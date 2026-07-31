@@ -7,7 +7,27 @@
  * automatically excluded from all scoped rules — no configuration needed.
  */
 
+/**
+ * Matches a whole @keyframes block, including its nested percentage rules.
+ * These must be passed through untouched: the scoping pass below sees the
+ * nested `0% { … }` rules as ordinary rules and would rewrite them into
+ * `.scope 0%:not([data-no-scope])`, silently killing the animation.
+ */
+const KEYFRAMES_BLOCK =
+  /@(?:-webkit-|-moz-|-o-)?keyframes\s+[^{]+\{(?:[^{}]*\{[^{}]*\})*[^{}]*\}/gi;
+
 export function scopeCSS(css, scope) {
+  if (!css) return "";
+  let out = "";
+  let cursor = 0;
+  for (const match of css.matchAll(KEYFRAMES_BLOCK)) {
+    out += scopeRules(css.slice(cursor, match.index), scope) + match[0];
+    cursor = match.index + match[0].length;
+  }
+  return out + scopeRules(css.slice(cursor), scope);
+}
+
+function scopeRules(css, scope) {
   if (!css) return "";
   return css.replace(
     /([^{}]+)\{([^{}]*)\}/g,
