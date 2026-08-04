@@ -198,14 +198,14 @@ const loadCustomBlocks = (editor) => {
 			If you are handling a probate or conservatorship case and want it managed properly from the beginning, I am ready to step in and take care of the entire real estate lane.
 		</p>
 		<div style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem;">
-			<div class="contact-item" style="display: flex; align-items: flex-start; gap: 1rem">
+			<div class="contact-item probaid-phone" style="display: flex; align-items: flex-start; gap: 1rem">
 				<img src="/svgs/phone-icon.svg" style="width: 2rem; height: 2rem; flex-shrink: 0; margin-top: 0.15rem;" />
 				<div class="body-text text-bold" style="line-height: 1.1">
 					<span class="text-secondary text-bold">(833) <span style="letter-spacing: 0.07em">PROBAID</span></span><br />
 					<span class="text-primary text-bold" style="display: block; text-align: right; letter-spacing: 0.17em;">7762243</span>
 				</div>
 			</div>
-			<div class="contact-item" style="display: flex; align-items: center; gap: 1rem">
+			<div class="contact-item probaid-email" style="display: flex; align-items: center; gap: 1rem">
 				<img src="/svgs/uiw_mail.svg" style="width: 2rem; height: 2rem; flex-shrink: 0; margin-top: 0.15rem;" />
 				<span class="body-text text-secondary text-bold">833PROBAID.com</span>
 			</div>
@@ -235,7 +235,7 @@ const loadCustomBlocks = (editor) => {
         </p>
         <div style="display: flex; flex-direction: column; gap: 1rem">
           <div
-            class="contact-item"
+            class="contact-item probaid-phone"
             style="display: flex; align-items: flex-start; gap: 1rem"
           >
             <img
@@ -263,7 +263,7 @@ const loadCustomBlocks = (editor) => {
             </div>
           </div>
           <div
-            class="contact-item"
+            class="contact-item probaid-email"
             style="display: flex; align-items: center; gap: 1rem"
           >
             <img
@@ -275,12 +275,12 @@ const loadCustomBlocks = (editor) => {
                 margin-top: 0.15rem;
               "
             />
-            <span class="body-text text-secondary text-bold"
+            <span class="body-text text-bold"
               >833PROBAID.com</span
             >
           </div>
 		  <div
-            class="contact-item"
+            class="contact-item probaid-info-email"
             style="display: flex; align-items: center; gap: 1rem"
           >
             <img
@@ -292,7 +292,7 @@ const loadCustomBlocks = (editor) => {
                 margin-top: 0.15rem;
               "
             />
-            <span class="body-text text-secondary text-bold"
+            <span class="body-text text-bold"
               >Info@833PROBAID.com</span
             >
           </div>
