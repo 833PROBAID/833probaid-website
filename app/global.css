@@ -88,6 +88,20 @@ section {
   --animate-pulse-ring: pulse-ring 1.25s var(--ease-out) infinite;
 }
 
+/* Contact rows are clickable (see components/ContactActionHandler.jsx) */
+.probaid-phone,
+.probaid-email,
+.probaid-info-email {
+  cursor: pointer;
+}
+
+.probaid-phone:focus-visible,
+.probaid-email:focus-visible,
+.probaid-info-email:focus-visible {
+  outline: 2px solid var(--color-secondary);
+  outline-offset: 4px;
+}
+
 @keyframes floatAnimation {
   0%,
   100% {

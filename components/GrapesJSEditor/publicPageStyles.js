@@ -816,12 +816,21 @@ const publicPageStyles = `
 			.conclusion-block .conclusion-content {
 				background-color: white;
 				border-radius: 16px;
-				clip-path: polygon(0% 0%, 100% 0%, 100% 68%, 91% 100%, 0% 100%);
+				clip-path: polygon(0% 0%, 100% 0%, 100% 45%, 91% 100%, 0% 100%);
 				padding: 1.5rem;
+			}
+
+			.conclusion-block .conclusion-content>div {
+				gap: 30px !important;
 			}
 
 			.conclusion-block .conclusion-content .contact-item {
 				color: var(--black)
+			}
+
+			.conclusion-block .conclusion-content .contact-item:first-child>img {
+				position: relative;
+				bottom: 5px;
 			}
 			// .conclusion-block:hover .contact-item .text-secondary {
 			// 	color: var(--secondary);
@@ -920,6 +929,20 @@ const publicPageStyles = `
 					transform 0.3s ease;
 				cursor: default;
 				width: fit-content;
+			}
+
+			/* Contact rows are clickable (see components/ContactActionHandler.jsx) */
+			.probaid-phone,
+			.probaid-email,
+			.probaid-info-email {
+				cursor: pointer;
+			}
+
+			.probaid-phone:focus-visible,
+			.probaid-email:focus-visible,
+			.probaid-info-email:focus-visible {
+				outline: 2px solid var(--secondary);
+				outline-offset: 4px;
 			}
 
 			/* Block parent content-block hover from bleeding into contact items */
