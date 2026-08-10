@@ -205,7 +205,7 @@ export default async function HomeBookDetailPage({ params }) {
       )}
       <div className="hidden mt-0! !mb-0 !p-6 !pb-[2.5rem] !py-0 !h-auto relative bottom-1.5 bottom-5" />
       <div className="hidden !pt-[2.5rem] !mb-[1.5rem] !mb-[1.2rem] !mt-[1.5rem] !mt-[2.5rem] !mt-[1.2rem] !mb-[2.5rem] !mt-6" />
-      <div className="hidden !mt-0 mb-[0.5rem] !py-[2.5rem] !mt-[4rem] !mb-[-0.1em] !mb-[-0.07em] !mb-[1rem]" />
+      <div className="hidden !mt-0 mb-[0.5rem] !pb-[2rem] !pt-[2.2rem] !py-[2.5rem] !mt-[4rem] !mb-[-0.1em] !mb-[-0.07em] !mb-[1rem]" />
       <div className="hidden !-mt-2 !items-center !mt-[-1rem] !mt-[2rem] !p-[2.5rem] !w-[92%] !mb-[2rem] !mb-[0.8rem] !p-[1.5rem] !mb-[1.25rem]"></div>
       <Navbar />
       <section className="mx-auto mt-5 max-w-7xl px-4 md:px-0">
