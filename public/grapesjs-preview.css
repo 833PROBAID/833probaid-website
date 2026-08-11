@@ -1109,8 +1109,16 @@
 				position: relative;
 			}
 
+			.\!relative {
+				position: relative !important;
+			}
+
 			.bottom-1\.5 {
 				bottom: 0.375rem; /* 6px */
+			}
+
+			.\!bottom-\[0\.6rem\] {
+				bottom: 0.6rem !important;
 			}
 
 			.bottom-5 {
@@ -1213,6 +1221,15 @@
 
 			.\!-mt-2 {
 				margin-top: -0.5rem !important;
+			}
+
+			.\!ml-16 {
+				margin-left: 64px !important;
+			}
+
+			.\!mx-\[25px\] {
+				margin-left: 25px !important;
+				margin-right: 25px !important;
 			}
 
 			.\!mt-\[-1rem\] {
