@@ -17,6 +17,7 @@ import {
 import vendorsApi from "../../app/lib/api/vendors";
 import { uploadToBlob } from "../../app/lib/blobUpload";
 import CTAButton from "../CTAButton";
+import SubmissionSuccessModal from "../SubmissionSuccessModal";
 
 const DummyYesRadio = ({ value = false }) => {
   return (
@@ -224,7 +225,7 @@ const isEmpty = (v) => !v?.toString().trim();
 const Form2 = ({ readOnly = false, initialData = null, submitPortalTarget = null }) => {
   const [submitStatus, setSubmitStatus] = useState(null);
   const [submitError, setSubmitError] = useState("");
-  const [countdown, setCountdown] = useState(0);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [fileResetKey, setFileResetKey] = useState(0);
   const [fieldErrors, setFieldErrors] = useState(new Set());
   // Fields the user has interacted with. Live validation only applies to
@@ -633,17 +634,7 @@ const Form2 = ({ readOnly = false, initialData = null, submitPortalTarget = null
         setFieldErrors(new Set());
         setTouched(new Set());
         setFileResetKey((k) => k + 1);
-        setCountdown(5);
-        const interval = setInterval(() => {
-          setCountdown((prev) => {
-            if (prev <= 1) {
-              clearInterval(interval);
-              setSubmitStatus(null);
-              return 0;
-            }
-            return prev - 1;
-          });
-        }, 1000);
+        setShowSuccessModal(true);
 
         const scrollY = window.scrollY;
 
@@ -668,13 +659,6 @@ const Form2 = ({ readOnly = false, initialData = null, submitPortalTarget = null
   // form body without affecting the zoom controls or the print layout.
   const submitSection = (
     <>
-      {submitStatus === "success" && (
-        <div className="mt-4 rounded-lg bg-green-50 border border-green-200 p-4 text-center">
-          <p className="font-semibold text-green-800">
-            Submission successful! Resetting in {countdown}s…
-          </p>
-        </div>
-      )}
       {submitStatus === "error" && (
         <div className="mt-4 rounded-lg bg-red-50 border border-red-200 p-4 text-center">
           <p className="font-semibold text-red-800">
@@ -2763,6 +2747,23 @@ const Form2 = ({ readOnly = false, initialData = null, submitPortalTarget = null
       {!submitPortalTarget && submitSection}
     </div>
     {submitPortalTarget && createPortal(submitSection, submitPortalTarget)}
+    <SubmissionSuccessModal
+      open={showSuccessModal}
+      onClose={() => {
+        setShowSuccessModal(false);
+        setSubmitStatus(null);
+      }}
+      title="Vendor Application Received"
+      paragraphs={[
+        "Your Vendor Intake Application has been securely received and entered into the 833PROBAID® Vendor Qualification Process.",
+        "Our team is reviewing your application, verifying the information and supporting documentation provided, including applicable licenses, insurance, W-9s, service capabilities, and coverage areas.",
+        "If additional information or documentation is required, we will contact you directly. Approved vendors may be added to the 833PROBAID® Vendor Network and contacted for assignments based on service area, qualifications, availability, and case needs.",
+      ]}
+      footnote={{
+        heading: "Questions about your application?",
+        text: "Please contact us at",
+      }}
+    />
     </>
   );
 };

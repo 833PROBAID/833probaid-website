@@ -18,6 +18,7 @@ import {
 import referralsApi from "../../app/lib/api/referrals";
 import { uploadToBlob } from "../../app/lib/blobUpload";
 import CTAButton from "../CTAButton";
+import SubmissionSuccessModal from "../SubmissionSuccessModal";
 
 const INITIAL_FORM_DATA = {
 	// Referring Party Info
@@ -149,7 +150,7 @@ const buildFormData = (data) => ({
 const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null }) => {
 	const [submitStatus, setSubmitStatus] = useState(null); // null | 'loading' | 'success' | 'error'
 	const [submitError, setSubmitError] = useState("");
-	const [countdown, setCountdown] = useState(0);
+	const [showSuccessModal, setShowSuccessModal] = useState(false);
 	const [fieldErrors, setFieldErrors] = useState(new Set());
 	const [_formData, setFormData] = useState(INITIAL_FORM_DATA);
 
@@ -782,17 +783,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 				setFormData(INITIAL_FORM_DATA);
 				setFieldErrors(new Set());
 				setTouched(new Set());
-				setCountdown(5);
-				const interval = setInterval(() => {
-					setCountdown((prev) => {
-						if (prev <= 1) {
-							clearInterval(interval);
-							setSubmitStatus(null);
-							return 0;
-						}
-						return prev - 1;
-					});
-				}, 1000);
+				setShowSuccessModal(true);
 			} else {
 				setSubmitStatus("error");
 				setSubmitError(result.error || "Submission failed");
@@ -863,12 +854,6 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 						icon={<i className={`fas ${submitStatus === "loading" ? 'fa-spinner fa-spin' : 'fa-paper-plane'} text-white text-xl tracking-wide [text-shadow:1px_2px_1.6px_rgba(0,0,0,0.82),0_0_6px_rgba(255,255,255,0.25)]`} />}
 						className="cursor-pointer w-max px-4 h-12 lg:h-16 mb-4 mt-5"
 					/>
-				)}
-				{submitStatus === "success" && (
-					<div className='flex items-center gap-2 bg-green-100 border border-green-400 text-green-800 font-bold px-6 py-3 rounded'>
-						<i className='fas fa-check-circle text-green-600'></i>
-						Referral submitted successfully! Resetting in {countdown}s…
-					</div>
 				)}
 				{submitStatus === "error" && (
 					<div className='flex items-center gap-2 bg-red-100 border border-red-400 text-red-800 font-bold px-6 py-3 rounded'>
@@ -3009,6 +2994,23 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 				{!submitPortalTarget && submitSection}
 			</div>
 			{submitPortalTarget && createPortal(submitSection, submitPortalTarget)}
+			<SubmissionSuccessModal
+				open={showSuccessModal}
+				onClose={() => {
+					setShowSuccessModal(false);
+					setSubmitStatus(null);
+				}}
+				title="Referral Received & File Initiated"
+				paragraphs={[
+					"Your referral has been securely received and entered into the 833PROBAID® intake workflow.",
+					"Our team is reviewing the submitted referral, evaluating the court status, property status, occupancy, and all information provided to determine the appropriate next steps in accordance with your instructions.",
+					"If additional information or documentation is required, or if direct client contact was requested, we will initiate the appropriate communication promptly.",
+				]}
+				footnote={{
+					heading: "Need immediate assistance?",
+					text: "For imminent court deadlines, overbid hearings, or urgent property security concerns, please contact us directly at",
+				}}
+			/>
 		</>
 	);
 };

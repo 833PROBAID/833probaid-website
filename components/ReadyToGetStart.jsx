@@ -118,7 +118,7 @@ const ReadyToGetStart = () => {
                 </h2> */}
                 <div>
                   <h2
-                    className={`font-anton text-center font-normal  text-5xl mb-2`}
+                    className={`font-anton text-center font-normal  text-5xl mb-5`}
                     style={{ color: "#EF6C00" }}
                   >
                     COMMAND THE OUTCOME : CALL (833) PROBAID
@@ -131,10 +131,10 @@ const ReadyToGetStart = () => {
                   </h2>
                 </div>
                 <p
-                  className={`mt-12 mb-6 text-center font-bold text-[26px] leading-[1.2] text-[#2A2A2A]`}
+                  className={`mt-8 mb-6 text-center font-bold text-[26px] leading-[1.2] text-[#2A2A2A]`}
                 >
                   <AnimatedText text="Court-supervised real estate requires a high standard of precision, compliance, and specialized expertise. Stop navigating probate, conservatorship, or trust property sales through uncertainty." />
-                  <span className="mt-8 block">
+                  <span className="mt-6 block">
                     Call{" "}
                     <span
                       style={{ color: "#0097A7" }}
