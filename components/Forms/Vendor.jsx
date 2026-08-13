@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import {
   Checkbox,
   TextInput,
@@ -214,7 +215,13 @@ const REQUIRED_RADIO_FIELDS = [
 
 const isEmpty = (v) => !v?.toString().trim();
 
-const Form2 = ({ readOnly = false, initialData = null }) => {
+/**
+ * `submitPortalTarget` lets the caller render the submit button somewhere other
+ * than directly under the form — the public home book page places it after the
+ * closing copy so the button is the last thing before the conclusion block.
+ * Omitted (dashboard, read-only views), the button stays inline as before.
+ */
+const Form2 = ({ readOnly = false, initialData = null, submitPortalTarget = null }) => {
   const [submitStatus, setSubmitStatus] = useState(null);
   const [submitError, setSubmitError] = useState("");
   const [countdown, setCountdown] = useState(0);
@@ -656,7 +663,42 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
     }
   };
   console.log(3423424, formData)
+
+  // Lives outside the zoomed form canvas, so it can be portaled away from the
+  // form body without affecting the zoom controls or the print layout.
+  const submitSection = (
+    <>
+      {submitStatus === "success" && (
+        <div className="mt-4 rounded-lg bg-green-50 border border-green-200 p-4 text-center">
+          <p className="font-semibold text-green-800">
+            Submission successful! Resetting in {countdown}s…
+          </p>
+        </div>
+      )}
+      {submitStatus === "error" && (
+        <div className="mt-4 rounded-lg bg-red-50 border border-red-200 p-4 text-center">
+          <p className="font-semibold text-red-800">
+            {submitError || "Submission failed. Please try again."}
+          </p>
+        </div>
+      )}
+      {!readOnly && (
+        <div className="flex justify-center mt-6">
+          <CTAButton
+            label={submitStatus === 'loading' ? 'Submitting…' : 'Submit'}
+            iconPosition="left"
+            onClick={handleSubmit}
+            disabled={submitStatus === "loading"}
+            icon={<i className={`fas ${submitStatus === "loading" ? 'fa-spinner fa-spin' : 'fa-paper-plane'} text-white text-xl tracking-wide [text-shadow:1px_2px_1.6px_rgba(0,0,0,0.82),0_0_6px_rgba(255,255,255,0.25)]`} />}
+            className="cursor-pointer w-max px-4 h-12 lg:h-16 mb-4 mt-5"
+          />
+        </div>
+      )}
+    </>
+  );
+
   return (
+    <>
     <div
       className="w-full mt-[2.5rem]"
       ref={formContainerRef}
@@ -2718,33 +2760,10 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
           </div>
         </div>
       </div>
-      {submitStatus === "success" && (
-        <div className="mt-4 rounded-lg bg-green-50 border border-green-200 p-4 text-center">
-          <p className="font-semibold text-green-800">
-            Submission successful! Resetting in {countdown}s…
-          </p>
-        </div>
-      )}
-      {submitStatus === "error" && (
-        <div className="mt-4 rounded-lg bg-red-50 border border-red-200 p-4 text-center">
-          <p className="font-semibold text-red-800">
-            {submitError || "Submission failed. Please try again."}
-          </p>
-        </div>
-      )}
-      {!readOnly && (
-        <div className="flex justify-center mt-6">
-          <CTAButton
-              label={submitStatus === 'loading' ? 'Submitting…' : 'Submit'} 
-              iconPosition="left"
-              onClick={handleSubmit}
-              disabled={submitStatus === "loading"}
-              icon={<i className={`fas ${submitStatus === "loading" ? 'fa-spinner fa-spin' : 'fa-paper-plane'} text-white text-xl tracking-wide [text-shadow:1px_2px_1.6px_rgba(0,0,0,0.82),0_0_6px_rgba(255,255,255,0.25)]`} />} 
-              className="cursor-pointer w-max px-4 h-12 lg:h-16 mb-4 mt-5"
-            />
-        </div>
-      )}
+      {!submitPortalTarget && submitSection}
     </div>
+    {submitPortalTarget && createPortal(submitSection, submitPortalTarget)}
+    </>
   );
 };
 

@@ -1157,3 +1157,25 @@ body {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-8px); }
 }
+
+/* ---------------------------------------------------------------
+   Inline keyword CTAs
+   Underlined "SOLD" links to /books/seller-guide.pdf and underlined
+   "FORM" links to /homebooks/833probaid-referral-intake site-wide
+   (wired up at runtime by components/CtaWordLinks.jsx).
+   Only the underline gets heavier here — text weight is untouched.
+   --------------------------------------------------------------- */
+.sold-cta,
+.sold-guide-link,
+[data-sold-guide],
+.form-cta,
+.form-cta-link,
+[data-form-cta] {
+  text-decoration-line: underline;
+  /* !important beats the inline `text-decoration: underline` shorthands that
+     come from JSX and CMS content — those reset the thickness to auto. */
+  text-decoration-thickness: max(2.5px, 0.12em) !important;
+  text-underline-offset: 0.1em;
+  text-decoration-skip-ink: none;
+  cursor: pointer;
+}

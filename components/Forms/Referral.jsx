@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {
@@ -139,7 +140,13 @@ const buildFormData = (data) => ({
 	},
 });
 
-const Form = ({ readOnly = false, initialData = null }) => {
+/**
+ * `submitPortalTarget` lets the caller render the submit button somewhere other
+ * than directly under the form — the public home book page places it after the
+ * closing copy so the button is the last thing before the conclusion block.
+ * Omitted (dashboard, read-only views), the button stays inline as before.
+ */
+const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null }) => {
 	const [submitStatus, setSubmitStatus] = useState(null); // null | 'loading' | 'success' | 'error'
 	const [submitError, setSubmitError] = useState("");
 	const [countdown, setCountdown] = useState(0);
@@ -842,7 +849,39 @@ const Form = ({ readOnly = false, initialData = null }) => {
 		setZoomLevel(1);
 	};
 
+	// Lives outside the zoomed form canvas, so it can be portaled away from the
+	// form body without affecting the zoom controls or the print layout.
+	const submitSection = (
+		<div className='max-w-full px-4'>
+			<div className='flex flex-col items-center gap-3'>
+				{!readOnly && submitStatus !== "success" && (
+					<CTAButton
+						label={submitStatus === 'loading' ? 'Submitting…' : 'Submit Referral'}
+						iconPosition="left"
+						onClick={handleSendPdfByEmail}
+						disabled={submitStatus === "loading"}
+						icon={<i className={`fas ${submitStatus === "loading" ? 'fa-spinner fa-spin' : 'fa-paper-plane'} text-white text-xl tracking-wide [text-shadow:1px_2px_1.6px_rgba(0,0,0,0.82),0_0_6px_rgba(255,255,255,0.25)]`} />}
+						className="cursor-pointer w-max px-4 h-12 lg:h-16 mb-4 mt-5"
+					/>
+				)}
+				{submitStatus === "success" && (
+					<div className='flex items-center gap-2 bg-green-100 border border-green-400 text-green-800 font-bold px-6 py-3 rounded'>
+						<i className='fas fa-check-circle text-green-600'></i>
+						Referral submitted successfully! Resetting in {countdown}s…
+					</div>
+				)}
+				{submitStatus === "error" && (
+					<div className='flex items-center gap-2 bg-red-100 border border-red-400 text-red-800 font-bold px-6 py-3 rounded'>
+						<i className='fas fa-exclamation-circle text-red-600'></i>
+						{submitError || "Submission failed. Please try again."}
+					</div>
+				)}
+			</div>
+		</div>
+	);
+
 	return (
+		<>
 		<div
 			className='w-full'
 			ref={formContainerRef}
@@ -2967,33 +3006,10 @@ const Form = ({ readOnly = false, initialData = null }) => {
 					</div>
 				</div>
 			</div>
-			<div className='max-w-full overflow-x-hidden px-4'>
-				<div className='flex flex-col items-center mt-6 gap-3'>
-					{!readOnly && submitStatus !== "success" && (
-						<CTAButton 
-							label={submitStatus === 'loading' ? 'Submitting…' : 'Submit Referral'} 
-							iconPosition="left"
-							onClick={handleSendPdfByEmail}
-							disabled={submitStatus === "loading"}
-							icon={<i className={`fas ${submitStatus === "loading" ? 'fa-spinner fa-spin' : 'fa-paper-plane'} text-white text-xl tracking-wide [text-shadow:1px_2px_1.6px_rgba(0,0,0,0.82),0_0_6px_rgba(255,255,255,0.25)]`} />} 
-							className="cursor-pointer w-max px-4 h-12 lg:h-16 mb-4 mt-5"
-						/>
-					)}
-					{submitStatus === "success" && (
-						<div className='flex items-center gap-2 bg-green-100 border border-green-400 text-green-800 font-bold px-6 py-3 rounded'>
-							<i className='fas fa-check-circle text-green-600'></i>
-							Referral submitted successfully! Resetting in {countdown}s…
-						</div>
-					)}
-					{submitStatus === "error" && (
-						<div className='flex items-center gap-2 bg-red-100 border border-red-400 text-red-800 font-bold px-6 py-3 rounded'>
-							<i className='fas fa-exclamation-circle text-red-600'></i>
-							{submitError || "Submission failed. Please try again."}
-						</div>
-					)}
-				</div>
+				{!submitPortalTarget && submitSection}
 			</div>
-		</div>
+			{submitPortalTarget && createPortal(submitSection, submitPortalTarget)}
+		</>
 	);
 };
 

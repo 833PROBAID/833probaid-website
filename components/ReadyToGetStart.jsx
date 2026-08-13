@@ -19,8 +19,8 @@ const ReadyToGetStart = () => {
     <div className="w-full">
       <div
         className="bg-secondary hidden md:grid rounded-xl grid-cols-1 gap-1
-                  p-4 shadow-[0px_0px_20px_0px_rgba(0,0,0,0.2)] justify-center
-                  items-center sm:gap-6 sm:pl-5 sm:pt-[24px] sm:pb-[20px] sm:pr-5
+                  p-4 pt-11 shadow-[0px_0px_20px_0px_rgba(0,0,0,0.2)] justify-center
+                  items-center sm:gap-6 sm:pl-5 sm:pb-[20px] sm:pr-5
                   sm:shadow-[0px_0px_20px_0px_rgba(0,0,0,0.4)]
                   md:grid-cols-6 md:shadow-[0px_0px_20px_0px_rgba(0,0,0,0.6)]
                   lg:shadow-[0px_0px_20px_0px_rgba(0,0,0,0.75)]
@@ -32,8 +32,8 @@ const ReadyToGetStart = () => {
 					<svg
 						className='absolute inset-0 h-full w-full' */}
           <svg
-            className={`absolute inset-0 h-full w-full${isSafariBrowser ? " transform-gpu backface-hidden" : ""}`}
-            viewBox="0 0 1130 674"
+            className={`absolute inset-0 h-full overflow-visible w-full${isSafariBrowser ? " transform-gpu backface-hidden" : ""}`}
+            viewBox="0 70 1130 614"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
             preserveAspectRatio="xMidYMid meet"
@@ -44,6 +44,7 @@ const ReadyToGetStart = () => {
                   ? "url(#filter0_s_167_4)"
                   : "url(#filter0_ddii_167_4)"
               }
+              transform="scale(1 1.08)"
             >
               <path
                 d="M17.8999 29.2998C17.8999 21.5678 24.1679 15.2998 31.8999 15.2998H1097.9C1105.63 15.2998 1111.9 21.5678 1111.9 29.2998V639.3C1111.9 647.032 1105.63 653.3 1097.9 653.3H31.8999C24.1679 653.3 17.8999 647.032 17.8999 639.3V29.2998Z"
@@ -54,20 +55,26 @@ const ReadyToGetStart = () => {
                 stroke="#838383"
               />
             </g>
-            <g filter="url(#filter1_d_167_4)">
+            <g
+              filter="url(#filter1_d_167_4)"
+              transform="scale(1 1.1)"
+            >
               <rect
                 x="67.8999"
-                y="66.2998"
+                y="62.2998"
                 width="994"
                 height="534"
                 rx="15"
                 fill="white"
               />
             </g>
-            <g filter="url(#filter2_d_167_4)">
+            <g
+              filter="url(#filter2_d_167_4)"
+              transform="scale(1 1.1)"
+            >
               <rect
                 x="67.8999"
-                y="66.2998"
+                y="62.2998"
                 width="994"
                 height="536"
                 rx="15"
@@ -89,7 +96,7 @@ const ReadyToGetStart = () => {
             <foreignObject x="90" y="60" width="930" height="460">
               <div
                 xmlns="http://www.w3.org/1999/xhtml"
-                className="flex h-full flex-col items-center justify-start px-3 font-montserrat font-semibold pt-10"
+                className="flex h-full flex-col items-center justify-start px-3 font-montserrat font-semibold pt-12 2xl:pt-20"
               >
                 {/* <h2
                   className={`font-anton text-center font-normal ${headingSizeClass}`}
@@ -109,23 +116,25 @@ const ReadyToGetStart = () => {
                     animate={true}
                   />
                 </h2> */}
-                <h2
-                  className={`font-anton text-center font-normal  text-5xl mb-2`}
-                  style={{ color: "#EF6C00" }}
-                >
-                  COMMAND THE OUTCOME : CALL (833) PROBAID
-                </h2>
-                <h2
-                  className={`font-anton text-center font-normal  text-5xl`}
-                  style={{ color: "#0097A7" }}
-                >
-                  Stop Guessing. Start Executing.
-                </h2>
+                <div>
+                  <h2
+                    className={`font-anton text-center font-normal  text-5xl mb-2`}
+                    style={{ color: "#EF6C00" }}
+                  >
+                    COMMAND THE OUTCOME : CALL (833) PROBAID
+                  </h2>
+                  <h2
+                    className={`font-anton text-center font-normal  text-5xl`}
+                    style={{ color: "#0097A7" }}
+                  >
+                    Stop Guessing. Start Executing.
+                  </h2>
+                </div>
                 <p
-                  className={`my-6 text-center font-bold text-[26px] leading-[1.2] text-[#2A2A2A]`}
+                  className={`mt-12 mb-6 text-center font-bold text-[26px] leading-[1.2] text-[#2A2A2A]`}
                 >
                   <AnimatedText text="Court-supervised real estate requires a high standard of precision, compliance, and specialized expertise. Stop navigating probate, conservatorship, or trust property sales through uncertainty." />
-                  <span className="mt-5 block">
+                  <span className="mt-8 block">
                     Call{" "}
                     <span
                       style={{ color: "#0097A7" }}
@@ -143,6 +152,7 @@ const ReadyToGetStart = () => {
                     <AnimatedText text="fill out the " />
                     <Link
                       href="/homebooks/833probaid-referral-intake"
+                      className="form-cta"
                       style={{
                         color: "#0097A7",
                         textDecoration: "underline",
@@ -152,7 +162,7 @@ const ReadyToGetStart = () => {
                         <AnimatedText text="FORM" />
                       </span>
                     </Link>{" "}
-                    <AnimatedText text=" for a Strategic Consultation. We eliminate the red tape, protect the estate’s equity, and manage the transaction to a clean, court-approved closing." />
+                    <AnimatedText text=" for a Strategic Consultation. We navigate the red tape, protect the estate’s equity, and manage the transaction through a clean, compliant closing." />
                   </span>
                 </p>
               </div>
@@ -522,7 +532,7 @@ const ReadyToGetStart = () => {
               </linearGradient>
             </defs>
           </svg>
-          <div className="absolute left-[24.12%] top-[71.29%] w-[26.97%] h-[12.84%]">
+          <div className="absolute left-[24.12%] bottom-16 2xl:bottom-20 w-[26.97%] h-[12.84%]">
             <CTAButton
               label="Learn More"
               onClick={() => router.push("/homebooks/contact-us")}
@@ -531,7 +541,7 @@ const ReadyToGetStart = () => {
               iconClassName="w-7 lg:w-9 xl:w-10 h-7 lg:h-9 xl:h-10"
             />
           </div>
-          <div className="absolute left-[53.33%] top-[71.29%] w-[26.97%] h-[12.84%]">
+          <div className="absolute left-[53.33%] bottom-16 2xl:bottom-20 w-[26.97%] h-[12.84%]">
             <CTAButton
               label="Form"
               onClick={() => router.push("/homebooks/833probaid-referral-intake")}
@@ -543,7 +553,7 @@ const ReadyToGetStart = () => {
             />
           </div>
         </div>
-        <div className="w-[97%] h-full md:col-span-2 hidden md:flex">
+        <div className="w-full h-full md:col-span-2 hidden md:flex relative -top-2.5 scale-y-[1.03]">
           <img
             src="/images/qr-scan.svg"
             className="w-full h-auto transition-transform duration-500 ease-out cursor-pointer"
@@ -626,9 +636,10 @@ const ReadyToGetStart = () => {
                   Stop Guessing. Start Executing.
                 </h2>
                 <p
-                  className={`my-4 text-center text-[26px] leading-[1.2] text-[#2A2A2A]`}
+                  className={`my-10 text-center text-[26px] leading-[1.2] text-[#2A2A2A]`}
                 >
                   <AnimatedText text="Court-supervised real estate requires a high standard of precision, compliance, and specialized expertise. Stop navigating probate, conservatorship, or trust property sales through uncertainty." />
+                  <br />
                   <br />
                   Call{" "}
                   <span style={{ color: "#0097A7" }} className="font-semibold">
@@ -641,6 +652,7 @@ const ReadyToGetStart = () => {
                   <AnimatedText text="fill out the " />
                   <Link
                     href="/homebooks/833probaid-referral-intake"
+                    className="form-cta"
                     style={{
                       color: "#0097A7",
                       textDecoration: "underline",
@@ -650,7 +662,7 @@ const ReadyToGetStart = () => {
                       <AnimatedText text="FORM" />
                     </span>
                   </Link>{" "}
-                  <AnimatedText text=" for a Strategic Consultation. We eliminate the red tape, protect the estate’s equity, and manage the transaction to a clean, court-approved closing." />
+                  <AnimatedText text=" for a Strategic Consultation. We navigate the red tape, protect the estate’s equity, and manage the transaction through a clean, compliant closing." />
                 </p>
               </div>
             </foreignObject>

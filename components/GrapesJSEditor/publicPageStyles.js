@@ -850,11 +850,16 @@ const publicPageStyles = `
 			// }
 
 			/* =========================================
-			   6. SOLD CTA INLINE HIGHLIGHT
+			   6. INLINE CTA HIGHLIGHT (SOLD / FORM)
 			   ========================================= */
-			.sold-cta {
+			.sold-cta,
+			.form-cta {
 				text-transform: uppercase;
-				text-decoration: underline;
+				text-decoration-line: underline;
+				/* Heavier rule only — the text weight stays as authored. */
+				text-decoration-thickness: max(2.5px, 0.12em);
+				text-underline-offset: 0.1em;
+				text-decoration-skip-ink: none;
 				cursor: pointer;
 			}
 

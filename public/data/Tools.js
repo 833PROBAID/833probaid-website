@@ -1,19 +1,19 @@
 export const trustCardData = [
     {
         serial: 1,
-        text: "As we conclude this guide on navigating probate, trust, or conservatorship real estate sales, we want to extend our heartfelt gratitude to you. Dealing with the loss of a loved one and managing their estate through probate can be emotionally challenging and overwhelming. We understand the weight of the responsibility you carry during this time, and we commend your strength and resilience.",
+        text: "Probate, trust, and conservatorship real estate leaves zero room for trial and error. The property, the legal requirements, the court timelines, and the financial decisions all carry significant consequences. When the burden of that responsibility is placed in your hands—whether as an attorney, fiduciary, or executor—who you trust to manage the real estate dictates how smoothly the entire administration moves forward.",
     },
     {
         serial: 2,
-        text: "Navigating the probate process requires patience, diligence, and a compassionate approach, and we're honored to have been a part of your journey. Whether you're a seller, buyer, or involved in any capacity in a probate sale, we appreciate the trust you've placed in us to provide guidance and support.",
+        text: "That trust isn't built on promises; it's earned through execution. It's built on immediate communication, tight documentation, no missed details, and resolving compliance issues before they jeopardize a court date or delay closing. It's about keeping every moving piece aligned so the estate is protected from start to finish.",
     },
     {
         serial: 3,
-        text: "As we conclude this guide on navigating probate, trust, or conservatorship real estate sales, we want to extend our heartfelt gratitude to you. Dealing with the loss of a loved one and managing their estate through probate can be emotionally challenging and overwhelming. We understand the weight of the responsibility you carry during this time, and we commend your strength and resilience.",
+        text: "What you've seen across this platform isn't just another real estate service—it represents a higher standard for how court-supervised real estate should be managed. We engineered 833PROBAID® to deliver the structured, high-level infrastructure that court-supervised real estate demands and estate representatives deserve.",
     },
     {
         serial: 4,
-        text: "Navigating the probate process requires patience, diligence, and a compassionate approach, and we're honored to have been a part of your journey. Whether you're a seller, buyer, or involved in any capacity in a probate sale, we appreciate the trust you've placed in us to provide guidance and support.",
+        text: "A court-supervised sale isn't a weekend marketing campaign—it's an active legal file. When property disposition demands procedural accuracy, disciplined execution, and unwavering attention to detail, you don't look for a salesperson. You deploy a system. Remember the name. Remember the number.",
     },
 ];
 export const toolsCardData = [
