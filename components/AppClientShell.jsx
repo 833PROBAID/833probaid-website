@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import dynamic from "next/dynamic";
 import { AuthProvider } from "../contexts/AuthContext";
 import ContactActionHandler from "./ContactActionHandler";
+import CtaWordLinks from "./CtaWordLinks";
 
 const AIChatbot = dynamic(() => import("./AIChatbot"), {
 	ssr: false,
@@ -16,6 +17,7 @@ export default function AppClientShell({ children }) {
 	return (
 		<AuthProvider>
 			<ContactActionHandler />
+			{!isDashboard && <CtaWordLinks />}
 			{children}
 			{!isDashboard && <AIChatbot />}
 		</AuthProvider>

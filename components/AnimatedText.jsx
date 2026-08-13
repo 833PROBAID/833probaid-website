@@ -1,12 +1,13 @@
 "use client";
 
-const supStyle = { verticalAlign: "super", fontSize: "0.7em", lineHeight: "1" };
+const supStyle = { verticalAlign: "super", fontSize: "0.7em", lineHeight: "1", position: "relative" };
 
 export default function AnimatedText({
   text,
   className = "",
   as: Component = "span",
   animate = false,
+  top = 0,
   ...props
 }) {
   if (!animate) {
@@ -17,7 +18,7 @@ export default function AnimatedText({
               ? [part]
               : [
                   ...acc,
-                  <span key={i} style={supStyle}>
+                  <span key={i} style={{...supStyle, top}}>
                     ®
                   </span>,
                   part,
@@ -40,7 +41,7 @@ export default function AnimatedText({
       return (
         <>
           {parts[0]}
-          <span style={supStyle}>®</span>
+          <span style={{...supStyle, top}}>®</span>
           {parts[1]}
         </>
       );

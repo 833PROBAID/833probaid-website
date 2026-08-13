@@ -195,7 +195,7 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
                     href="/books/seller-guide.pdf"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-primary underline font-extrabold cursor-pointer transition-transform duration-300 inline-block hover:scale-110 hover:-translate-y-1"
+                    className="text-primary underline sold-guide-link font-extrabold cursor-pointer transition-transform duration-300 inline-block hover:scale-110 hover:-translate-y-1"
                   >
                     SOLD
                   </Link>{" "}

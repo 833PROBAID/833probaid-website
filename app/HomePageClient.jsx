@@ -20,7 +20,7 @@ const TrustCard = dynamic(() => import("../components/TrustCard"));
 const ReadyToGetStart = dynamic(() => import("@/components/ReadyToGetStart"));
 
 export default function HomePageClient({ initialHomeCardData = [] }) {
-  const isMobile = useIsMobile(); 
+  const isMobile = useIsMobile();
   const homeCardData = Array.isArray(initialHomeCardData)
     ? initialHomeCardData
     : [];
@@ -42,6 +42,7 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
               text="833PROBAID® Runs It"
               className="text-secondary"
               animate={true}
+              top="-6px"
             />
           </h1>
           <div className="mt-4 md:mt-6 lg:mt-8 xl:mt-10">
@@ -109,7 +110,7 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
                 animate={false}
               />
               <AnimatedText
-                text="for one reason — consistency that outperforms the industry. Files stay clean. Communication stays tight. Deadlines are honored. Documentation is complete. And every case moves forward with a level of organization most agents can't replicate, don't understand, and wouldn't know how to implement even if they tried. This is disciplined execution in its purest form — the standard every court-supervised sale should have, but almost none do."
+                text="for one reason — consistency that outperforms the industry. Files stay clean. Communication stays tight. Deadlines are honored. Documentation is complete. And every case moves forward through a level of organization most agents simply aren't equipped to deliver. This is disciplined execution in its purest form — the standard every court-supervised sale should have, but almost none do."
                 animate={false}
               />
             </p>
@@ -130,9 +131,11 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
                   priority={true}
                 />
               ))}
-          </section>
+            </section>
           )}
-          <BookCardGrid cards={isMobile ? homeCardData : homeCardData.slice(1)} />
+          <BookCardGrid
+            cards={isMobile ? homeCardData : homeCardData.slice(1)}
+          />
 
           {/* Desktop: Always show last big card */}
           {/* <div className="mt-4 hidden text-white sm:mt-10 md:mt-14 sm:block">
@@ -167,8 +170,8 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
               height={1000}
               sizes="(max-width: 768px) 100vw, 50vw"
             />
-            <div>
-              <h1 className="font-anton text-center text-2xl md:text-3xl lg:text-4xl xl:text-[55px] flex flex-col justify-center items-center gap-1 sm:gap-3">
+            <div className="flex flex-col justify-center">
+              <h1 className="font-anton text-center text-2xl leading-[1.08] md:text-3xl lg:text-4xl xl:text-[46px] flex flex-col justify-center items-center gap-1 sm:gap-2">
                 <AnimatedText
                   text="Selling a Probate, Trust, Or"
                   className="text-header"
@@ -183,32 +186,29 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
                 />
               </h1>
 
-              <h4 className="font-montserrat text-primary mt-4 text-center text-lg font-extrabold xl:text-3xl">
+              <h4 className="font-montserrat text-primary mt-3 text-center text-lg leading-snug font-extrabold lg:text-xl xl:text-2xl">
                 <AnimatedText
-                  text="We Handle It ALL—Fast & Easy."
+                  text="We Handle the Sale—From Authority to Closing."
                   animate={false}
                 />
               </h4>
               <div className="mt-3">
-                <p className="font-montserrat text-center text-[15.8px] md:text-xl lg:text-2xl">
+                <p className="font-montserrat text-center text-[15.8px] leading-relaxed text-pretty md:text-[15px] lg:text-base xl:text-[17px]">
                   <AnimatedText
-                    text="Whether you're navigating probate, managing a trust, or dealing with conservatorship property, we understand that you've got a lot on your plate. Let us help you get your property"
+                    text="Whether you're administering a probate, managing a trust, or handling a conservatorship property, we understand that you already have enough on your plate. Once authority is established, "
                     animate={false}
                   />{" "}
-                  <Link
-                    href="/books/seller-guide.pdf"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-primary underline font-extrabold cursor-pointer transition-transform duration-300 inline-block hover:scale-110 hover:-translate-y-1"
-                  >
-                    SOLD
-                  </Link>{" "}
                   <AnimatedText
-                    text="quickly and at the best price. Whether you need cash fast, or you want to get top dollar with a traditional sale, we've got you covered."
+                    text=" 833PROBAID® "
+                    className="text-primary font-extrabold"
+                    animate={false}
+                  />
+                  <AnimatedText
+                    text=" takes control of the real estate sale—from property preparation and pricing to marketing, negotiations, court requirements when applicable, and closing. Whether the estate needs a faster cash solution or the property should be positioned for maximum market value, we'll help you choose and execute the strategy that best serves the estate. One property. One controlled process. One less thing for you to manage."
                     animate={false}
                   />
                 </p>
-                <h4 className="font-montserrat text-primary text-center text-lg font-extrabold xl:text-3xl mt-4">
+                <h4 className="font-montserrat text-primary text-center text-lg font-extrabold tracking-wide lg:text-xl xl:text-2xl mt-4">
                   <AnimatedText text="Fast" />
                   <span className="text-secondary">.</span>{" "}
                   <AnimatedText text="Fair" />
@@ -228,18 +228,17 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
         <section
           className={`${sectionContainerClass} py-10 md:py-12 lg:py-14 xl:py-15`}
         >
-          <h1 className="font-anton text-center text-2xl md:text-3xl lg:text-4xl xl:text-6xl flex flex-col sm:flex-row justify-center items-center gap-1 sm:gap-3">
-            <AnimatedText text="Your Probate" as="div" animate={true} />
+          <h1 className="font-anton text-center text-2xl md:text-3xl lg:text-4xl xl:text-6xl">
+            <AnimatedText text="Probate Risk. " animate={true} />
             <AnimatedText
-              text="Real Estate Tools"
+              text="Calculated Before It Becomes a Problem."
               className="text-secondary"
-              as="div"
               animate={true}
             />
           </h1>
           <div className="my-6">
             <p className="font-montserrat text-center font-medium text-[15.8px] md:text-xl lg:text-2xl">
-              <AnimatedText text="Use these free tools to help navigate the probate process with confidence. From calculating overbids to assessing risks, get the insights you need." />
+              <AnimatedText text="Court-supervised sales leave little room for surprises. These tools expose risk, calculate critical requirements, and test readiness before problems reach the property, the transaction, or the court." />
             </p>
           </div>
           <div className="grid grid-cols-2 gap-4 sm:gap-8 sm:grid-cols-2 lg:grid-cols-4 mt-10">
@@ -273,12 +272,31 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
             </h1>
           </div>
           <div className="space-y-7 sm:space-y-10">
-            {trustCardData.map((item) => {
+            {trustCardData.map((item, index) => {
               return (
                 <TrustCard
                   key={item.serial}
                   text={item.text}
                   serial={item.serial}
+                  addition={
+                    index === 3 ? (
+                      <>
+                        <br/>
+                        <AnimatedText
+                          text="If The Court Touches It, "
+                          animate={true}
+                        />
+                        <AnimatedText
+                          text="833PROBAID®"
+                          className="text-primary"
+                          animate={true}
+                        />
+                        <AnimatedText text=" Runs It." animate={true} />
+                      </>
+                    ) : (
+                      <></>
+                    )
+                  }
                 />
               );
             })}

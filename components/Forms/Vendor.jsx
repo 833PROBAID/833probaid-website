@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import {
   Checkbox,
   TextInput,
@@ -16,6 +17,7 @@ import {
 import vendorsApi from "../../app/lib/api/vendors";
 import { uploadToBlob } from "../../app/lib/blobUpload";
 import CTAButton from "../CTAButton";
+import SubmissionSuccessModal from "../SubmissionSuccessModal";
 
 const DummyYesRadio = ({ value = false }) => {
   return (
@@ -214,10 +216,16 @@ const REQUIRED_RADIO_FIELDS = [
 
 const isEmpty = (v) => !v?.toString().trim();
 
-const Form2 = ({ readOnly = false, initialData = null }) => {
+/**
+ * `submitPortalTarget` lets the caller render the submit button somewhere other
+ * than directly under the form — the public home book page places it after the
+ * closing copy so the button is the last thing before the conclusion block.
+ * Omitted (dashboard, read-only views), the button stays inline as before.
+ */
+const Form2 = ({ readOnly = false, initialData = null, submitPortalTarget = null }) => {
   const [submitStatus, setSubmitStatus] = useState(null);
   const [submitError, setSubmitError] = useState("");
-  const [countdown, setCountdown] = useState(0);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [fileResetKey, setFileResetKey] = useState(0);
   const [fieldErrors, setFieldErrors] = useState(new Set());
   // Fields the user has interacted with. Live validation only applies to
@@ -626,17 +634,7 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
         setFieldErrors(new Set());
         setTouched(new Set());
         setFileResetKey((k) => k + 1);
-        setCountdown(5);
-        const interval = setInterval(() => {
-          setCountdown((prev) => {
-            if (prev <= 1) {
-              clearInterval(interval);
-              setSubmitStatus(null);
-              return 0;
-            }
-            return prev - 1;
-          });
-        }, 1000);
+        setShowSuccessModal(true);
 
         const scrollY = window.scrollY;
 
@@ -656,7 +654,35 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
     }
   };
   console.log(3423424, formData)
+
+  // Lives outside the zoomed form canvas, so it can be portaled away from the
+  // form body without affecting the zoom controls or the print layout.
+  const submitSection = (
+    <>
+      {submitStatus === "error" && (
+        <div className="mt-4 rounded-lg bg-red-50 border border-red-200 p-4 text-center">
+          <p className="font-semibold text-red-800">
+            {submitError || "Submission failed. Please try again."}
+          </p>
+        </div>
+      )}
+      {!readOnly && (
+        <div className="flex justify-center mt-6">
+          <CTAButton
+            label={submitStatus === 'loading' ? 'Submitting…' : 'Submit'}
+            iconPosition="left"
+            onClick={handleSubmit}
+            disabled={submitStatus === "loading"}
+            icon={<i className={`fas ${submitStatus === "loading" ? 'fa-spinner fa-spin' : 'fa-paper-plane'} text-white text-xl tracking-wide [text-shadow:1px_2px_1.6px_rgba(0,0,0,0.82),0_0_6px_rgba(255,255,255,0.25)]`} />}
+            className="cursor-pointer w-max px-4 h-12 lg:h-16 mb-4 mt-5"
+          />
+        </div>
+      )}
+    </>
+  );
+
   return (
+    <>
     <div
       className="w-full mt-[2.5rem]"
       ref={formContainerRef}
@@ -2718,33 +2744,27 @@ const Form2 = ({ readOnly = false, initialData = null }) => {
           </div>
         </div>
       </div>
-      {submitStatus === "success" && (
-        <div className="mt-4 rounded-lg bg-green-50 border border-green-200 p-4 text-center">
-          <p className="font-semibold text-green-800">
-            Submission successful! Resetting in {countdown}s…
-          </p>
-        </div>
-      )}
-      {submitStatus === "error" && (
-        <div className="mt-4 rounded-lg bg-red-50 border border-red-200 p-4 text-center">
-          <p className="font-semibold text-red-800">
-            {submitError || "Submission failed. Please try again."}
-          </p>
-        </div>
-      )}
-      {!readOnly && (
-        <div className="flex justify-center mt-6">
-          <CTAButton
-              label={submitStatus === 'loading' ? 'Submitting…' : 'Submit'} 
-              iconPosition="left"
-              onClick={handleSubmit}
-              disabled={submitStatus === "loading"}
-              icon={<i className={`fas ${submitStatus === "loading" ? 'fa-spinner fa-spin' : 'fa-paper-plane'} text-white text-xl tracking-wide [text-shadow:1px_2px_1.6px_rgba(0,0,0,0.82),0_0_6px_rgba(255,255,255,0.25)]`} />} 
-              className="cursor-pointer w-max px-4 h-12 lg:h-16 mb-4 mt-5"
-            />
-        </div>
-      )}
+      {!submitPortalTarget && submitSection}
     </div>
+    {submitPortalTarget && createPortal(submitSection, submitPortalTarget)}
+    <SubmissionSuccessModal
+      open={showSuccessModal}
+      onClose={() => {
+        setShowSuccessModal(false);
+        setSubmitStatus(null);
+      }}
+      title="Vendor Application Received"
+      paragraphs={[
+        "Your Vendor Intake Application has been securely received and entered into the 833PROBAID® Vendor Qualification Process.",
+        "Our team is reviewing your application, verifying the information and supporting documentation provided, including applicable licenses, insurance, W-9s, service capabilities, and coverage areas.",
+        "If additional information or documentation is required, we will contact you directly. Approved vendors may be added to the 833PROBAID® Vendor Network and contacted for assignments based on service area, qualifications, availability, and case needs.",
+      ]}
+      footnote={{
+        heading: "Questions about your application?",
+        text: "Please contact us at",
+      }}
+    />
+    </>
   );
 };
 
