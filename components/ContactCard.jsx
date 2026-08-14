@@ -9,6 +9,7 @@ export default function ContactCard() {
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           style={{ transform: "translate3d(0,0,0)", willChange: "transform", isolation: "isolate" }}
+          className="relative -top-0.75 -left-1.25"
         >
           <g filter="url(#filter0_dii_273_12)">
             <rect x="14.6001" y="13.5996" width="541" height="556" rx="22" fill="#0097A7" />

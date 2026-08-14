@@ -1191,4 +1191,9 @@ body {
   color: var(--color-primary) !important;
   text-transform: uppercase;
   text-decoration-color: currentColor;
+  transition: color 0.3s ease;
+}
+
+.shadow-card:hover .now-cta {
+  color: var(--color-secondary) !important;
 }

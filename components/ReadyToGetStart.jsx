@@ -96,7 +96,7 @@ const ReadyToGetStart = () => {
             <foreignObject x="90" y="60" width="930" height="460">
               <div
                 xmlns="http://www.w3.org/1999/xhtml"
-                className="flex h-full flex-col items-center justify-start px-3 font-montserrat font-semibold pt-12 2xl:pt-20"
+                className="flex h-full flex-col items-center justify-start px-3 font-montserrat font-semibold pt-12"
               >
                 {/* <h2
                   className={`font-anton text-center font-normal ${headingSizeClass}`}
@@ -144,10 +144,13 @@ const ReadyToGetStart = () => {
                     </span>{" "}
                     <span
                       style={{ color: "#FE7702" }}
-                      className="font-bold"
+                      className="font-bold probaid-phone"
                     >
-                      <AnimatedText text="(833) 776-2243 — NOW " />
-                    </span>{" "}
+                      <AnimatedText text="(833) 776-2243" />
+                      <AnimatedText text=" — " className="text-black" />
+                      <AnimatedText text="NOW" className="underline decoration-[max(2.5px,0.12em)]! underline-offset-[0.1em] [text-decoration-skip-ink:none" />
+                      <AnimatedText text=" — " className="text-black" />
+                      </span>{" "}
                     <AnimatedText text="or" />{" "}
                     <AnimatedText text="fill out the " />
                     <Link

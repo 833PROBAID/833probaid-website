@@ -42,7 +42,8 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
               text="833PROBAID® Runs It"
               className="text-secondary"
               animate={true}
-              top="-6px"
+              top="-11px"
+              fontSize="0.7em"
             />
           </h1>
           <div className="mt-4 md:mt-6 lg:mt-8 xl:mt-10">
@@ -51,6 +52,7 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
                 className="text-primary font-extrabold"
                 text="833PROBAID® "
                 animate={false}
+                top="2px"
               />
               <AnimatedText
                 text="runs a proprietary, court-aligned system built exclusively for probate, trust, and conservatorship real estate. Every case is pushed through a controlled workflow engineered to eliminate confusion, force clarity, and keep the entire process in lockstep with the court — from the first intake call to the final recording. No templates. No shortcuts. No guesswork. Just structure, precision, and full alignment with the way court-supervised real estate is meant to run."
@@ -173,7 +175,7 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
             <div className="flex flex-col justify-center">
               <h1 className="font-anton text-center text-2xl leading-[1.08] md:text-3xl lg:text-4xl xl:text-[46px] flex flex-col justify-center items-center gap-1 sm:gap-2">
                 <AnimatedText
-                  text="Selling a Probate, Trust, Or"
+                  text="Selling a Probate, Trust, or"
                   className="text-header"
                   as="div"
                   animate={true}
@@ -193,7 +195,7 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
                 />
               </h4>
               <div className="mt-3">
-                <p className="font-montserrat text-center text-[15.8px] leading-relaxed text-pretty md:text-[15px] lg:text-base xl:text-[17px]">
+                <p className="font-montserrat text-center font-medium leading-relaxed text-pretty text-[15.8px] md:text-xl lg:text-2xl">
                   <AnimatedText
                     text="Whether you're administering a probate, managing a trust, or handling a conservatorship property, we understand that you already have enough on your plate. Once authority is established, "
                     animate={false}
@@ -231,7 +233,7 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
           <h1 className="font-anton text-center text-2xl md:text-3xl lg:text-4xl xl:text-6xl">
             <AnimatedText text="Probate Risk. " animate={true} />
             <AnimatedText
-              text="Calculated Before It Becomes a Problem."
+              text="Identify It Before It Becomes a Problem."
               className="text-secondary"
               animate={true}
             />
@@ -281,17 +283,34 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
                   addition={
                     index === 3 ? (
                       <>
-                        <br/>
+                        <br />
                         <AnimatedText
                           text="If The Court Touches It, "
                           animate={true}
+                          className="text-secondary"
                         />
                         <AnimatedText
                           text="833PROBAID®"
                           className="text-primary"
                           animate={true}
                         />
-                        <AnimatedText text=" Runs It." animate={true} />
+                        <AnimatedText
+                          text=" Runs It."
+                          animate={true}
+                          className="text-secondary"
+                        />
+                      </>
+                    ) : index === 2 ? (
+                      <>
+                        <AnimatedText
+                          text="833PROBAID®"
+                          className="text-primary"
+                          animate={true}
+                        />
+                        <AnimatedText
+                          text=" to deliver the structured, high-level infrastructure that court-supervised real estate demands and estate representatives deserve."
+                          animate={true}
+                        />
                       </>
                     ) : (
                       <></>

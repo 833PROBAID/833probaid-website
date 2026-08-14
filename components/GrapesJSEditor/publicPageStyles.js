@@ -868,6 +868,11 @@ const publicPageStyles = `
 			   dials 8337762243 (see components/CtaWordLinks.jsx). */
 			.now-cta {
 				color: #0097a7;
+				transition: color 0.3s ease;
+			}
+
+			.now-cta:hover {
+				color: #fe7702 !important;
 			}
 
 			/* =========================================
