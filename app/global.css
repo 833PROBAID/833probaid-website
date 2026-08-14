@@ -1160,8 +1160,9 @@ body {
 
 /* ---------------------------------------------------------------
    Inline keyword CTAs
-   Underlined "SOLD" links to /books/seller-guide.pdf and underlined
-   "FORM" links to /homebooks/833probaid-referral-intake site-wide
+   Underlined "SOLD" links to /books/seller-guide.pdf, underlined "FORM"
+   links to /homebooks/833probaid-referral-intake, and the "NOW" of any
+   "call now" dials 8337762243 — all site-wide
    (wired up at runtime by components/CtaWordLinks.jsx).
    Only the underline gets heavier here — text weight is untouched.
    --------------------------------------------------------------- */
@@ -1170,7 +1171,9 @@ body {
 [data-sold-guide],
 .form-cta,
 .form-cta-link,
-[data-form-cta] {
+[data-form-cta],
+.now-cta,
+[data-now-cta] {
   text-decoration-line: underline;
   /* !important beats the inline `text-decoration: underline` shorthands that
      come from JSX and CMS content — those reset the thickness to auto. */
@@ -1178,4 +1181,14 @@ body {
   text-underline-offset: 0.1em;
   text-decoration-skip-ink: none;
   cursor: pointer;
+}
+
+/* The "NOW" of a "call now" prompt, site-wide: primary colour, all caps, and
+   it dials 8337762243 through the .probaid-phone handler. !important beats the
+   id and inline colour rules GrapesJS saves onto the surrounding CMS markup. */
+.now-cta,
+[data-now-cta] {
+  color: var(--color-primary) !important;
+  text-transform: uppercase;
+  text-decoration-color: currentColor;
 }
