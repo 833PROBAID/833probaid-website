@@ -12,18 +12,24 @@ import { usePathname, useRouter } from "next/navigation";
  * JSX. Rather than patching every source, this scans the rendered DOM and
  * makes every *underlined* occurrence open its destination:
  *
- *   SOLD -> the seller guide PDF (new tab)
- *   FORM -> the referral intake home book (same tab)
+ *   SOLD              -> the seller guide PDF (new tab)
+ *   FORM              -> the referral intake home book (same tab)
+ *   NOW in "call now" -> tel:8337762243
  *
  * Rules:
- *  - only underlined occurrences are touched (plain "sold" / "form" in body
- *    copy stays plain text);
+ *  - SOLD / FORM only touch underlined occurrences (plain "sold" / "form" in
+ *    body copy stays plain text); NOW is styled wherever "call now" appears,
+ *    underlined or not;
+ *  - a rule may highlight just one capture group of its pattern (`wrapGroup`),
+ *    which is how "call now" leaves the "call" untouched;
  *  - if the word already sits inside a link / clickable element, that element
- *    is re-pointed at the destination instead of nesting a new anchor;
- *  - otherwise just the word itself is wrapped in an anchor.
+ *    is re-pointed at the destination instead of nesting a new anchor
+ *    (skipped for NOW, so a "Call Now" button keeps its own destination);
+ *  - otherwise just the word itself is wrapped in an anchor / span.
  *
- * Styling (thicker underline) lives in app/global.css under .sold-cta /
- * .form-cta and friends so it applies at first paint too.
+ * Styling (primary colour, uppercase, thicker underline) lives in
+ * app/global.css under .sold-cta / .form-cta / .now-cta and friends so it
+ * applies at first paint too.
  */
 
 const RULES = [
@@ -42,6 +48,25 @@ const RULES = [
     attr: "data-form-cta",
     linkClass: "form-cta-link",
     markerClass: "form-cta",
+  },
+  {
+    // Only the "now" of a "call now" prompt — a bare "now" is body copy.
+    // The `d` flag gives the group's offset; wrapGroup keeps "call" as-is.
+    word: /\bcall\s+(now)\b/di,
+    wrapGroup: 1,
+    // "call now" is already a phone prompt, so it is wired everywhere it
+    // shows up — no underline needed to opt in.
+    requireUnderline: false,
+    // Never hijack a surrounding "Call Now" control — it has its own action.
+    repointClickable: false,
+    // No href of our own: `.probaid-phone` hands the click to
+    // components/ContactActionHandler.jsx, which dials tel:8337762243 and
+    // adds the role/tabindex/aria-label. Inside an existing link or button
+    // that handler defers, so the wrapper is purely decorative there.
+    tag: "span",
+    attr: "data-now-cta",
+    linkClass: "now-cta probaid-phone",
+    markerClass: "now-cta",
   },
 ];
 
@@ -90,13 +115,32 @@ function clickableAncestor(element) {
   return element.closest("a, button, [onclick], [role='link'], [role='button']");
 }
 
-/** First keyword occurrence in `text`, or null. */
-function firstMatch(text) {
+/**
+ * The slice of `match` that actually gets wrapped: the whole match by default,
+ * or `rule.wrapGroup` when only part of the pattern is the CTA.
+ */
+function wrapRange(match, rule) {
+  const group = rule.wrapGroup;
+  if (!group || match[group] === undefined) {
+    return { index: match.index, length: match[0].length };
+  }
+  const text = match[group];
+  // `match.indices` comes from the pattern's `d` flag; on engines without it,
+  // fall back to locating the group — ours sit at the tail of the match.
+  const start =
+    match.indices?.[group]?.[0] ?? match.index + match[0].lastIndexOf(text);
+  return { index: start, length: text.length };
+}
+
+/** First keyword occurrence in `text` among `rules`, or null. */
+function firstMatch(text, rules = RULES) {
   let best = null;
-  RULES.forEach((rule) => {
+  rules.forEach((rule) => {
     const match = text.match(rule.word);
-    if (match && (!best || match.index < best.match.index)) {
-      best = { rule, match };
+    if (!match) return;
+    const range = wrapRange(match, rule);
+    if (!best || range.index < best.range.index) {
+      best = { rule, match, range };
     }
   });
   return best;
@@ -129,25 +173,28 @@ function pointAtTarget(element, rule, navigate) {
 }
 
 /**
- * Wraps the keyword inside `node` in an anchor.
+ * Wraps the keyword inside `node` in its own element (an anchor, or whatever
+ * `rule.tag` asks for when the rule carries no href of its own).
  * Returns the trailing text node so the caller can keep scanning it.
  */
-function wrapWord(node, match, rule, navigate) {
-  const wordNode = node.splitText(match.index);
-  const tail = wordNode.splitText(match[0].length);
+function wrapWord(node, range, rule, navigate) {
+  const wordNode = node.splitText(range.index);
+  const tail = wordNode.splitText(range.length);
 
-  const link = document.createElement("a");
-  link.href = rule.href;
-  if (rule.newTab) {
-    link.target = "_blank";
-    link.rel = "noopener noreferrer";
+  const link = document.createElement(rule.tag || "a");
+  if (rule.href) {
+    link.href = rule.href;
+    if (rule.newTab) {
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+    }
   }
   link.className = rule.linkClass;
   link.setAttribute(rule.attr, "");
   link.textContent = wordNode.nodeValue;
 
   // Internal destinations stay in the SPA instead of doing a full reload.
-  if (!rule.newTab) {
+  if (rule.href && !rule.newTab) {
     link.addEventListener("click", (event) => {
       event.preventDefault();
       navigate(rule);
@@ -180,25 +227,32 @@ function enhance(root, navigate) {
   targets.forEach((node) => {
     const parent = node.parentElement;
     if (!parent || !parent.isConnected) return;
+
     // The underline is drawn by the parent, so one verdict covers every
     // occurrence in this text node.
-    if (!isUnderlined(parent)) return;
+    const underlined = isUnderlined(parent);
+    const rules = underlined
+      ? RULES
+      : RULES.filter((rule) => rule.requireUnderline === false);
+    if (!rules.length) return;
 
-    const first = firstMatch(node.nodeValue);
+    const first = firstMatch(node.nodeValue, rules);
     if (!first) return;
 
-    const clickable = clickableAncestor(parent);
-    if (clickable && isUnderlined(clickable)) {
-      pointAtTarget(clickable, first.rule, navigate);
-      return;
+    if (first.rule.repointClickable !== false) {
+      const clickable = clickableAncestor(parent);
+      if (clickable && isUnderlined(clickable)) {
+        pointAtTarget(clickable, first.rule, navigate);
+        return;
+      }
     }
 
     // Wrap each occurrence in this text node.
     let current = node;
     let hit = first;
     while (hit) {
-      current = wrapWord(current, hit.match, hit.rule, navigate);
-      hit = firstMatch(current.nodeValue);
+      current = wrapWord(current, hit.range, hit.rule, navigate);
+      hit = firstMatch(current.nodeValue, rules);
     }
   });
 }

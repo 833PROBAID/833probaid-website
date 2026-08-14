@@ -850,10 +850,11 @@ const publicPageStyles = `
 			// }
 
 			/* =========================================
-			   6. INLINE CTA HIGHLIGHT (SOLD / FORM)
+			   6. INLINE CTA HIGHLIGHT (SOLD / FORM / NOW)
 			   ========================================= */
 			.sold-cta,
-			.form-cta {
+			.form-cta,
+			.now-cta {
 				text-transform: uppercase;
 				text-decoration-line: underline;
 				/* Heavier rule only — the text weight stays as authored. */
@@ -861,6 +862,12 @@ const publicPageStyles = `
 				text-underline-offset: 0.1em;
 				text-decoration-skip-ink: none;
 				cursor: pointer;
+			}
+
+			/* The "NOW" of "call now" also carries the primary colour and
+			   dials 8337762243 (see components/CtaWordLinks.jsx). */
+			.now-cta {
+				color: #0097a7;
 			}
 
 			/* =========================================
