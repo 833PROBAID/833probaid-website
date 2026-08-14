@@ -120,14 +120,13 @@ export default function NewsletterCard() {
                           <span
                             style={{
                               verticalAlign: "super",
-                              fontSize: "0.9em",
                               lineHeight: "0",
                             }}
                           >
                             ®
                           </span>
-                          .
                         </b>
+                        <b>.</b>
                       </p>
                       <p className="font-bold text-[19px] mt-4 ">
                         Subscribe to our newsletter.

@@ -60,8 +60,8 @@ export default function Footer() {
               833PROBAID
               <span
                 style={{
-                  verticalAlign: "super",
-                  fontSize: "0.6em",
+                  position: "relative",
+                  top: "-5.5px",
                   lineHeight: "0",
                 }}
               >

@@ -496,8 +496,8 @@ function BookCardInner({
                       i < arr.length - 1 ? (
                         <span key={i}>
                           {part}
-                          <sup className="text-[0.55em] relative -top-2">®</sup>
-                        </span>
+                          <span className="relative -top-1.5">®</span>
+                          </span>
                       ) : (
                         part
                       ),

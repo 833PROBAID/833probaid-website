@@ -9,7 +9,7 @@ export const trustCardData = [
     },
     {
         serial: 3,
-        text: "What you've seen across this platform isn't just another real estate service—it represents a higher standard for how court-supervised real estate should be managed. We engineered 833PROBAID® to deliver the structured, high-level infrastructure that court-supervised real estate demands and estate representatives deserve.",
+        text: "What you've seen across this platform isn't just another real estate service—it represents a higher standard for how court-supervised real estate should be managed. We engineered ",
     },
     {
         serial: 4,
