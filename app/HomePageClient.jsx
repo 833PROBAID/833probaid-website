@@ -261,15 +261,14 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
         <section className={sectionContainerClass}>
           <div className="mb-5 sm:mb-10">
             <h1 className="font-anton text-center text-2xl md:text-3xl lg:text-4xl xl:text-6xl flex flex-col sm:flex-row justify-center items-center gap-1 sm:gap-3">
-              <AnimatedText text="Thank You for" as="div" animate={true} />
+              <AnimatedText text="Thank You" as="div" animate={true} />
               <div className="flex gap-1.5">
                 <AnimatedText
-                  text="Trusting"
+                  text=" for Trusting Us"
                   className="text-secondary"
                   as="div"
                   animate={true}
                 />
-                <AnimatedText text="Us" as="div" animate={true} />
               </div>
             </h1>
           </div>
