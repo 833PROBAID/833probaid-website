@@ -40,7 +40,7 @@ export default function ContactCard() {
                   </p>
                 </div>
                 <a href="tel:8337762243" className="mb-8 flex items-center gap-3">
-                  <img src="/svgs/phone-icon.svg" style={{ width: "32px" }} alt="Phone" />
+                  <img src="/svgs/phone-icon.svg" style={{ width: "32px", marginTop: "-9px", marginLeft: "1px" }} alt="Phone" />
                   <div className="flex flex-row items-start justify-start text-xl md:text-3xl">
                     <b className="text-secondary font-bold">(833)&nbsp;</b>
                     <div className="flex flex-col gap-3">
@@ -52,11 +52,11 @@ export default function ContactCard() {
                   </div>
                 </a>
                 <a href="mailto:info@833probaid.com" className="mb-6 flex items-center gap-3">
-                  <img src="/svgs/uiw_mail.svg" style={{ height: "35px" }} alt="Email" />
+                  <img src="/svgs/uiw_mail.svg" style={{ height: "35px", marginTop: "-2px" }} alt="Email" />
                   <p className="font-bold text-[19px]">Info@833probaid.com</p>
                 </a>
                 <a href="https://www.833probaid.com" className="flex items-center gap-3">
-                  <img className="ml-0.5" src="/svgs/globe.svg" style={{ height: "30px" }} alt="Website" />
+                  <img className="ml-0.5" src="/svgs/globe.svg" style={{ height: "30px", marginTop: "2px", marginLeft: "3px" }} alt="Website" />
                   <p className="ml-0.5 font-bold text-[19px]">www.833probaid.com</p>
                 </a>
               </div>

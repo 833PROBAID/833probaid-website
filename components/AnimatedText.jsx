@@ -1,6 +1,6 @@
 "use client";
 
-const supStyle = { verticalAlign: "super", lineHeight: "1", position: "relative" };
+const supStyle = { verticalAlign: "super", lineHeight: 0, position: "relative" };
 
 export default function AnimatedText({
   text,

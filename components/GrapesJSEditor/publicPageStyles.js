@@ -858,7 +858,7 @@ const publicPageStyles = `
 				text-transform: uppercase;
 				text-decoration-line: underline;
 				/* Heavier rule only — the text weight stays as authored. */
-				text-decoration-thickness: max(2.5px, 0.12em);
+				text-decoration-thickness: max(3.5px, 0.12em) !important;
 				text-underline-offset: 0.1em;
 				text-decoration-skip-ink: none;
 				cursor: pointer;

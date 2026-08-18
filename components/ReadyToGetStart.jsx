@@ -140,7 +140,8 @@ const ReadyToGetStart = () => {
                       style={{ color: "#0097A7" }}
                       className="font-bold"
                     >
-                      <AnimatedText text="(833) PROBAID — " />
+                      <AnimatedText text="(833) PROBAID" />
+                      <AnimatedText text=" — " className="text-black" />
                     </span>{" "}
                     <span
                       style={{ color: "#FE7702" }}
@@ -148,7 +149,7 @@ const ReadyToGetStart = () => {
                     >
                       <AnimatedText text="(833) 776-2243" />
                       <AnimatedText text=" — " className="text-black" />
-                      <AnimatedText text="NOW" className="underline decoration-[max(2.5px,0.12em)]! underline-offset-[0.1em] [text-decoration-skip-ink:none" />
+                      <AnimatedText text="NOW" className="underline decoration-[max(4.5px,0.12em)]! underline-offset-[0.1em] [text-decoration-skip-ink:none" />
                       <AnimatedText text=" — " className="text-black" />
                       </span>{" "}
                     <AnimatedText text="or" />{" "}
@@ -162,7 +163,7 @@ const ReadyToGetStart = () => {
                       }}
                     >
                       <span>
-                        <AnimatedText text="FORM" />
+                        <AnimatedText text="FORM" className="underline decoration-[max(4.5px,0.12em)]! underline-offset-[0.1em] [text-decoration-skip-ink:none" />                    
                       </span>
                     </Link>{" "}
                     <AnimatedText text=" for a Strategic Consultation. We navigate the red tape, protect the estate’s equity, and manage the transaction through a clean, compliant closing." />
@@ -645,11 +646,15 @@ const ReadyToGetStart = () => {
                   <br />
                   <br />
                   Call{" "}
-                  <span style={{ color: "#0097A7" }} className="font-semibold">
-                    <AnimatedText text="(833) PROBAID — " />
-                  </span>{" "}
-                  <span style={{ color: "#FE7702" }} className="font-semibold">
-                    <AnimatedText text="(833) 776-2243 — NOW " />
+                  <span style={{ color: "#0097A7" }} className="font-bold">
+                    <AnimatedText text="(833) PROBAID" />
+                    <AnimatedText text=" — " className="text-black" />
+                  </span>
+                  <span style={{ color: "#FE7702" }} className="font-bold probaid-phone">
+                    <AnimatedText text="(833) 776-2243" />
+                    <AnimatedText text=" — " className="text-black" />
+                    <AnimatedText text="NOW" className="underline decoration-[max(4.5px,0.12em)]! underline-offset-[0.1em] [text-decoration-skip-ink:none" />                    
+                    <AnimatedText text=" — " className="text-black" />
                   </span>{" "}
                   <AnimatedText text="or" />{" "}
                   <AnimatedText text="fill out the " />
@@ -662,7 +667,7 @@ const ReadyToGetStart = () => {
                     }}
                   >
                     <span>
-                      <AnimatedText text="FORM" />
+                      <AnimatedText text="FORM" className="underline decoration-[max(4.5px,0.12em)]! underline-offset-[0.1em] [text-decoration-skip-ink:none" />                    
                     </span>
                   </Link>{" "}
                   <AnimatedText text=" for a Strategic Consultation. We navigate the red tape, protect the estate’s equity, and manage the transaction through a clean, compliant closing." />

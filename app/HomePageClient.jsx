@@ -42,7 +42,7 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
               text="833PROBAID® Runs It"
               className="text-secondary"
               animate={true}
-              top="-11px"
+              top="-0.25em"
               fontSize="0.7em"
             />
           </h1>
@@ -195,7 +195,7 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
                 />
               </h4>
               <div className="mt-3">
-                <p className="font-montserrat text-center font-medium leading-relaxed text-pretty text-[15.8px] md:text-xl lg:text-2xl">
+                <p className="font-montserrat text-center font-medium leading-relaxed text-pretty text-[15.8px] md:text-lg lg:text-xl">
                   <AnimatedText
                     text="Whether you're administering a probate, managing a trust, or handling a conservatorship property, we understand that you already have enough on your plate. Once authority is established, "
                     animate={false}
