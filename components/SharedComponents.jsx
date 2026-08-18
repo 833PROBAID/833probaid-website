@@ -1,6 +1,7 @@
 import React from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import AnimatedText from "./AnimatedText";
 
 // Shared, lazily-created canvas used to measure text width so an overflow
 // TextArea can show only the characters that don't fit in its sibling input.
@@ -1470,7 +1471,11 @@ export const FormSection = ({
 				<div className='absolute left-4 top-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[4rem] h-[4rem] rounded-full bg-[#FD7702] flex items-center justify-center z-10 border-[6px] border-[#0097A7]'>
 					<i className={`fas ${icon} text-2xl`}></i>
 				</div>
-				{title}
+				<AnimatedText
+					text={title}
+					top="0.3em"
+					fontSize="50px"
+				/>
 			</div>
 			<div className='pl-12 py-3 space-y-4'>{children}</div>
 		</div>

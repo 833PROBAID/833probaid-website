@@ -437,7 +437,7 @@ function BookCardInner({
                       i < arr.length - 1 ? (
                         <span key={i}>
                           {part}
-                          <span className="relative -top-1.5">®</span>
+                          <span className="relative -top-[0.35em]">®</span>
                         </span>
                       ) : (
                         part
@@ -458,6 +458,13 @@ function BookCardInner({
                   alignItems: "center",
                   justifyContent: "center",
                   zIndex: 3,
+                  position: "absolute",
+                  top: 0,
+                  bottom: 0,
+                  height: "max-content",
+                  margin: "auto",
+                  left: 0,
+                  right: 0
                 }}
               >
                 <p className="text-white text-center tracking-wider font-extrabold font-montserrat leading-[1.3] sm:text-[10px] lg:text-sm xl:text-lg 2xl:text-xl px-[4%] [text-shadow:1px_1px_2.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
@@ -470,7 +477,7 @@ function BookCardInner({
                 className="flex items-center justify-between flex-col gap-4"
                 style={{ padding: "0% 6% 2.5%" }}
               >
-                <p className="text-white tracking-wider text-center font-montserrat leading-[1.3] font-semibold sm:text-[10px] lg:text-[14px] xl:text-lg 2xl:text-[17px] px-[1%] [text-shadow:1px_0px_2.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
+                <p className="absolute bottom-[30%] xl:bottom-[27%] 2xl:bottom-[30%] text-white tracking-wider text-center font-montserrat leading-[1.3] font-semibold sm:text-[10px] lg:text-[14px] xl:text-lg 2xl:text-[17px] px-[1%] [text-shadow:1px_0px_2.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
                   {description}
                 </p>
                 <LearnMoreButton

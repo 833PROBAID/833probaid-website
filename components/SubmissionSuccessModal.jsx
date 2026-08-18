@@ -18,7 +18,7 @@ function withBrand(text, brandClassName = "font-semibold text-primaryDark") {
 		.filter((part) => part !== "")
 		.map((part, i) =>
 			IS_BRAND.test(part) ? (
-				<AnimatedText key={i} text={part} className={brandClassName} top="0.05em" />
+				<AnimatedText key={i} text={part} className={brandClassName} top="0.35em" fontSize="28px" />
 			) : (
 				part
 			)
@@ -159,7 +159,8 @@ export default function SubmissionSuccessModal({
 							as="p"
 							text={eyebrow}
 							top="0.15em"
-							className="psm-fade psm-d1 mt-5 font-montserrat text-[11px] font-black tracking-[0.34em] text-white/85 uppercase"
+							className="psm-fade psm-d1 mt-5 font-montserrat text-[16px] font-black tracking-[0.34em] text-white/85 uppercase"
+							fontSize="20px"
 						/>
 					) : null}
 
@@ -202,7 +203,7 @@ export default function SubmissionSuccessModal({
 						<div className="psm-fade psm-d7 relative mt-4 overflow-hidden rounded-2xl border border-primary/20 bg-tealSoft/60 p-5 text-center sm:p-6">
 							<span className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-primary to-secondary" />
 							{footnote.heading ? (
-								<p className="font-montserrat text-[0.78rem] font-black tracking-[0.16em] text-primaryDark uppercase">
+								<p className="font-montserrat text-[1rem] font-black tracking-[0.16em] text-primaryDark uppercase">
 									{withBrand(footnote.heading, "text-primaryDark")}
 								</p>
 							) : null}
@@ -216,9 +217,7 @@ export default function SubmissionSuccessModal({
 									href={`tel:${phone.tel}`}
 									className="psm-phone mt-4 inline-flex items-center gap-2.5 rounded-xl bg-secondary px-5 py-3 font-montserrat text-[0.82rem] font-black tracking-wide text-white uppercase transition sm:text-[0.95rem]"
 								>
-									<svg viewBox="0 0 24 24" className="h-4.5 w-4.5 shrink-0" fill="currentColor" aria-hidden="true">
-										<path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.2.4 2.4.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C11.6 21 3 12.4 3 1.9c0-.5.4-1 1-1h3.5c.5 0 1 .5 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1.1l-2.3 2.2z" />
-									</svg>
+									<img src="/svgs/phone-icon-white.svg" style={{ width: "20px", marginTop: "2px" }} alt="Phone" />
 									{phone.display}
 								</a>
 							) : null}
