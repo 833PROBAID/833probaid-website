@@ -1284,3 +1284,7 @@
 			.\!mt-\[4rem\] {
 				margin-top: 4rem !important;
 			}
+
+			.\!text-secondary {
+				color: var(--secondary);
+			}
