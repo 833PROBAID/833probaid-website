@@ -63,16 +63,6 @@ export default function HomeCard({
 		if (!slug && !onclick) return;
 		if (isOpening) return;
 
-		const prefersReducedMotion =
-			typeof window !== "undefined" &&
-			!!window.matchMedia &&
-			window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-		if (prefersReducedMotion) {
-			runAction();
-			return;
-		}
-
 		setIsOpening(true);
 		setTimeout(() => {
 			runAction();

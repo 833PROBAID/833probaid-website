@@ -72,7 +72,7 @@ export function LearnMoreButton({
         }}
       />
       <button
-        className="inline-flex items-center gap-2 sm:gap-1 px-2 sm:h-[38px] lg:h-[55px] xl:h-[70px] lg:gap-3 rounded-[8px] pl-2.5"
+        className="inline-flex items-center gap-2 sm:gap-1 px-2 h-[48px] md:h-[42px] 2md:h-[45px] lg:h-[55px] xl:h-[70px] lg:gap-3 rounded-[8px] pl-2.5"
         type="button"
         onClick={onClick}
         onMouseEnter={() => setHov(true)}
@@ -86,7 +86,7 @@ export function LearnMoreButton({
             "inset 5.46px -5.46px 3.64px 0px #00000040, inset -3.64px 4.55px 3.64px 0px #FFFFFF40",
         }}
       >
-        <span className="font-poppins font-black sm:text-[13px] lg:text-[18px] xl:text-[23px] uppercase text-white tracking-wide [text-shadow:1px_2px_1.6px_rgba(0,0,0,0.81),0_0_6px_rgba(255,255,255,0.25)]">
+        <span className="font-poppins font-black text-[18px] sm:text-[18px] md:text-[14.5px] 2md:text-[15.5px] 3md:text-[18px] xl:text-[23px] uppercase text-white tracking-wide [text-shadow:1px_2px_1.6px_rgba(0,0,0,0.81),0_0_6px_rgba(255,255,255,0.25)]">
           {label}
         </span>
         <Image
@@ -95,7 +95,7 @@ export function LearnMoreButton({
           width={100}
           height={100}
           priority
-          className="object-contain sm:h-[18px] sm:w-[18px] lg:h-[45px] lg:w-[45px]"
+          className="object-contain h-[48px] w-[35px] sm:h-[28px] sm:w-[28px] lg:h-[45px] lg:w-[45px]"
         />
       </button>
     </div>
@@ -414,7 +414,7 @@ function BookCardInner({
             >
 
               {/* UPPER HALF — icon + title */}
-              <div className="flex flex-col items-center justify-start pt-2 lg:pt-6">
+              <div className="flex flex-col items-center justify-start pt-2 3md:pt-5 lg:pt-6">
                 <div className="sm:h-[50px] md:h-[60px] lg:h-[70px] xl:h-[90px] sm:w-[50px] md:w-[60px] lg:w-[70px] xl:w-[90px]">
                   <Image
                     src={icon}
@@ -430,7 +430,7 @@ function BookCardInner({
                     }`}
                   />
                 </div>
-                <h1 className="pt-3 text-white font-bold text-center uppercase leading-[1.2] font-montserrat sm:text-[11px] lg:text-[16px] xl:text-[22px] px-[5%] drop-shadow-[0px_2px_1px_rgba(0,0,0,0.85)] tracking-wider">
+                <h1 className="pt-3 text-white font-bold text-center uppercase leading-[1.2] font-montserrat sm:text-[11px] 2md:text-[12px] 3md:text-[14px] lg:text-[16px] 2lg:text-[17.5px] 3lg:text-[18.5px] xl:text-[22px] px-[5%] drop-shadow-[0px_2px_1px_rgba(0,0,0,0.85)] tracking-wider">
                   {String(title)
                     .split("®")
                     .map((part, i, arr) =>
@@ -467,7 +467,7 @@ function BookCardInner({
                   right: 0
                 }}
               >
-                <p className="text-white text-center tracking-wider font-extrabold font-montserrat leading-[1.3] sm:text-[10px] lg:text-sm xl:text-lg 2xl:text-xl px-[4%] [text-shadow:1px_1px_2.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
+                <p className="text-white text-center tracking-wider font-extrabold font-montserrat leading-[1.3] sm:text-[10px] 2md:text-[12px] 3md:text-[13px] lg:text-sm xl:text-lg 2lg:text-[19px] 2xl:text-xl px-[4%] [text-shadow:1px_1px_2.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
                   {subtitle}
                 </p>
               </div>
@@ -477,7 +477,7 @@ function BookCardInner({
                 className="flex items-center justify-between flex-col gap-4"
                 style={{ padding: "0% 6% 2.5%" }}
               >
-                <p className="absolute bottom-[30%] xl:bottom-[27%] 2xl:bottom-[30%] text-white tracking-wider text-center font-montserrat leading-[1.3] font-semibold sm:text-[10px] lg:text-[14px] xl:text-lg 2xl:text-[17px] px-[1%] [text-shadow:1px_0px_2.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
+                <p className="absolute bottom-[30%] xl:bottom-[27%] 2xl:bottom-[30%] text-white tracking-wider text-center font-montserrat leading-[1.3] font-semibold sm:text-[10px] 2md:text-[11px] 3md:text-[13px] lg:text-[14px] 2lg:text-[15.5px] 3lg:text-[17px] xl:text-lg 2xl:text-[17px] px-[1%] [text-shadow:1px_0px_2.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
                   {description}
                 </p>
                 <LearnMoreButton

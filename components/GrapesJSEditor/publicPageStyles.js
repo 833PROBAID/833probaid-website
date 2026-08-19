@@ -813,11 +813,27 @@ const publicPageStyles = `
 				transform: translateY(-5px)
 			}
 
+			/* Bottom-right chamfer. Equal px offsets on X and Y keep the cut at
+			   exactly 45deg whatever the box's width/height ratio is —
+			   percentages would resolve against width and height separately. */
 			.conclusion-block .conclusion-content {
+				--conclusion-cut: 70px;
 				background-color: white;
 				border-radius: 16px;
-				clip-path: polygon(0% 0%, 100% 0%, 100% 45%, 91% 100%, 0% 100%);
+				clip-path: polygon(
+					0% 0%,
+					100% 0%,
+					100% calc(100% - var(--conclusion-cut)),
+					calc(100% - var(--conclusion-cut)) 100%,
+					0% 100%
+				);
 				padding: 1.5rem;
+			}
+
+			@media (min-width: 540px) {
+				.conclusion-block .conclusion-content {
+					--conclusion-cut: 120px;
+				}
 			}
 
 			.conclusion-block .conclusion-content>div {
@@ -952,7 +968,7 @@ const publicPageStyles = `
 			.probaid-phone,
 			.probaid-email,
 			.probaid-info-email {
-				cursor: pointer;
+				cursor: pointer !important;
 			}
 
 			.probaid-phone:focus-visible,

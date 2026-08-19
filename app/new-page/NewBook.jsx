@@ -76,7 +76,7 @@ export function LearnMoreButton({
         }}
       />
       <button
-        className="inline-flex items-center gap-2 sm:gap-1 px-2 h-[48px] sm:h-[38px] lg:h-[55px] xl:h-[70px] lg:gap-3 rounded-[8px] pl-2.5"
+        className="inline-flex items-center gap-2 sm:gap-1 px-2 h-[48px] md:h-[42px] 2md:h-[45px] lg:h-[55px] xl:h-[70px] lg:gap-3 rounded-[8px] pl-2.5"
         type="button"
         onClick={onClick}
         onMouseEnter={() => setHov(true)}
@@ -90,7 +90,7 @@ export function LearnMoreButton({
             "inset 5.46px -5.46px 3.64px 0px #00000040, inset -3.64px 4.55px 3.64px 0px #FFFFFF40",
         }}
       >
-        <span className="font-montserrat font-black text-[18px] sm:text-[13px] lg:text-[18px] xl:text-[23px] uppercase text-white tracking-wide [text-shadow:1_2px_1.6px_rgba(0,0,0,0.82),0_0_6px_rgba(255,255,255,0.25)]">
+        <span className="font-montserrat font-black text-[18px] sm:text-[18px] md:text-[14.5px] 2md:text-[15.5px] 3md:text-[18px] xl:text-[23px] uppercase text-white tracking-wide [text-shadow:1_2px_1.6px_rgba(0,0,0,0.82),0_0_6px_rgba(255,255,255,0.25)]">
           {label}
         </span>
         <Image
@@ -99,7 +99,7 @@ export function LearnMoreButton({
           width={100}
           height={100}
           priority
-          className="object-contain h-[48px] w-[35px] sm:h-[18px] sm:w-[18px] lg:h-[45px] lg:w-[45px]"
+          className="object-contain h-[48px] w-[35px] sm:h-[28px] sm:w-[28px] lg:h-[45px] lg:w-[45px]"
           style={{
             transform: `rotate(${arrowRotation})`,
             transition: "transform 400ms ease",
@@ -464,7 +464,7 @@ function BookCardInner({
                   zIndex: 3,
                 }}
               >
-                <p className="text-white text-center tracking-wider font-bold font-montserrat leading-[1.3] sm:text-[10px] lg:text-sm xl:text-lg 2xl:text-xl px-[6%] sm:px-[7%] [text-shadow:1px_2px_2.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
+                <p className="text-white text-center tracking-wider font-bold font-montserrat leading-[1.3] md:text-[11px] 2md:text-[13px] 3md:text-[16px] lg:text-sm 2lg:text-[15.5px] 3lg:text-[16.5px] xl:text-lg 2xl:text-xl px-[6%] sm:px-[7%] [text-shadow:1px_2px_2.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
                   {subtitle}
                 </p>
               </div>
@@ -474,20 +474,20 @@ function BookCardInner({
                 className="absolute left-0 right-0 h-[36%] flex flex-col items-center justify-start"
                 style={{ paddingTop: "7.5%" }}
               >
-                <div className="sm:h-[60px] md:h-[70px] lg:h-[90px] xl:h-[100px]">
+                <div className="h-[100px] lg:h-[90px] xl:h-[100px]">
                   <Image
                     src={icon}
                     alt={title}
                     width={120}
                     height={120}
                     priority={priority}
-                    className={`object-contain w-full sm:h-[60px] md:h-[70px] lg:h-[90px] xl:h-[100px] floating-text cursor-pointer hover:scale-[1.1] transition-all duration-300 ${
+                    className={`object-contain w-full h-[100px] md:h-[80px] lg:h-[90px] xl:h-[100px] floating-text cursor-pointer hover:scale-[1.1] transition-all duration-300 ${
                       mirrored ? "hover:rotate-10" : "hover:-rotate-10"
                     }`}
                   />
                 </div>
                 <h1
-                  className="text-white font-bold text-center uppercase leading-[1.2] font-montserrat sm:text-[11px] lg:text-[16px] xl:text-[20px] px-[5%] drop-shadow-[4.31px_4.31px_4.31px_rgba(0,0,0,0.25)] [text-shadow:1_2px_1.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]"
+                  className="text-white font-bold text-center uppercase leading-[1.2] font-montserrat md:text-[11px] 2md:text-[12px] 3md:text-[15px] lg:text-[16px] 2lg:text-[17.5px] 3lg:text-[18.5px]  xl:text-[20px] px-[5%] drop-shadow-[4.31px_4.31px_4.31px_rgba(0,0,0,0.25)] [text-shadow:1_2px_1.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]"
                   style={{ paddingTop: "4%" }}
                 >
                   {String(title)
@@ -510,7 +510,7 @@ function BookCardInner({
                 className="absolute top-[63%] left-0 right-0 bottom-0 flex items-center justify-between flex-col"
                 style={{ padding: "2% 4% 6.5%" }}
               >
-                <p className="text-white tracking-wider text-center font-montserrat leading-[1.3] font-semibold sm:text-[10px] lg:text-[14px] xl:text-lg 2xl:text-[17px] px-[1%]">
+                <p className="text-white tracking-wider text-center font-montserrat leading-[1.3] font-semibold md:text-[10px] 2md:text-[12px] 3md:text-[13px] lg:text-[14px] 2lg:text-[15.5px] 3lg:text-[16.5px] xl:text-lg 2xl:text-[17px] px-[1%]">
                   {description}
                 </p>
                 <LearnMoreButton

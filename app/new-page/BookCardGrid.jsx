@@ -1,22 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BookCard from "./NewBook";
 import CTAButton from "@/components/CTAButton";
 
 const INITIAL_COUNT = 6;
 
 export default function BookCardGrid({ cards = [] }) {
-  const [showAll, setShowAll] = useState(() => {
-    if (typeof window !== "undefined") {
-      try {
-        return JSON.parse(localStorage.getItem("bookCardGridShowAll") ?? "false");
-      } catch {
-        return false;
-      }
+  // Starts collapsed so the client's first render matches the server's, then
+  // syncs to the persisted preference after mount.
+  const [showAll, setShowAll] = useState(false);
+
+  useEffect(() => {
+    try {
+      setShowAll(
+        JSON.parse(localStorage.getItem("bookCardGridShowAll") ?? "false")
+      );
+    } catch {
+      // ignore unreadable/corrupt storage — stay collapsed
     }
-    return false;
-  });
+  }, []);
 
   const toggleShowAll = () => {
     setShowAll((prev) => {

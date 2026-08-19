@@ -1,9 +1,19 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import newsletterSubscriptionsApi from "@/app/lib/api/newsletterSubscriptions";
+import {
+	formatUSPhone,
+	isEmpty,
+	isValidEmail,
+	isValidUSPhone,
+} from "@/app/utils/formValidation";
 import AnimatedText from "./AnimatedText";
+import CTAButton from "./CTAButton";
+
+// How long the success state stays on screen before the modal closes itself.
+const SUCCESS_CLOSE_DELAY = 5000;
 
 const NEWSLETTER_SIGNAL = /(newsletter|email|mailchimp|constantcontact|klaviyo|convertkit)/i;
 const NEWSLETTER_QUERY_KEYS = [
@@ -76,6 +86,9 @@ export default function NewsletterSubscriptionModal({
 	});
 	const [status, setStatus] = useState("idle");
 	const [error, setError] = useState("");
+	// Fields the user has interacted with — inline errors only show for these,
+	// so nothing is red before the field has been typed in or blurred.
+	const [touched, setTouched] = useState({});
 	const [sourceContext, setSourceContext] = useState({
 		sourceType: "website",
 		sourceDetails: {
@@ -90,8 +103,28 @@ export default function NewsletterSubscriptionModal({
 	const [mounted, setMounted] = useState(false);
 	const closeRef = useRef(null);
 	const cardRef = useRef(null);
+	const successTimerRef = useRef(null);
+	const phoneRef = useRef(null);
+	const phoneCaretRef = useRef(null);
 
 	useEffect(() => setMounted(true), []);
+
+	// Restore the caret after the reformatted phone value re-renders, so editing
+	// in the middle of the number doesn't kick the cursor to the end.
+	useLayoutEffect(() => {
+		if (phoneCaretRef.current == null || !phoneRef.current) return;
+		const pos = phoneCaretRef.current;
+		phoneRef.current.setSelectionRange(pos, pos);
+		phoneCaretRef.current = null;
+	});
+
+	// Drop any pending auto-close timer when the dialog goes away.
+	useEffect(() => {
+		if (isOpen) return;
+		clearTimeout(successTimerRef.current);
+	}, [isOpen]);
+
+	useEffect(() => () => clearTimeout(successTimerRef.current), []);
 
 	useEffect(() => {
 		if (!isOpen) return;
@@ -101,10 +134,14 @@ export default function NewsletterSubscriptionModal({
 	useEffect(() => {
 		if (!isOpen) return;
 
+		const prefilledEmail = String(initialEmail || "").trim();
 		setFormData((current) => ({
 			...current,
-			email: String(initialEmail || "").trim(),
+			email: prefilledEmail,
 		}));
+		// A pre-filled email comes from the footer input, so validate it right
+		// away instead of waiting for the user to edit it.
+		setTouched(prefilledEmail ? { email: true } : {});
 		setStatus("idle");
 		setError("");
 	}, [initialEmail, isOpen]);
@@ -150,24 +187,84 @@ export default function NewsletterSubscriptionModal({
 		};
 	}, [isOpen, onClose]);
 
-	const isValid = useMemo(() => {
-		return (
-			formData.fullName.trim().length > 1 &&
-			/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim()) &&
-			formData.phone.trim().length >= 7
-		);
+	// Same rules the vendor-partnership form uses (shared helpers), so an email
+	// or phone accepted here is accepted there too.
+	const fieldErrors = useMemo(() => {
+		const errors = {};
+
+		if (isEmpty(formData.fullName)) {
+			errors.fullName = "Please enter your full name.";
+		} else if (formData.fullName.trim().length < 2) {
+			errors.fullName = "Please enter at least 2 characters.";
+		}
+
+		if (isEmpty(formData.phone)) {
+			errors.phone = "Please enter your phone number.";
+		} else if (!isValidUSPhone(formData.phone)) {
+			errors.phone = "Please enter a valid 10-digit US phone number.";
+		}
+
+		if (isEmpty(formData.email)) {
+			errors.email = "Please enter your email address.";
+		} else if (!isValidEmail(formData.email)) {
+			errors.email = "Please enter a valid email address.";
+		}
+
+		return errors;
 	}, [formData]);
+
+	const isValid = Object.keys(fieldErrors).length === 0;
+	const errorFor = (field) => (touched[field] ? fieldErrors[field] || "" : "");
 
 	const isDuplicateWarning = /already subscribed/i.test(error);
 
 	const handleChange = (event) => {
 		const { name, value } = event.target;
-		setFormData((current) => ({ ...current, [name]: value }));
+		let nextValue = value;
+
+		if (name === "phone") {
+			const { selectionStart } = event.target;
+			const digitsBefore = value
+				.slice(0, selectionStart ?? value.length)
+				.replace(/\D/g, "").length;
+			nextValue = formatUSPhone(value);
+
+			// Caret goes just after the Nth digit (where N = digits before caret).
+			let pos = 0;
+			if (digitsBefore > 0) {
+				let count = 0;
+				pos = nextValue.length;
+				for (let i = 0; i < nextValue.length; i++) {
+					if (/\d/.test(nextValue[i])) count++;
+					if (count >= digitsBefore) {
+						pos = i + 1;
+						break;
+					}
+				}
+			}
+			phoneCaretRef.current = pos;
+		}
+
+		setFormData((current) => ({ ...current, [name]: nextValue }));
+		setTouched((current) =>
+			current[name] ? current : { ...current, [name]: true },
+		);
+	};
+
+	const handleBlur = (event) => {
+		const { name } = event.target;
+		setTouched((current) =>
+			current[name] ? current : { ...current, [name]: true },
+		);
 	};
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
-		if (!isValid || status === "loading") return;
+		if (status === "loading") return;
+		if (!isValid) {
+			setTouched({ fullName: true, phone: true, email: true });
+			return;
+		}
 
 		setStatus("loading");
 		setError("");
@@ -189,11 +286,13 @@ export default function NewsletterSubscriptionModal({
 			}
 
 			setStatus("success");
-			setTimeout(() => {
+			clearTimeout(successTimerRef.current);
+			successTimerRef.current = setTimeout(() => {
 				onSuccess?.(result.subscription);
 				onClose?.();
 				setFormData({ fullName: "", email: "", phone: "" });
-			}, 700);
+				setTouched({});
+			}, SUCCESS_CLOSE_DELAY);
 		} catch (submitError) {
 			setStatus("error");
 			setError(submitError.message || "Submission failed. Please try again.");
@@ -204,8 +303,13 @@ export default function NewsletterSubscriptionModal({
 
 	const inputClass =
 		"nsm-input w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20";
+	const invalidInputClass =
+		"nsm-input w-full rounded-xl border border-red-500 bg-white px-3.5 py-2.5 text-sm text-slate-900 outline-none transition focus:border-red-500 focus:ring-2 focus:ring-red-500/20";
+	const inputClassFor = (field) =>
+		errorFor(field) ? invalidInputClass : inputClass;
 	const labelClass =
 		"font-montserrat text-[0.72rem] font-black tracking-[0.14em] text-primaryDark uppercase";
+	const fieldErrorClass = "text-[0.75rem] font-semibold text-red-600";
 
 	return createPortal(
 		<div
@@ -263,9 +367,10 @@ export default function NewsletterSubscriptionModal({
 										strokeLinejoin="round"
 									/>
 								) : (
-									<g stroke="url(#nsm-icon-grad)" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round">
-										<rect x="7" y="12" width="38" height="28" rx="5" />
-										<path className="nsm-draw-flap" d="M9 16 L26 29 L43 16" />
+									<g className="nsm-bell" stroke="url(#nsm-icon-grad)" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round">
+										<path d="M26 9c-6.6 0-12 5.4-12 12v6.5c0 2.6-1 5-2.8 6.8-.7.7-.2 1.9.8 1.9h28c1 0 1.5-1.2.8-1.9A9.6 9.6 0 0 1 38 27.5V21c0-6.6-5.4-12-12-12z" />
+										<path d="M26 9V5" />
+										<path className="nsm-draw-clapper" d="M21.5 36.2a4.5 4.5 0 0 0 9 0" />
 									</g>
 								)}
 								<defs>
@@ -302,19 +407,21 @@ export default function NewsletterSubscriptionModal({
 
 				{/* Curved cut between header and body */}
 				<svg
-					className="-mt-14 block w-full shrink-0 text-white"
+					className="-mt-14 block w-full shrink-0"
 					viewBox="0 0 1440 90"
 					preserveAspectRatio="none"
 					aria-hidden="true"
 					style={{ height: "56px" }}
 				>
-					<path fill="currentColor" d="M0 90V44c240 40 480 46 720 20S1200 8 1440 30v60z" />
+					{/* Back wave in the brand secondary, front wave carries the body colour. */}
+					<path fill="var(--color-secondary)" d="M0 90V30c240 40 480 46 720 20S1200 -6 1440 16v74z" />
+					<path fill="#fff" d="M0 90V50c240 40 480 46 720 20S1200 14 1440 36v54z" />
 				</svg>
 
 				{/* ── Body ───────────────────────────────────────────────────── */}
 				<div className="min-h-0 flex-1 overflow-y-auto px-6 py-2 sm:px-10">
 					{entryMessage ? (
-						<p className="nsm-fade nsm-d4 mt-4 rounded-xl border border-amber-200 bg-amber-50 px-3.5 py-2.5 text-sm font-semibold text-amber-800">
+						<p className="nsm-fade nsm-d4 border-primary text-secondary mt-4 rounded-xl border px-3.5 py-2.5 text-sm font-semibold">
 							{entryMessage}
 						</p>
 					) : null}
@@ -327,21 +434,40 @@ export default function NewsletterSubscriptionModal({
 								name="fullName"
 								value={formData.fullName}
 								onChange={handleChange}
+								onBlur={handleBlur}
 								required
-								className={inputClass}
+								aria-invalid={Boolean(errorFor("fullName"))}
+								className={inputClassFor("fullName")}
 							/>
+							{errorFor("fullName") ? (
+								<span className={fieldErrorClass}>{errorFor("fullName")}</span>
+							) : null}
 						</label>
 
 						<label className="flex flex-col gap-1.5">
 							<span className={labelClass}>Phone *</span>
-							<input
-								type="tel"
-								name="phone"
-								value={formData.phone}
-								onChange={handleChange}
-								required
-								className={inputClass}
-							/>
+							<div className="flex items-stretch">
+								<span className="grid shrink-0 place-items-center rounded-l-xl border border-r-0 border-slate-300 bg-slate-100 px-3 text-sm font-semibold text-primaryDark select-none">
+									+1
+								</span>
+								<input
+									ref={phoneRef}
+									type="tel"
+									name="phone"
+									value={formData.phone}
+									onChange={handleChange}
+									onBlur={handleBlur}
+									required
+									inputMode="numeric"
+									autoComplete="tel"
+									placeholder="(555) 234-5678"
+									aria-invalid={Boolean(errorFor("phone"))}
+									className={`${inputClassFor("phone")} rounded-l-none`}
+								/>
+							</div>
+							{errorFor("phone") ? (
+								<span className={fieldErrorClass}>{errorFor("phone")}</span>
+							) : null}
 						</label>
 					</div>
 
@@ -357,16 +483,23 @@ export default function NewsletterSubscriptionModal({
 							name="email"
 							value={formData.email}
 							onChange={handleChange}
+							onBlur={handleBlur}
 							required
-							className={inputClass}
+							autoComplete="email"
+							placeholder="e.g. name@company.com"
+							aria-invalid={Boolean(errorFor("email"))}
+							className={inputClassFor("email")}
 						/>
+						{errorFor("email") ? (
+							<span className={fieldErrorClass}>{errorFor("email")}</span>
+						) : null}
 					</label>
 
 					{status === "error" && error ? (
 						<p
 							className={`mt-4 rounded-xl px-3.5 py-2.5 text-sm font-semibold ${
 								isDuplicateWarning
-									? "border border-amber-200 bg-amber-50 text-amber-800"
+									? "border-secondary/50 bg-secondary/10 text-secondary border"
 									: "border border-red-200 bg-red-50 text-red-700"
 							}`}
 						>
@@ -388,21 +521,29 @@ export default function NewsletterSubscriptionModal({
 				</div>
 
 				{/* ── Footer ─────────────────────────────────────────────────── */}
-				<div className="flex shrink-0 flex-col-reverse gap-3 px-6 pt-5 pb-6 sm:flex-row sm:items-center sm:px-10">
-					<button
-						type="button"
+				<div className="flex shrink-0 items-center gap-4 px-6 pt-5 pb-6 flex-row justify-end sm:px-10">
+					<CTAButton
+						label="Cancel"
+						bg="#0097A7"
+						icon={null}
 						onClick={onClose}
-						className="rounded-xl border border-slate-300 bg-white px-6 py-3.5 font-montserrat text-sm font-black tracking-[0.12em] text-slate-600 uppercase transition hover:border-slate-400 hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 sm:w-auto"
-					>
-						Cancel
-					</button>
-					<button
+						className="px-5 py-3 lg:px-6 lg:py-4"
+						textClassName="text-[13px] lg:text-[16px]"
+					/>
+					<CTAButton
+						label={
+							status === "loading"
+								? "Submitting..."
+								: status === "success"
+									? "Subscribed"
+									: "Subscribe"
+						}
 						type="submit"
 						disabled={!isValid || status === "loading" || status === "success"}
-						className="nsm-cta flex-1 rounded-xl bg-gradient-to-r from-primary to-primaryDark px-6 py-3.5 font-montserrat text-sm font-black tracking-[0.12em] text-white uppercase transition focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
-					>
-						{status === "loading" ? "Submitting..." : status === "success" ? "Subscribed" : "Subscribe"}
-					</button>
+						className="px-5 py-2.5 disabled:opacity-60 lg:px-6 lg:py-3"
+						textClassName="text-[13px] lg:text-[16px]"
+						iconClassName="w-6 lg:w-8 h-6 lg:h-8"
+					/>
 				</div>
 			</form>
 		</div>,
@@ -457,16 +598,20 @@ const NSM_STYLES = `
 .nsm-ring {
   position: absolute;
   border-radius: 9999px;
-  border: 2px solid rgba(255,255,255,0.55);
+  border: 2px solid rgb(254,119,2);
   inset: 0;
 }
 .nsm-ring-1 { animation: nsm-halo 2.4s ease-out 0.5s infinite; }
 .nsm-ring-2 { animation: nsm-halo 2.4s ease-out 1.4s infinite; }
 
-.nsm-draw-flap {
-  stroke-dasharray: 48;
-  stroke-dashoffset: 48;
-  animation: nsm-draw 520ms cubic-bezier(0.65, 0, 0.35, 1) 430ms both;
+.nsm-bell {
+  transform-origin: 26px 7px;
+  animation: nsm-swing 2.8s ease-in-out 0.9s infinite;
+}
+.nsm-draw-clapper {
+  stroke-dasharray: 16;
+  stroke-dashoffset: 16;
+  animation: nsm-draw 460ms cubic-bezier(0.65, 0, 0.35, 1) 480ms both;
 }
 .nsm-draw-check {
   stroke-dasharray: 48;
@@ -483,9 +628,6 @@ const NSM_STYLES = `
 .nsm-d6 { animation-delay: 640ms; }
 .nsm-d7 { animation-delay: 710ms; }
 
-.nsm-cta { box-shadow: 0 10px 26px -10px rgba(0,151,167,0.9); }
-.nsm-cta:not(:disabled):hover { transform: translateY(-2px); filter: brightness(1.06); }
-
 @keyframes nsm-fade-in { from { opacity: 0 } to { opacity: 1 } }
 @keyframes nsm-pop {
   0% { opacity: 0; transform: translateY(26px) scale(0.94); }
@@ -496,10 +638,18 @@ const NSM_STYLES = `
   100% { opacity: 1; transform: scale(1); }
 }
 @keyframes nsm-halo {
-  0% { transform: scale(0.78); opacity: 0.7; }
-  100% { transform: scale(1.35); opacity: 0; }
+  0% { border: 4px solid rgb(254,119,2); transform: scale(0.78); opacity: 1; }
+  100% { border: 4px solid rgb(254,119,2); transform: scale(1.35); opacity: 0; }
 }
 @keyframes nsm-draw { to { stroke-dashoffset: 0; } }
+@keyframes nsm-swing {
+  0%, 62%, 100% { transform: rotate(0deg); }
+  68% { transform: rotate(11deg); }
+  74% { transform: rotate(-9deg); }
+  80% { transform: rotate(6deg); }
+  86% { transform: rotate(-4deg); }
+  92% { transform: rotate(2deg); }
+}
 @keyframes nsm-rise {
   0% { opacity: 0; transform: translateY(14px); }
   100% { opacity: 1; transform: translateY(0); }
@@ -511,15 +661,5 @@ const NSM_STYLES = `
 @keyframes nsm-drift {
   0%, 100% { transform: translate3d(0,0,0) scale(1); }
   50% { transform: translate3d(18px, 14px, 0) scale(1.12); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .nsm-backdrop, .nsm-card, .nsm-seal, .nsm-draw-flap, .nsm-draw-check, .nsm-fade,
-  .nsm-shine, .nsm-ring-1, .nsm-ring-2, .nsm-aurora-1, .nsm-aurora-2 {
-    animation: none !important;
-  }
-  .nsm-draw-flap, .nsm-draw-check { stroke-dashoffset: 0; }
-  .nsm-shine { display: none; }
-  .nsm-fade { opacity: 1; transform: none; }
 }
 `;

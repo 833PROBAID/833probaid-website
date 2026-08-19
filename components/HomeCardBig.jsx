@@ -33,16 +33,6 @@ export default function HomeCardBig({
 		if (!slug && !onclick) return;
 		if (isOpening) return;
 
-		const prefersReducedMotion =
-			typeof window !== "undefined" &&
-			!!window.matchMedia &&
-			window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-		if (prefersReducedMotion) {
-			runAction();
-			return;
-		}
-
 		setIsOpening(true);
 		setTimeout(() => {
 			runAction();
@@ -183,14 +173,6 @@ export default function HomeCardBig({
 						}
 						.hcb-book-text-open {
 							animation: hcbBookTextFade 0.5s ease-in-out forwards;
-						}
-						@media (prefers-reduced-motion: reduce) {
-							.hcb-open-left,
-							.hcb-shadow-open,
-							.hcb-thickness-open,
-							.hcb-spine-round-open {
-								animation: none !important;
-							}
 						}
 						@media (max-width: 767px) {
 							.hcb-card-wrapper:hover .hcb-icon-wrapper,
