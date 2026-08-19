@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import dynamic from "next/dynamic";
 import Hero from "../components/Home/Hero";
 import Navbar from "../components/Navbar";
@@ -20,10 +21,35 @@ const TrustCard = dynamic(() => import("../components/TrustCard"));
 const ReadyToGetStart = dynamic(() => import("@/components/ReadyToGetStart"));
 
 export default function HomePageClient({ initialHomeCardData = [] }) {
-  const isMobile = useIsMobile();
+  const isMobile = useIsMobile(768);
   const homeCardData = Array.isArray(initialHomeCardData)
     ? initialHomeCardData
     : [];
+
+  const hasHomeCards = homeCardData.length > 0;
+
+  useEffect(() => {
+    console.log(toolsCardData.map(e => '#' + e.href).includes(window.location.hash), window.location.hash, 7777)
+    if (!hasHomeCards) return;
+    if (window.location.hash !== "#qr-section" && !toolsCardData.map(e => '#' + e.href).includes(window.location.hash)) return;
+
+    setTimeout(() => {
+      requestAnimationFrame(() => {
+        if (window.location.hash === "#qr-section") {
+          document.getElementById("qr-section-scroll")?.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        } else {
+          document.getElementById(window.location.hash.replace('#', '') + '-identifier')?.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }
+      });
+    }, 500)
+  }, [hasHomeCards]);
+
   const sectionContainerClass =
     "mx-auto w-full max-w-7xl px-4 sm:px-5 md:px-6 lg:px-8 xl:px-10 2xl:px-0";
   return (
@@ -222,7 +248,7 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
             </div>
           </div>
         </section>
-        <section className={sectionContainerClass}>
+        <section className={`${sectionContainerClass} scroll-mt-54`} id="qr-section-scroll">
           <div className="mt-10">
             <ReadyToGetStart />
           </div>

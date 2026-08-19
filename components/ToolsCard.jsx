@@ -28,7 +28,7 @@ export default function ToolsCard({ id, index = 0, icon, title, description, hre
   };
 
   return (
-    <div className={`flex w-full justify-center group tc-card-wrapper ${index < 2 ? "tc-card-first" : "tc-card-last"}`}>
+    <div id={href+'-identifier'} className={`flex w-full justify-center group tc-card-wrapper scroll-mt-[50vh] ${index < 2 ? "tc-card-first" : "tc-card-last"}`}>
       <div className="w-full">
         <svg
           width="100%"

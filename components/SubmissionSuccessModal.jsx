@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import AnimatedText from "./AnimatedText";
+import CTAButton from "./CTAButton";
 
 const BRAND_SPLIT = /(833PROBAID®?)/g;
 const IS_BRAND = /^833PROBAID®?$/;
@@ -226,14 +227,15 @@ export default function SubmissionSuccessModal({
 				</div>
 
 				{/* ── Footer ─────────────────────────────────────────────────── */}
-				<div className="shrink-0 px-6 pt-5 pb-6 sm:px-10">
-					<button
-						type="button"
+				<div className="flex shrink-0 flex-row items-center justify-end gap-4 px-6 pt-5 pb-6 sm:px-10">
+					<CTAButton
+						label={closeLabel}
+						bg="#0097A7"
+						icon={null}
 						onClick={onClose}
-						className="psm-cta w-full rounded-xl bg-gradient-to-r from-primary to-primaryDark px-6 py-3.5 font-montserrat text-sm font-black tracking-[0.12em] text-white uppercase transition focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2"
-					>
-						{closeLabel}
-					</button>
+						className="px-5 py-3 lg:px-6 lg:py-4"
+						textClassName="text-[13px] lg:text-[16px]"
+					/>
 				</div>
 			</div>
 		</div>,
@@ -288,7 +290,7 @@ const PSM_STYLES = `
 .psm-ring {
   position: absolute;
   border-radius: 9999px;
-  border: 2px solid rgba(255,255,255,0.55);
+  border: 2px solid rgb(254,119,2);
   inset: 0;
 }
 .psm-ring-1 { animation: psm-halo 2.4s ease-out 0.5s infinite; }
@@ -311,8 +313,6 @@ const PSM_STYLES = `
 
 .psm-phone { box-shadow: 0 8px 20px -6px rgba(254,119,2,0.75); }
 .psm-phone:hover { transform: translateY(-2px); filter: brightness(1.06); }
-.psm-cta { box-shadow: 0 10px 26px -10px rgba(0,151,167,0.9); }
-.psm-cta:hover { transform: translateY(-2px); filter: brightness(1.06); }
 
 @keyframes psm-fade-in { from { opacity: 0 } to { opacity: 1 } }
 @keyframes psm-pop {
@@ -324,8 +324,8 @@ const PSM_STYLES = `
   100% { opacity: 1; transform: scale(1); }
 }
 @keyframes psm-halo {
-  0% { transform: scale(0.78); opacity: 0.7; }
-  100% { transform: scale(1.35); opacity: 0; }
+  0% { border: 4px solid rgb(254,119,2); transform: scale(0.78); opacity: 1; }
+  100% { border: 4px solid rgb(254,119,2); transform: scale(1.35); opacity: 0; }
 }
 @keyframes psm-draw { to { stroke-dashoffset: 0; } }
 @keyframes psm-rise {
@@ -341,13 +341,4 @@ const PSM_STYLES = `
   50% { transform: translate3d(18px, 14px, 0) scale(1.12); }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .psm-backdrop, .psm-card, .psm-seal, .psm-check, .psm-fade, .psm-shine,
-  .psm-ring-1, .psm-ring-2, .psm-aurora-1, .psm-aurora-2 {
-    animation: none !important;
-  }
-  .psm-check { stroke-dashoffset: 0; }
-  .psm-shine { display: none; }
-  .psm-fade { opacity: 1; transform: none; }
-}
 `;

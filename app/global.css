@@ -47,7 +47,12 @@ section {
   --color-botMessage: #ffffff;
   --color-voiceActive: #ff4444;
   --color-voiceInactive: #666666;
-  --color-header: #2A2A2A
+  --color-header: #2A2A2A;
+
+  --breakpoint-2md: 50rem; /* 800px */
+  --breakpoint-3md: 56.25rem; /* 900px */
+  --breakpoint-2lg: 68.75rem; /* 1100px */
+  --breakpoint-3lg: 75rem; /* 1200px */
 
   --ease-out: cubic-bezier(0.24, 0, 0.38, 1);
 
@@ -92,7 +97,7 @@ section {
 .probaid-phone,
 .probaid-email,
 .probaid-info-email {
-  cursor: pointer;
+  cursor: pointer !important;
 }
 
 .probaid-phone:focus-visible,
@@ -388,18 +393,6 @@ section {
     line-height: 1.22;
   }
 }
-@media (prefers-reduced-motion: reduce) {
-  .hc-open-left,
-  .hc-open-right,
-  .hc-shadow-open-left,
-  .hc-shadow-open-right,
-  .hc-thickness-open-left,
-  .hc-thickness-open-right,
-  .hc-holder-lip-open-left,
-  .hc-holder-lip-open-right {
-    animation: none !important;
-  }
-}
 @media (max-width: 767px) {
   .hc-card-wrapper:hover .hc-icon-wrapper,
   .hc-card-wrapper:has(.hc-button-float:hover) .hc-icon-wrapper {
@@ -636,12 +629,6 @@ section {
 .footer-marquee__item:not(:last-child)::after {
   content: " \00B7 ";
   padding: 0 0.3em;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .footer-marquee__track {
-    animation-duration: 120s;
-  }
 }
 
 .animate-slideIn {

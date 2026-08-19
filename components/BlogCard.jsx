@@ -58,16 +58,6 @@ export default function BlogCard({
     if (!slug) return;
     if (isOpening) return;
 
-    const prefersReducedMotion =
-      typeof window !== "undefined" &&
-      !!window.matchMedia &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    if (prefersReducedMotion) {
-      runAction();
-      return;
-    }
-
     setIsOpening(true);
     setTimeout(() => {
       router.push(`/blogs/${slug}`);
@@ -187,14 +177,6 @@ export default function BlogCard({
 						.bc-open-right { animation: bcBookOpenRight 0.5s linear forwards; }
 						.bc-shadow-open-left { animation: bcShadowLeft 0.5s linear forwards; }
 						.bc-shadow-open-right { animation: bcShadowRight 0.5s linear forwards; }
-						@media (prefers-reduced-motion: reduce) {
-							.bc-open-left, .bc-open-right,
-							.bc-shadow-open-left, .bc-shadow-open-right,
-							.bc-thickness-open-left, .bc-thickness-open-right,
-							.bc-holder-lip-open-left, .bc-holder-lip-open-right {
-								animation: none !important;
-							}
-						}
 						@media (max-width: 767px) {
 							.bc-card-wrapper:has(.bc-button-float:hover) .bc-banner-wrapper {
 								transform: none !important;

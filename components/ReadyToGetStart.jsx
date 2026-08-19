@@ -121,7 +121,7 @@ const ReadyToGetStart = () => {
                     className={`font-anton text-center font-normal  text-5xl mb-5`}
                     style={{ color: "#EF6C00" }}
                   >
-                    COMMAND THE OUTCOME : CALL (833) PROBAID
+                    COMMAND THE OUTCOME: CALL (833) PROBAID
                   </h2>
                   <h2
                     className={`font-anton text-center font-normal  text-5xl`}
@@ -140,7 +140,7 @@ const ReadyToGetStart = () => {
                       style={{ color: "#0097A7" }}
                       className="font-bold"
                     >
-                      <AnimatedText text="(833) PROBAID" />
+                      <AnimatedText text="(833) PROBAID" className="probaid-phone" />
                       <AnimatedText text=" — " className="text-black" />
                     </span>{" "}
                     <span
@@ -631,7 +631,7 @@ const ReadyToGetStart = () => {
                   className={`font-anton text-center font-normal  text-5xl mb-2`}
                   style={{ color: "#EF6C00" }}
                 >
-                  COMMAND THE OUTCOME : CALL (833) PROBAID
+                  COMMAND THE OUTCOME: CALL (833) PROBAID
                 </h2>
                 <h2
                   className={`font-anton text-center font-normal  text-5xl`}

@@ -4,8 +4,7 @@ import { useEffect, useState } from "react";
 import AnimatedText from "./AnimatedText";
 import NewsletterSubscriptionModal from "./NewsletterSubscriptionModal";
 import CTAButton from "./CTAButton";
-
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+import { isValidEmail } from "@/app/utils/formValidation";
 
 export default function NewsletterCard() {
   const [newsletterEmail, setNewsletterEmail] = useState("");
@@ -26,7 +25,7 @@ export default function NewsletterCard() {
     const normalizedEmail = rawEmail.toLowerCase();
     if (!rawEmail) {
       setSubscriptionNotice("Add your email in the popup before submitting.");
-    } else if (!EMAIL_PATTERN.test(normalizedEmail)) {
+    } else if (!isValidEmail(normalizedEmail)) {
       setSubscriptionNotice(
         "Your email looks invalid. Please correct it in the popup.",
       );
