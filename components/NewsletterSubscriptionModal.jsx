@@ -180,6 +180,11 @@ export default function NewsletterSubscriptionModal({
 		const focusTimer = setTimeout(() => closeRef.current?.focus(), 350);
 
 		return () => {
+			setFormData({
+				fullName: "",
+				email: "",
+				phone: "",
+			})
 			document.removeEventListener("keydown", onKeyDown);
 			clearTimeout(focusTimer);
 			document.body.style.overflow = previousOverflow;
@@ -394,7 +399,6 @@ export default function NewsletterSubscriptionModal({
 					<h2
 						id="nsm-title"
 						className="nsm-fade nsm-d2 my-2 font-montserrat text-[1.35rem] leading-[1.15] font-black tracking-wide text-white uppercase sm:text-[1.85rem]"
-						style={{ textShadow: "0 2px 10px rgba(0,0,0,0.28)" }}
 					>
 						Complete Your Subscription
 					</h2>
@@ -421,7 +425,7 @@ export default function NewsletterSubscriptionModal({
 				{/* ── Body ───────────────────────────────────────────────────── */}
 				<div className="min-h-0 flex-1 overflow-y-auto px-6 py-2 sm:px-10">
 					{entryMessage ? (
-						<p className="nsm-fade nsm-d4 border-primary text-secondary mt-4 rounded-xl border px-3.5 py-2.5 text-sm font-semibold">
+						<p className="nsm-fade nsm-d4 border-primary text-secondary mt-4 rounded-xl border px-3.5 py-2.5 text-sm font-bold">
 							{entryMessage}
 						</p>
 					) : null}
@@ -437,7 +441,7 @@ export default function NewsletterSubscriptionModal({
 								onBlur={handleBlur}
 								required
 								aria-invalid={Boolean(errorFor("fullName"))}
-								className={inputClassFor("fullName")}
+								className={`${inputClassFor("fullName")} font-bold`}
 							/>
 							{errorFor("fullName") ? (
 								<span className={fieldErrorClass}>{errorFor("fullName")}</span>
@@ -447,7 +451,7 @@ export default function NewsletterSubscriptionModal({
 						<label className="flex flex-col gap-1.5">
 							<span className={labelClass}>Phone *</span>
 							<div className="flex items-stretch">
-								<span className="grid shrink-0 place-items-center rounded-l-xl border border-r-0 border-slate-300 bg-slate-100 px-3 text-sm font-semibold text-primaryDark select-none">
+								<span className="grid shrink-0 place-items-center rounded-l-xl border border-r-0 border-slate-300 bg-slate-100 px-3 text-sm font-bold text-primaryDark select-none">
 									+1
 								</span>
 								<input
@@ -462,7 +466,7 @@ export default function NewsletterSubscriptionModal({
 									autoComplete="tel"
 									placeholder="(555) 234-5678"
 									aria-invalid={Boolean(errorFor("phone"))}
-									className={`${inputClassFor("phone")} rounded-l-none`}
+									className={`${inputClassFor("phone")} rounded-l-none font-bold placeholder:italic placeholder-secondary`}
 								/>
 							</div>
 							{errorFor("phone") ? (
@@ -488,7 +492,7 @@ export default function NewsletterSubscriptionModal({
 							autoComplete="email"
 							placeholder="e.g. name@company.com"
 							aria-invalid={Boolean(errorFor("email"))}
-							className={inputClassFor("email")}
+							className={`${inputClassFor("email")} font-bold placeholder:italic placeholder-secondary`}
 						/>
 						{errorFor("email") ? (
 							<span className={fieldErrorClass}>{errorFor("email")}</span>
@@ -598,7 +602,7 @@ const NSM_STYLES = `
 .nsm-ring {
   position: absolute;
   border-radius: 9999px;
-  border: 2px solid rgb(254,119,2);
+  border: 2px solid rgba(255,255,255,0.55);
   inset: 0;
 }
 .nsm-ring-1 { animation: nsm-halo 2.4s ease-out 0.5s infinite; }
@@ -620,8 +624,14 @@ const NSM_STYLES = `
 }
 
 .nsm-fade { animation: nsm-rise 560ms cubic-bezier(0.22, 1, 0.36, 1) both; }
-.nsm-d1 { animation-delay: 260ms; }
-.nsm-d2 { animation-delay: 340ms; }
+.nsm-d1 {
+	animation-delay: 260ms;
+	text-shadow: 1px 1px 1.6px rgba(0,0,0,0.82), 0 0 6px rgba(255,255,255,0.25);
+}
+.nsm-d2 {
+	animation-delay: 340ms;
+	text-shadow: 1px 2px 1.6px rgba(0,0,0,0.82), 0 0 6px rgba(255,255,255,0.25);
+}
 .nsm-d3 { animation-delay: 420ms; }
 .nsm-d4 { animation-delay: 500ms; }
 .nsm-d5 { animation-delay: 570ms; }
@@ -638,8 +648,8 @@ const NSM_STYLES = `
   100% { opacity: 1; transform: scale(1); }
 }
 @keyframes nsm-halo {
-  0% { border: 4px solid rgb(254,119,2); transform: scale(0.78); opacity: 1; }
-  100% { border: 4px solid rgb(254,119,2); transform: scale(1.35); opacity: 0; }
+  0% { transform: scale(0.78); opacity: 1; border-width: 3px; }
+  100% { transform: scale(1.35); opacity: 0; border-width: 3px; }
 }
 @keyframes nsm-draw { to { stroke-dashoffset: 0; } }
 @keyframes nsm-swing {

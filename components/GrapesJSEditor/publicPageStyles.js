@@ -813,6 +813,14 @@ const publicPageStyles = `
 				transform: translateY(-5px)
 			}
 
+			.conclusion-block:hover .text-secondary {
+				color: var(--primary);
+			}
+
+			.conclusion-block:hover .text-primary {
+				color: var(--secondary);
+			}
+
 			/* Bottom-right chamfer. Equal px offsets on X and Y keep the cut at
 			   exactly 45deg whatever the box's width/height ratio is —
 			   percentages would resolve against width and height separately. */

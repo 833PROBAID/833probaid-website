@@ -28,27 +28,26 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
 
   const hasHomeCards = homeCardData.length > 0;
 
-  useEffect(() => {
-    console.log(toolsCardData.map(e => '#' + e.href).includes(window.location.hash), window.location.hash, 7777)
-    if (!hasHomeCards) return;
-    if (window.location.hash !== "#qr-section" && !toolsCardData.map(e => '#' + e.href).includes(window.location.hash)) return;
+  // useEffect(() => {
+  //   if (!hasHomeCards) return;
+  //   if (window.location.hash !== "#qr-section" && !toolsCardData.map(e => '#' + e.href).includes(window.location.hash)) return;
 
-    setTimeout(() => {
-      requestAnimationFrame(() => {
-        if (window.location.hash === "#qr-section") {
-          document.getElementById("qr-section-scroll")?.scrollIntoView({
-            behavior: "smooth",
-            block: "start",
-          });
-        } else {
-          document.getElementById(window.location.hash.replace('#', '') + '-identifier')?.scrollIntoView({
-            behavior: "smooth",
-            block: "start",
-          });
-        }
-      });
-    }, 500)
-  }, [hasHomeCards]);
+  //   setTimeout(() => {
+  //     requestAnimationFrame(() => {
+  //       if (window.location.hash === "#qr-section") {
+  //         document.getElementById("qr-section-scroll")?.scrollIntoView({
+  //           behavior: "smooth",
+  //           block: "start",
+  //         });
+  //       } else {
+  //         document.getElementById(window.location.hash.replace('#', '') + '-identifier')?.scrollIntoView({
+  //           behavior: "smooth",
+  //           block: "start",
+  //         });
+  //       }
+  //     });
+  //   }, 500)
+  // }, [hasHomeCards]);
 
   const sectionContainerClass =
     "mx-auto w-full max-w-7xl px-4 sm:px-5 md:px-6 lg:px-8 xl:px-10 2xl:px-0";
@@ -248,7 +247,7 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
             </div>
           </div>
         </section>
-        <section className={`${sectionContainerClass} scroll-mt-54`} id="qr-section-scroll">
+        <section className={`${sectionContainerClass} scroll-mt-[20vh]`} id="qr-section">
           <div className="mt-10">
             <ReadyToGetStart />
           </div>

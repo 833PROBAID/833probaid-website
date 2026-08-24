@@ -125,7 +125,7 @@ export default function NewsletterCard() {
                             ®
                           </span>
                         </b>
-                        <b>.</b>
+                        .
                       </p>
                       <p className="font-bold text-[19px] mt-4 ">
                         Subscribe to our newsletter.

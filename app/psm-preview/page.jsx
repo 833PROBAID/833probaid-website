@@ -8,10 +8,11 @@ const VARIANTS = {
 	referral: {
 		title: "Referral Received & File Initiated",
 		paragraphs: [
-			"Your referral has been securely received and entered into the 833PROBAID® intake workflow.",
+			"Your referral has been securely received and entered into the 833PROBAID® Intake Workflow.",
 			"Our team is reviewing the submitted referral, evaluating the court status, property status, occupancy, and all information provided to determine the appropriate next steps in accordance with your instructions.",
 			"If additional information or documentation is required, or if direct client contact was requested, we will initiate the appropriate communication promptly.",
 		],
+		highlights: ["Intake Workflow"],
 		footnote: {
 			heading: "Need immediate assistance?",
 			text: "For imminent court deadlines, overbid hearings, or urgent property security concerns, please contact us directly at",
@@ -24,6 +25,7 @@ const VARIANTS = {
 			"Our team is reviewing your application, verifying the information and supporting documentation provided, including applicable licenses, insurance, W-9s, service capabilities, and coverage areas.",
 			"If additional information or documentation is required, we will contact you directly. Approved vendors may be added to the 833PROBAID® Vendor Network and contacted for assignments based on service area, qualifications, availability, and case needs.",
 		],
+		highlights: ["Vendor Qualification Process", "Vendor Network"],
 		footnote: {
 			heading: "Questions about your application?",
 			text: "Please contact us at",

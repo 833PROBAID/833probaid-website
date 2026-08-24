@@ -2759,6 +2759,7 @@ const Form2 = ({ readOnly = false, initialData = null, submitPortalTarget = null
         "Our team is reviewing your application, verifying the information and supporting documentation provided, including applicable licenses, insurance, W-9s, service capabilities, and coverage areas.",
         "If additional information or documentation is required, we will contact you directly. Approved vendors may be added to the 833PROBAID® Vendor Network and contacted for assignments based on service area, qualifications, availability, and case needs.",
       ]}
+      highlights={["Vendor Qualification Process", "Vendor Network"]}
       footnote={{
         heading: "Questions about your application?",
         text: "Please contact us at",

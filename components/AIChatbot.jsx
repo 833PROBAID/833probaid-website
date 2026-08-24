@@ -698,7 +698,7 @@ export default function AIChatbot() {
 
 			{/* Chat panel */}
 			<div
-				className='fixed z-9998 flex flex-col'
+				className={`fixed z-9998 flex flex-col ${open ? 'visible' : 'invisible'}`}
 				style={isMobile ? {
 					// Full-screen on mobile
 					top: 0,

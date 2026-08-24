@@ -3002,10 +3002,11 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 				}}
 				title="Referral Received & File Initiated"
 				paragraphs={[
-					"Your referral has been securely received and entered into the 833PROBAID® intake workflow.",
+					"Your referral has been securely received and entered into the 833PROBAID® Intake Workflow.",
 					"Our team is reviewing the submitted referral, evaluating the court status, property status, occupancy, and all information provided to determine the appropriate next steps in accordance with your instructions.",
 					"If additional information or documentation is required, or if direct client contact was requested, we will initiate the appropriate communication promptly.",
 				]}
+				highlights={["Intake Workflow"]}
 				footnote={{
 					heading: "Need immediate assistance?",
 					text: "For imminent court deadlines, overbid hearings, or urgent property security concerns, please contact us directly at",

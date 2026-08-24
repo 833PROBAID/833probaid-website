@@ -203,10 +203,10 @@ export default async function HomeBookDetailPage({ params }) {
           dangerouslySetInnerHTML={{ __html: structuredDataScript }}
         />
       )}
-      <div className="hidden mt-0! !mb-0 !p-6 !pb-[2.5rem] !py-0 !h-auto relative bottom-1.5 !bottom-[0.6rem] bottom-5 bottom-6.5 !ml-16 !mx-[25px]" />
-      <div className="hidden !relative !pt-[2.5rem] !mb-[1.5rem] !mb-[1.2rem] !mt-[1.5rem] !mt-[2.5rem] !mt-[1.2rem] !mb-[2.5rem] !mt-6" />
-      <div className="hidden !mt-0 mb-[0.5rem] !mb-[0.5rem] !pb-[2rem] !pt-[2.2rem] !py-[2.5rem] !mt-[4rem] !mb-[-0.1em] !mb-[-0.07em] !mb-[-0.3em] !mt-[-0.3em] !mb-[1rem]" />
-      <div className="hidden !-mt-2 !items-center !mt-[-1rem] !mt-[2rem] !p-[2.5rem] !w-[92%] !mb-[2rem] !mb-[0.8rem] !p-[1.5rem] !mb-[1.25rem] !text-secondary"></div>
+      <div className="hidden mt-0! !mb-0 !p-6 !pb-[2.5rem] !py-0 !p-0 !h-auto relative bottom-1.5 !bottom-[0.6rem] bottom-5 bottom-6.5 !ml-16 !mr-16 !mx-[25px]" />
+      <div className="hidden !relative !pt-[2.5rem] !mb-[1.5rem] !mb-[1.2rem] !mt-[1.5rem] !mt-[2.5rem] !mt-[1.2rem] !mb-[2.5rem] !mt-6 !border-primary group-hover:!border-secondary" />
+      <div className="hidden !mt-0 mb-[0.5rem] !mb-[0.5rem] !pb-[2rem] !pt-[2.2rem] !py-[2.5rem] !mt-[4rem] !mb-[-0.1em] !mb-[-0.2em] !mb-[-0.07em] !mb-[-0.3em] !mt-[-0.3em] !mb-[1rem] !mt-[0.75rem]" />
+      <div className="hidden !-mt-2 !items-center !mt-[-1rem] !mt-[2rem] !p-[2.5rem] !w-[92%] !mb-[2rem] !mb-[0.8rem] !p-[1.5rem] !mb-[1.25rem] !text-secondary decoration-[max(4.5px,0.12em)]! underline-offset-[0.1em]!"></div>
       <Navbar />
       <section className="mx-auto mt-5 max-w-7xl px-4 md:px-0">
         <BooksHero

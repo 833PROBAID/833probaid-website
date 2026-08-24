@@ -1202,6 +1202,10 @@
 				margin-bottom: -0.1em !important;
 			}
 
+			.\!mb-\[-0\.2em\] {
+				margin-bottom: -0.2em !important;
+			}
+
 			.\!mb-\[-0\.07em\] {
 				margin-bottom: -0.07em !important;
 			}
@@ -1303,4 +1307,32 @@
 
 			.\!text-secondary {
 				color: var(--secondary);
+			}
+
+			.decoration-\[max\(4\.5px\,0\.12em\)\]\! {
+				text-decoration-thickness: max(4.5px, 0.12em) !important;
+			}
+
+			.underline-offset-\[0\.1em\]\! {
+				text-underline-offset: 0.1em !important;
+			}
+
+			.\!mt-\[0\.75rem\] {
+				margin-top: 0.75rem !important;
+			}
+
+			.\!p-0 {
+				padding: 0 !important;
+			}
+
+			.\!border-primary {
+				border-color: var(--primary) !important;
+			}
+
+			.group-hover\:\!border-secondary {
+				&:is(:where(.group):hover *) {
+					@media (hover: hover) {
+						border-color: var(--secondary) /* #fe7702 */ !important;
+					}
+				}
 			}
