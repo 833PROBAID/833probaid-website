@@ -8,12 +8,38 @@ import CTAButton from "./CTAButton";
 const BRAND_SPLIT = /(833PROBAID®?)/g;
 const IS_BRAND = /^833PROBAID®?$/;
 
+const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+/**
+ * Wraps each `highlights` phrase found in a plain-text chunk in the secondary
+ * brand colour, leaving the rest of the copy untouched.
+ */
+function withHighlights(text, highlights, keyPrefix) {
+	if (!highlights.length) return text;
+
+	const splitter = new RegExp(`(${highlights.map(escapeRegExp).join("|")})`, "g");
+
+	return String(text)
+		.split(splitter)
+		.filter((part) => part !== "")
+		.map((part, i) =>
+			highlights.includes(part) ? (
+				<span key={`${keyPrefix}-h${i}`} className="text-secondary font-semibold">
+					{part}
+				</span>
+			) : (
+				part
+			)
+		);
+}
+
 /**
  * Renders copy with every "833PROBAID®" mention routed through <AnimatedText>,
  * so the ® lands as a true superscript (and the mark reads as the brand)
- * instead of sitting inline at full size.
+ * instead of sitting inline at full size. Any `highlights` phrases in the
+ * remaining copy are tinted with the secondary brand colour.
  */
-function withBrand(text, brandClassName = "font-semibold text-primaryDark") {
+function withBrand(text, brandClassName = "font-semibold text-primaryDark", highlights = []) {
 	return String(text)
 		.split(BRAND_SPLIT)
 		.filter((part) => part !== "")
@@ -21,7 +47,7 @@ function withBrand(text, brandClassName = "font-semibold text-primaryDark") {
 			IS_BRAND.test(part) ? (
 				<AnimatedText key={i} text={part} className={brandClassName} top="0.35em" fontSize="28px" />
 			) : (
-				part
+				<span key={i}>{withHighlights(part, highlights, i)}</span>
 			)
 		);
 }
@@ -39,6 +65,7 @@ export default function SubmissionSuccessModal({
 	eyebrow = "833PROBAID®",
 	title,
 	paragraphs = [],
+	highlights = [],
 	footnote,
 	phone = { display: "(833) PROBAID / (833) 776-2243", tel: "8337762243" },
 	closeLabel = "Close",
@@ -195,13 +222,13 @@ export default function SubmissionSuccessModal({
 								key={i}
 								className={`psm-fade psm-d${Math.min(i + 4, 7)} text-[0.95rem] leading-relaxed text-slate-600 sm:text-base`}
 							>
-								{withBrand(text)}
+								{withBrand(text, undefined, highlights)}
 							</p>
 						))}
 					</div>
 
 					{footnote ? (
-						<div className="psm-fade psm-d7 relative mt-4 overflow-hidden rounded-2xl border border-primary/20 bg-tealSoft/60 p-5 text-center sm:p-6">
+						<div className="psm-fade psm-d7 relative mt-4 overflow-hidden rounded-2xl mb-1.75 shadow-[0_0_7px_1px_black] bg-tealSoft/60 p-5 text-center sm:p-6">
 							<span className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-primary to-secondary" />
 							{footnote.heading ? (
 								<p className="font-montserrat text-[1rem] font-black tracking-[0.16em] text-primaryDark uppercase">
@@ -216,7 +243,7 @@ export default function SubmissionSuccessModal({
 							{phone ? (
 								<a
 									href={`tel:${phone.tel}`}
-									className="psm-phone mt-4 inline-flex items-center gap-2.5 rounded-xl bg-secondary px-5 py-3 font-montserrat text-[0.82rem] font-black tracking-wide text-white uppercase transition sm:text-[0.95rem]"
+									className="psm-phone mt-4 inline-flex items-center gap-2.5 rounded-lg bg-secondary px-5 py-3 font-montserrat text-[0.82rem] font-black tracking-wide text-white uppercase transition sm:text-[0.95rem]"
 								>
 									<img src="/svgs/phone-icon-white.svg" style={{ width: "20px", marginTop: "2px" }} alt="Phone" />
 									{phone.display}
@@ -290,7 +317,7 @@ const PSM_STYLES = `
 .psm-ring {
   position: absolute;
   border-radius: 9999px;
-  border: 2px solid rgb(254,119,2);
+  border: 2px solid rgba(255,255,255,0.55);
   inset: 0;
 }
 .psm-ring-1 { animation: psm-halo 2.4s ease-out 0.5s infinite; }
@@ -302,17 +329,34 @@ const PSM_STYLES = `
   animation: psm-draw 520ms cubic-bezier(0.65, 0, 0.35, 1) 430ms both;
 }
 
-.psm-fade { animation: psm-rise 560ms cubic-bezier(0.22, 1, 0.36, 1) both; }
-.psm-d1 { animation-delay: 260ms; }
-.psm-d2 { animation-delay: 340ms; }
+.psm-d1 {
+	animation-delay: 260ms;
+	text-shadow: 1px 1px 1.6px rgba(0,0,0,0.82), 0 0 6px rgba(255,255,255,0.25);
+}
+.psm-d2 {
+	animation-delay: 340ms; 
+
+	span {
+		text-shadow: 1px 2px 1.6px rgba(0,0,0,0.82), 0 0 6px rgba(255,255,255,0.25);
+	}
+}
 .psm-d3 { animation-delay: 420ms; }
 .psm-d4 { animation-delay: 500ms; }
 .psm-d5 { animation-delay: 570ms; }
 .psm-d6 { animation-delay: 640ms; }
 .psm-d7 { animation-delay: 710ms; }
 
-.psm-phone { box-shadow: 0 8px 20px -6px rgba(254,119,2,0.75); }
-.psm-phone:hover { transform: translateY(-2px); filter: brightness(1.06); }
+.psm-phone {
+  box-shadow:
+    2px 1.73px 6.64px 0 rgba(0,0,0,1),
+    5.46px -5.46px 3.64px 0 rgba(0,0,0,0.25) inset,
+    -3.64px 4.55px 3.64px 0 rgba(255,255,255,0.25) inset,
+    -1.82px -0.91px 3.64px 0 rgba(0,0,0,0.7);
+}
+.psm-phone:hover {
+	transform: scale(1.08) rotate(-2deg);
+	filter: brightness(1.06);
+}
 
 @keyframes psm-fade-in { from { opacity: 0 } to { opacity: 1 } }
 @keyframes psm-pop {
@@ -324,8 +368,8 @@ const PSM_STYLES = `
   100% { opacity: 1; transform: scale(1); }
 }
 @keyframes psm-halo {
-  0% { border: 4px solid rgb(254,119,2); transform: scale(0.78); opacity: 1; }
-  100% { border: 4px solid rgb(254,119,2); transform: scale(1.35); opacity: 0; }
+  0% { transform: scale(0.78); opacity: 1; border-width: 3px; }
+  100% { transform: scale(1.35); opacity: 0; border-width: 3px; }
 }
 @keyframes psm-draw { to { stroke-dashoffset: 0; } }
 @keyframes psm-rise {

@@ -12,21 +12,21 @@ export default function BookCardGrid({ cards = [] }) {
   const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
-    try {
-      setShowAll(
-        JSON.parse(localStorage.getItem("bookCardGridShowAll") ?? "false")
-      );
-    } catch {
-      // ignore unreadable/corrupt storage — stay collapsed
-    }
+    // try {
+    //   setShowAll(
+    //     JSON.parse(localStorage.getItem("bookCardGridShowAll") ?? "false")
+    //   );
+    // } catch {
+    //   // ignore unreadable/corrupt storage — stay collapsed
+    // }
   }, []);
 
   const toggleShowAll = () => {
     setShowAll((prev) => {
       const next = !prev;
-      if (typeof window !== "undefined") {
-        localStorage.setItem("bookCardGridShowAll", JSON.stringify(next));
-      }
+      // if (typeof window !== "undefined") {
+      //   localStorage.setItem("bookCardGridShowAll", JSON.stringify(next));
+      // }
       return next;
     });
   };

@@ -149,7 +149,7 @@ const ReadyToGetStart = () => {
                     >
                       <AnimatedText text="(833) 776-2243" />
                       <AnimatedText text=" — " className="text-black" />
-                      <AnimatedText text="NOW" className="underline decoration-[max(4.5px,0.12em)]! underline-offset-[0.1em] [text-decoration-skip-ink:none" />
+                      <AnimatedText text="NOW" className="underline decoration-[max(4.5px,0.12em)]! underline-offset-[0.1em]" />
                       <AnimatedText text=" — " className="text-black" />
                       </span>{" "}
                     <AnimatedText text="or" />{" "}
@@ -163,7 +163,7 @@ const ReadyToGetStart = () => {
                       }}
                     >
                       <span>
-                        <AnimatedText text="FORM" className="underline decoration-[max(4.5px,0.12em)]! underline-offset-[0.1em] [text-decoration-skip-ink:none" />                    
+                        <AnimatedText text="FORM" className="underline decoration-[max(4.5px,0.12em)]! underline-offset-[0.1em]" />                    
                       </span>
                     </Link>{" "}
                     <AnimatedText text=" for a Strategic Consultation. We navigate the red tape, protect the estate’s equity, and manage the transaction through a clean, compliant closing." />
@@ -653,7 +653,7 @@ const ReadyToGetStart = () => {
                   <span style={{ color: "#FE7702" }} className="font-bold probaid-phone">
                     <AnimatedText text="(833) 776-2243" />
                     <AnimatedText text=" — " className="text-black" />
-                    <AnimatedText text="NOW" className="underline decoration-[max(4.5px,0.12em)]! underline-offset-[0.1em] [text-decoration-skip-ink:none" />                    
+                    <AnimatedText text="NOW" className="underline decoration-[max(4.5px,0.12em)]! underline-offset-[0.1em]" />                    
                     <AnimatedText text=" — " className="text-black" />
                   </span>{" "}
                   <AnimatedText text="or" />{" "}
@@ -667,7 +667,7 @@ const ReadyToGetStart = () => {
                     }}
                   >
                     <span>
-                      <AnimatedText text="FORM" className="underline decoration-[max(4.5px,0.12em)]! underline-offset-[0.1em] [text-decoration-skip-ink:none" />                    
+                      <AnimatedText text="FORM" className="underline decoration-[max(4.5px,0.12em)]! underline-offset-[0.1em]" />                    
                     </span>
                   </Link>{" "}
                   <AnimatedText text=" for a Strategic Consultation. We navigate the red tape, protect the estate’s equity, and manage the transaction through a clean, compliant closing." />
