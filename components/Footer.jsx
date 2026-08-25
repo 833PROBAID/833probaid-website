@@ -53,7 +53,7 @@ export default function Footer() {
         </div>
 
         <hr className="text-black/36" />
-        <div className="mx-auto flex w-full max-w-7xl flex-col items-center justify-between px-4 py-4 font-bold md:flex-row">
+        <div id="terms-of-service" className="mx-auto flex w-full max-w-7xl flex-col items-center justify-between px-4 py-4 font-bold md:flex-row">
           <p>
             © {new Date().getFullYear()}{" "}
             <span className="text-secondary">
