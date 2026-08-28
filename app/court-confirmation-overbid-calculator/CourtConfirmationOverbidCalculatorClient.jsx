@@ -2,9 +2,10 @@
 
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import CTAButton from "@/components/CTAButton";
 import ToolLeadCaptureModal from "@/components/ToolLeadCaptureModal";
-import { Calculator } from "lucide-react";
-import { useState } from "react";
+import { Calculator, Gavel } from "lucide-react";
+import { useMemo, useState } from "react";
 
 const shellShadow =
 	"0 clamp(12px, 2.5vw, 20px) clamp(26px, 5.5vw, 48px) rgba(15, 23, 42, 0.16), 0 1px 0 rgba(255,255,255,0.3) inset";
@@ -17,33 +18,48 @@ const metricCardShadow =
 const fieldShadow =
 	"0 clamp(4px, 1.1vw, 6px) clamp(8px, 2.4vw, 14px) rgba(15, 23, 42, 0.11), 0 1px 0 rgba(255,255,255,0.5) inset";
 
+const CONTACT_NAME = "833PROBAID";
+const CONTACT_PHONE = "(833) PROBAID 7762243";
+const CONTACT_HREF = "tel:8337762243";
+
 const currencyFormatter = new Intl.NumberFormat("en-US", {
 	style: "currency",
 	currency: "USD",
-	maximumFractionDigits: 0,
+	maximumFractionDigits: 2,
 });
 
-const formatCurrency = (value) =>
-	currencyFormatter.format(Math.round(value || 0));
+const formatCurrency = (value) => currencyFormatter.format(value || 0);
 
 const parseAmount = (value) => {
-	const parsed = Number(String(value).replace(/[^\d.-]/g, ""));
+	const parsed = Number(String(value).replace(/[^\d.]/g, ""));
 	return Number.isFinite(parsed) ? parsed : 0;
 };
 
-const getMinimumOverbid = (acceptedOffer) => {
-	const firstTenThousand = Math.min(acceptedOffer, 10000);
-	const balance = Math.max(acceptedOffer - 10000, 0);
+// California Probate Code section 10311: the first overbid must exceed the
+// accepted offer by 10% of the first $10,000 plus 5% of the balance.
+const buildOverbid = (acceptedOffer) => {
+	const firstTierBase = Math.min(acceptedOffer, 10000);
+	const firstTierIncrease = firstTierBase * 0.1;
+	const remainingBalance = Math.max(acceptedOffer - 10000, 0);
+	const remainingIncrease = remainingBalance * 0.05;
+	const requiredIncrease = firstTierIncrease + remainingIncrease;
 
-	return acceptedOffer + firstTenThousand * 0.1 + balance * 0.05;
+	return {
+		acceptedOffer,
+		firstTierIncrease,
+		remainingBalance,
+		remainingIncrease,
+		requiredIncrease,
+		minimumOverbid: acceptedOffer + requiredIncrease,
+	};
 };
 
 const Page = () => {
 	const [offerPrice, setOfferPrice] = useState("");
-	const [downPayment, setDownPayment] = useState("");
-	const [deposit, setDeposit] = useState("");
-	const [results, setResults] = useState(null);
-	const [error, setError] = useState("");
+
+	const acceptedOffer = parseAmount(offerPrice);
+	const hasOffer = acceptedOffer > 0;
+	const results = useMemo(() => buildOverbid(acceptedOffer), [acceptedOffer]);
 
 	const renderLabelText = (text) =>
 		text.split("").map((char, index) => {
@@ -60,73 +76,23 @@ const Page = () => {
 			return <span key={`${char}-${index}`}>{char}</span>;
 		});
 
-	const handleCalculation = () => {
-		const acceptedOffer = parseAmount(offerPrice);
-		const plannedDownPayment = parseAmount(downPayment);
-		const existingDeposit = parseAmount(deposit);
-
-		if (acceptedOffer <= 0) {
-			setError(
-				"Enter a valid accepted offer to calculate the statutory overbid.",
-			);
-			setResults(null);
-			return;
-		}
-
-		if (plannedDownPayment <= 0) {
-			setError(
-				"Enter the planned down payment so the funding model can project cash needs.",
-			);
-			setResults(null);
-			return;
-		}
-
-		if (existingDeposit < 0) {
-			setError("Deposit cannot be negative.");
-			setResults(null);
-			return;
-		}
-
-		const minimumOverbid = getMinimumOverbid(acceptedOffer);
-		const statutoryIncrease = minimumOverbid - acceptedOffer;
-		const downPaymentRatio = Math.min(plannedDownPayment / acceptedOffer, 1);
-		const requiredCourtDeposit = minimumOverbid * 0.1;
-		const creditedDeposit = Math.min(existingDeposit, requiredCourtDeposit);
-		const depositGap = Math.max(requiredCourtDeposit - creditedDeposit, 0);
-		const estimatedDownPaymentAtMinimumOverbid =
-			minimumOverbid * downPaymentRatio;
-		const cashNeededBeforeClose = Math.max(
-			estimatedDownPaymentAtMinimumOverbid - existingDeposit,
-			0,
-		);
-		const estimatedLoanAmount = Math.max(
-			minimumOverbid - estimatedDownPaymentAtMinimumOverbid,
-			0,
-		);
-
-		setError("");
-		setResults({
-			acceptedOffer,
-			plannedDownPayment,
-			existingDeposit,
-			minimumOverbid,
-			statutoryIncrease,
-			requiredCourtDeposit,
-			creditedDeposit,
-			depositGap,
-			downPaymentRatio,
-			estimatedDownPaymentAtMinimumOverbid,
-			cashNeededBeforeClose,
-			estimatedLoanAmount,
-		});
-	};
+	const breakdownRows = [
+		{ label: "10% of First $10,000", value: results.firstTierIncrease },
+		{ label: "Remaining Balance", value: results.remainingBalance },
+		{ label: "5% of Remaining Balance", value: results.remainingIncrease },
+		{
+			label: "Required Overbid Increase",
+			value: results.requiredIncrease,
+			emphasis: true,
+		},
+	];
 
 	const handleReset = () => {
 		setOfferPrice("");
-		setDownPayment("");
-		setDeposit("");
-		setResults(null);
-		setError("");
+	};
+
+	const handleCall = () => {
+		window.location.href = CONTACT_HREF;
 	};
 
 	return (
@@ -153,11 +119,11 @@ const Page = () => {
 										COURT CONFIRMATION TOOLKIT
 									</p>
 									<h1 className='mb-3 text-[30px] leading-tight font-extrabold text-white sm:text-[40px]'>
-										Court Confirmation Overbid Calculator
+										California Probate Minimum Overbid Calculator
 									</h1>
 									<p className='max-w-2xl text-base font-bold text-white/95 sm:text-xl'>
-										Model the statutory minimum overbid and funding requirements
-										before you step into court.
+										Enter the current accepted offer to calculate the statutory
+										minimum first overbid under California Probate Code §10311.
 									</p>
 								</div>
 
@@ -170,17 +136,17 @@ const Page = () => {
 											boxShadow: heroPanelShadow,
 										}}>
 										<h2 className='mb-3 text-center text-[18px] font-bold tracking-[0.08em] text-white sm:text-[20px]'>
-											FUNDING SNAPSHOT
+											MINIMUM OVERBID
 										</h2>
 										<p className='text-center text-2xl font-extrabold leading-tight text-white sm:text-4xl'>
-											{results
+											{hasOffer
 												? formatCurrency(results.minimumOverbid)
-												: "Ready to model"}
+												: "Ready to calculate"}
 										</p>
 										<p className='mt-3 text-center text-sm font-bold leading-relaxed text-white/95 sm:text-lg'>
-											{results
-												? `Court deposit target ${formatCurrency(results.requiredCourtDeposit)}`
-												: "Enter an accepted offer, planned cash in, and any existing deposit to generate the court model."}
+											{hasOffer
+												? `Required overbid increase ${formatCurrency(results.requiredIncrease)}`
+												: "Enter the accepted offer and every other line updates automatically."}
 										</p>
 									</div>
 								</div>
@@ -205,7 +171,7 @@ const Page = () => {
 										<h2
 											className='text-[20px] font-bold sm:text-[24px] lg:text-[28px]'
 											style={{ color: "var(--color-primary)" }}>
-											Property Details
+											Accepted Offer
 										</h2>
 										<p className='mt-1 text-sm text-gray-500 sm:text-base'>
 											The statutory model uses 10% of the first $10,000 of the
@@ -214,105 +180,34 @@ const Page = () => {
 									</div>
 								</div>
 
-								<div className='grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3'>
-									<div className='flex flex-col gap-2'>
-										<label className='text-sm font-extrabold tracking-[0.04em] text-gray-900 uppercase'>
-											{renderLabelText("Offer Price ($):")}
-										</label>
-										<input
-											type='number'
-											inputMode='decimal'
-											min='0'
-											placeholder='e.g., 1500000'
-											value={offerPrice}
-											onChange={(e) => {
-												setOfferPrice(e.target.value);
-												setResults(null);
-												setError("");
-											}}
-											className='w-full rounded-2xl border-2 px-4 py-3.5 text-base text-gray-900 transition-all focus:outline-none focus:ring-2'
-											style={{
-												borderColor: "var(--color-primary)",
-												boxShadow: fieldShadow,
-												"--tw-ring-color": "rgba(0, 151, 167, 0.25)",
-											}}
-										/>
-									</div>
-
-									<div className='flex flex-col gap-2'>
-										<label className='text-sm font-extrabold tracking-[0.04em] text-gray-900 uppercase'>
-											{renderLabelText("Down Payment ($):")}
-										</label>
-										<input
-											type='number'
-											inputMode='decimal'
-											min='0'
-											placeholder='e.g., 300000'
-											value={downPayment}
-											onChange={(e) => {
-												setDownPayment(e.target.value);
-												setResults(null);
-												setError("");
-											}}
-											className='w-full rounded-2xl border-2 px-4 py-3.5 text-base text-gray-900 transition-all focus:outline-none focus:ring-2'
-											style={{
-												borderColor: "var(--color-primary)",
-												boxShadow: fieldShadow,
-												"--tw-ring-color": "rgba(0, 151, 167, 0.25)",
-											}}
-										/>
-									</div>
-
-									<div className='flex flex-col gap-2'>
-										<label className='text-sm font-extrabold tracking-[0.04em] text-gray-900 uppercase'>
-											{renderLabelText("Deposit ($) (Optional):")}
-										</label>
-										<input
-											type='number'
-											inputMode='decimal'
-											min='0'
-											placeholder='e.g., 45000'
-											value={deposit}
-											onChange={(e) => {
-												setDeposit(e.target.value);
-												setResults(null);
-												setError("");
-											}}
-											className='w-full rounded-2xl border-2 px-4 py-3.5 text-base text-gray-900 transition-all focus:outline-none focus:ring-2'
-											style={{
-												borderColor: "var(--color-primary)",
-												boxShadow: fieldShadow,
-												"--tw-ring-color": "rgba(0, 151, 167, 0.25)",
-											}}
-										/>
-									</div>
+								<div className='flex flex-col gap-2'>
+									<label
+										htmlFor='accepted-offer'
+										className='text-sm font-extrabold tracking-[0.04em] text-gray-900 uppercase'>
+										{renderLabelText("Accepted Offer ($):")}
+									</label>
+									<input
+										id='accepted-offer'
+										type='number'
+										inputMode='decimal'
+										min='0'
+										placeholder='e.g., 1000000'
+										value={offerPrice}
+										onChange={(e) => setOfferPrice(e.target.value)}
+										className='w-full rounded-2xl border-2 px-4 py-3.5 text-base text-gray-900 transition-all focus:outline-none focus:ring-2 md:max-w-md font-bold'
+										style={{
+											borderColor: "var(--color-primary)",
+											boxShadow: fieldShadow,
+											"--tw-ring-color": "rgba(0, 151, 167, 0.25)",
+										}}
+									/>
+									<p className='text-sm leading-relaxed text-gray-500'>
+										Every amount below is calculated automatically from this
+										offer.
+									</p>
 								</div>
 
-								<p className='mt-5 text-sm leading-relaxed text-gray-500'>
-									The calculator assumes your planned down payment scales with
-									the new minimum overbid. Any existing deposit is credited
-									toward the 10% court deposit target.
-								</p>
-
-								{error ? (
-									<div className='mt-5 rounded-2xl border border-secondary/20 bg-secondary/8 px-4 py-3 text-sm font-semibold text-secondary'>
-										{error}
-									</div>
-								) : null}
-
-								<div className='mt-7 flex flex-col items-center justify-center gap-4 sm:flex-row sm:items-center sm:justify-end'>
-									<button
-										type='button'
-										onClick={handleCalculation}
-										className='transition-transform hover:scale-[1.01] focus-visible:ring-2 focus-visible:ring-secondary/45 focus-visible:ring-offset-2 focus-visible:outline-none'
-										aria-label='Run overbid calculation'>
-										<img
-											src='/svgs/run.svg'
-											alt='Run overbid calculation'
-											className='h-13.25'
-										/>
-									</button>
-
+								{/* <div className='mt-7 flex justify-center sm:justify-end'>
 									<button
 										type='button'
 										onClick={handleReset}
@@ -324,157 +219,143 @@ const Page = () => {
 											className='h-13.25'
 										/>
 									</button>
-								</div>
+								</div> */}
 
-								{results ? (
-									<div className='mt-8 space-y-6'>
-										<div className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6'>
-											<div
-												className='rounded-3xl bg-primary p-6 text-white'
-												style={{ boxShadow: metricCardShadow }}>
-												<p className='text-xs font-semibold tracking-[0.25em] uppercase text-white/80'>
+								<div className='mt-8 space-y-6'>
+									<div
+										className='rounded-3xl border border-gray-200 bg-white p-6'
+										style={{ boxShadow: sectionCardShadow }}>
+										<h3 className='text-xl font-bold text-primary'>
+											Calculation Breakdown
+										</h3>
+										<div className='mt-5 space-y-4 text-sm sm:text-base'>
+											<div className='flex items-center justify-between gap-4 border-b border-gray-100 pb-3'>
+												<span className='font-semibold text-gray-500'>
+													Accepted Offer
+												</span>
+												<span className='font-bold text-gray-900'>
+													{hasOffer ? formatCurrency(results.acceptedOffer) : "—"}
+												</span>
+											</div>
+
+											{breakdownRows.map((row) => (
+												<div
+													key={row.label}
+													className='flex items-center justify-between gap-4 border-b border-gray-100 pb-3'>
+													<span
+														className={
+															row.emphasis
+																? "font-bold text-gray-700"
+																: "font-semibold text-gray-500"
+														}>
+														{row.label}
+													</span>
+													<span
+														className={
+															row.emphasis
+																? "font-black text-secondary"
+																: "font-bold text-gray-900"
+														}>
+														{hasOffer ? formatCurrency(row.value) : "—"}
+													</span>
+												</div>
+											))}
+
+											<div className='flex items-center justify-between gap-4'>
+												<span className='text-xs font-bold tracking-[0.2em] text-gray-500 uppercase'>
 													Minimum Overbid
-												</p>
-												<p className='mt-2 text-3xl font-black sm:text-4xl'>
-													{formatCurrency(results.minimumOverbid)}
-												</p>
-												<p className='mt-2 text-sm text-white/85'>
-													This reflects the accepted offer plus the statutory
-													court-confirmation increase.
-												</p>
-											</div>
-
-											<div
-												className='rounded-3xl bg-secondary p-6 text-white'
-												style={{ boxShadow: metricCardShadow }}>
-												<p className='text-xs font-semibold tracking-[0.25em] uppercase text-white/80'>
-													Court Deposit Target
-												</p>
-												<p className='mt-2 text-3xl font-black sm:text-4xl'>
-													{formatCurrency(results.requiredCourtDeposit)}
-												</p>
-												<p className='mt-2 text-sm text-white/85'>
-													Existing deposit credited:{" "}
-													{formatCurrency(results.creditedDeposit)}
-												</p>
-											</div>
-
-											<div
-												className='rounded-3xl border border-gray-200 bg-white p-6'
-												style={{ boxShadow: metricCardShadow }}>
-												<p className='text-xs font-semibold tracking-[0.25em] uppercase text-gray-500'>
-													Added Cash Needed
-												</p>
-												<p className='mt-2 text-3xl font-black text-primary sm:text-4xl'>
-													{formatCurrency(results.cashNeededBeforeClose)}
-												</p>
-												<p className='mt-2 text-sm text-gray-600'>
-													Deposit gap at hearing:{" "}
-													{formatCurrency(results.depositGap)}
-												</p>
-											</div>
-										</div>
-
-										<div className='grid grid-cols-1 gap-6 xl:grid-cols-2'>
-											<div
-												className='rounded-3xl border border-gray-200 bg-white p-6'
-												style={{ boxShadow: sectionCardShadow }}>
-												<h3 className='text-xl font-bold text-primary'>
-													Calculation Breakdown
-												</h3>
-												<div className='mt-5 space-y-4 text-sm sm:text-base'>
-													<div className='flex items-center justify-between gap-4 border-b border-gray-100 pb-3'>
-														<span className='font-semibold text-gray-500'>
-															Accepted offer
-														</span>
-														<span className='font-bold text-gray-900'>
-															{formatCurrency(results.acceptedOffer)}
-														</span>
-													</div>
-													<div className='flex items-center justify-between gap-4 border-b border-gray-100 pb-3'>
-														<span className='font-semibold text-gray-500'>
-															Statutory increase
-														</span>
-														<span className='font-bold text-gray-900'>
-															{formatCurrency(results.statutoryIncrease)}
-														</span>
-													</div>
-													<div className='flex items-center justify-between gap-4 border-b border-gray-100 pb-3'>
-														<span className='font-semibold text-gray-500'>
-															Estimated down payment at minimum overbid
-														</span>
-														<span className='font-bold text-gray-900'>
-															{formatCurrency(
-																results.estimatedDownPaymentAtMinimumOverbid,
-															)}
-														</span>
-													</div>
-													<div className='flex items-center justify-between gap-4 border-b border-gray-100 pb-3'>
-														<span className='font-semibold text-gray-500'>
-															Existing deposit credited
-														</span>
-														<span className='font-bold text-gray-900'>
-															{formatCurrency(results.creditedDeposit)}
-														</span>
-													</div>
-													<div className='flex items-center justify-between gap-4 border-b border-gray-100 pb-3'>
-														<span className='font-semibold text-gray-500'>
-															Hearing deposit shortfall
-														</span>
-														<span className='font-bold text-gray-900'>
-															{formatCurrency(results.depositGap)}
-														</span>
-													</div>
-													<div className='flex items-center justify-between gap-4'>
-														<span className='font-semibold text-gray-500'>
-															Estimated financed balance
-														</span>
-														<span className='font-bold text-gray-900'>
-															{formatCurrency(results.estimatedLoanAmount)}
-														</span>
-													</div>
-												</div>
-											</div>
-
-											<div
-												className='rounded-3xl border border-gray-200 bg-white p-6'
-												style={{ boxShadow: sectionCardShadow }}>
-												<h3 className='text-xl font-bold text-primary'>
-													Court Readiness Notes
-												</h3>
-												<div className='mt-5 space-y-4 text-sm leading-relaxed text-gray-600 sm:text-base'>
-													<p>
-														Your current plan implies a down payment ratio of{" "}
-														<span className='font-bold text-gray-900'>
-															{Math.round(results.downPaymentRatio * 100)}%
-														</span>{" "}
-														at the accepted offer.
-													</p>
-													<p>
-														If the sale opens at the statutory minimum overbid,
-														budget{" "}
-														<span className='font-bold text-gray-900'>
-															{formatCurrency(results.cashNeededBeforeClose)}
-														</span>{" "}
-														in additional cash to preserve that leverage
-														profile.
-													</p>
-													<p>
-														Bring a cashier’s check strategy into your court
-														prep if the existing deposit does not fully satisfy
-														the 10% target.
-													</p>
-													<div className='rounded-2xl bg-gray-50 px-4 py-4 text-sm text-gray-500'>
-														This tool provides a planning model only. Confirm
-														exact court deposit handling, credit for existing
-														funds, and hearing instructions with probate counsel
-														and the listing side before court.
-													</div>
-												</div>
+												</span>
+												<span className='text-xl font-black text-primary sm:text-2xl'>
+													{hasOffer ? formatCurrency(results.minimumOverbid) : "—"}
+												</span>
 											</div>
 										</div>
 									</div>
-								) : null}
+
+									<div
+										className='rounded-3xl bg-secondary p-6 text-white sm:p-8'
+										style={{ boxShadow: metricCardShadow }}>
+										<p className='text-sm font-bold tracking-[0.25em] uppercase text-white/80'>
+											Minimum Overbid
+										</p>
+										<p className='mt-2 text-4xl font-black sm:text-5xl'>
+											{hasOffer ? formatCurrency(results.minimumOverbid) : "—"}
+										</p>
+										<p className='mt-2 text-sm text-white/85 sm:text-base font-bold'>
+											Accepted offer plus the statutory increase of{" "}
+											{hasOffer ? formatCurrency(results.requiredIncrease) : "—"}.
+										</p>
+									</div>
+
+									<div
+										className='rounded-3xl border border-gray-200 bg-white p-6 sm:p-8'
+										style={{ boxShadow: sectionCardShadow }}>
+										<h3 className='text-xl font-bold text-primary sm:text-2xl'>
+											Planning to Overbid at the Court Confirmation Hearing?
+										</h3>
+										<div className='mt-4 space-y-4 text-sm leading-relaxed text-gray-600 sm:text-base'>
+											<p>
+												The amount above represents the statutory minimum initial
+												overbid based on the accepted offer entered, using the
+												formula in California Probate Code §10311.
+											</p>
+											<p>
+												Court procedures, deposit requirements, acceptable forms
+												of payment, bidding increments, financing terms, and
+												other requirements may vary depending on the court and
+												the specific probate sale.
+											</p>
+											<p>
+												Before attending the hearing, confirm the required
+												deposit amount and form of payment with the listing
+												agent, estate representative/counsel, and applicable
+												court instructions.
+											</p>
+											<p>
+												This calculator is provided for informational purposes
+												only and is not legal advice. Final bid requirements and
+												acceptance are determined by the court.
+											</p>
+										</div>
+									</div>
+
+									<div className='flex items-start gap-3 rounded-3xl border border-secondary bg-secondary/10 px-5 py-5 sm:px-6'>
+										<Gavel
+											className='mt-0.5 h-5 w-5 shrink-0 text-secondary'
+											strokeWidth={2.5}
+											aria-hidden='true'
+										/>
+										<p className='text-sm leading-relaxed font-semibold text-secondary sm:text-base'>
+											The calculated amount is the minimum opening overbid — not
+											necessarily the final purchase price. Additional competitive
+											bidding may occur at the confirmation hearing.
+										</p>
+									</div>
+
+									<div
+										className='rounded-3xl border-[3px] border-secondary bg-white p-6 text-center sm:p-8'
+										style={{ boxShadow: sectionCardShadow }}>
+										<p className='text-sm font-bold tracking-[0.25em] text-secondary uppercase'>
+											Need A Second Set Of Eyes?
+										</p>
+										<h3 className='mt-2 text-2xl font-black text-primary sm:text-3xl'>
+											Have questions about overbidding on a probate property?
+										</h3>
+										<p className='mt-3 text-md leading-relaxed text-gray-600 sm:text-base'>
+											Contact {CONTACT_NAME} — Probate Real Estate Specialist
+										</p>
+										<div className='mt-6 flex justify-center'>
+											<CTAButton
+												label={`Call ${CONTACT_PHONE}`}
+												onClick={handleCall}
+												// bg='#0097A7'
+												icon='/arrow-right.png'
+												className='px-5 h-12 lg:h-14'
+												aria-label={`Call ${CONTACT_PHONE}`}
+											/>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
