@@ -81,6 +81,8 @@ const INITIAL_FORM_DATA = {
 		reverseMortgage: false,
 		successorInInterest: false,
 		otherCaseType: false,
+		partitionAction: false,
+		receivership: false,
 		notSure: false,
 	},
 
@@ -541,6 +543,10 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 			errors.add("clientRole.successorRole");
 		if (formData.caseType.otherCaseType && !hasRole("Other"))
 			errors.add("clientRole.successorRole");
+		if (formData.caseType.partitionAction && !hasRole("Other"))
+			errors.add("clientRole.successorRole");
+		if (formData.caseType.receivership && !hasRole("Other"))
+			errors.add("clientRole.successorRole");
 
 		// When the court has issued letters, the issue date is required.
 		// (Courthouse is always required — handled in requiredFields above.)
@@ -697,7 +703,11 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 					? ["Other"]
 					: formData.caseType.otherCaseType
 						? ["Other"]
-						: null;
+						: formData.caseType.partitionAction
+							? ["Other"]
+							: formData.caseType.receivership
+								? ["Other"]
+								: null;
 
 	// Every Case Type is single-pick for Client Role.
 	const isClientRoleMulti = false;
@@ -733,6 +743,8 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 		formData.caseType.reverseMortgage,
 		formData.caseType.successorInInterest,
 		formData.caseType.otherCaseType,
+		formData.caseType.partitionAction,
+		formData.caseType.receivership,
 		formData.clientRole,
 		readOnly,
 	]);
@@ -1286,6 +1298,8 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 																...formData.caseType,
 																probate: e.target.checked,
 																otherCaseType: false,
+																partitionAction: false,
+																receivership: false,
 																conservatorship: false,
 																fullAuthority: false,
 																limitedAuthority: false,
@@ -1313,6 +1327,8 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 																...formData.caseType,
 																fullAuthority: e.target.checked,
 																otherCaseType: false,
+																partitionAction: false,
+																receivership: false,
 																limitedAuthority: false,
 																probate: true,
 																conservatorship: false,
@@ -1344,6 +1360,8 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 																...formData.caseType,
 																limitedAuthority: e.target.checked,
 																otherCaseType: false,
+																partitionAction: false,
+																receivership: false,
 																fullAuthority: false,
 																probate: true,
 																conservatorship: false,
@@ -1387,6 +1405,8 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 																...formData.caseType,
 																conservatorship: e.target.checked,
 																otherCaseType: false,
+																partitionAction: false,
+																receivership: false,
 																probate: false,
 																fullAuthority: false,
 																limitedAuthority: false,
@@ -1417,6 +1437,8 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 																...formData.caseType,
 																ofTheEstate: e.target.checked,
 																otherCaseType: false,
+																partitionAction: false,
+																receivership: false,
 																ofThePerson: false,
 																both: false,
 																probate: false,
@@ -1448,6 +1470,8 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 																...formData.caseType,
 																ofThePerson: e.target.checked,
 																otherCaseType: false,
+																partitionAction: false,
+																receivership: false,
 																ofTheEstate: false,
 																both: false,
 																probate: false,
@@ -1479,6 +1503,8 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 																...formData.caseType,
 																both: e.target.checked,
 																otherCaseType: false,
+																partitionAction: false,
+																receivership: false,
 																ofThePerson: true,
 																ofTheEstate: true,
 																probate: false,
@@ -1522,6 +1548,8 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 																...formData.caseType,
 																trustSale: e.target.checked,
 																otherCaseType: false,
+																partitionAction: false,
+																receivership: false,
 																probate: false,
 																conservatorship: false,
 																fullAuthority: false,
@@ -1552,6 +1580,8 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 																...formData.caseType,
 																trustee: e.target.checked,
 																otherCaseType: false,
+																partitionAction: false,
+																receivership: false,
 																successorTrustee: false,
 																probate: false,
 																conservatorship: false,
@@ -1583,6 +1613,8 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 																...formData.caseType,
 																successorTrustee: e.target.checked,
 																otherCaseType: false,
+																partitionAction: false,
+																receivership: false,
 																probate: false,
 																conservatorship: false,
 																fullAuthority: false,
@@ -1606,20 +1638,26 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 										</div>
 										<div className='flex justify-start gap-2 w-full'>
 											<Checkbox
-												name='reverseMortgage'
+												name='partitionAction'
 												group='caseType'
-												label='Reverse Mortgage'
-												checked={formData.caseType.reverseMortgage}
+												label='Partition Action'
+												checked={formData.caseType.partitionAction}
 												onChange={(e) => {
-													markTouched("caseType", "clientRole");
+													markTouched(
+														"caseType",
+														"clientRole",
+														"clientRole.successorRole",
+													);
 													setFormData({
 														...formData,
 														clientRole: "",
 														clientRoleOther: "",
 														caseType: {
 															...formData.caseType,
-															reverseMortgage: e.target.checked,
+															partitionAction: e.target.checked,
+															receivership: false,
 															otherCaseType: false,
+															successorInInterest: false,
 															probate: false,
 															conservatorship: false,
 															fullAuthority: false,
@@ -1630,11 +1668,11 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 															trustSale: false,
 															trustee: false,
 															successorTrustee: false,
-															successorInInterest: false,
+															reverseMortgage: false,
 														},
 													});
 												}}
-												width='220px'
+												width='240px'
 											/>
 										</div>
 										<div className='flex justify-start gap-2 w-full'>
@@ -1657,6 +1695,8 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 															...formData.caseType,
 															successorInInterest: e.target.checked,
 															otherCaseType: false,
+															partitionAction: false,
+															receivership: false,
 															probate: false,
 															conservatorship: false,
 															fullAuthority: false,
@@ -1672,6 +1712,80 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 													});
 												}}
 												width='240px'
+											/>
+										</div>
+										<div className='flex justify-start gap-2 w-full'>
+											<Checkbox
+												name='receivership'
+												group='caseType'
+												label='Receivership'
+												checked={formData.caseType.receivership}
+												onChange={(e) => {
+													markTouched(
+														"caseType",
+														"clientRole",
+														"clientRole.successorRole",
+													);
+													setFormData({
+														...formData,
+														clientRole: "",
+														clientRoleOther: "",
+														caseType: {
+															...formData.caseType,
+															receivership: e.target.checked,
+															partitionAction: false,
+															otherCaseType: false,
+															successorInInterest: false,
+															probate: false,
+															conservatorship: false,
+															fullAuthority: false,
+															limitedAuthority: false,
+															ofTheEstate: false,
+															ofThePerson: false,
+															both: false,
+															trustSale: false,
+															trustee: false,
+															successorTrustee: false,
+															reverseMortgage: false,
+														},
+													});
+												}}
+												width='240px'
+											/>
+										</div>
+										<div className='flex justify-start gap-2 w-full'>
+											<Checkbox
+												name='reverseMortgage'
+												group='caseType'
+												label='Reverse Mortgage'
+												checked={formData.caseType.reverseMortgage}
+												onChange={(e) => {
+													markTouched("caseType", "clientRole");
+													setFormData({
+														...formData,
+														clientRole: "",
+														clientRoleOther: "",
+														caseType: {
+															...formData.caseType,
+															reverseMortgage: e.target.checked,
+															otherCaseType: false,
+															partitionAction: false,
+															receivership: false,
+															probate: false,
+															conservatorship: false,
+															fullAuthority: false,
+															limitedAuthority: false,
+															ofTheEstate: false,
+															ofThePerson: false,
+															both: false,
+															trustSale: false,
+															trustee: false,
+															successorTrustee: false,
+															successorInInterest: false,
+														},
+													});
+												}}
+												width='220px'
 											/>
 										</div>
 										<div className='flex justify-start gap-2 w-full'>
@@ -1693,6 +1807,8 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 														caseType: {
 															...formData.caseType,
 															otherCaseType: e.target.checked,
+															partitionAction: false,
+															receivership: false,
 															successorInInterest: false,
 															probate: false,
 															conservatorship: false,

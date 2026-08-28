@@ -65,6 +65,8 @@ const referralSchema = new mongoose.Schema(
 			reverseMortgage: { type: Boolean, default: false },
 			successorInInterest: { type: Boolean, default: false },
 			otherCaseType: { type: Boolean, default: false },
+			partitionAction: { type: Boolean, default: false },
+			receivership: { type: Boolean, default: false },
 			notSure: { type: Boolean, default: false },
 		},
 
