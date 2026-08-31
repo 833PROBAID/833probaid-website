@@ -78,13 +78,15 @@ const INITIAL_FORM_DATA = {
 		trustSale: false,
 		trustee: false,
 		successorTrustee: false,
-		reverseMortgage: false,
 		successorInInterest: false,
 		otherCaseType: false,
 		partitionAction: false,
 		receivership: false,
 		notSure: false,
 	},
+
+	// Does the selected case type involve an existing reverse mortgage?
+	reverseMortgage: "",
 
 	// Requested Support
 	requestedSupport: {
@@ -507,6 +509,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 			lettersIssued: formData.lettersIssued,
 			courthouse: formData.courthouse,
 			multipleProperties: formData.multipleProperties,
+			reverseMortgage: formData.reverseMortgage,
 			attorneyName: formData.attorneyName,
 			attorneyEmail: formData.attorneyEmail,
 		};
@@ -692,7 +695,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 	}, [_formData, touched, readOnly]);
 
 	// The selected Case Type restricts which Client Role options are allowed.
-	// `null` means no restriction (Reverse Mortgage / none → all allowed).
+	// `null` means no restriction (no case type selected → all allowed).
 	const allowedClientRoles = formData.caseType.probate
 		? ["Executor", "Administrator"]
 		: formData.caseType.conservatorship
@@ -740,7 +743,6 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 		formData.caseType.probate,
 		formData.caseType.conservatorship,
 		formData.caseType.trustSale,
-		formData.caseType.reverseMortgage,
 		formData.caseType.successorInInterest,
 		formData.caseType.otherCaseType,
 		formData.caseType.partitionAction,
@@ -1307,7 +1309,6 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 																ofThePerson: false,
 																both: false,
 																trustSale: false,
-																reverseMortgage: false,
 																successorInInterest: false,
 															},
 														});
@@ -1337,7 +1338,6 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 																both: false,
 																trustee: false,
 																successorTrustee: false,
-																reverseMortgage: false,
 																successorInInterest: false,
 																trustSale: false,
 															},
@@ -1370,7 +1370,6 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 																both: false,
 																trustee: false,
 																successorTrustee: false,
-																reverseMortgage: false,
 																successorInInterest: false,
 																trustSale: false,
 															},
@@ -1415,7 +1414,6 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 																both: false,
 																trustee: false,
 																successorTrustee: false,
-																reverseMortgage: false,
 																successorInInterest: false,
 																trustSale: false,
 															}
@@ -1447,7 +1445,6 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 																limitedAuthority: false,
 																trustee: false,
 																successorTrustee: false,
-																reverseMortgage: false,
 																successorInInterest: false,
 																trustSale: false,
 															},
@@ -1480,7 +1477,6 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 																limitedAuthority: false,
 																trustee: false,
 																successorTrustee: false,
-																reverseMortgage: false,
 																successorInInterest: false,
 																trustSale: false,
 															},
@@ -1513,7 +1509,6 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 																limitedAuthority: false,
 																trustee: false,
 																successorTrustee: false,
-																reverseMortgage: false,
 																successorInInterest: false,
 																trustSale: false,
 															},
@@ -1559,7 +1554,6 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 																both: false,
 																trustee: false,
 																successorTrustee: false,
-																reverseMortgage: false,
 																successorInInterest: false,
 															},
 														});
@@ -1591,7 +1585,6 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 																ofThePerson: false,
 																both: false,
 																trustSale: true,
-																reverseMortgage: false,
 																successorInInterest: false,
 															},
 														});
@@ -1624,7 +1617,6 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 																both: false,
 																trustSale: true,
 																trustee: false,
-																reverseMortgage: false,
 																successorInInterest: false,
 															},
 														});
@@ -1668,7 +1660,6 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 															trustSale: false,
 															trustee: false,
 															successorTrustee: false,
-															reverseMortgage: false,
 														},
 													});
 												}}
@@ -1707,7 +1698,6 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 															trustSale: false,
 															trustee: false,
 															successorTrustee: false,
-															reverseMortgage: false,
 														},
 													});
 												}}
@@ -1746,46 +1736,10 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 															trustSale: false,
 															trustee: false,
 															successorTrustee: false,
-															reverseMortgage: false,
 														},
 													});
 												}}
 												width='240px'
-											/>
-										</div>
-										<div className='flex justify-start gap-2 w-full'>
-											<Checkbox
-												name='reverseMortgage'
-												group='caseType'
-												label='Reverse Mortgage'
-												checked={formData.caseType.reverseMortgage}
-												onChange={(e) => {
-													markTouched("caseType", "clientRole");
-													setFormData({
-														...formData,
-														clientRole: "",
-														clientRoleOther: "",
-														caseType: {
-															...formData.caseType,
-															reverseMortgage: e.target.checked,
-															otherCaseType: false,
-															partitionAction: false,
-															receivership: false,
-															probate: false,
-															conservatorship: false,
-															fullAuthority: false,
-															limitedAuthority: false,
-															ofTheEstate: false,
-															ofThePerson: false,
-															both: false,
-															trustSale: false,
-															trustee: false,
-															successorTrustee: false,
-															successorInInterest: false,
-														},
-													});
-												}}
-												width='220px'
 											/>
 										</div>
 										<div className='flex justify-start gap-2 w-full'>
@@ -1820,7 +1774,6 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 															trustSale: false,
 															trustee: false,
 															successorTrustee: false,
-															reverseMortgage: false,
 														},
 													});
 												}}
@@ -1828,10 +1781,41 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 											/>
 										</div>
 										{fieldErrors.has("caseType") && (
-											<p className='text-red-500 font-bold text-base'>
+											<p className='text-red-500 font-bold text-base mb-0'>
 												Please select at least one case type.
 											</p>
 										)}
+
+										<div className='flex justify-between items-center gap-4 pt-6'>
+											<label className='block font-bold text-lg'>
+												{renderLabel(
+													"Does the above selected case type involve an existing reverse mortgage?",
+												)}
+											</label>
+											<RadioGroup
+												name='reverseMortgage'
+												value={formData.reverseMortgage}
+												onChange={handleChange}
+												error={fieldErrors.has("reverseMortgage")}
+												options={[
+													{
+														value: "Yes",
+														label: "Yes",
+														color: "teal",
+														width: "80px",
+													},
+													{
+														value: "No",
+														label: "No",
+														color: "orange",
+														width: "80px",
+													},
+												]}
+												width='auto'
+												gap='gap-4'
+												direction='horizontal'
+											/>
+										</div>
 									</FormSection>
 
 									{/* Client/Representative Details */}

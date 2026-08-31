@@ -62,13 +62,15 @@ const referralSchema = new mongoose.Schema(
 			trustSale: { type: Boolean, default: false },
 			trustee: { type: Boolean, default: false },
 			successorTrustee: { type: Boolean, default: false },
-			reverseMortgage: { type: Boolean, default: false },
 			successorInInterest: { type: Boolean, default: false },
 			otherCaseType: { type: Boolean, default: false },
 			partitionAction: { type: Boolean, default: false },
 			receivership: { type: Boolean, default: false },
 			notSure: { type: Boolean, default: false },
 		},
+
+		// Does the selected case type involve an existing reverse mortgage?
+		reverseMortgage: { type: String, default: "" },
 
 		// Requested Support
 		requestedSupport: {
