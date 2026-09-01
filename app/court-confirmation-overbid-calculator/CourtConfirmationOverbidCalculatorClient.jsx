@@ -154,7 +154,7 @@ const Page = () => {
                       background:
                         "linear-gradient(180deg, #f7ac46 0%, #fe7701 52%, #fe7701 100%)",
                       boxShadow:
-                        "inset 3px 4px 1px rgba(255,255,255,0.25), inset -3px -2px 2px 2px rgba(0,0,0,0.45), 0 6px 10px rgba(0,0,0,0.45)",
+                        "inset 3px 4px 1px rgba(255,255,255,0.25), inset -3px -2px 2px 2px rgba(0,0,0,0.45), 0 0 6px 5px rgba(0,0,0,0.5)",
                     }}
                   >
                     <span className="flex h-8.5 w-8.5 items-center justify-center rounded-full bg-white shadow-[0_1px_3px_rgba(0,0,0,0.35)]">
@@ -307,12 +307,12 @@ const Page = () => {
                 <div className="flex flex-col gap-2">
                   <label
                     htmlFor="accepted-offer"
-                    className="text-[1.375rem] font-bold uppercase"
+                    className="text-[1.375rem] font-bold uppercase text-primary group-hover:text-secondary"
                   >
                     Accepted Offer Amount:
                   </label>
                   <div className="flex items-stretch">
-                    <span className="grid shrink-0 place-items-center rounded-l-2xl border-2 border-r border-primary bg-slate-100 px-4 text-xl font-bold text-primaryDark select-none">
+                    <span className="grid shrink-0 place-items-center rounded-l-2xl border-2 border-r border-primary bg-slate-100 px-4 text-xl font-bold text-secondary select-none">
                       $
                     </span>
                     <input
