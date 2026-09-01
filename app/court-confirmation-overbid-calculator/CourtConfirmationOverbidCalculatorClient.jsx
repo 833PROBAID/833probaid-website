@@ -242,7 +242,7 @@ const Page = () => {
                       >
                         {hasOffer
                           ? formatCurrency(results.minimumOverbid)
-                          : "Ready to calculate"}
+                          : "Ready to calculate?"}
                       </p>
 
                       <div
