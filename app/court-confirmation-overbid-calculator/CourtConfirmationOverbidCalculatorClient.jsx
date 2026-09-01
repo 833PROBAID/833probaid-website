@@ -4,15 +4,15 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import CTAButton from "@/components/CTAButton";
 import ToolLeadCaptureModal from "@/components/ToolLeadCaptureModal";
-import { Calculator, Gavel } from "lucide-react";
+import { Calculator, Gavel, Landmark } from "lucide-react";
 import { useMemo, useState } from "react";
 
 const shellShadow =
   "rgba(0, 0, 0, 0.5) 0px 8px 12px, rgba(0, 0, 0, 0.7) 0px -5px 12px 1px";
-// const heroPanelShadow =
-//   "rgba(0, 0, 0, 0.4) 0px 8px 12px, rgba(0, 0, 0, 0.4) 0px -5px 12px 1px";
 const heroPanelShadow =
-  "rgba(0, 0, 0, 0.4) 0px 8px 12px,rgba(0, 0, 0, 0.4) 0px -5px 12px 1px,rgba(0, 0, 0, 0.25) 5.46px -5.46px 3.64px 0px inset,rgba(255, 255, 255, 0.25) -3.64px 4.55px 3.64px 0px inset";
+  "rgba(0, 0, 0, 0.5) 5px 7px 12px 10px,rgba(255, 255, 255, 0.25) 2.46px 3.46px 3.64px 0px inset,rgba(0, 0, 0, 0.25) -2.64px -3.55px 3.64px 0px inset";
+const heroPanelShadow2 =
+  "rgba(0, 0, 0, 0.4) 0px -2px 3px,rgba(0, 0, 0, 0.8) 0px 2px 5px 1px,rgba(255, 255, 255, 0.25) 5.46px 5.46px 3.64px 0px inset,rgba(0, 0, 0, 0.25) -3.64px -4.55px 3.64px 0px inset";
 const sectionCardShadow =
   "rgba(0, 0, 0, 0.4) 0px 8px 12px, rgba(0, 0, 0, 0.4) 0px -5px 12px 1px";
 const metricCardShadow =
@@ -108,96 +108,170 @@ const Page = () => {
       <section className="min-h-screen py-8 sm:py-12 lg:py-16 font-montserrat">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div
-            className="overflow-hidden rounded-3xl border-[3px] border-secondary group hover:translate-y-[-5px] hover:![box-shadow:rgba(0,0,0,0.6)_0px_12px_20px,rgba(0,0,0,0.7)_0px_-8px_16px_2px]"
+            className="overflow-hidden rounded-3xl border-[3px] border-[#0f1417] group hover:translate-y-[-5px] hover:![box-shadow:rgba(0,0,0,0.6)_0px_12px_20px,rgba(0,0,0,0.7)_0px_-8px_16px_2px]"
             style={{ boxShadow: shellShadow }}
           >
             <div
-              className="p-10"
+              className="relative overflow-hidden p-6 sm:p-8 lg:p-10 rounded-t-[20px]"
               style={{
                 background:
-                  "linear-gradient(to bottom right, var(--color-primary), var(--color-primaryDark))",
+                  "linear-gradient(165deg, #26808d 0%, #13707f 28%, #065b6a 58%, #034653 100%)",
+                boxShadow:
+                  "rgba(0, 0, 0, 0.4) 0px 4px 3px, rgba(255,255,255,0.4) 4px 4px 5px inset, rgba(0,0,0,0.4) -6px -6px 5px inset",
               }}
             >
-              <div className="flex flex-col gap-6 xl:flex-row xl:items-start xl:justify-between xl:gap-8 -mb-[0.3em]">
-                <div
-                  className="flex-1"
-                  style={{
-                    filter: "drop-shadow(2px 3px 0px rgba(0,0,0,0.5))",
-                  }}
-                >
-                  <p className="mb-3 text-[1.375rem] font-bold tracking-[1px] text-white -mt-[0.3em]">
-                    COURT CONFIRMATION TOOLKIT
-                  </p>
-                  <h1 className="mb-3 leading-tight font-bold text-white text-[40px]">
+              {/* halftone dot texture */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0"
+                style={{
+                  backgroundImage:
+                    "radial-gradient(circle, rgba(255,255,255,0.22) 1.4px, transparent 1.5px)",
+                  backgroundSize: "11px 11px",
+                  maskImage:
+                    "radial-gradient(85% 105% at 100% 78%, #000 0%, rgba(0,0,0,0.6) 45%, transparent 80%)",
+                  WebkitMaskImage:
+                    "radial-gradient(85% 105% at 100% 78%, #000 0%, rgba(0,0,0,0.6) 45%, transparent 80%)",
+                }}
+              />
+
+              {/* orange corner wedge */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute bottom-0 left-0 h-[87px] w-[87px]"
+                style={{
+                  background:
+                    "linear-gradient(200deg, #fe7701 0%, #fe7701 45%, #9e5220 100%)",
+                  clipPath: "polygon(0 0, 0 100%, 100% 100%)",
+                }}
+              />
+
+              <div className="relative flex flex-col gap-10 xl:flex-row xl:items-center xl:justify-between xl:gap-8">
+                <div className="flex-1">
+                  <div
+                    className="inline-flex items-center gap-3 rounded-xl py-2 pr-5 pl-2"
+                    style={{
+                      background:
+                        "linear-gradient(180deg, #f7ac46 0%, #fe7701 52%, #fe7701 100%)",
+                      boxShadow:
+                        "inset 3px 4px 1px rgba(255,255,255,0.25), inset -3px -2px 2px 2px rgba(0,0,0,0.45), 0 0 6px 5px rgba(0,0,0,0.5)",
+                    }}
+                  >
+                    <span className="flex h-8.5 w-8.5 items-center justify-center rounded-full bg-white shadow-[0_1px_3px_rgba(0,0,0,0.35)]">
+                      <Landmark
+                        className="h-5 w-5 text-secondary"
+                        strokeWidth={2.2}
+                        aria-hidden="true"
+                      />
+                    </span>
+                    <span
+                      className="text-[15px] font-extrabold tracking-[1.5px] text-white uppercase sm:text-[18px]"
+                      style={{ textShadow: "0 2px 2px rgba(0,0,0,0.45)" }}
+                    >
+                      Court Confirmation Toolkit
+                    </span>
+                  </div>
+
+                  <h1
+                    className="mt-9 max-w-[43rem] text-[30px] leading-[1.12] font-bold tracking-[-2px] text-white sm:text-[38px] xl:text-[44px]"
+                    style={{
+                      filter: "drop-shadow(2px 3px 0px rgba(0,0,0,0.5))",
+                    }}
+                  >
                     California Probate Minimum Overbid Calculator
                   </h1>
-                  <p className="max-w-2xl font-bold text-white/95 text-[1.375rem]">
-                    Enter the current accepted offer to calculate the statutory
-                    minimum first overbid under California Probate Code §10311.
-                  </p>
+
+                  <div className="mt-9 border-l-4 border-secondary pl-6">
+                    <p
+                      className="max-w-[30rem] text-[16px] leading-[1.6] text-white/95 sm:text-[18px] font-bold"
+                      style={{
+                        filter: "drop-shadow(1px 2px 0px rgba(0,0,0,0.4))",
+                      }}
+                    >
+                      Enter the current Accepted Offer to calculate the minimum
+                      initial overbid under California Probate Code
+                      §10311(a)(1).
+                    </p>
+                  </div>
                 </div>
 
-                <div className="w-full xl:w-120.5">
+                <div className="w-full xl:w-[29rem] xl:shrink-0">
                   <div
-                    className="rounded-2xl px-6 py-6 backdrop-blur-sm hover:-translate-y-1.25 hover:![box-shadow:rgba(0,0,0,0.5)_0px_12px_20px,rgba(0,0,0,0.5)_0px_-8px_16px_2px,rgba(0,0,0,0.25)_5.46px_-5.46px_3.64px_0px_inset,rgba(255,255,255,0.25)_-3.64px_4.55px_3.64px_0px_inset] group/second"
+                    className="group/second relative rounded-3xl px-2 pt-2 pb-2 backdrop-blur-sm hover:-translate-y-1.25 hover:![box-shadow:rgba(0,0,0,0.8)_5px_7px_12px_10px,rgba(255,255,255,0.25)_2.46px_3.46px_3.64px_0px_inset,rgba(0,0,0,0.25)_-2.64px_-3.55px_3.64px_0px_inset]"
                     style={{
-                      backgroundColor: "rgba(0, 151, 167, 0.32)",
+                      background:
+                        "linear-gradient(150deg, #3397a3 0%, #0f707f 50%, #045665 100%)",
                       boxShadow: heroPanelShadow,
                     }}
                   >
-                    <div className="p-2 w-max rounded-full bg-[linear-gradient(to_bottom,white_0%,rgb(255,180,100)_15%,rgb(254,119,2)_70%,rgb(254,119,2)_100%)] [box-shadow:0px_4px_6px_5px_rgba(0,0,0,0.7)] absolute left-1/2 -translate-x-1/2 top-0 -translate-y-1/4">
-                      <div className="bg-secondary w-max p-5 rounded-full shadow-[inset_0px_0px_12px_rgba(0,0,0,0.5)]">
-                        <img
-                          src="/icons/tool1.png"
-                          className="w-14 h-14 [box-shadow:0px_0px_5px_2px_rgba(0,0,0,0.7)] rounded-lg group-hover/second:-rotate-12 duration-200"
-                        />
-                      </div>
-                    </div>
                     <div
-                      className="flex justify-center items-center gap-4 mt-20"
+                      className="relative rounded-[20px] px-6 pt-6 pb-8 backdrop-blur-sm"
                       style={{
-                        filter: "drop-shadow(2px 2px 0px rgba(0,0,0,0.5))",
+                        background:
+                          "linear-gradient(165deg, #1a8b9a 0%, #0f707f 35%, #065765 65%, #045665 100%)",
+                        boxShadow: heroPanelShadow2,
                       }}
                     >
-                      <div className="w-10 h-1 bg-secondary"></div>
-                      <h2 className="text-center font-bold tracking-[1px] text-secondary text-[1.375rem]">
-                        MINIMUM OVERBID
-                      </h2>
-                      <div className="w-10 h-1 bg-secondary"></div>
-                    </div>
-                    <p
-                      className="text-center font-bold leading-tight text-white text-[40px]"
-                      style={{
-                        filter: "drop-shadow(2.5px 3px 0px rgba(0,0,0,0.5))",
-                      }}
-                    >
-                      {hasOffer
-                        ? formatCurrency(results.minimumOverbid)
-                        : "Ready to calculate"}
-                    </p>
-                    <div className="flex justify-center mt-3">
+                      <div className="p-2 w-max rounded-full bg-[linear-gradient(to_bottom,white_0%,rgb(255,180,100)_15%,rgb(254,119,2)_70%,rgb(254,119,2)_100%)] [box-shadow:0px_4px_6px_5px_rgba(0,0,0,0.7)] absolute left-1/2 -translate-x-1/2 top-0 -translate-y-1/4">
+                        <div className="bg-secondary w-max p-5 rounded-full shadow-[inset_0px_0px_12px_rgba(0,0,0,0.5)]">
+                          <img
+                            src="/icons/tool1.png"
+                            className="w-14 h-14 [box-shadow:0px_0px_5px_2px_rgba(0,0,0,0.7)] rounded-lg group-hover/second:-rotate-12 duration-200"
+                          />
+                        </div>
+                      </div>
+
                       <div
-                        className="w-40 h-1"
+                        className="mt-20 flex items-center justify-center gap-3 sm:gap-5"
+                        style={{
+                          filter: "drop-shadow(1px 2px 0px rgba(0,0,0,0.45))",
+                        }}
+                      >
+                        <span className="h-[3px] w-10 min-w-0 shrink rounded-full bg-secondary" />
+                        <h2 className="text-center text-[15px] font-bold tracking-[1px] whitespace-nowrap text-secondary uppercase sm:text-[19px] sm:tracking-[2px]">
+                          Minimum INITIAL Overbid
+                        </h2>
+                        <span className="h-[3px] w-10 min-w-0 shrink rounded-full bg-secondary" />
+                      </div>
+
+                      <p
+                        className="mt-2 text-center text-[30px] leading-[1.15] font-bold text-white sm:text-[38px]"
+                        style={{
+                          filter: "drop-shadow(2.5px 3px 0px rgba(0,0,0,0.5))",
+                        }}
+                      >
+                        {hasOffer
+                          ? formatCurrency(results.minimumOverbid)
+                          : "Ready to calculate?"}
+                      </p>
+
+                      <div
+                        className="mx-auto mt-4 h-[3px] w-[60px] rounded-full"
                         style={{
                           background:
-                            "linear-gradient(to right, rgb(254, 119, 2) 0%, rgb(254, 119, 2) 35%, rgb(255, 255, 255) 50%, rgb(254, 119, 2) 65%, rgb(254, 119, 2) 100%)",
-                          clipPath:
-                            "polygon(0 36.67%, 50% 0, 100% 36.67%, 100% 83.33%, 50% 100%, 0 83.33%)",
+                            "linear-gradient(90deg, #e8752a 0%, #ffe6c4 50%, #e8752a 100%)",
+                          boxShadow: "0 0 10px 2px rgba(254,140,40,0.65)",
                         }}
-                      ></div>
-                    </div>
-                    <p
-                      className="mt-3 text-center font-bold text-white/95 text-[1.375rem]"
-                      style={{
-                        filter: "drop-shadow(2.5px 3px 0px rgba(0,0,0,0.5))",
-                      }}
-                    >
-                      {hasOffer
-                        ? `Required overbid increase ${formatCurrency(
+                      />
+
+                      <p
+                        className="mt-4 text-center text-[16px] leading-[1.6] text-white/95 sm:text-[18px] font-bold"
+                        style={{
+                          filter: "drop-shadow(1px 2px 0px rgba(0,0,0,0.4))",
+                        }}
+                      >
+                        {hasOffer ? (
+                          `Required overbid increase ${formatCurrency(
                             results.requiredIncrease
                           )}`
-                        : "Enter the accepted offer and every other line updates automatically."}
-                    </p>
+                        ) : (
+                          <>
+                            Enter the <span className="">Accepted Offer</span>{" "}
+                            and every other line updates automatically.
+                          </>
+                        )}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -219,12 +293,13 @@ const Page = () => {
                   />
 
                   <div>
-                    <h2 className="text-[1.375rem] mt-[-0.3em] font-bold uppercase text-primary group-hover:text-secondary">
+                    <h2 className="text-[1.375rem] mt-[-0.3em] font-bold text-primary group-hover:text-secondary">
                       Accepted Offer
                     </h2>
                     <p className="mt-1 text-[1.375rem] text-black font-bold">
-                      The statutory model uses 10% of the first $10,000 of the
-                      accepted offer plus 5% of the balance.
+                      The minimum overbid is calculated as 10% of the first
+                      $10,000 of the Accepted Offer plus 5% of the remaining
+                      balance.
                     </p>
                   </div>
                 </div>
@@ -232,28 +307,33 @@ const Page = () => {
                 <div className="flex flex-col gap-2">
                   <label
                     htmlFor="accepted-offer"
-                    className="text-[1.375rem] font-bold"
+                    className="text-[1.375rem] font-bold uppercase text-primary group-hover:text-secondary"
                   >
-                    {renderLabelText("Accepted Offer ($):")}
+                    Accepted Offer Amount:
                   </label>
-                  <input
-                    id="accepted-offer"
-                    type="number"
-                    inputMode="decimal"
-                    min="0"
-                    placeholder="e.g., 1000000"
-                    value={offerPrice}
-                    onChange={(e) => setOfferPrice(e.target.value)}
-                    className="w-full rounded-2xl border-2 px-4 py-3.5 text-base text-gray-900 transition-all focus:outline-none focus:ring-2 md:max-w-md font-bold placeholder:text-secondary"
-                    style={{
-                      borderColor: "var(--color-primary)",
-                      boxShadow: fieldShadow,
-                      "--tw-ring-color": "rgba(0, 151, 167, 0.25)",
-                    }}
-                  />
+                  <div className="flex items-stretch">
+                    <span className="grid shrink-0 place-items-center rounded-l-2xl border-2 border-r border-primary bg-slate-100 px-4 text-xl font-bold text-secondary select-none">
+                      $
+                    </span>
+                    <input
+                      id="accepted-offer"
+                      type="number"
+                      inputMode="decimal"
+                      min="0"
+                      placeholder="e.g., 1000000"
+                      value={offerPrice}
+                      onChange={(e) => setOfferPrice(e.target.value)}
+                      className="w-full rounded-r-2xl border-2 border-l-0 px-4 py-2.5 text-base text-gray-900 transition-all focus:outline-none focus:ring-2 md:max-w-md font-bold placeholder:text-secondary"
+                      style={{
+                        borderColor: "var(--color-primary)",
+                        boxShadow: fieldShadow,
+                        "--tw-ring-color": "rgba(0, 151, 167, 0.25)",
+                      }}
+                    />
+                  </div>
                   <p className="text-[1.375rem] font-bold">
-                    Every amount below is calculated automatically from this
-                    offer.
+                    Every amount below is calculated automatically from
+                    the Accepted Offer.
                   </p>
                 </div>
 
@@ -310,7 +390,9 @@ const Page = () => {
                       ))}
 
                       <div className="flex items-center justify-between gap-4">
-                        <span className="font-bold">Minimum Overbid</span>
+                        <span className="font-bold">
+                          MINIMUM INITIAL OVERBID
+                        </span>
                         <span className="text-primary font-bold group-hover:text-secondary">
                           {hasOffer
                             ? formatCurrency(results.minimumOverbid)
@@ -325,13 +407,13 @@ const Page = () => {
                     style={{ boxShadow: metricCardShadow }}
                   >
                     <p className="text-[1.375rem] font-bold tracking-[1px] uppercase text-white/80 -mt-[0.15em]">
-                      Minimum Overbid
+                      MINIMUM INITIAL OVERBID
                     </p>
                     <p className="mt-2 text-4xl font-black sm:text-5xl">
                       {hasOffer ? formatCurrency(results.minimumOverbid) : "—"}
                     </p>
                     <p className="mt-2 text-[1.375rem] text-white/85 font-bold -mb-[0.3em]">
-                      Accepted offer plus the statutory increase of{" "}
+                      Accepted Offer plus the required overbid increase of{" "}
                       {hasOffer
                         ? formatCurrency(results.requiredIncrease)
                         : "—"}
@@ -340,40 +422,56 @@ const Page = () => {
                   </div>
 
                   <div
-                    className="rounded-2xl border border-gray-200 bg-white p-6 hover:-translate-y-1.25 hover:![box-shadow:rgba(0,0,0,0.5)_0px_12px_20px,rgba(0,0,0,0.5)_0px_-8px_16px_2px]"
+                    className="rounded-2xl border border-gray-200 bg-white p-6 pb-8 hover:-translate-y-1.25 hover:![box-shadow:rgba(0,0,0,0.5)_0px_12px_20px,rgba(0,0,0,0.5)_0px_-8px_16px_2px]"
                     style={{ boxShadow: sectionCardShadow }}
                   >
                     <h3 className="font-bold text-primary text-[1.375rem] group-hover:text-secondary -mt-[0.2em]">
                       Planning to Overbid at the Court Confirmation Hearing?
                     </h3>
-                    <div className="mt-4 space-y-4 !text-[1.375rem] leading-relaxed sm:text-base font-bold -mb-[0.3em]">
-                      <p>
-                        The amount above represents the statutory minimum
-                        initial overbid based on the accepted offer entered,
-                        using the formula in California Probate Code §10311.
-                      </p>
-                      <p>
-                        Court procedures, deposit requirements, acceptable forms
-                        of payment, bidding increments, financing terms, and
-                        other requirements may vary depending on the court and
-                        the specific probate sale.
-                      </p>
-                      <p>
-                        Before attending the hearing, confirm the required
-                        deposit amount and form of payment with the listing
-                        agent, estate representative/counsel, and applicable
-                        court instructions.
-                      </p>
-                      <p>
-                        This calculator is provided for informational purposes
-                        only and is not legal advice. Final bid requirements and
-                        acceptance are determined by the court.
-                      </p>
+                    <div className="mt-5 space-y-4 !text-[1.375rem] leading-relaxed sm:text-base font-bold">
+                      <div className="[box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px] p-6 rounded-2xl flex items-start gap-6">
+                        <img src="https://833probaid.com/images/arrow.png" />
+                        <p>
+                          The amount above represents the minimum initial
+                          overbid calculated from the Accepted Offer entered,
+                          using the formula set forth in California Probate Code
+                          §10311(a)(1).
+                        </p>
+                      </div>
+                      <div className="[box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px] p-6 rounded-2xl flex items-start gap-6">
+                        <img src="https://833probaid.com/images/arrow.png" />
+                        <p>
+                          Court procedures, deposit requirements, acceptable
+                          forms of payment, bidding increments, financing terms,
+                          and other requirements may vary depending on the court
+                          and the specific probate sale.
+                        </p>
+                      </div>
+                      <div className="[box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px] p-6 rounded-2xl flex items-start gap-6">
+                        <img src="https://833probaid.com/images/arrow.png" />
+                        <p>
+                          Before attending the hearing, confirm the required
+                          deposit amount and form of payment with the listing
+                          agent, estate representative/counsel, and applicable
+                          court instructions.
+                        </p>
+                      </div>
+                      <div className="[box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px] p-6 rounded-2xl flex items-start gap-6">
+                        <img src="https://833probaid.com/images/arrow.png" />
+                        <p>
+                          This calculator is provided for informational purposes
+                          only and is not to be considered as legal or financial
+                          advice. Meeting the calculated minimum overbid amount
+                          does not guarantee that an overbid will qualify or be
+                          accepted. Additional statutory, court, and
+                          sale-specific requirements may apply.
+                        </p>
+                      </div>
                     </div>
                   </div>
 
                   <div
-                    className="flex items-start gap-3 rounded-2xl border border-secondary bg-secondary/10 py-5 px-6 hover:-translate-y-1.25 hover:![box-shadow:rgba(0,0,0,0.5)_0px_12px_20px,rgba(0,0,0,0.5)_0px_-8px_16px_2px]"
+                    className="flex items-start gap-3 rounded-2xl border-[3px] border-secondary py-5 px-6 hover:-translate-y-1.25 hover:![box-shadow:rgba(0,0,0,0.5)_0px_12px_20px,rgba(0,0,0,0.5)_0px_-8px_16px_2px]"
                     style={{ boxShadow: sectionCardShadow }}
                   >
                     <Gavel
@@ -381,10 +479,11 @@ const Page = () => {
                       strokeWidth={2.5}
                       aria-hidden="true"
                     />
-                    <p className="text-[1.375rem] leading-relaxed font-semibold text-secondary">
-                      The calculated amount is the minimum opening overbid — not
+                    <p className="text-[1.375rem] leading-relaxed font-bold text-secondary">
+                      The calculated amount is the minimum initial overbid—not
                       necessarily the final purchase price. Additional
-                      competitive bidding may occur at the confirmation hearing.
+                      competitive bidding may occur at the court confirmation
+                      hearing.
                     </p>
                   </div>
 
@@ -396,7 +495,8 @@ const Page = () => {
                       Need A Second Set Of Eyes?
                     </p>
                     <h3 className="mt-2 text-2xl font-bold text-primary group-hover:text-secondary">
-                      Have questions about overbidding on a probate property?
+                      Have questions about overbidding on a court-confirmed real
+                      estate sale?
                     </h3>
                     <div className="mt-8 flex justify-center">
                       <CTAButton
