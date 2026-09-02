@@ -20,6 +20,9 @@ const metricCardShadow =
 const fieldShadow =
   "0 clamp(4px, 1.1vw, 6px) clamp(8px, 2.4vw, 14px) rgba(15, 23, 42, 0.11), 0 1px 0 rgba(255,255,255,0.5) inset";
 
+const MAX_OFFER_DIGITS = 12;
+const MAX_OFFER_DECIMALS = 2;
+
 const CONTACT_NAME = "833PROBAID";
 const CONTACT_PHONE = "(833) PROBAID";
 const CONTACT_HREF = "tel:8337762243";
@@ -58,6 +61,26 @@ const buildOverbid = (acceptedOffer) => {
 
 const Page = () => {
   const [offerPrice, setOfferPrice] = useState("");
+  const [showLimitWarning, setShowLimitWarning] = useState(false);
+
+  const handleOfferChange = (event) => {
+    const nextValue = event.target.value;
+    const [wholePart, decimalPart = ""] = nextValue.split(".");
+    const wholeDigitCount = (wholePart.match(/\d/g) || []).length;
+
+    if (wholeDigitCount > MAX_OFFER_DIGITS) {
+      setShowLimitWarning(true);
+      return;
+    }
+
+    // Silently ignore anything past two decimal places.
+    if (decimalPart.length > MAX_OFFER_DECIMALS) {
+      return;
+    }
+
+    setShowLimitWarning(false);
+    setOfferPrice(nextValue);
+  };
 
   const acceptedOffer = parseAmount(offerPrice);
   const hasOffer = acceptedOffer > 0;
@@ -92,6 +115,7 @@ const Page = () => {
 
   const handleReset = () => {
     setOfferPrice("");
+    setShowLimitWarning(false);
   };
 
   const handleCall = () => {
@@ -108,11 +132,11 @@ const Page = () => {
       <section className="min-h-screen py-8 sm:py-12 lg:py-16 font-montserrat">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div
-            className="overflow-hidden rounded-3xl border-[3px] border-[#0f1417] group hover:translate-y-[-5px] hover:![box-shadow:rgba(0,0,0,0.6)_0px_12px_20px,rgba(0,0,0,0.7)_0px_-8px_16px_2px]"
+            className="overflow-hidden rounded-3xl group hover:translate-y-[-5px] hover:![box-shadow:rgba(0,0,0,0.6)_0px_12px_20px,rgba(0,0,0,0.7)_0px_-8px_16px_2px]"
             style={{ boxShadow: shellShadow }}
           >
             <div
-              className="relative overflow-hidden p-6 sm:p-8 lg:p-10 rounded-t-[20px]"
+              className="relative overflow-hidden p-6 sm:p-8 lg:p-10 rounded-t-[24px] border-[3px] border-b-0 border-[#0f1417]"
               style={{
                 background:
                   "linear-gradient(165deg, #26808d 0%, #13707f 28%, #065b6a 58%, #034653 100%)",
@@ -149,7 +173,7 @@ const Page = () => {
               <div className="relative flex flex-col gap-10 xl:flex-row xl:items-center xl:justify-between xl:gap-8">
                 <div className="flex-1">
                   <div
-                    className="inline-flex items-center gap-3 rounded-xl py-2 pr-5 pl-2"
+                    className="inline-flex items-center gap-3 rounded-xl py-3 pr-5 pl-3"
                     style={{
                       background:
                         "linear-gradient(180deg, #f7ac46 0%, #fe7701 52%, #fe7701 100%)",
@@ -157,15 +181,15 @@ const Page = () => {
                         "inset 3px 4px 1px rgba(255,255,255,0.25), inset -3px -2px 2px 2px rgba(0,0,0,0.45), 0 0 6px 5px rgba(0,0,0,0.5)",
                     }}
                   >
-                    <span className="flex h-8.5 w-8.5 items-center justify-center rounded-full bg-white shadow-[0_1px_3px_rgba(0,0,0,0.35)]">
+                    <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-[0_1px_3px_rgba(0,0,0,0.35)]">
                       <Landmark
-                        className="h-5 w-5 text-secondary"
+                        className="h-7 w-7 text-secondary"
                         strokeWidth={2.2}
                         aria-hidden="true"
                       />
                     </span>
                     <span
-                      className="text-[15px] font-extrabold tracking-[1.5px] text-white uppercase sm:text-[18px]"
+                      className="font-extrabold tracking-[1.5px] text-white uppercase text-[24px]"
                       style={{ textShadow: "0 2px 2px rgba(0,0,0,0.45)" }}
                     >
                       Court Confirmation Toolkit
@@ -173,7 +197,7 @@ const Page = () => {
                   </div>
 
                   <h1
-                    className="mt-9 max-w-[43rem] text-[30px] leading-[1.12] font-bold tracking-[-2px] text-white sm:text-[38px] xl:text-[44px]"
+                    className="mt-8 max-w-[43rem] text-[30px] leading-[1.12] font-bold tracking-[-2px] text-white sm:text-[38px] xl:text-[44px]"
                     style={{
                       filter: "drop-shadow(2px 3px 0px rgba(0,0,0,0.5))",
                     }}
@@ -181,7 +205,7 @@ const Page = () => {
                     California Probate Minimum Overbid Calculator
                   </h1>
 
-                  <div className="mt-9 border-l-4 border-secondary pl-6">
+                  <div className="mt-8 border-l-4 border-secondary pl-6">
                     <p
                       className="max-w-[30rem] text-[16px] leading-[1.6] text-white/95 sm:text-[18px] font-bold"
                       style={{
@@ -277,7 +301,7 @@ const Page = () => {
               </div>
             </div>
 
-            <div className="bg-linear-to-br from-gray-50 to-gray-100 p-10">
+            <div className="bg-linear-to-br from-gray-50 to-gray-100 p-10 border-[3px] border-t-0 border-secondary rounded-b-[24px]">
               <div
                 className="flex flex-col rounded-2xl border border-gray-200 bg-white p-10 hover:-translate-y-1.25 hover:![box-shadow:rgba(0,0,0,0.5)_0px_12px_20px,rgba(0,0,0,0.5)_0px_-8px_16px_2px]"
                 style={{ boxShadow: sectionCardShadow }}
@@ -322,15 +346,33 @@ const Page = () => {
                       min="0"
                       placeholder="e.g., 1000000"
                       value={offerPrice}
-                      onChange={(e) => setOfferPrice(e.target.value)}
+                      onChange={handleOfferChange}
+                      aria-invalid={showLimitWarning}
+                      aria-describedby={
+                        showLimitWarning ? "accepted-offer-limit" : undefined
+                      }
                       className="w-full rounded-r-2xl border-2 border-l-0 px-4 py-2.5 text-base text-gray-900 transition-all focus:outline-none focus:ring-2 md:max-w-md font-bold placeholder:text-secondary"
                       style={{
-                        borderColor: "var(--color-primary)",
+                        borderColor: showLimitWarning
+                          ? "#dc2626"
+                          : "var(--color-primary)",
                         boxShadow: fieldShadow,
-                        "--tw-ring-color": "rgba(0, 151, 167, 0.25)",
+                        "--tw-ring-color": showLimitWarning
+                          ? "rgba(220, 38, 38, 0.25)"
+                          : "rgba(0, 151, 167, 0.25)",
                       }}
                     />
                   </div>
+                  {showLimitWarning && (
+                    <p
+                      id="accepted-offer-limit"
+                      role="alert"
+                      className="text-[1rem] font-bold text-red-600"
+                    >
+                      Maximum {MAX_OFFER_DIGITS} digits allowed for the Accepted
+                      Offer Amount.
+                    </p>
+                  )}
                   <p className="text-[1.375rem] font-bold">
                     Every amount below is calculated automatically from
                     the Accepted Offer.
@@ -390,7 +432,7 @@ const Page = () => {
                       ))}
 
                       <div className="flex items-center justify-between gap-4">
-                        <span className="font-bold">
+                        <span className="text-primary font-bold group-hover:text-secondary">
                           MINIMUM INITIAL OVERBID
                         </span>
                         <span className="text-primary font-bold group-hover:text-secondary">

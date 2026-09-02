@@ -496,6 +496,11 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 		const errors = new Set();
 		const prop0 = formData.exportedProperties[0] || {};
 
+		// "Has the Court Issued Letters Yet?" only applies to Probate and
+		// Conservatorship cases — every other Case Type bypasses it.
+		const lettersIssuedApplies =
+			formData.caseType.probate || formData.caseType.conservatorship;
+
 		// Rule 1: required top-level fields
 		const requiredFields = {
 			referringPartyName: formData.referringPartyName,
@@ -506,7 +511,6 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 			preferredContact: formData.preferredContact,
 			clientName: formData.clientName,
 			clientRole: formData.clientRole,
-			lettersIssued: formData.lettersIssued,
 			courthouse: formData.courthouse,
 			multipleProperties: formData.multipleProperties,
 			reverseMortgage: formData.reverseMortgage,
@@ -551,10 +555,16 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 		if (formData.caseType.receivership && !hasRole("Other"))
 			errors.add("clientRole.successorRole");
 
-		// When the court has issued letters, the issue date is required.
+		// Letters are only asked about for Probate / Conservatorship; when they
+		// apply, the answer is required and "Yes" also requires the issue date.
 		// (Courthouse is always required — handled in requiredFields above.)
-		if (formData.lettersIssued === "Yes") {
-			if (isEmpty(formData.lettersDate)) errors.add("lettersDate");
+		if (lettersIssuedApplies) {
+			if (isEmpty(formData.lettersIssued)) errors.add("lettersIssued");
+			if (
+				formData.lettersIssued === "Yes" &&
+				isEmpty(formData.lettersDate)
+			)
+				errors.add("lettersDate");
 		}
 
 		// Email format checks (referring email is required; attorney email allows "N/A")
@@ -1290,7 +1300,8 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 															"caseType",
 															"caseType.probateAuthority",
 															"clientRole",
-															"clientRole.probateRole"
+															"clientRole.probateRole",
+															"lettersIssued"
 														);
 														setFormData({
 															...formData,
@@ -1322,6 +1333,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 													label='Full Authority'
 													checked={formData.caseType.fullAuthority}
 													onChange={(e) => {
+														markTouched("lettersIssued");
 														setFormData({
 															...formData,
 															caseType: {
@@ -1354,6 +1366,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 													label='Limited Authority (With Court Confirmation)'
 													checked={formData.caseType.limitedAuthority}
 													onChange={(e) => {
+														markTouched("lettersIssued");
 														setFormData({
 															...formData,
 															caseType: {
@@ -1394,7 +1407,8 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 															"caseType",
 															"caseType.conservatorshipScope",
 															"clientRole",
-															"clientRole.conservatorRole"
+															"clientRole.conservatorRole",
+															"lettersIssued"
 														);
 														setFormData({
 															...formData,
@@ -1429,6 +1443,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 													label='Of the Estate'
 													checked={formData.caseType.ofTheEstate}
 													onChange={(e) => {
+														markTouched("lettersIssued");
 														setFormData({
 															...formData,
 															caseType: {
@@ -1461,6 +1476,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 													label='Of the Person'
 													checked={formData.caseType.ofThePerson}
 													onChange={(e) => {
+														markTouched("lettersIssued");
 														setFormData({
 															...formData,
 															caseType: {
@@ -1493,6 +1509,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 													label='Both'
 													checked={formData.caseType.both}
 													onChange={(e) => {
+														markTouched("lettersIssued");
 														setFormData({
 															...formData,
 															caseType: {
@@ -1789,7 +1806,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 										<div className='flex justify-between items-center gap-4 pt-6'>
 											<label className='block font-bold text-lg'>
 												{renderLabel(
-													"Does the above selected case type involve an existing reverse mortgage?",
+													"Does the Above Selected Case Type Involve an Existing Reverse Mortgage?",
 												)}
 											</label>
 											<RadioGroup
@@ -1972,6 +1989,12 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 																color: "orange",
 																width: "80px",
 															},
+															{
+																value: "NA",
+																label: "N/A ",
+																color: "gray",
+																width: "80px",
+															}
 														]}
 														width='auto'
 														gap='gap-4'
@@ -2000,7 +2023,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 																};
 																handleChange(event);
 															}}
-															className={`border-[3px] px-2 py-1 bg-gray-200 placeholder:italic placeholder-[#FD7702] w-[240px] font-bold focus:outline-none focus:ring-2 focus:ring-[#FD7702] focus:ring-offset-0 disabled:text-secondary disabled:[-webkit-text-fill-color:var(--color-secondary)] disabled:cursor-not-allowed ${
+															className={`border-[3px] px-2 py-1 bg-gray-200 placeholder:italic placeholder-[#FD7702] w-[190px] font-bold focus:outline-none focus:ring-2 focus:ring-[#FD7702] focus:ring-offset-0 disabled:text-secondary disabled:[-webkit-text-fill-color:var(--color-secondary)] disabled:cursor-not-allowed ${
 																fieldErrors.has("lettersDate")
 																	? "border-red-500"
 																	: "border-[#0097A7]"
@@ -2034,7 +2057,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 																};
 																handleChange(event);
 															}}
-															className='border-[3px] border-[#0097A7] px-2 py-1 bg-gray-200 placeholder:italic placeholder-[#FD7702] w-[230px] font-bold focus:outline-none focus:ring-2 focus:ring-[#FD7702] focus:ring-offset-0 disabled:text-secondary disabled:[-webkit-text-fill-color:var(--color-secondary)] disabled:cursor-not-allowed'
+															className='border-[3px] border-[#0097A7] px-2 py-1 bg-gray-200 placeholder:italic placeholder-[#FD7702] w-[200px] font-bold focus:outline-none focus:ring-2 focus:ring-[#FD7702] focus:ring-offset-0 disabled:text-secondary disabled:[-webkit-text-fill-color:var(--color-secondary)] disabled:cursor-not-allowed'
 															placeholderText='Select date'
 															popperPlacement="bottom-end"
 															dateFormat='MM-dd-yyyy'

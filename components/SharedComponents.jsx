@@ -1278,6 +1278,36 @@ export const FileUpload = ({
 	);
 };
 
+// Radio pill palettes. `bgColor`/`labelBorderClass` style the label pill;
+// `dotColor` is the selected dot, and `borderClass`/`dotColor2` the two-tone
+// rings around it. "gray" is used for neutral answers such as "N/A".
+const RADIO_COLORS = {
+	teal: {
+		bgColor: "bg-[#0097A7]",
+		labelBorderClass: "border-[#0097A7]",
+		dotColor: "#FD7702",
+		dotColor2: "#0097A7",
+		borderClass: "border-[#FD7702]",
+		focusRingClass: "focus:ring-[#FD7702]",
+	},
+	orange: {
+		bgColor: "bg-[#FD7702]",
+		labelBorderClass: "border-[#FD7702]",
+		dotColor: "#0097A7",
+		dotColor2: "#FD7702",
+		borderClass: "border-[#0097A7]",
+		focusRingClass: "focus:ring-[#0097A7]",
+	},
+	gray: {
+		bgColor: "bg-[#6B7280]",
+		labelBorderClass: "border-[#6B7280]",
+		dotColor: "#4B5563",
+		dotColor2: "#6B7280",
+		borderClass: "border-[#9CA3AF]",
+		focusRingClass: "focus:ring-[#6B7280]",
+	},
+};
+
 export const RadioButton = ({
 	name,
 	value,
@@ -1293,13 +1323,14 @@ export const RadioButton = ({
 	const isSelected = selectedValue === value;
 	const widthConfig = getWidthStyles(width);
 
-	const bgColor = color === "orange" ? "bg-[#FD7702]" : "bg-[#0097A7]";
-	const dotColor = color === "orange" ? "#0097A7" : "#FD7702";
-	const dotColor2 = color !== "orange" ? "#0097A7" : "#FD7702";
-	const borderClass =
-		color === "orange" ? "border-[#0097A7]" : "border-[#FD7702]";
-	const focusRingClass =
-		color === "orange" ? "focus:ring-[#0097A7]" : "focus:ring-[#FD7702]";
+	const {
+		bgColor,
+		labelBorderClass,
+		dotColor,
+		dotColor2,
+		borderClass,
+		focusRingClass,
+	} = RADIO_COLORS[color] || RADIO_COLORS.teal;
 
 	const handleClick = () => {
 		if (disabled) return;
@@ -1350,11 +1381,7 @@ export const RadioButton = ({
 
 			<span
 				className={`pr-2.5 pl-4 py-1 rounded font-bold uppercase text-sm text-[15px] line-height-6 w-full border ${
-					error
-						? "border-red-500 ring-2 ring-red-500"
-						: color === "orange"
-							? "border-[#FD7702]"
-							: "border-[#0097A7]"
+					error ? "border-red-500 ring-2 ring-red-500" : labelBorderClass
 				} ${bgColor} text-white`}>
 				{label}
 			</span>

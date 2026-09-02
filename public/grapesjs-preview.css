@@ -1198,8 +1198,24 @@
 				margin-bottom: 1.25rem !important;
 			}
 
+			.\!pt-\[1\.5rem\] {
+				padding-top: 1.5rem !important;
+			}
+
+			.\!pt-\[2rem\] {
+				padding-top: 2rem !important;
+			}
+
 			.\!mb-\[-0\.1em\] {
 				margin-bottom: -0.1em !important;
+			}
+
+			.\!mt-\[-0\.1em\] {
+				margin-top: -0.1em !important;
+			}
+
+			.\!mt-\[-0\.2em\] {
+				margin-top: -0.2em !important;
 			}
 
 			.\!mb-\[-0\.2em\] {
@@ -1271,6 +1287,14 @@
 
 			.\!mt-\[-1rem\] {
 				margin-top: -1rem !important;
+			}
+
+			.\!mb-\[1rem\] {
+				margin-bottom: 1rem !important;
+			}
+
+			.\!mt-\[1rem\] {
+				margin-top: 1rem !important;
 			}
 
 			.\!mt-\[1\.2rem\] {
