@@ -491,15 +491,16 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 	// "N/A" / "Not Yet Assigned" are acceptable for the optional attorney email
 	const isNaValue = (v) => /^(n\/?a|not yet assigned)$/i.test(v?.toString().trim());
 
+	// "Has the Court Issued Letters Yet?" only applies to Probate and
+	// Conservatorship cases — and for those the answer must be Yes or No,
+	// so "N/A" is not offered.
+	const lettersIssuedApplies =
+		formData.caseType.probate || formData.caseType.conservatorship;
+
 	// Build the set of invalid field keys (empty set === valid)
 	const buildErrors = () => {
 		const errors = new Set();
 		const prop0 = formData.exportedProperties[0] || {};
-
-		// "Has the Court Issued Letters Yet?" only applies to Probate and
-		// Conservatorship cases — every other Case Type bypasses it.
-		const lettersIssuedApplies =
-			formData.caseType.probate || formData.caseType.conservatorship;
 
 		// Rule 1: required top-level fields
 		const requiredFields = {
@@ -703,6 +704,24 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 		setFieldErrors(visible);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [_formData, touched, readOnly]);
+
+	// When the Case Type crosses in or out of Probate / Conservatorship, an
+	// answer that no longer fits the new type is dropped: "N/A" on the way in
+	// (those cases must answer Yes or No) and "Yes" / "No" on the way out.
+	// Only the crossing clears it, so an answer the user picks afterwards stays.
+	const prevLettersIssuedApplies = useRef(lettersIssuedApplies);
+	useEffect(() => {
+		if (readOnly) return;
+		if (prevLettersIssuedApplies.current === lettersIssuedApplies) return;
+		prevLettersIssuedApplies.current = lettersIssuedApplies;
+		setFormData((prev) => {
+			const stale = lettersIssuedApplies
+				? prev.lettersIssued === "NA"
+				: prev.lettersIssued === "Yes" || prev.lettersIssued === "No";
+			return stale ? { ...prev, lettersIssued: "" } : prev;
+		});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [lettersIssuedApplies, readOnly]);
 
 	// The selected Case Type restricts which Client Role options are allowed.
 	// `null` means no restriction (no case type selected → all allowed).
@@ -1982,19 +2001,22 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 																label: "Yes",
 																color: "teal",
 																width: "80px",
+																error: fieldErrors.has("lettersIssued"),
 															},
 															{
 																value: "No",
 																label: "No ",
 																color: "orange",
 																width: "80px",
+																error: fieldErrors.has("lettersIssued"),
 															},
 															{
 																value: "NA",
 																label: "N/A ",
 																color: "gray",
 																width: "80px",
-															}
+																disabled: lettersIssuedApplies,
+															},
 														]}
 														width='auto'
 														gap='gap-4'
