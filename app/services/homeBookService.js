@@ -1,6 +1,6 @@
 import connectToDatabase from "../utils/db.js";
 import HomeBook from "../models/HomeBook.js";
-import { unstable_cache } from "next/cache";
+import { revalidateTag, unstable_cache } from "next/cache";
 
 const getPublishedHomeBooksForHomepageCached = unstable_cache(
 	async () => {
@@ -103,6 +103,22 @@ export const getHomeBookBySlugCached = unstable_cache(
 	{ revalidate: 300, tags: ["homebooks"] },
 );
 
+// Drop cached home book reads so public pages pick up writes immediately
+function revalidateHomeBooks() {
+	revalidateTag("homebooks");
+}
+
+// Next serial number used for ordering home books (sort key: `no`)
+async function getNextHomeBookNo() {
+	const last = await HomeBook.findOne({})
+		.select({ no: 1, _id: 0 })
+		.sort({ no: -1 })
+		.lean();
+
+	const lastNo = Number(last?.no);
+	return Number.isFinite(lastNo) ? lastNo + 1 : 1;
+}
+
 // Create new home book
 export async function createHomeBook(homeBookData) {
 	await connectToDatabase();
@@ -111,13 +127,30 @@ export async function createHomeBook(homeBookData) {
 		throw new Error("Slug is required. Please set canonical URL with a slug.");
 	}
 
-	const homeBook = await HomeBook.create({
-		...homeBookData,
-		publishedDate: new Date(),
-		modifiedDate: new Date(),
-	});
+	const requestedNo = Number(homeBookData.no);
+	let no = Number.isFinite(requestedNo) ? requestedNo : await getNextHomeBookNo();
 
-	return homeBook;
+	// Retry on the unique index in case two books are created at the same time
+	for (let attempt = 0; ; attempt += 1) {
+		try {
+			const homeBook = await HomeBook.create({
+				...homeBookData,
+				no,
+				publishedDate: new Date(),
+				modifiedDate: new Date(),
+			});
+
+			revalidateHomeBooks();
+			return homeBook;
+		} catch (error) {
+			const isDuplicateNo =
+				error?.code === 11000 && error?.keyPattern?.no !== undefined;
+			if (!isDuplicateNo || Number.isFinite(requestedNo) || attempt >= 4) {
+				throw error;
+			}
+			no = await getNextHomeBookNo();
+		}
+	}
 }
 
 // Update existing home book
@@ -139,13 +172,20 @@ export async function updateHomeBook(homeBookId, homeBookData) {
 	homeBook.modifiedDate = new Date();
 	await homeBook.save();
 
+	revalidateHomeBooks();
 	return homeBook;
 }
 
 // Delete home book
 export async function deleteHomeBook(homeBookId) {
 	await connectToDatabase();
-	return HomeBook.findByIdAndDelete(homeBookId);
+
+	const homeBook = await HomeBook.findByIdAndDelete(homeBookId);
+	if (homeBook) {
+		revalidateHomeBooks();
+	}
+
+	return homeBook;
 }
 
 // Increment view count
