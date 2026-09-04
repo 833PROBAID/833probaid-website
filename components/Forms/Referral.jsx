@@ -491,6 +491,12 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 	// "N/A" / "Not Yet Assigned" are acceptable for the optional attorney email
 	const isNaValue = (v) => /^(n\/?a|not yet assigned)$/i.test(v?.toString().trim());
 
+	// "Has the Court Issued Letters Yet?" only applies to Probate and
+	// Conservatorship cases — and for those the answer must be Yes or No,
+	// so "N/A" is not offered.
+	const lettersIssuedApplies =
+		formData.caseType.probate || formData.caseType.conservatorship;
+
 	// Build the set of invalid field keys (empty set === valid)
 	const buildErrors = () => {
 		const errors = new Set();
@@ -506,7 +512,6 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 			preferredContact: formData.preferredContact,
 			clientName: formData.clientName,
 			clientRole: formData.clientRole,
-			lettersIssued: formData.lettersIssued,
 			courthouse: formData.courthouse,
 			multipleProperties: formData.multipleProperties,
 			reverseMortgage: formData.reverseMortgage,
@@ -551,10 +556,16 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 		if (formData.caseType.receivership && !hasRole("Other"))
 			errors.add("clientRole.successorRole");
 
-		// When the court has issued letters, the issue date is required.
+		// Letters are only asked about for Probate / Conservatorship; when they
+		// apply, the answer is required and "Yes" also requires the issue date.
 		// (Courthouse is always required — handled in requiredFields above.)
-		if (formData.lettersIssued === "Yes") {
-			if (isEmpty(formData.lettersDate)) errors.add("lettersDate");
+		if (lettersIssuedApplies) {
+			if (isEmpty(formData.lettersIssued)) errors.add("lettersIssued");
+			if (
+				formData.lettersIssued === "Yes" &&
+				isEmpty(formData.lettersDate)
+			)
+				errors.add("lettersDate");
 		}
 
 		// Email format checks (referring email is required; attorney email allows "N/A")
@@ -693,6 +704,24 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 		setFieldErrors(visible);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [_formData, touched, readOnly]);
+
+	// When the Case Type crosses in or out of Probate / Conservatorship, an
+	// answer that no longer fits the new type is dropped: "N/A" on the way in
+	// (those cases must answer Yes or No) and "Yes" / "No" on the way out.
+	// Only the crossing clears it, so an answer the user picks afterwards stays.
+	const prevLettersIssuedApplies = useRef(lettersIssuedApplies);
+	useEffect(() => {
+		if (readOnly) return;
+		if (prevLettersIssuedApplies.current === lettersIssuedApplies) return;
+		prevLettersIssuedApplies.current = lettersIssuedApplies;
+		setFormData((prev) => {
+			const stale = lettersIssuedApplies
+				? prev.lettersIssued === "NA"
+				: prev.lettersIssued === "Yes" || prev.lettersIssued === "No";
+			return stale ? { ...prev, lettersIssued: "" } : prev;
+		});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [lettersIssuedApplies, readOnly]);
 
 	// The selected Case Type restricts which Client Role options are allowed.
 	// `null` means no restriction (no case type selected → all allowed).
@@ -1290,7 +1319,8 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 															"caseType",
 															"caseType.probateAuthority",
 															"clientRole",
-															"clientRole.probateRole"
+															"clientRole.probateRole",
+															"lettersIssued"
 														);
 														setFormData({
 															...formData,
@@ -1322,6 +1352,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 													label='Full Authority'
 													checked={formData.caseType.fullAuthority}
 													onChange={(e) => {
+														markTouched("lettersIssued");
 														setFormData({
 															...formData,
 															caseType: {
@@ -1354,6 +1385,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 													label='Limited Authority (With Court Confirmation)'
 													checked={formData.caseType.limitedAuthority}
 													onChange={(e) => {
+														markTouched("lettersIssued");
 														setFormData({
 															...formData,
 															caseType: {
@@ -1394,7 +1426,8 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 															"caseType",
 															"caseType.conservatorshipScope",
 															"clientRole",
-															"clientRole.conservatorRole"
+															"clientRole.conservatorRole",
+															"lettersIssued"
 														);
 														setFormData({
 															...formData,
@@ -1429,6 +1462,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 													label='Of the Estate'
 													checked={formData.caseType.ofTheEstate}
 													onChange={(e) => {
+														markTouched("lettersIssued");
 														setFormData({
 															...formData,
 															caseType: {
@@ -1461,6 +1495,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 													label='Of the Person'
 													checked={formData.caseType.ofThePerson}
 													onChange={(e) => {
+														markTouched("lettersIssued");
 														setFormData({
 															...formData,
 															caseType: {
@@ -1493,6 +1528,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 													label='Both'
 													checked={formData.caseType.both}
 													onChange={(e) => {
+														markTouched("lettersIssued");
 														setFormData({
 															...formData,
 															caseType: {
@@ -1789,7 +1825,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 										<div className='flex justify-between items-center gap-4 pt-6'>
 											<label className='block font-bold text-lg'>
 												{renderLabel(
-													"Does the above selected case type involve an existing reverse mortgage?",
+													"Does the Above Selected Case Type Involve an Existing Reverse Mortgage?",
 												)}
 											</label>
 											<RadioGroup
@@ -1965,12 +2001,21 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 																label: "Yes",
 																color: "teal",
 																width: "80px",
+																error: fieldErrors.has("lettersIssued"),
 															},
 															{
 																value: "No",
 																label: "No ",
 																color: "orange",
 																width: "80px",
+																error: fieldErrors.has("lettersIssued"),
+															},
+															{
+																value: "NA",
+																label: "N/A ",
+																color: "gray",
+																width: "80px",
+																disabled: lettersIssuedApplies,
 															},
 														]}
 														width='auto'
@@ -2000,7 +2045,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 																};
 																handleChange(event);
 															}}
-															className={`border-[3px] px-2 py-1 bg-gray-200 placeholder:italic placeholder-[#FD7702] w-[240px] font-bold focus:outline-none focus:ring-2 focus:ring-[#FD7702] focus:ring-offset-0 disabled:text-secondary disabled:[-webkit-text-fill-color:var(--color-secondary)] disabled:cursor-not-allowed ${
+															className={`border-[3px] px-2 py-1 bg-gray-200 placeholder:italic placeholder-[#FD7702] w-[190px] font-bold focus:outline-none focus:ring-2 focus:ring-[#FD7702] focus:ring-offset-0 disabled:text-secondary disabled:[-webkit-text-fill-color:var(--color-secondary)] disabled:cursor-not-allowed ${
 																fieldErrors.has("lettersDate")
 																	? "border-red-500"
 																	: "border-[#0097A7]"
@@ -2034,7 +2079,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 																};
 																handleChange(event);
 															}}
-															className='border-[3px] border-[#0097A7] px-2 py-1 bg-gray-200 placeholder:italic placeholder-[#FD7702] w-[230px] font-bold focus:outline-none focus:ring-2 focus:ring-[#FD7702] focus:ring-offset-0 disabled:text-secondary disabled:[-webkit-text-fill-color:var(--color-secondary)] disabled:cursor-not-allowed'
+															className='border-[3px] border-[#0097A7] px-2 py-1 bg-gray-200 placeholder:italic placeholder-[#FD7702] w-[200px] font-bold focus:outline-none focus:ring-2 focus:ring-[#FD7702] focus:ring-offset-0 disabled:text-secondary disabled:[-webkit-text-fill-color:var(--color-secondary)] disabled:cursor-not-allowed'
 															placeholderText='Select date'
 															popperPlacement="bottom-end"
 															dateFormat='MM-dd-yyyy'

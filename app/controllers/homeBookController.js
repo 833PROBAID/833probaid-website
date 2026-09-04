@@ -98,7 +98,7 @@ export async function handleCreateHomeBook(homeBookData) {
 		};
 	} catch (error) {
 		console.error("Error creating home book:", error);
-		throw new Error("Failed to create home book");
+		throw new Error(error?.message || "Failed to create home book");
 	}
 }
 
@@ -121,7 +121,7 @@ export async function handleUpdateHomeBook(homeBookId, homeBookData) {
 		};
 	} catch (error) {
 		console.error("Error updating home book:", error);
-		throw new Error("Failed to update home book");
+		throw new Error(error?.message || "Failed to update home book");
 	}
 }
 
@@ -138,6 +138,6 @@ export async function handleDeleteHomeBook(homeBookId) {
 		};
 	} catch (error) {
 		console.error("Error deleting home book:", error);
-		throw new Error("Failed to delete home book");
+		throw new Error(error?.message || "Failed to delete home book");
 	}
 }
