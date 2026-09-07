@@ -1823,9 +1823,11 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 										)}
 
 										<div className='flex justify-between items-center gap-4 pt-6'>
-											<label className='block font-bold text-lg'>
+											<label className='block font-bold text-lg text-secondary'>
 												{renderLabel(
 													"Does the Above Selected Case Type Involve an Existing Reverse Mortgage?",
+													null,
+													'invoice'
 												)}
 											</label>
 											<RadioGroup
@@ -1833,6 +1835,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 												value={formData.reverseMortgage}
 												onChange={handleChange}
 												error={fieldErrors.has("reverseMortgage")}
+												containerClass="scale-110 mr-[9px]"
 												options={[
 													{
 														value: "Yes",

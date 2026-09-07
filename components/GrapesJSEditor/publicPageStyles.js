@@ -25,6 +25,7 @@ const publicPageStyles = `
 
 				--gray-100: #f3f4f6;
 				--gray-300: #d1d5db;
+				--gray-400: #9ca3af;
 				--gray-500: #6b7280;
 				--gray-600: #4b5563;
 				--white: #ffffff;
@@ -953,6 +954,102 @@ const publicPageStyles = `
 				height: 45px;
 				flex-shrink: 0;
 				object-fit: contain;
+			}
+
+			/* =========================================
+			   6d. RADIO PILL
+			   Source: RadioButton / RadioGroup in components/SharedComponents.jsx
+			   (RADIO_COLORS teal | orange | gray), rewritten as plain markup so a
+			   dropped block is a real <input type="radio"> and stays interactive
+			   without React. The input itself is the circle — appearance:none plus
+			   an inset white ring draws the selected dot — which also keeps the
+			   block free of empty <span> wrappers that stripEmptyHtml would delete.
+			   ========================================= */
+
+			.radio-group {
+				display: flex;
+				flex-direction: column;
+				gap: 0.25rem;
+			}
+
+			.radio-group-label {
+				font-family: var(--font-montserrat);
+				font-size: 1.125rem;
+				font-weight: 700;
+				line-height: 1.75rem;
+			}
+
+			.radio-group-options {
+				display: flex;
+				flex-wrap: wrap;
+				align-items: center;
+				gap: 1rem;
+			}
+
+			.radio-pill {
+				--radio-fill: var(--primary);
+				--radio-dot: var(--secondary);
+				--radio-ring: var(--primary);
+				display: inline-flex;
+				align-items: center;
+				cursor: pointer;
+				height: 0;
+				position: relative;
+				top: 9px;
+			}
+
+			.radio-pill-orange {
+				--radio-fill: var(--secondary);
+				--radio-dot: var(--primary);
+				--radio-ring: var(--secondary);
+			}
+
+			.radio-pill-gray {
+				--radio-fill: var(--gray-500);
+				--radio-dot: var(--gray-600);
+				--radio-ring: var(--gray-400);
+			}
+
+			.radio-pill-input {
+				-webkit-appearance: none;
+				appearance: none;
+				flex-shrink: 0;
+				width: 2rem;
+				height: 2rem;
+				/* Tucks the circle under the label pill's 1rem left padding. */
+				margin: 0 -0.75rem 0 0;
+				border: 2px solid var(--radio-ring);
+				border-radius: 9999px;
+				background-color: var(--white);
+				cursor: pointer;
+				position: relative;
+				z-index: 2;
+				transition: background-color 0.2s ease, box-shadow 0.2s ease;
+			}
+
+			/* Selected dot: fill the circle, then punch a white ring back in. */
+			.radio-pill-input:checked {
+				background-color: var(--radio-dot);
+				box-shadow: inset 0 0 0 0.25rem var(--white);
+			}
+
+			.radio-pill-input:focus-visible {
+				outline: 2px solid var(--radio-ring);
+				outline-offset: 2px;
+			}
+
+			.radio-pill-label {
+				padding: 0.25rem 0.625rem 0.25rem 1rem;
+				border: 1px solid var(--radio-fill);
+				border-radius: 0.25rem;
+				background-color: var(--radio-fill);
+				color: var(--white);
+				font-family: var(--font-montserrat);
+				font-size: 15px;
+				font-weight: 700;
+				line-height: 1.5rem;
+				text-align: center;
+				text-transform: uppercase;
 			}
 
 			.site-footer {

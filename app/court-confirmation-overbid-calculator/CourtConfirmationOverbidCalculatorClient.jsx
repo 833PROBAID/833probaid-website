@@ -64,11 +64,21 @@ const Page = () => {
   const [showLimitWarning, setShowLimitWarning] = useState(false);
 
   const handleOfferChange = (event) => {
-    const nextValue = event.target.value;
-    const [wholePart, decimalPart = ""] = nextValue.split(".");
-    const wholeDigitCount = (wholePart.match(/\d/g) || []).length;
+    // Drop anything that is not a digit or a decimal point (letters, "e", "+",
+    // "-", spaces) so pasted or typed text can never reach the field.
+    let nextValue = event.target.value.replace(/[^\d.]/g, "");
 
-    if (wholeDigitCount > MAX_OFFER_DIGITS) {
+    // Keep only the first decimal point.
+    const firstDot = nextValue.indexOf(".");
+    if (firstDot !== -1) {
+      nextValue =
+        nextValue.slice(0, firstDot + 1) +
+        nextValue.slice(firstDot + 1).replace(/\./g, "");
+    }
+
+    const [wholePart, decimalPart = ""] = nextValue.split(".");
+
+    if (wholePart.length > MAX_OFFER_DIGITS) {
       setShowLimitWarning(true);
       return;
     }
@@ -341,9 +351,10 @@ const Page = () => {
                     </span>
                     <input
                       id="accepted-offer"
-                      type="number"
+                      type="text"
                       inputMode="decimal"
-                      min="0"
+                      autoComplete="off"
+                      pattern="[0-9]*[.]?[0-9]*"
                       placeholder="e.g., 1000000"
                       value={offerPrice}
                       onChange={handleOfferChange}

@@ -162,6 +162,10 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
           )}
           <BookCardGrid
             cards={isMobile ? homeCardData : homeCardData.slice(1)}
+            bigLast={!isMobile}
+            // Mobile has no leading big card, so it absorbs its slot to keep
+            // the collapsed count at 8 books on every breakpoint.
+            initialCount={isMobile ? 8 : 7}
           />
 
           {/* Desktop: Always show last big card */}
@@ -333,6 +337,14 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
                         />
                         <AnimatedText
                           text=" to deliver the structured, high-level infrastructure that court-supervised real estate demands and estate representatives deserve."
+                          animate={true}
+                        />
+                      </>
+                    ) : index === 1 ? (
+                      <>
+                        <AnimatedText
+                          text="Start to Finish"
+                          className="text-primary"
                           animate={true}
                         />
                       </>
