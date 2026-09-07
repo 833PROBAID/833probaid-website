@@ -1,3 +1,36 @@
+/**
+ * Markup for one radio pill, shared by the "Radio Button" / "Radio Group"
+ * blocks below and by the "Radio button" RTE action (GrapesjsRteActions.jsx),
+ * so an inline radio and a dropped one stay identical.
+ *
+ * Styles: .radio-pill* in publicPageStyles.js / public/grapesjs-preview.css
+ * (ported from RadioButton in components/SharedComponents.jsx). Colours:
+ * "" (teal, default) | "orange" | "gray".
+ *
+ * Radios group by their name attribute, so every question on a page needs its
+ * own `name` — anything left on the default shares one selection.
+ */
+export const radioPillHTML = ({
+  label = "Option One",
+  color = "",
+  name = "radio-question-1",
+  value = "option-1",
+  attrs = "",
+} = {}) =>
+  `<label class="radio-pill${color ? ` radio-pill-${color}` : ""}"${
+    attrs ? ` ${attrs}` : ""
+  }><input class="radio-pill-input" type="radio" name="${name}" value="${value}" /><span class="radio-pill-label">${escapeHtml(
+    label
+  )}</span></label>`;
+
+/** Selected text becomes a pill label, so it has to be inert as markup. */
+const escapeHtml = (value) =>
+  String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+
 const loadCustomBlocks = (editor) => {
   const blockManager = editor.BlockManager;
 
@@ -317,6 +350,33 @@ const loadCustomBlocks = (editor) => {
 	<span class="cta-link-text">Learn More</span>
 	<img class="cta-link-arrow" src="/arrow-right.png" alt="arrow right" />
 </a>`,
+  });
+
+  // ===================== RADIO PILL =====================
+  // Inline radios can also be made from selected text with the "Radio button"
+  // action in the rich-text toolbar (see GrapesjsRteActions.jsx).
+  blockManager.add("radio-pill", {
+    label: "Radio Button",
+    media: '<i class="fa fa-dot-circle"></i>',
+    category: "Content",
+    content: radioPillHTML(),
+  });
+
+  // ===================== RADIO GROUP =====================
+  // Source: RadioGroup in components/SharedComponents.jsx — a labelled row of
+  // radio pills, one per colour (teal / orange / gray for the neutral answer).
+  blockManager.add("radio-group", {
+    label: "Radio Group",
+    media: '<i class="fa fa-list-ol"></i>',
+    category: "Content",
+    content: `<div class="radio-group">
+	<span class="radio-group-label">Question label goes here</span>
+	<div class="radio-group-options">
+		${radioPillHTML({ label: "Yes", value: "yes" })}
+		${radioPillHTML({ label: "No", value: "no", color: "orange" })}
+		${radioPillHTML({ label: "N/A", value: "na", color: "gray" })}
+	</div>
+</div>`,
   });
 };
 

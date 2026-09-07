@@ -340,6 +340,14 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
                           animate={true}
                         />
                       </>
+                    ) : index === 1 ? (
+                      <>
+                        <AnimatedText
+                          text="Start to Finish"
+                          className="text-primary"
+                          animate={true}
+                        />
+                      </>
                     ) : (
                       <></>
                     )

@@ -5,6 +5,7 @@ import grapesjs from "grapesjs";
 import gjsPresetWebpage from "grapesjs-preset-webpage";
 import gjsBlocksBasic from "grapesjs-blocks-basic";
 import loadCustomBlocks from "./GrapesjsCustomBlocks";
+import loadRteActions from "./GrapesjsRteActions";
 import "grapesjs/dist/css/grapes.min.css";
 import "./BlogGrapesEditor.css";
 import publicPageStyles from "./publicPageStyles";
@@ -160,6 +161,9 @@ export default function BlogGrapesEditor({ initialContent, onSave }) {
 
 			// Load custom blog blocks
 			loadCustomBlocks(instanceRef.current);
+
+			// Extra rich-text toolbar actions (radio button from selected text)
+			loadRteActions(instanceRef.current);
 
 			// Load initial content
 			if (initialContent?.state) {
