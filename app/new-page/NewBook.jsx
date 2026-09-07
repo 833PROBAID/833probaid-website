@@ -510,7 +510,7 @@ function BookCardInner({
                 className="absolute top-[63%] left-0 right-0 bottom-0 flex items-center justify-between flex-col"
                 style={{ padding: "2% 4% 6.5%" }}
               >
-                <p className="text-white tracking-wider text-center font-montserrat leading-[1.3] font-semibold md:text-[10px] 2md:text-[12px] 3md:text-[13px] lg:text-[14px] 2lg:text-[15.5px] 3lg:text-[16.5px] xl:text-lg 2xl:text-[17px] px-[1%]">
+                <p className="text-white tracking-wider text-center font-montserrat leading-[1.3] font-semibold sm:text-[10px] 2md:text-[11px] 3md:text-[13px] lg:text-[14px] 2lg:text-[15.5px] 3lg:text-[17px] xl:text-lg 2xl:text-[17px] px-[1%]">
                   {description}
                 </p>
                 <LearnMoreButton

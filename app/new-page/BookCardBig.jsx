@@ -430,7 +430,7 @@ function BookCardInner({
                     }`}
                   />
                 </div>
-                <h1 className="pt-3 text-white font-bold text-center uppercase leading-[1.2] font-montserrat sm:text-[11px] 2md:text-[12px] 3md:text-[14px] lg:text-[16px] 2lg:text-[17.5px] 3lg:text-[18.5px] xl:text-[22px] px-[5%] drop-shadow-[0px_2px_1px_rgba(0,0,0,0.85)] tracking-wider">
+                <h1 className="pt-3 text-white font-bold text-center uppercase leading-[1.2] font-montserrat md:text-[11px] 2md:text-[12px] 3md:text-[15px] lg:text-[16px] 2lg:text-[17.5px] 3lg:text-[18.5px]  xl:text-[20px] px-[5%] drop-shadow-[4.31px_4.31px_4.31px_rgba(0,0,0,0.25)] [text-shadow:1_2px_1.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
                   {String(title)
                     .split("®")
                     .map((part, i, arr) =>
@@ -467,7 +467,7 @@ function BookCardInner({
                   right: 0
                 }}
               >
-                <p className="text-white text-center tracking-wider font-extrabold font-montserrat leading-[1.3] sm:text-[10px] 2md:text-[12px] 3md:text-[13px] lg:text-sm xl:text-lg 2lg:text-[19px] 2xl:text-xl px-[4%] [text-shadow:1px_1px_2.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
+                <p className="text-white text-center tracking-wider font-extrabold font-montserrat leading-[1.3] md:text-[11px] 2md:text-[13px] 3md:text-[16px] lg:text-sm 2lg:text-[15.5px] 3lg:text-[16.5px] xl:text-lg 2xl:text-xl px-[4%] [text-shadow:1px_2px_2.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
                   {subtitle}
                 </p>
               </div>
@@ -477,7 +477,7 @@ function BookCardInner({
                 className="flex items-center justify-between flex-col gap-4"
                 style={{ padding: "0% 6% 2.5%" }}
               >
-                <p className="absolute bottom-[30%] xl:bottom-[27%] 2xl:bottom-[30%] text-white tracking-wider text-center font-montserrat leading-[1.3] font-semibold sm:text-[10px] 2md:text-[11px] 3md:text-[13px] lg:text-[14px] 2lg:text-[15.5px] 3lg:text-[17px] xl:text-lg 2xl:text-[17px] px-[1%] [text-shadow:1px_0px_2.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
+                <p className="absolute bottom-[30%] xl:bottom-[27%] 2xl:bottom-[30%] text-white tracking-wider text-center font-montserrat leading-[1.3] font-semibold sm:text-[10px] 2md:text-[11px] 3md:text-[13px] lg:text-[14px] 2lg:text-[15.5px] 3lg:text-[17px] xl:text-lg 2xl:text-[17px] px-[1%]">
                   {description}
                 </p>
                 <LearnMoreButton
