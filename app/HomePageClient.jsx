@@ -162,6 +162,10 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
           )}
           <BookCardGrid
             cards={isMobile ? homeCardData : homeCardData.slice(1)}
+            bigLast={!isMobile}
+            // Mobile has no leading big card, so it absorbs its slot to keep
+            // the collapsed count at 8 books on every breakpoint.
+            initialCount={isMobile ? 8 : 7}
           />
 
           {/* Desktop: Always show last big card */}

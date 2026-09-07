@@ -7,7 +7,11 @@ import CTAButton from "@/components/CTAButton";
 
 const INITIAL_COUNT = 7;
 
-export default function BookCardGrid({ cards = [] }) {
+export default function BookCardGrid({
+  cards = [],
+  bigLast = true,
+  initialCount = INITIAL_COUNT,
+}) {
   // Starts collapsed so the client's first render matches the server's, then
   // syncs to the persisted preference after mount.
   const [showAll, setShowAll] = useState(false);
@@ -32,14 +36,17 @@ export default function BookCardGrid({ cards = [] }) {
     });
   };
 
-  const visible = showAll ? cards : cards.slice(0, INITIAL_COUNT);
-  const hasOverflow = cards.length > INITIAL_COUNT;
+  const visible = showAll ? cards : cards.slice(0, initialCount);
+  const hasOverflow = cards.length > initialCount;
 
-  // The last visible book always renders as the big card, so the section ends
-  // on a full-width book no matter how many are expanded.
+  // The last visible book renders as the big card so the section ends on a
+  // full-width book, except when `bigLast` is off (mobile) where every book
+  // stays in the grid.
   const lastIndex = visible.length - 1;
-  const gridCards = visible.slice(0, lastIndex < 0 ? 0 : lastIndex);
-  const lastCard = lastIndex >= 0 ? visible[lastIndex] : null;
+  const gridCards = bigLast
+    ? visible.slice(0, lastIndex < 0 ? 0 : lastIndex)
+    : visible;
+  const lastCard = bigLast && lastIndex >= 0 ? visible[lastIndex] : null;
 
   return (
     <>
