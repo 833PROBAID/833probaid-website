@@ -343,7 +343,7 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
                     ) : index === 1 ? (
                       <>
                         <AnimatedText
-                          text="Start to Finish"
+                          text="Start to Finish."
                           className="text-primary"
                           animate={true}
                         />
