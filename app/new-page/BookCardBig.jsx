@@ -114,6 +114,7 @@ function BookCardInner({
   icon,
   mirrored = false,
   priority = false,
+  bottom = '30%'
 }) {
   const [open, setOpen] = useState(false);
   const [inView, setInView] = useState(false);
@@ -477,7 +478,7 @@ function BookCardInner({
                 className="flex items-center justify-between flex-col gap-4"
                 style={{ padding: "0% 6% 2.5%" }}
               >
-                <p className="absolute bottom-[30%] xl:bottom-[27%] 2xl:bottom-[30%] text-white tracking-wider text-center font-montserrat leading-[1.3] font-semibold sm:text-[10px] 2md:text-[11px] 3md:text-[13px] lg:text-[14px] 2lg:text-[15.5px] 3lg:text-[17px] xl:text-lg 2xl:text-[17px] px-[1%]">
+                <p className={`absolute bottom-[30%] xl:bottom-[${bottom}] 2xl:bottom-[30%] text-white tracking-wider text-center font-montserrat leading-[1.3] font-semibold sm:text-[10px] 2md:text-[11px] 3md:text-[13px] lg:text-[14px] 2lg:text-[15.5px] 3lg:text-[17px] xl:text-lg 2xl:text-[17px] px-[1%]`}>
                   {description}
                 </p>
                 <LearnMoreButton

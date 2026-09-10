@@ -156,6 +156,7 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
                   mirrored={index % 2 !== 0}
                   speed={3000}
                   priority={true}
+                  bottom="27%"
                 />
               ))}
             </section>
