@@ -96,7 +96,7 @@ const ReadyToGetStart = () => {
             <foreignObject x="90" y="60" width="930" height="460">
               <div
                 xmlns="http://www.w3.org/1999/xhtml"
-                className="flex h-full flex-col items-center justify-start px-3 font-montserrat font-semibold pt-10 2xl:pt-12"
+                className="flex h-full flex-col items-center justify-start px-3 font-montserrat font-semibold pt-11 2xl:pt-12"
               >
                 {/* <h2
                   className={`font-anton text-center font-normal ${headingSizeClass}`}
@@ -536,7 +536,7 @@ const ReadyToGetStart = () => {
               </linearGradient>
             </defs>
           </svg>
-          <div className="absolute left-[24.12%] bottom-14 2xl:bottom-20 w-[26.97%] h-[12.84%]">
+          <div className="absolute left-[24.12%] bottom-[14%] 2xl:bottom-20 w-[26.97%] h-[12.84%]">
             <CTAButton
               label="Learn More"
               onClick={() => router.push("/homebooks/contact-us")}
@@ -545,7 +545,7 @@ const ReadyToGetStart = () => {
               iconClassName="w-7 lg:w-9 xl:w-10 h-7 lg:h-9 xl:h-10"
             />
           </div>
-          <div className="absolute left-[53.33%] bottom-14 2xl:bottom-20 w-[26.97%] h-[12.84%]">
+          <div className="absolute left-[53.33%] bottom-[14%] 2xl:bottom-20 w-[26.97%] h-[12.84%]">
             <CTAButton
               label="Form"
               onClick={() => router.push("/homebooks/833probaid-referral-intake")}
@@ -625,7 +625,7 @@ const ReadyToGetStart = () => {
             <foreignObject x="90" y="60" width="930" height="460">
               <div
                 xmlns="http://www.w3.org/1999/xhtml"
-                className="flex h-full flex-col items-center justify-center px-3 font-montserrat font-bold"
+                className="flex h-full flex-col items-center justify-center px-3 pt-6 font-montserrat font-bold"
               >
                 <h2
                   className={`font-anton text-center font-normal  text-5xl mb-2`}
