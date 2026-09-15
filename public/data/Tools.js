@@ -5,7 +5,7 @@ export const trustCardData = [
     },
     {
         serial: 2,
-        text: "That trust isn't built on promises; it's earned through execution. It's built on immediate communication, tight documentation, no missed details, and resolving compliance issues before they jeopardize a court date or delay closing. It's about keeping every moving piece aligned so the estate is protected from start to finish.",
+        text: "That trust isn't built on promises; it's earned through execution. It's built on immediate communication, tight documentation, no missed details, and resolving compliance issues before they jeopardize a court date or delay closing. It's about keeping every moving piece aligned so the estate is protected from ",
     },
     {
         serial: 3,

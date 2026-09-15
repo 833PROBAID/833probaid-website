@@ -1039,7 +1039,7 @@ const publicPageStyles = `
 			}
 
 			.radio-pill-label {
-				padding: 0.25rem 0.625rem 0.25rem 1rem;
+				padding: 4px 10px 4px 16px;
 				border: 1px solid var(--radio-fill);
 				border-radius: 0.25rem;
 				background-color: var(--radio-fill);
@@ -1047,7 +1047,7 @@ const publicPageStyles = `
 				font-family: var(--font-montserrat);
 				font-size: 15px;
 				font-weight: 700;
-				line-height: 1.5rem;
+				line-height: calc(1.25 / 0.875);
 				text-align: center;
 				text-transform: uppercase;
 			}

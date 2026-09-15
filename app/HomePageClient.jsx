@@ -156,6 +156,7 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
                   mirrored={index % 2 !== 0}
                   speed={3000}
                   priority={true}
+                  bottom="27%"
                 />
               ))}
             </section>
@@ -343,7 +344,7 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
                     ) : index === 1 ? (
                       <>
                         <AnimatedText
-                          text="Start to Finish"
+                          text="Start to Finish."
                           className="text-primary"
                           animate={true}
                         />
