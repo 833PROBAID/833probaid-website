@@ -212,7 +212,7 @@ const Page = () => {
                       filter: "drop-shadow(2px 3px 0px rgba(0,0,0,0.5))",
                     }}
                   >
-                    California Probate Minimum Overbid Calculator
+                    California Court Confirmation Overbid Calculator
                   </h1>
 
                   <div className="mt-8 border-l-4 border-secondary pl-6">
@@ -224,7 +224,7 @@ const Page = () => {
                     >
                       Enter the current Accepted Offer to calculate the minimum
                       initial overbid under California Probate Code
-                      §10311(a)(1).
+                      § 10311(a)(1).
                     </p>
                   </div>
                 </div>
@@ -331,7 +331,7 @@ const Page = () => {
                       Accepted Offer
                     </h2>
                     <p className="mt-1 text-[1.375rem] text-black font-bold">
-                      The minimum overbid is calculated as 10% of the first
+                      The minimum initial overbid is calculated as 10% of the first
                       $10,000 of the Accepted Offer plus 5% of the remaining
                       balance.
                     </p>
@@ -488,7 +488,7 @@ const Page = () => {
                           The amount above represents the minimum initial
                           overbid calculated from the Accepted Offer entered,
                           using the formula set forth in California Probate Code
-                          §10311(a)(1).
+                          § 10311(a)(1).
                         </p>
                       </div>
                       <div className="[box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px] p-6 rounded-2xl flex items-start gap-6">
@@ -497,7 +497,7 @@ const Page = () => {
                           Court procedures, deposit requirements, acceptable
                           forms of payment, bidding increments, financing terms,
                           and other requirements may vary depending on the court
-                          and the specific probate sale.
+                          and the specific court-confirmed sale.
                         </p>
                       </div>
                       <div className="[box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px] p-6 rounded-2xl flex items-start gap-6">
@@ -505,7 +505,7 @@ const Page = () => {
                         <p>
                           Before attending the hearing, confirm the required
                           deposit amount and form of payment with the listing
-                          agent, estate representative/counsel, and applicable
+                          agent or counsel, and review the applicable
                           court instructions.
                         </p>
                       </div>
@@ -514,7 +514,7 @@ const Page = () => {
                         <p>
                           This calculator is provided for informational purposes
                           only and is not to be considered as legal or financial
-                          advice. Meeting the calculated minimum overbid amount
+                          advice. Meeting the calculated minimum initial overbid amount
                           does not guarantee that an overbid will qualify or be
                           accepted. Additional statutory, court, and
                           sale-specific requirements may apply.
