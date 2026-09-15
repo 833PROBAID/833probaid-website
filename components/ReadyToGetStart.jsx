@@ -32,7 +32,9 @@ const ReadyToGetStart = () => {
 					<svg
 						className='absolute inset-0 h-full w-full' */}
           <svg
-            className={`absolute inset-0 h-full overflow-visible w-full${isSafariBrowser ? " transform-gpu backface-hidden" : ""}`}
+            className={`absolute inset-0 h-full overflow-visible w-full${
+              isSafariBrowser ? " transform-gpu backface-hidden" : ""
+            }`}
             viewBox="0 70 1130 614"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -55,10 +57,7 @@ const ReadyToGetStart = () => {
                 stroke="#838383"
               />
             </g>
-            <g
-              filter="url(#filter1_d_167_4)"
-              transform="scale(1 1.1)"
-            >
+            <g filter="url(#filter1_d_167_4)" transform="scale(1 1.1)">
               <rect
                 x="67.8999"
                 y="62.2998"
@@ -68,10 +67,7 @@ const ReadyToGetStart = () => {
                 fill="white"
               />
             </g>
-            <g
-              filter="url(#filter2_d_167_4)"
-              transform="scale(1 1.1)"
-            >
+            <g filter="url(#filter2_d_167_4)" transform="scale(1 1.1)">
               <rect
                 x="67.8999"
                 y="62.2998"
@@ -136,11 +132,11 @@ const ReadyToGetStart = () => {
                   <AnimatedText text="Court-supervised real estate requires a high standard of precision, compliance, and specialized expertise. Stop navigating probate, conservatorship, or trust property sales through uncertainty." />
                   <span className="mt-6 block">
                     Call{" "}
-                    <span
-                      style={{ color: "#0097A7" }}
-                      className="font-bold"
-                    >
-                      <AnimatedText text="(833) PROBAID" className="probaid-phone" />
+                    <span style={{ color: "#0097A7" }} className="font-bold">
+                      <AnimatedText
+                        text="(833) PROBAID"
+                        className="probaid-phone"
+                      />
                       <AnimatedText text=" — " className="text-black" />
                     </span>{" "}
                     <span
@@ -149,9 +145,12 @@ const ReadyToGetStart = () => {
                     >
                       <AnimatedText text="(833) 776-2243" />
                       <AnimatedText text=" — " className="text-black" />
-                      <AnimatedText text="NOW" className="underline decoration-[max(4.5px,0.12em)]! underline-offset-[0.1em]" />
+                      <AnimatedText
+                        text="NOW"
+                        className="underline decoration-[max(4.5px,0.12em)]! underline-offset-[0.1em]"
+                      />
                       <AnimatedText text=" — " className="text-black" />
-                      </span>{" "}
+                    </span>{" "}
                     <AnimatedText text="or" />{" "}
                     <AnimatedText text="fill out the " />
                     <Link
@@ -163,7 +162,10 @@ const ReadyToGetStart = () => {
                       }}
                     >
                       <span>
-                        <AnimatedText text="FORM" className="underline decoration-[max(4.5px,0.12em)]! underline-offset-[0.1em]" />                    
+                        <AnimatedText
+                          text="FORM"
+                          className="underline decoration-[max(4.5px,0.12em)]! underline-offset-[0.1em]"
+                        />
                       </span>
                     </Link>{" "}
                     <AnimatedText text=" for a Strategic Consultation. We navigate the red tape, protect the estate’s equity, and manage the transaction through a clean, compliant closing." />
@@ -536,23 +538,23 @@ const ReadyToGetStart = () => {
               </linearGradient>
             </defs>
           </svg>
-          <div className="absolute left-[24.12%] bottom-[14%] 2xl:bottom-20 w-[26.97%] h-[12.84%]">
+          <div className="absolute bottom-[14%] 2xl:bottom-20 h-[12.84%] flex w-full justify-center gap-6">
             <CTAButton
               label="Learn More"
               onClick={() => router.push("/homebooks/contact-us")}
-              className="w-full h-full justify-center px-1!"
-              textClassName="text-[15px] xl:text-[18px]"
+              className="h-full justify-center pr-2 pl-3"
+              textClassName="text-[18px] sm:text-[18px] md:text-[14.5px] 2md:text-[15.5px] 3md:text-[18px] xl:text-[23px] text-nowrap"
               iconClassName="w-7 lg:w-9 xl:w-10 h-7 lg:h-9 xl:h-10"
             />
-          </div>
-          <div className="absolute left-[53.33%] bottom-[14%] 2xl:bottom-20 w-[26.97%] h-[12.84%]">
             <CTAButton
               label="Form"
-              onClick={() => router.push("/homebooks/833probaid-referral-intake")}
+              onClick={() =>
+                router.push("/homebooks/833probaid-referral-intake")
+              }
               bg="#0097A7"
               mirrored
-              className="w-full h-full justify-center px-1!"
-              textClassName="text-[15px] xl:text-[18px]"
+              className="min-w-48 h-full justify-center pr-2 pl-3"
+              textClassName="text-[18px] sm:text-[18px] md:text-[14.5px] 2md:text-[15.5px] 3md:text-[18px] xl:text-[23px]"
               iconClassName="w-7 lg:w-9 xl:w-10 h-7 lg:h-9 xl:h-10"
             />
           </div>
@@ -568,7 +570,9 @@ const ReadyToGetStart = () => {
       <div className="bg-secondary block md:hidden rounded-xl md:rounded-none p-4 shadow-[0px_12px_20px_0px_rgba(0,0,0,0.2),0px_-12px_20px_0px_rgba(0,0,0,0.2)] sm:shadow-[0px_12px_20px_0px_rgba(0,0,0,0.4),0px_-12px_20px_0px_rgba(0,0,0,0.4)] md:shadow-[0px_12px_20px_0px_rgba(0,0,0,0.6),0px_-12px_20px_0px_rgba(0,0,0,0.6)] lg:shadow-[0px_12px_20px_0px_rgba(0,0,0,0.75),0px_-12px_20px_0px_rgba(0,0,0,0.75)] xl:shadow-[0px_12px_20px_0px_rgba(0,0,0,0.9),0px_-12px_20px_0px_rgba(0,0,0,0.9)]">
         <div className="relative aspect-[1130/674] md:h-full w-full flex md:col-span-4">
           <svg
-            className={`absolute inset-0 h-full w-full${isSafariBrowser ? " transform-gpu backface-hidden" : ""}`}
+            className={`absolute inset-0 h-full w-full${
+              isSafariBrowser ? " transform-gpu backface-hidden" : ""
+            }`}
             viewBox="0 0 1130 674"
             fill="white"
             xmlns="http://www.w3.org/2000/svg"
@@ -650,10 +654,16 @@ const ReadyToGetStart = () => {
                     <AnimatedText text="(833) PROBAID" />
                     <AnimatedText text=" — " className="text-black" />
                   </span>
-                  <span style={{ color: "#FE7702" }} className="font-bold probaid-phone">
+                  <span
+                    style={{ color: "#FE7702" }}
+                    className="font-bold probaid-phone"
+                  >
                     <AnimatedText text="(833) 776-2243" />
                     <AnimatedText text=" — " className="text-black" />
-                    <AnimatedText text="NOW" className="underline decoration-[max(4.5px,0.12em)]! underline-offset-[0.1em]" />                    
+                    <AnimatedText
+                      text="NOW"
+                      className="underline decoration-[max(4.5px,0.12em)]! underline-offset-[0.1em]"
+                    />
                     <AnimatedText text=" — " className="text-black" />
                   </span>{" "}
                   <AnimatedText text="or" />{" "}
@@ -667,7 +677,10 @@ const ReadyToGetStart = () => {
                     }}
                   >
                     <span>
-                      <AnimatedText text="FORM" className="underline decoration-[max(4.5px,0.12em)]! underline-offset-[0.1em]" />                    
+                      <AnimatedText
+                        text="FORM"
+                        className="underline decoration-[max(4.5px,0.12em)]! underline-offset-[0.1em]"
+                      />
                     </span>
                   </Link>{" "}
                   <AnimatedText text=" for a Strategic Consultation. We navigate the red tape, protect the estate’s equity, and manage the transaction through a clean, compliant closing." />
@@ -1058,7 +1071,9 @@ const ReadyToGetStart = () => {
           >
             <CTAButton
               label="Form"
-              onClick={() => router.push("/homebooks/833probaid-referral-intake")}
+              onClick={() =>
+                router.push("/homebooks/833probaid-referral-intake")
+              }
               bg="#0097A7"
               mirrored
               className="w-full justify-center gap-1! px-1.5 py-1 h-full shadow-[0px_2.73px_6.64px_0px_rgba(0,0,0,0.68),2.46px_-2.46px_1.64px_0px_rgba(0,0,0,0.25)_inset,-2.64px_1.55px_1.64px_0px_rgba(255,255,255,0.25)_inset,-1.82px_-0.91px_3.64px_0px_rgba(0,0,0,0.6)]! md:shadow-[2px_1.73px_6.64px_0px_rgba(0,0,0,1),5.46px_-5.46px_3.64px_0px_rgba(0,0,0,0.25)_inset,-3.64px_4.55px_3.64px_0px_rgba(255,255,255,0.25)_inset,-1.82px_-0.91px_3.64px_0px_rgba(0,0,0,0.7)]! rounded-sm! md:rounded-lg!"

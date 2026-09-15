@@ -1457,3 +1457,11 @@
 					}
 				}
 			}
+
+			.flex {
+				display: flex;
+			}
+
+			.\!mr-16 {
+				margin-right: 64px !important;
+			}
