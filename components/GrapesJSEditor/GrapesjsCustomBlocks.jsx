@@ -19,7 +19,7 @@ export const radioPillHTML = ({
 } = {}) =>
   `<label class="radio-pill${color ? ` radio-pill-${color}` : ""}"${
     attrs ? ` ${attrs}` : ""
-  }><input class="radio-pill-input" type="radio" name="${name}" value="${value}" /><span class="radio-pill-label">${escapeHtml(
+  }><input class="radio-pill-input" checked type="radio" name="${name}" value="${value}" /><span class="radio-pill-label">${escapeHtml(
     label
   )}</span></label>`;
 
