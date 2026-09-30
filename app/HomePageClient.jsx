@@ -241,12 +241,11 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
                   />
                 </p>
                 <h4 className="font-montserrat text-primary text-center text-lg font-extrabold tracking-wide lg:text-xl xl:text-2xl mt-4">
-                  <AnimatedText text="Fast" />
-                  <span className="text-secondary">.</span>{" "}
-                  <AnimatedText text="Fair" />
-                  <span className="text-secondary">.</span>{" "}
-                  <AnimatedText text="Done" />
-                  <span className="text-secondary">.</span>
+                  <AnimatedText text="FAST " />
+                  <span className="text-secondary">•</span>{" "}
+                  <AnimatedText text="FAIR " />
+                  <span className="text-secondary">•</span>{" "}
+                  <AnimatedText text="DONE" />
                 </h4>
               </div>
             </div>
