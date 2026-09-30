@@ -140,14 +140,14 @@ const ReadyToGetStart = () => {
                       <AnimatedText text=" — " className="text-black" />
                     </span>{" "}
                     <span
-                      style={{ color: "#FE7702" }}
                       className="font-bold probaid-phone"
                     >
-                      <AnimatedText text="(833) 776-2243" />
+                      <AnimatedText text="(833) 776-2243" style={{ color: "#0097A7" }}/>
                       <AnimatedText text=" — " className="text-black" />
                       <AnimatedText
                         text="NOW"
                         className="underline decoration-[max(4.5px,0.12em)]! underline-offset-[0.1em]"
+                        style={{ color: "#FE7702" }}
                       />
                       <AnimatedText text=" — " className="text-black" />
                     </span>{" "}
@@ -157,7 +157,7 @@ const ReadyToGetStart = () => {
                       href="/homebooks/833probaid-referral-intake"
                       className="form-cta"
                       style={{
-                        color: "#0097A7",
+                        color: "#FE7702",
                         textDecoration: "underline",
                       }}
                     >
@@ -655,14 +655,14 @@ const ReadyToGetStart = () => {
                     <AnimatedText text=" — " className="text-black" />
                   </span>
                   <span
-                    style={{ color: "#FE7702" }}
                     className="font-bold probaid-phone"
                   >
-                    <AnimatedText text="(833) 776-2243" />
+                    <AnimatedText text="(833) 776-2243" style={{ color: "#0097A7" }} />
                     <AnimatedText text=" — " className="text-black" />
                     <AnimatedText
                       text="NOW"
                       className="underline decoration-[max(4.5px,0.12em)]! underline-offset-[0.1em]"
+                      style={{ color: "#FE7702" }}
                     />
                     <AnimatedText text=" — " className="text-black" />
                   </span>{" "}
@@ -672,7 +672,7 @@ const ReadyToGetStart = () => {
                     href="/homebooks/833probaid-referral-intake"
                     className="form-cta"
                     style={{
-                      color: "#0097A7",
+                      color: "#FE7702",
                       textDecoration: "underline",
                     }}
                   >
