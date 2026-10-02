@@ -1493,3 +1493,11 @@
 			.after\:bottom-\[6px\]::after {
 				bottom: 6px;
 			}
+
+			.\!bg-primary {
+				background-color: #0097a7 !important;
+			}
+
+			.\!bg-secondary {
+				background-color: #fe7702 !important;
+			}
