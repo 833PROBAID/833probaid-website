@@ -7,6 +7,7 @@ import { useEffect, useMemo, useState } from "react";
 
 /* =====================================================================
    833PROBAID® — Occupant Access Risk Analyzer
+   - Questions unlock after role + valid property address
    - Live Access Readiness % (no "generate" button)
    - Feedback under every answer + vendor call-to-action
    - Recommended sale path + lead stage
@@ -20,6 +21,7 @@ const TOOL_PAGE = "occupant-access-risk-analyzer";
 const STORAGE_KEY = "tool-access-v2";
 const PHONE = "(833) 776-2243";
 const TEL = "tel:8337762243";
+const TERMS_URL = "/privacy";
 
 const TEAL = "#0097A7";
 const TEAL_DEEP = "#004E57";
@@ -346,7 +348,7 @@ function compute(A) {
 	};
 }
 
-function reportText(A, c, lead, updatedAt) {
+function reportText(A, c, lead, updatedAt, addr) {
 	const lvl = c.answered ? levelFor(c.pct)[1] : "—";
 	const complete = c.answered === c.total;
 	const top = (c.gaps[0] || "access to the property").replace(/ \(unconfirmed\)$/, "");
@@ -359,6 +361,7 @@ function reportText(A, c, lead, updatedAt) {
 		lead ? `Phone: ${lead.phone}` : "",
 		`Attorney copy: ${lead && lead.atty ? `Yes — ${lead.atty}` : "No"}`,
 		`Role: ${ROLES[A.role] ? ROLES[A.role].label : "Not specified"}`,
+		`Property: ${addr && addr.trim() ? addr.trim() : "Not provided"}`,
 		"",
 		`Access Readiness: ${c.answered ? c.pct + "%" : "—"} (${lvl})${c.capped ? " · capped by a blocking answer" : ""}`,
 		`LEAD STAGE: ${c.path[0]}`,
@@ -377,6 +380,25 @@ function reportText(A, c, lead, updatedAt) {
 		`Hey ${lead ? lead.first : "[name]"}, I read your access report — you’re about ${c.pct}% ready. The main thing holding it up: ${top.charAt(0).toLowerCase() + top.slice(1)}. That’s usually what stalls these sales. What have you been able to handle so far? While you finish the rest, I can come take a look at the property and prepare the pricing analysis, so we’re ready to list the day you’re done.`,
 	].filter((l, i, arr) => l !== "" || arr[i - 1] !== "").join("\n");
 }
+
+/* ------------------------------------------------------ address check
+   Format check only. For a guaranteed-real address, add Google Places
+   Autocomplete (or USPS address verification) on the server side. */
+const STATES = ["AL","AK","AZ","AR","CA","CO","CT","DE","DC","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"];
+const STREET_TYPE = /\b(st|street|ave|avenue|blvd|boulevard|dr|drive|rd|road|ln|lane|way|ct|court|pl|place|cir|circle|ter|terrace|pkwy|parkway|hwy|highway|trl|trail|sq|square|loop|row|walk|path|pike|plz|plaza|aly|alley)\.?\b/i;
+function checkAddress(ad) {
+	const problems = [];
+	const street = ad.street.trim();
+	if (!/^\d+[A-Za-z]?\s+\S/.test(street)) problems.push("start the street with the house number (like 123 Main St)");
+	else if (!/[A-Za-z]{2,}/.test(street.replace(/^\d+[A-Za-z]?\s+/, "")) || !STREET_TYPE.test(street)) problems.push("include the street name and type (St, Ave, Blvd, Dr…)");
+	if (!/^[A-Za-z][A-Za-z .'-]{1,}$/.test(ad.city.trim())) problems.push("add the city");
+	if (!STATES.includes(ad.state)) problems.push("pick the state");
+	const zip = ad.zip.trim();
+	if (!/^\d{5}(-\d{4})?$/.test(zip)) problems.push("add a 5-digit ZIP code");
+	else if (ad.state === "CA" && (+zip.slice(0, 5) < 90001 || +zip.slice(0, 5) > 96162)) problems.push("that ZIP code isn’t in California");
+	return problems;
+}
+const formatAddress = (ad) => (ad.street.trim() ? `${ad.street.trim()}, ${ad.city.trim()}, ${ad.state} ${ad.zip.trim()}` : "");
 
 /* ------------------------------------------------------------ UI pieces */
 const toneBox = {
@@ -433,6 +455,9 @@ const inputCls =
 /* ================================================================ page */
 const OccupantAccessRiskAnalyzerClient = () => {
 	const [A, setA] = useState({});
+	const [ad, setAd] = useState({ street: "", city: "", state: "CA", zip: "" });
+	const addr = formatAddress(ad);
+	const setPart = (k, v) => { setAd((cur) => ({ ...cur, [k]: v })); setUpdatedAt(Date.now()); };
 	const [lead, setLead] = useState(null);
 	const [sentAt, setSentAt] = useState(null);
 	const [updatedAt, setUpdatedAt] = useState(null);
@@ -449,6 +474,7 @@ const OccupantAccessRiskAnalyzerClient = () => {
 		try {
 			const s = JSON.parse(sessionStorage.getItem(STORAGE_KEY) || "{}");
 			if (s.answers) setA(s.answers);
+			if (s.ad) setAd(s.ad);
 			if (s.lead) setLead(s.lead);
 			if (s.sentAt) setSentAt(s.sentAt);
 			if (s.updatedAt) setUpdatedAt(s.updatedAt);
@@ -458,11 +484,15 @@ const OccupantAccessRiskAnalyzerClient = () => {
 	useEffect(() => {
 		if (!loaded) return;
 		try {
-			sessionStorage.setItem(STORAGE_KEY, JSON.stringify({ answers: A, lead, sentAt, updatedAt }));
+			sessionStorage.setItem(STORAGE_KEY, JSON.stringify({ answers: A, ad, lead, sentAt, updatedAt }));
 		} catch {}
-	}, [A, lead, sentAt, updatedAt, loaded]);
+	}, [A, ad, lead, sentAt, updatedAt, loaded]);
 
 	const c = useMemo(() => compute(A), [A]);
+	const addrProblems = checkAddress(ad);
+	const addrValid = addrProblems.length === 0;
+	const addrStarted = !!(ad.street.trim() || ad.city.trim() || ad.zip.trim());
+	const unlocked = !!A.role && addrValid;
 	const complete = c.answered === c.total;
 	const level = c.answered ? levelFor(c.pct) : null;
 	const r = roleOf(A);
@@ -478,17 +508,18 @@ const OccupantAccessRiskAnalyzerClient = () => {
 
 	const sendReport = async (L) => {
 		const lvl = c.answered ? levelFor(c.pct)[1] : "";
-		const report = reportText(A, c, L, updatedAt);
+		const report = reportText(A, c, L, updatedAt, addr);
 		const res = await fetch(REPORT_ENDPOINT, {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({
 				toolPage: TOOL_PAGE,
 				isUpdate: !!sentAt,
-				subject: `${sentAt ? "UPDATED " : ""}Access Readiness — ${L.first} ${L.last} — ${c.pct}% ${lvl} — ${c.path[0]}`,
+				subject: `${sentAt ? "UPDATED " : ""}Access Readiness — ${L.first} ${L.last} — ${addr.trim()} — ${c.pct}% ${lvl} — ${c.path[0]}`,
 				lead: { firstName: L.first, lastName: L.last, email: L.email, phone: L.phone },
 				attorneyEmail: L.atty || null,
 				role: ROLES[A.role] ? ROLES[A.role].label : null,
+				propertyAddress: addr.trim(),
 				answers: A,
 				readiness: c.pct,
 				level: lvl,
@@ -519,9 +550,15 @@ const OccupantAccessRiskAnalyzerClient = () => {
 		if (form.phone.replace(/\D/g, "").length < 10) bad.phone = true;
 		if (form.atty.trim() && !emailOk(form.atty)) bad.atty = true;
 		if (!form.consent) bad.consent = true;
+		if (!addrValid) bad.addr = true;
 		setInvalid(bad);
+		if (bad.addr && Object.keys(bad).length === 1) {
+			setStatus({ type: "err", text: "Complete the property address at the top of the form, then click again." });
+			document.getElementById("acc-property-address")?.scrollIntoView({ behavior: "smooth", block: "center" });
+			return;
+		}
 		if (Object.keys(bad).length) {
-			setStatus({ type: "err", text: "Please complete the highlighted fields (10-digit phone, valid emails, and the consent box)." });
+			setStatus({ type: "err", text: `Please complete the highlighted fields (10-digit phone, valid emails, and the consent box)${bad.addr ? ", and complete the property address at the top of the form" : ""}.` });
 			return;
 		}
 		const L = { first: form.first.trim(), last: form.last.trim(), email: form.email.trim(), phone: form.phone.trim(), atty: form.atty.trim() };
@@ -635,6 +672,53 @@ const OccupantAccessRiskAnalyzerClient = () => {
 											</div>
 										</fieldset>
 
+										{/* property address */}
+										<div className='rounded-3xl border-2 p-4 sm:p-6' style={{ borderColor: invalid.addr && !addrValid ? "#c62828" : TEAL, backgroundColor: "#e6f5f6", boxShadow: sectionCardShadow }}>
+											<div className='flex justify-between text-xs font-bold text-gray-500'>
+												<span>Property</span>
+												<span style={{ color: addrValid ? TEAL : ORANGE }}>{addrValid ? "Answered" : "Pending"}</span>
+											</div>
+											<h3 className='mt-1 text-lg font-extrabold text-gray-900'>What is the address of the property?</h3>
+											<p className='mt-1 text-sm text-gray-500'>The property this check is for — whether it’s part of an estate, a trust, or a conservatorship.</p>
+											<div className='mt-4 grid grid-cols-1 gap-3 sm:grid-cols-6'>
+												<label className='block sm:col-span-6'>
+													<span className='text-sm font-bold text-gray-800'>Street address</span>
+													<input id='acc-property-address' type='text' autoComplete='address-line1' placeholder='123 Main St' value={ad.street} onChange={(e) => setPart("street", e.target.value)} className={`${inputCls} mt-1`} />
+												</label>
+												<label className='block sm:col-span-3'>
+													<span className='text-sm font-bold text-gray-800'>City</span>
+													<input type='text' autoComplete='address-level2' placeholder='Los Angeles' value={ad.city} onChange={(e) => setPart("city", e.target.value)} className={`${inputCls} mt-1`} />
+												</label>
+												<label className='block sm:col-span-1'>
+													<span className='text-sm font-bold text-gray-800'>State</span>
+													<select autoComplete='address-level1' value={ad.state} onChange={(e) => setPart("state", e.target.value)} className={`${inputCls} mt-1 px-2`}>
+														{STATES.map((st) => <option key={st} value={st}>{st}</option>)}
+													</select>
+												</label>
+												<label className='block sm:col-span-2'>
+													<span className='text-sm font-bold text-gray-800'>ZIP code</span>
+													<input type='text' inputMode='numeric' autoComplete='postal-code' placeholder='90041' maxLength={10} value={ad.zip} onChange={(e) => setPart("zip", e.target.value)} className={`${inputCls} mt-1`} />
+												</label>
+											</div>
+										</div>
+
+										{/* unlock notice */}
+										{unlocked ? (
+											<p className='rounded-2xl border-l-4 border-green-700 bg-green-50 px-4 py-3 text-sm font-bold text-green-900'>
+												Unlocked. Answer the questions below — your score updates with every answer.
+											</p>
+										) : (
+											<div className='rounded-2xl border-l-4 px-4 py-3 text-sm font-bold' style={{ borderColor: ORANGE, backgroundColor: "#fff7ef", color: "#7a3a00" }}>
+												<p>Answer both questions above to unlock the rest of the check.</p>
+												<ul className='mt-2 space-y-1 font-semibold'>
+													<li>{A.role ? "✓" : "○"} Your role</li>
+													<li>{addrValid ? "✓" : "○"} Property address{addrStarted && !addrValid ? ` — ${addrProblems.join("; ")}` : ""}</li>
+												</ul>
+											</div>
+										)}
+
+										<fieldset disabled={!unlocked} aria-disabled={!unlocked} className={`m-0 min-w-0 space-y-4 border-0 p-0 transition-[filter,opacity] sm:space-y-5 ${unlocked ? "" : "pointer-events-none select-none opacity-50 blur-[2px]"}`}>
+										<legend className='sr-only'>Access questions</legend>
 										{c.qs.map((q) => {
 											qNum++;
 											const v = A[q.id];
@@ -677,6 +761,7 @@ const OccupantAccessRiskAnalyzerClient = () => {
 												</div>
 											);
 										})}
+										</fieldset>
 									</div>
 								</div>
 
@@ -804,7 +889,13 @@ const OccupantAccessRiskAnalyzerClient = () => {
 										</div>
 										<label className={`flex items-start gap-3 text-sm ${invalid.consent ? "text-red-700" : "text-gray-700"}`}>
 											<input type='checkbox' checked={form.consent} onChange={(e) => setForm({ ...form, consent: e.target.checked })} className='mt-1 h-4 w-4 accent-[#0097A7]' />
-											<span>I agree that 833PROBAID® may contact me about this report by phone, text, or email.</span>
+											<span>
+												I agree that 833PROBAID® may contact me about this report by phone, text, or email, and I agree to the{" "}
+												<a href={TERMS_URL} target='_blank' rel='noopener noreferrer' className='font-bold underline' style={{ color: TEAL }}>
+													Website Terms of Use, Privacy Policy &amp; Disclosures
+												</a>
+												.
+											</span>
 										</label>
 										<button
 											type='submit'
