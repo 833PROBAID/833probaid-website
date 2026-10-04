@@ -1,8 +1,9 @@
 "use client";
 
-import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
+import CTAButton from "@/components/CTAButton";
+import ServiceLayout from "@/components/ServiceLayout";
 import ToolLeadCaptureModal from "@/components/ToolLeadCaptureModal";
+import { KeyRound } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
 /* =====================================================================
@@ -27,12 +28,14 @@ const TEAL = "#0097A7";
 const TEAL_DEEP = "#004E57";
 const ORANGE = "#FD7702";
 
-const shellShadow =
-	"0 clamp(12px, 2.5vw, 20px) clamp(26px, 5.5vw, 48px) rgba(15, 23, 42, 0.16), 0 1px 0 rgba(255,255,255,0.3) inset";
-const heroPanelShadow =
-	"0 clamp(10px, 2vw, 16px) clamp(20px, 4.5vw, 32px) rgba(15, 23, 42, 0.17), 0 1px 0 rgba(255,255,255,0.24) inset";
 const sectionCardShadow =
 	"0 clamp(8px, 1.7vw, 14px) clamp(16px, 3.4vw, 30px) rgba(15, 23, 42, 0.11), 0 1px 0 rgba(255,255,255,0.45) inset";
+const layerCardShadow =
+	"rgba(0, 0, 0, 0.4) 0px 8px 12px, rgba(0, 0, 0, 0.4) 0px -5px 12px 1px";
+const fieldShadow =
+	"0 clamp(4px, 1.1vw, 6px) clamp(8px, 2.4vw, 14px) rgba(15, 23, 42, 0.11), 0 1px 0 rgba(255,255,255,0.5) inset";
+const cardLift =
+	"hover:-translate-y-1.25 hover:![box-shadow:rgba(0,0,0,0.5)_0px_12px_20px,rgba(0,0,0,0.5)_0px_-8px_16px_2px]";
 
 /* ------------------------------------------------------------------ copy */
 const ROLES = {
@@ -451,6 +454,24 @@ function Card({ title, tier, children, className = "" }) {
 
 const inputCls =
 	"w-full rounded-xl border-2 border-gray-200 bg-white px-4 py-3 text-base text-gray-800 outline-none focus:border-[#0097A7]";
+const reportInputCls =
+	"w-full rounded-2xl border-2 px-4 py-2.5 text-base font-bold text-gray-900 outline-none transition-all focus:ring-2 placeholder:text-secondary";
+
+function LayerRows({ items }) {
+	if (!items.length) return null;
+	return (
+		<div className='mt-5 space-y-4 text-[1.375rem] leading-relaxed font-bold'>
+			{items.map((text, index) => (
+				<div
+					key={`${text}-${index}`}
+					className='flex items-start gap-6 rounded-2xl p-6 [box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px]'>
+					<img src='https://833probaid.com/images/arrow.png' alt='' />
+					<p>{text}</p>
+				</div>
+			))}
+		</div>
+	);
+}
 
 /* ================================================================ page */
 const OccupantAccessRiskAnalyzerClient = () => {
@@ -496,6 +517,9 @@ const OccupantAccessRiskAnalyzerClient = () => {
 	const complete = c.answered === c.total;
 	const level = c.answered ? levelFor(c.pct) : null;
 	const r = roleOf(A);
+	const handleCall = () => {
+		window.location.href = TEL;
+	};
 
 	const pick = (id, v) => {
 		setA((cur) => ({ ...cur, [id]: v }));
@@ -594,43 +618,19 @@ const OccupantAccessRiskAnalyzerClient = () => {
 	let qNum = 0;
 	let lastSec = "";
 	const tier = level ? level[2] : null;
-	const pathTier = { "READY TO LIST": "low", "NEEDS PREP": "mid", "IN PROGRESS": null }[c.path[0]] ?? "high";
-
 	return (
-		<div>
-			<Navbar />
+		<>
 			<ToolLeadCaptureModal toolPage={TOOL_PAGE} title='Before You Use The Access Risk Analyzer' />
-			<section className='min-h-screen py-8 sm:py-12 lg:py-16'>
-				<div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
-					<div className='overflow-clip rounded-[28px] border-[3px] border-secondary sm:rounded-[40px]' style={{ boxShadow: shellShadow }}>
-						{/* ------------------------------------------------ hero */}
-						<div
-							className='px-5 py-8 sm:px-8 sm:py-10 lg:px-12 lg:py-12'
-							style={{ background: "linear-gradient(to bottom right, var(--color-primary), var(--color-primaryDark))" }}>
-							<div className='flex flex-col gap-6 xl:flex-row xl:items-start xl:justify-between xl:gap-8'>
-								<div className='flex-1'>
-									<p className='mb-3 text-sm font-semibold tracking-[0.15em] text-white sm:text-base'>Occupant Command Deck</p>
-									<h1 className='mb-3 text-[30px] font-extrabold leading-tight text-white sm:text-[38px]'>Occupant Access Risk Analyzer</h1>
-									<p className='max-w-2xl text-base font-bold text-white/95 sm:text-xl'>
-										Answer a few quick questions about who’s in the property, keys, authority, and condition. See your access readiness score, your best sale path, and exactly what stands between you and a listing.
-									</p>
-								</div>
-								<div className='w-full xl:w-132.5'>
-									<div
-										className='rounded-3xl border px-6 py-6 backdrop-blur-sm sm:px-8 sm:py-8'
-										style={{ backgroundColor: "rgba(0, 151, 167, 0.32)", borderColor: "rgba(255,255,255,0.18)", boxShadow: heroPanelShadow }}>
-										<h2 className='text-center text-[18px] font-bold tracking-[0.08em] text-white sm:text-[20px]'>Access Readiness</h2>
-										<p className='mt-2 text-center text-4xl font-extrabold text-white sm:text-6xl'>{c.answered ? `${c.pct}%` : "—"}</p>
-										<p className='mt-2 text-center text-sm font-bold leading-relaxed text-white/95 sm:text-lg'>
-											{c.answered ? `${level[1]} · ${c.answered} of ${c.total} answered` : "Your score updates with every answer."}
-										</p>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						{/* ------------------------------------------------ body */}
-						<div className='bg-linear-to-br from-gray-50 to-gray-100 px-5 py-8 sm:px-8 sm:py-10 lg:px-12 lg:py-12'>
+			<ServiceLayout
+				toolPage={TOOL_PAGE}
+				title="Occupant Command Deck"
+				mainHeading="Occupant Access Risk Analyzer"
+				description="Answer a few quick questions about who’s in the property, keys, authority, and condition. See your access readiness score, your best sale path, and exactly what stands between you and a listing."
+				logoImage="/icons/tool2.png"
+				panelTitle="Access Readiness"
+				panelValue={c.answered ? `${c.pct}%` : "—"}
+				panelDetail={c.answered ? `${level[1]} · ${c.answered} of ${c.total} answered` : "Your score updates with every answer."}
+			>
 							<div className='grid grid-cols-1 gap-8 lg:grid-cols-[1.4fr_1fr]'>
 								{/* questions */}
 								<div>
@@ -803,134 +803,250 @@ const OccupantAccessRiskAnalyzerClient = () => {
 							</div>
 
 							{/* ------------------------------------------------ report */}
-							<div id='access-report' className='mt-12 scroll-mt-28 space-y-5'>
-								<h2 className='text-3xl font-black uppercase sm:text-4xl' style={{ color: TEAL }}>Your access readiness report</h2>
-
-								<Card title={`Recommended sale path: ${c.path[1]}`} tier={pathTier}>
-									<ul className='mt-3 list-disc space-y-2 pl-5 text-sm text-gray-800'>
-										{c.path[2].map((t, i) => <li key={i}>{t}</li>)}
-									</ul>
-								</Card>
-
-								<div className='grid grid-cols-1 gap-5 md:grid-cols-2'>
-									<Card title='To reach 100% access readiness, you must fix:' tier='mid'>
-										<ul className='mt-3 list-disc space-y-2 pl-5 text-sm text-gray-800'>
-											{c.gaps.length ? c.gaps.map((t, i) => <li key={i}>{t}</li>) : <li>{c.answered ? "Nothing flagged so far." : "Your gaps appear here as you answer."}</li>}
-										</ul>
-									</Card>
-									<Card title='Alerts' tier='high'>
-										<ul className='mt-3 list-disc space-y-2 pl-5 text-sm font-semibold text-red-900'>
-											{c.alerts.length ? c.alerts.map((t, i) => <li key={i}>{t}</li>) : <li className='font-normal text-gray-700'>No alerts triggered{c.answered ? " so far" : " yet"}.</li>}
-										</ul>
-									</Card>
-								</div>
-
-								<Card title='Your action plan'>
-									{c.actions.length ? (
-										<>
-											<p className='mt-2 font-bold' style={{ color: TEAL_DEEP }}>
-												{lead
-													? `Your ${c.actions.length}-step action plan was emailed to ${lead.email}. Changed answers? Use “Send my updated report” below.`
-													: `${c.actions.length} required action${c.actions.length === 1 ? "" : "s"} ready. Enter your details below and we’ll email your step-by-step plan.`}
+							<div id='access-report' className='mt-12 scroll-mt-28'>
+								<div
+									className={`flex flex-col rounded-2xl border border-gray-200 bg-white p-6 sm:p-10 ${cardLift}`}
+									style={{ boxShadow: layerCardShadow }}>
+									<div className='mb-8 flex gap-3'>
+										<KeyRound
+											className='mt-[-0.45em] ml-[-0.2em] h-8 w-8 shrink-0 text-secondary group-hover:text-primary'
+											strokeWidth={2.5}
+											aria-hidden='true'
+											style={{ filter: "drop-shadow(0px 2px 0px rgba(0,0,0,0.25))" }}
+										/>
+										<div>
+											<h2 className='mt-[-0.3em] text-[1.375rem] font-bold text-primary group-hover:text-secondary'>
+												Your access readiness report
+											</h2>
+											<p className='mt-1 text-[1.375rem] font-bold text-black'>
+												Recommended sale path: {c.path[1]}
 											</p>
-											<ol className='pointer-events-none mt-3 list-decimal space-y-2 pl-5 text-sm text-gray-800 blur-[5px] select-none' aria-hidden='true'>
-												{c.actions.map((t, i) => <li key={i}>{t.replace(/\S/g, "x")}</li>)}
-											</ol>
-										</>
-									) : (
-										<p className='mt-2 text-sm text-gray-700'>{c.answered ? "No actions needed based on your answers so far." : "Your action plan builds as you answer."}</p>
-									)}
-								</Card>
-
-								<Card title='If access isn’t resolved' tier='high'>
-									<ul className='mt-3 list-disc space-y-2 pl-5 text-sm text-gray-800'>
-										<li>The sale timeline — and any court timeline — slips</li>
-										<li>Holding costs keep running: mortgage, taxes, insurance, utilities</li>
-										<li>Buyers walk away or offer less</li>
-										<li>The {r.title} may be blamed for delays or damage to the property</li>
-									</ul>
-								</Card>
-
-								{!lead ? (
-									<form onSubmit={submit} noValidate className='space-y-4 rounded-3xl border-[3px] bg-white p-5 sm:p-7' style={{ borderColor: TEAL, boxShadow: sectionCardShadow }}>
-										<h2 className='text-2xl font-black uppercase sm:text-3xl' style={{ color: TEAL }}>Get your full report &amp; action plan</h2>
-										<p className='text-gray-700'>Your step-by-step action plan and full report are sent to your email. Use an email you can open right now.</p>
-										<input type='text' tabIndex={-1} autoComplete='off' value={form.hp} onChange={(e) => setForm({ ...form, hp: e.target.value })} className='hidden' aria-hidden='true' />
-										<div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
-											{[
-												["first", "First name", "text", "given-name", ""],
-												["last", "Last name", "text", "family-name", ""],
-												["email", "Email", "email", "email", ""],
-												["phone", "Phone", "tel", "tel", "(555) 234-5678"],
-											].map(([k, label, type, ac, ph]) => (
-												<label key={k} className='block'>
-													<span className='text-sm font-bold text-gray-800'>{label} <span className='text-[#d96300]'>*</span></span>
-													<input
-														type={type}
-														autoComplete={ac}
-														placeholder={ph}
-														value={form[k]}
-														onChange={(e) => setForm({ ...form, [k]: e.target.value })}
-														className={`${inputCls} mt-1 ${invalid[k] ? "!border-red-600" : ""}`}
-													/>
-												</label>
-											))}
-											<label className='block sm:col-span-2'>
-												<span className='text-sm font-bold text-gray-800'>Also send a copy to my attorney (optional)</span>
-												<input
-													type='email'
-													placeholder='attorney@lawfirm.com'
-													value={form.atty}
-													onChange={(e) => setForm({ ...form, atty: e.target.value })}
-													className={`${inputCls} mt-1 ${invalid.atty ? "!border-red-600" : ""}`}
-												/>
-												<span className='mt-1 block text-xs text-gray-500'>Your attorney gets the same report when you click the button below. Leave blank to skip.</span>
-											</label>
 										</div>
-										<label className={`flex items-start gap-3 text-sm ${invalid.consent ? "text-red-700" : "text-gray-700"}`}>
-											<input type='checkbox' checked={form.consent} onChange={(e) => setForm({ ...form, consent: e.target.checked })} className='mt-1 h-4 w-4 accent-[#0097A7]' />
-											<span>
-												I agree that 833PROBAID® may contact me about this report by phone, text, or email, and I agree to the{" "}
-												<a href={TERMS_URL} target='_blank' rel='noopener noreferrer' className='font-bold underline' style={{ color: TEAL }}>
-													Website Terms of Use, Privacy Policy &amp; Disclosures
-												</a>
-												.
-											</span>
-										</label>
-										<button
-											type='submit'
-											disabled={sending}
-											className='rounded-xl px-6 py-3.5 text-base font-extrabold text-white transition-transform hover:scale-[1.02] disabled:opacity-60'
-											style={{ backgroundColor: ORANGE, boxShadow: "0 4px 0 #a84c00" }}>
-											{sending ? "Sending…" : "Email me my report & action plan"}
-										</button>
-										{status.text ? <p className={`font-bold ${status.type === "err" ? "text-red-700" : ""}`} role='status'>{status.text}</p> : null}
-									</form>
-								) : (
-									<div className='rounded-3xl p-6 text-white' style={{ backgroundColor: TEAL }}>
-										{thanks ? <p className='font-bold'>{thanks}</p> : null}
-										<h2 className='mt-2 text-2xl font-black uppercase'>Need help getting access?</h2>
-										<p className='mt-2 text-white/95'>We regularly help executors, trustees, and conservators work through occupied and hard-to-access properties — and when the property is ready, we’re ready to list.</p>
-										<div className='mt-4 flex flex-wrap gap-3'>
-											<a href={TEL} className='rounded-xl px-5 py-3 font-extrabold text-white no-underline' style={{ backgroundColor: ORANGE, boxShadow: "0 4px 0 #a84c00" }}>Call {PHONE}</a>
-											<button type='button' onClick={resend} disabled={sending} className='rounded-xl bg-white px-5 py-3 font-extrabold disabled:opacity-60' style={{ color: TEAL_DEEP }}>
-												{sending ? "Sending…" : "Done some steps? Send my updated report"}
-											</button>
-										</div>
-										{resendMsg ? <p className='mt-3 font-bold'>{resendMsg}</p> : null}
 									</div>
-								)}
 
-								<p className='rounded-2xl bg-white/70 p-4 text-xs text-gray-500'>
-									This tool is for general information only and is not legal, insurance, or financial advice. Results depend on the answers entered and don’t account for every circumstance of a specific estate, trust, or conservatorship. Confirm requirements with your attorney and the court.
-								</p>
+									<div className='space-y-8'>
+										<div
+											className={`rounded-2xl border border-gray-200 bg-white p-6 pb-8 ${cardLift}`}
+											style={{ boxShadow: layerCardShadow }}>
+											<h3 className='-mt-[0.2em] text-[1.375rem] font-bold text-primary group-hover:text-secondary'>
+												Recommended sale path: {c.path[1]}
+											</h3>
+											<LayerRows items={c.path[2]} />
+										</div>
+
+										<div
+											className={`rounded-2xl bg-secondary p-6 text-white ${cardLift}`}
+											style={{ boxShadow: layerCardShadow }}>
+											<p className='-mt-[0.15em] text-[1.375rem] font-bold tracking-[1px] text-white/80 uppercase'>
+												Access Readiness
+											</p>
+											<p className='mt-2 text-4xl font-black sm:text-5xl'>{c.answered ? `${c.pct}%` : "—"}</p>
+											<p className='-mb-[0.3em] mt-2 text-[1.375rem] font-bold text-white/85'>
+												{level ? `${level[1]}. ${level[3]}` : "Your score updates with every answer."}
+											</p>
+										</div>
+
+										<div
+											className={`rounded-2xl border border-gray-200 bg-white p-6 pb-8 ${cardLift}`}
+											style={{ boxShadow: layerCardShadow }}>
+											<h3 className='-mt-[0.2em] text-[1.375rem] font-bold text-primary group-hover:text-secondary'>
+												To reach 100% access readiness, you must fix:
+											</h3>
+											{c.gaps.length ? (
+												<LayerRows items={c.gaps} />
+											) : (
+												<p className='mt-5 text-[1.375rem] font-bold'>
+													{c.answered ? "Nothing flagged so far." : "Your gaps appear here as you answer."}
+												</p>
+											)}
+										</div>
+
+										<div
+											className={`rounded-2xl border border-gray-200 bg-white p-6 pb-8 ${cardLift}`}
+											style={{ boxShadow: layerCardShadow }}>
+											<h3 className='-mt-[0.2em] text-[1.375rem] font-bold text-primary group-hover:text-secondary'>Alerts</h3>
+											{c.alerts.length ? (
+												<LayerRows items={c.alerts} />
+											) : (
+												<p className='mt-5 text-[1.375rem] font-bold'>
+													No alerts triggered{c.answered ? " so far" : " yet"}.
+												</p>
+											)}
+										</div>
+
+										<div
+											className={`rounded-2xl border border-gray-200 bg-white p-6 pb-8 ${cardLift}`}
+											style={{ boxShadow: layerCardShadow }}>
+											<h3 className='-mt-[0.2em] text-[1.375rem] font-bold text-primary group-hover:text-secondary'>Your action plan</h3>
+											{c.actions.length ? (
+												<>
+													<p className='mt-5 text-[1.375rem] font-bold text-black'>
+														{lead
+															? `Your ${c.actions.length}-step action plan was emailed to ${lead.email}. Changed answers? Use “Send my updated report” below.`
+															: `${c.actions.length} required action${c.actions.length === 1 ? "" : "s"} ready. Enter your details below and we’ll email your step-by-step plan.`}
+													</p>
+													<div className='pointer-events-none mt-5 space-y-4 blur-[5px] select-none' aria-hidden='true'>
+														{c.actions.map((text, index) => (
+															<div
+																key={index}
+																className='flex items-start gap-6 rounded-2xl p-6 [box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px]'>
+																<img src='https://833probaid.com/images/arrow.png' alt='' />
+																<p className='text-[1.375rem] font-bold'>{text.replace(/\S/g, "x")}</p>
+															</div>
+														))}
+													</div>
+												</>
+											) : (
+												<p className='mt-5 text-[1.375rem] font-bold'>
+													{c.answered ? "No actions needed based on your answers so far." : "Your action plan builds as you answer."}
+												</p>
+											)}
+										</div>
+
+										<div
+											className={`rounded-2xl border border-gray-200 bg-white p-6 pb-8 ${cardLift}`}
+											style={{ boxShadow: layerCardShadow }}>
+											<h3 className='-mt-[0.2em] text-[1.375rem] font-bold text-primary group-hover:text-secondary'>If access isn’t resolved</h3>
+											<LayerRows
+												items={[
+													"The sale timeline — and any court timeline — slips",
+													"Holding costs keep running: mortgage, taxes, insurance, utilities",
+													"Buyers walk away or offer less",
+													`The ${r.title} may be blamed for delays or damage to the property`,
+												]}
+											/>
+										</div>
+
+										{!lead ? (
+											<form
+												onSubmit={submit}
+												noValidate
+												className={`space-y-6 rounded-2xl border-[3px] border-secondary bg-white p-6 sm:p-8 ${cardLift}`}
+												style={{ boxShadow: layerCardShadow }}>
+												<p className='text-2xl font-bold tracking-[1px] text-secondary uppercase group-hover:text-primary'>
+													Get your full report &amp; action plan
+												</p>
+												<h3 className='mt-2 text-2xl font-bold text-primary group-hover:text-secondary'>
+													Your step-by-step action plan and full report are sent to your email. Use an email you can open right now.
+												</h3>
+												<input type='text' tabIndex={-1} autoComplete='off' value={form.hp} onChange={(e) => setForm({ ...form, hp: e.target.value })} className='hidden' aria-hidden='true' />
+												<div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
+													{[
+														["first", "First name", "text", "given-name", ""],
+														["last", "Last name", "text", "family-name", ""],
+														["email", "Email", "email", "email", ""],
+														["phone", "Phone", "tel", "tel", "(555) 234-5678"],
+													].map(([k, label, type, ac, ph]) => (
+														<label key={k} className='block'>
+															<span className='text-[1.375rem] font-bold uppercase text-primary group-hover:text-secondary'>
+																{label} <span className='text-secondary'>*</span>
+															</span>
+															<input
+																type={type}
+																autoComplete={ac}
+																placeholder={ph}
+																value={form[k]}
+																onChange={(e) => setForm({ ...form, [k]: e.target.value })}
+																className={`${reportInputCls} mt-2`}
+																style={{
+																	borderColor: invalid[k] ? "#dc2626" : "var(--color-primary)",
+																	boxShadow: fieldShadow,
+																	"--tw-ring-color": invalid[k] ? "rgba(220, 38, 38, 0.25)" : "rgba(0, 151, 167, 0.25)",
+																}}
+															/>
+														</label>
+													))}
+													<label className='block sm:col-span-2'>
+														<span className='text-[1.375rem] font-bold uppercase text-primary group-hover:text-secondary'>
+															Also send a copy to my attorney (optional)
+														</span>
+														<input
+															type='email'
+															placeholder='attorney@lawfirm.com'
+															value={form.atty}
+															onChange={(e) => setForm({ ...form, atty: e.target.value })}
+															className={`${reportInputCls} mt-2`}
+															style={{
+																borderColor: invalid.atty ? "#dc2626" : "var(--color-primary)",
+																boxShadow: fieldShadow,
+																"--tw-ring-color": invalid.atty ? "rgba(220, 38, 38, 0.25)" : "rgba(0, 151, 167, 0.25)",
+															}}
+														/>
+														<span className='mt-2 block text-base font-bold text-black'>
+															Your attorney gets the same report when you click the button below. Leave blank to skip.
+														</span>
+													</label>
+												</div>
+												<label className={`flex items-start gap-3 text-[1.125rem] font-bold ${invalid.consent ? "text-red-700" : "text-black"}`}>
+													<input type='checkbox' checked={form.consent} onChange={(e) => setForm({ ...form, consent: e.target.checked })} className='mt-1 h-5 w-5 accent-[#0097A7]' />
+													<span>
+														I agree that 833PROBAID® may contact me about this report by phone, text, or email, and I agree to the{" "}
+														<a href={TERMS_URL} target='_blank' rel='noopener noreferrer' className='font-bold underline text-primary'>
+															Website Terms of Use, Privacy Policy &amp; Disclosures
+														</a>
+														.
+													</span>
+												</label>
+												<div className='flex justify-center'>
+													<CTAButton
+														type='submit'
+														label={sending ? "Sending…" : "Email me my report & action plan"}
+														disabled={sending}
+														icon='/arrow-right.png'
+														className='h-12 px-5 lg:h-14'
+														aria-label='Email me my report and action plan'
+													/>
+												</div>
+												{status.text ? <p className={`text-center text-[1.125rem] font-bold ${status.type === "err" ? "text-red-700" : "text-primary"}`} role='status'>{status.text}</p> : null}
+											</form>
+										) : (
+											<div
+												className={`rounded-2xl border-[3px] border-secondary bg-white p-6 text-center sm:p-8 ${cardLift}`}
+												style={{ boxShadow: layerCardShadow }}>
+												{thanks ? <p className='font-bold text-primary'>{thanks}</p> : null}
+												<p className='text-2xl font-bold tracking-[1px] text-secondary uppercase group-hover:text-primary'>
+													Need help getting access?
+												</p>
+												<h3 className='mt-2 text-2xl font-bold text-primary group-hover:text-secondary'>
+													We regularly help executors, trustees, and conservators work through occupied and hard-to-access properties — and when the property is ready, we’re ready to list.
+												</h3>
+												<div className='mt-8 flex flex-col items-center justify-center gap-4'>
+													<CTAButton
+														label={`Call ${PHONE}`}
+														onClick={handleCall}
+														icon='/arrow-right.png'
+														className='h-12 px-5 lg:h-14'
+														aria-label={`Call ${PHONE}`}
+													/>
+													<button
+														type='button'
+														onClick={resend}
+														disabled={sending}
+														className='text-[1.125rem] font-bold text-primary underline disabled:opacity-60'>
+														{sending ? "Sending…" : "Done some steps? Send my updated report"}
+													</button>
+												</div>
+												{resendMsg ? <p className='mt-4 font-bold text-primary'>{resendMsg}</p> : null}
+											</div>
+										)}
+
+										<div
+											className={`flex items-start gap-3 rounded-2xl border-[3px] border-secondary px-6 py-5 ${cardLift}`}
+											style={{ boxShadow: layerCardShadow }}>
+											<KeyRound
+												className='mt-1 h-6 w-6 shrink-0 text-secondary'
+												strokeWidth={2.5}
+												aria-hidden='true'
+											/>
+											<p className='text-[1.375rem] leading-relaxed font-bold text-secondary'>
+												This tool is for general information only and is not legal, insurance, or financial advice. Results depend on the answers entered and don’t account for every circumstance of a specific estate, trust, or conservatorship. Confirm requirements with your attorney and the court.
+											</p>
+										</div>
+									</div>
+								</div>
 							</div>
-						</div>
-					</div>
-				</div>
-			</section>
-			<Footer />
-		</div>
+			</ServiceLayout>
+		</>
 	);
 };
 

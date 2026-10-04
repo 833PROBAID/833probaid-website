@@ -49,6 +49,12 @@ const newsletterSubscriptionSchema = new mongoose.Schema(
 		sourceDetails: { type: sourceDetailsSchema, default: () => ({}) },
 		meta: { type: metaSchema, default: () => ({}) },
 		submittedAt: { type: Date, default: Date.now, index: true },
+		status: {
+			type: String,
+			enum: ["active", "revoked"],
+			default: "active",
+			index: true,
+		},
 	},
 	{ timestamps: true },
 );
