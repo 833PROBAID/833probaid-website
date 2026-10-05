@@ -1279,13 +1279,13 @@ export const FileUpload = ({
 };
 
 // Radio pill palettes. `bgColor`/`labelBorderClass` style the label pill;
-// `dotColor` is the selected dot, and `borderClass`/`dotColor2` the two-tone
+// `dotColor` is the selected dot and matches the pill background. `borderClass`/`dotColor2` are the two-tone
 // rings around it. "gray" is used for neutral answers such as "N/A".
 const RADIO_COLORS = {
 	teal: {
 		bgColor: "bg-[#0097A7]",
 		labelBorderClass: "border-[#0097A7]",
-		dotColor: "#FD7702",
+		dotColor: "#0097A7",
 		dotColor2: "#0097A7",
 		borderClass: "border-[#FD7702]",
 		focusRingClass: "focus:ring-[#FD7702]",
@@ -1293,15 +1293,23 @@ const RADIO_COLORS = {
 	orange: {
 		bgColor: "bg-[#FD7702]",
 		labelBorderClass: "border-[#FD7702]",
-		dotColor: "#0097A7",
+		dotColor: "#FD7702",
 		dotColor2: "#FD7702",
 		borderClass: "border-[#0097A7]",
 		focusRingClass: "focus:ring-[#0097A7]",
 	},
+	red: {
+		bgColor: "bg-[#e51b23]",
+		labelBorderClass: "border-[#e51b23]",
+		dotColor: "#e51b23",
+		dotColor2: "#e51b23",
+		borderClass: "border-[#e51b23]",
+		focusRingClass: "focus:ring-[#e51b23]",
+	},
 	gray: {
 		bgColor: "bg-[#6B7280]",
 		labelBorderClass: "border-[#6B7280]",
-		dotColor: "#4B5563",
+		dotColor: "#6B7280",
 		dotColor2: "#6B7280",
 		borderClass: "border-[#9CA3AF]",
 		focusRingClass: "focus:ring-[#6B7280]",

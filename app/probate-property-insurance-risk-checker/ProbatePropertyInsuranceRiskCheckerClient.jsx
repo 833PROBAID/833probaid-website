@@ -1,8 +1,10 @@
 "use client";
 
-import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
+import CTAButton from "@/components/CTAButton";
+import ServiceLayout from "@/components/ServiceLayout";
+import { RadioButton, RadioGroup } from "@/components/SharedComponents";
 import ToolLeadCaptureModal from "@/components/ToolLeadCaptureModal";
+import { ShieldAlert } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
 /* =====================================================================
@@ -28,12 +30,33 @@ const TEAL = "#0097A7";
 const TEAL_DEEP = "#004E57";
 const ORANGE = "#FD7702";
 
-const shellShadow =
-	"0 clamp(12px, 2.5vw, 20px) clamp(26px, 5.5vw, 48px) rgba(15, 23, 42, 0.16), 0 1px 0 rgba(255,255,255,0.3) inset";
-const heroPanelShadow =
-	"0 clamp(10px, 2vw, 16px) clamp(20px, 4.5vw, 32px) rgba(15, 23, 42, 0.17), 0 1px 0 rgba(255,255,255,0.24) inset";
-const sectionCardShadow =
-	"0 clamp(8px, 1.7vw, 14px) clamp(16px, 3.4vw, 30px) rgba(15, 23, 42, 0.11), 0 1px 0 rgba(255,255,255,0.45) inset";
+const layerCardShadow =
+	"rgba(0, 0, 0, 0.4) 0px 8px 12px, rgba(0, 0, 0, 0.4) 0px -5px 12px 1px";
+const fieldShadow =
+	"0 clamp(4px, 1.1vw, 6px) clamp(8px, 2.4vw, 14px) rgba(15, 23, 42, 0.11), 0 1px 0 rgba(255,255,255,0.5) inset";
+const cardLift =
+	"hover:-translate-y-1.25 hover:![box-shadow:rgba(0,0,0,0.5)_0px_12px_20px,rgba(0,0,0,0.5)_0px_-8px_16px_2px]";
+const frameShadow =
+	"rgba(0, 0, 0, 0.5) 5px 7px 12px 10px,rgba(255, 255, 255, 0.25) 2.46px 3.46px 3.64px 0px inset,rgba(0, 0, 0, 0.25) -2.64px -3.55px 3.64px 0px inset";
+const frameInnerShadow =
+	"rgba(0, 0, 0, 0.4) 0px -2px 3px,rgba(0, 0, 0, 0.8) 0px 2px 5px 1px,rgba(255, 255, 255, 0.25) 5.46px 5.46px 3.64px 0px inset,rgba(0, 0, 0, 0.25) -3.64px -4.55px 3.64px 0px inset";
+const frameHover =
+	"transition duration-200 hover:-translate-y-1.25 hover:![box-shadow:rgba(0,0,0,0.8)_5px_7px_12px_10px,rgba(255,255,255,0.25)_2.46px_3.46px_3.64px_0px_inset,rgba(0,0,0,0.25)_-2.64px_-3.55px_3.64px_0px_inset]";
+
+function Frame({ children, className = "", innerClassName = "", innerStyle, as: Tag = "div", ...rest }) {
+	return (
+		<Tag
+			className={`group relative rounded-3xl border-2 border-[#c5d0d2] bg-transparent p-2 backdrop-blur-sm ${frameHover} ${className}`}
+			style={{ boxShadow: frameShadow }}
+			{...rest}>
+			<div
+				className={`relative rounded-[20px] border-2 border-white ${innerClassName}`}
+				style={{ boxShadow: frameInnerShadow, ...innerStyle }}>
+				{children}
+			</div>
+		</Tag>
+	);
+}
 
 /* ------------------------------------------------------------------ copy */
 const ROLES = {
@@ -53,6 +76,27 @@ const VENDOR =
 // factor: 0 = good, 0.5 = partial / unsure, 1 = full risk
 const BAD_YES = [["yes", "Yes", 1], ["no", "No", 0], ["unsure", "Unsure", 0.5]];
 const BAD_NO = [["yes", "Yes", 0], ["no", "No", 1], ["unsure", "Unsure", 0.5]];
+
+const isUnsureOption = (val, label) => {
+	const key = String(val || "").toLowerCase();
+	const text = String(label || "").toLowerCase();
+	return key === "unsure" || text === "unsure" || text === "not sure";
+};
+
+const optionColor = (val, label, opts = []) => {
+	const key = String(val || "").toLowerCase();
+	const text = String(label || "").toLowerCase();
+	if (key === "no" || text === "no") return "red";
+	if (isUnsureOption(val, label)) {
+		const hasYesNo = opts.some(([optVal, optLabel]) => {
+			const optKey = String(optVal || "").toLowerCase();
+			const optText = String(optLabel || "").toLowerCase();
+			return optKey === "yes" || optText === "yes" || optKey === "no" || optText === "no";
+		});
+		return hasYesNo ? "orange" : "teal";
+	}
+	return "teal";
+};
 
 /* ------------------------------------------------------------- questions */
 const QUESTIONS = [
@@ -414,23 +458,37 @@ function Feedback({ fb }) {
 }
 
 function Card({ title, tier, children, className = "" }) {
-	const t = tier ? tierColors[tier] : null;
 	return (
-		<div
-			className={`rounded-3xl border-l-[6px] p-5 sm:p-6 ${className}`}
-			style={{
-				borderColor: t ? t.border : TEAL,
-				backgroundColor: t ? t.bg : "#e6f5f6",
-				boxShadow: sectionCardShadow,
-			}}>
+		<Frame
+			className={className}
+			innerClassName='p-5 sm:p-6'
+	>
 			{title ? <p className='text-xs font-extrabold uppercase tracking-[0.15em] text-gray-600'>{title}</p> : null}
 			{children}
-		</div>
+		</Frame>
 	);
 }
 
 const inputCls =
 	"w-full rounded-xl border-2 border-gray-200 bg-white px-4 py-3 text-base text-gray-800 outline-none focus:border-[#0097A7]";
+const reportInputCls =
+	"w-full rounded-2xl border-2 px-4 py-2.5 text-base font-bold text-gray-900 outline-none transition-all focus:ring-2 placeholder:text-secondary";
+
+function LayerRows({ items }) {
+	if (!items.length) return null;
+	return (
+		<div className='mt-5 space-y-4 text-[1.375rem] leading-relaxed font-bold'>
+			{items.map((text, index) => (
+				<div
+					key={`${text}-${index}`}
+					className='flex items-start gap-6 rounded-2xl p-6 [box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px]'>
+					<img src='https://833probaid.com/images/arrow.png' alt='' />
+					<p>{text}</p>
+				</div>
+			))}
+		</div>
+	);
+}
 
 /* ================================================================ page */
 const ProbatePropertyInsuranceRiskCheckerClient = () => {
@@ -476,6 +534,9 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 	const complete = c.answered === c.total;
 	const level = c.answered ? levelFor(c.pct) : null;
 	const r = roleOf(A);
+	const handleCall = () => {
+		window.location.href = TEL;
+	};
 
 	const pick = (id, v) => {
 		setA((cur) => ({ ...cur, [id]: v }));
@@ -574,60 +635,38 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 	let qNum = 0;
 	let lastSec = "";
 	const tier = level ? level[2] : null;
-	const pathTier = { "COVERAGE OK": "low", "NEEDS FIXES": "mid", "IN PROGRESS": null }[c.path[0]] ?? "high";
 
 	return (
-		<div>
-			<Navbar />
+		<>
 			<ToolLeadCaptureModal toolPage={TOOL_PAGE} title='Before You Use The Insurance Risk Checker' />
-			<section className='min-h-screen py-8 sm:py-12 lg:py-16'>
-				<div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
-					<div className='overflow-clip rounded-[28px] border-[3px] border-secondary sm:rounded-[40px]' style={{ boxShadow: shellShadow }}>
-						{/* ------------------------------------------------ hero */}
-						<div
-							className='px-5 py-8 sm:px-8 sm:py-10 lg:px-12 lg:py-12'
-							style={{ background: "linear-gradient(to bottom right, var(--color-primary), var(--color-primaryDark))" }}>
-							<div className='flex flex-col gap-6 xl:flex-row xl:items-start xl:justify-between xl:gap-8'>
-								<div className='flex-1'>
-									<p className='mb-3 text-sm font-semibold tracking-[0.15em] text-white sm:text-base'>Insurance Governance</p>
-									<h1 className='mb-3 text-[30px] font-extrabold leading-tight text-white sm:text-[38px]'>Probate Property Insurance Risk Checker</h1>
-									<p className='max-w-2xl text-base font-bold text-white/95 sm:text-xl'>
-										Answer 13 quick questions. See your insurance readiness score, what’s keeping it from 100%, and exactly how to close the gaps — before the estate faces a denied claim.
-									</p>
-								</div>
-								<div className='w-full xl:w-132.5'>
-									<div
-										className='rounded-3xl border px-6 py-6 backdrop-blur-sm sm:px-8 sm:py-8'
-										style={{ backgroundColor: "rgba(0, 151, 167, 0.32)", borderColor: "rgba(255,255,255,0.18)", boxShadow: heroPanelShadow }}>
-										<h2 className='text-center text-[18px] font-bold tracking-[0.08em] text-white sm:text-[20px]'>Insurance Readiness</h2>
-										<p className='mt-2 text-center text-4xl font-extrabold text-white sm:text-6xl'>{c.answered ? `${c.pct}%` : "—"}</p>
-										<p className='mt-2 text-center text-sm font-bold leading-relaxed text-white/95 sm:text-lg'>
-											{c.answered ? `${level[1]} · ${c.answered} of ${c.total} answered` : "Your score updates with every answer."}
-										</p>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						{/* ------------------------------------------------ body */}
-						<div className='bg-linear-to-br from-gray-50 to-gray-100 px-5 py-8 sm:px-8 sm:py-10 lg:px-12 lg:py-12'>
+			<ServiceLayout
+				toolPage={TOOL_PAGE}
+				title="Insurance Governance"
+				mainHeading="Probate Property Insurance Risk Checker"
+				description="Answer 13 quick questions. See your insurance readiness score, what’s keeping it from 100%, and exactly how to close the gaps — before the estate faces a denied claim."
+				logoImage="/icons/tool3.png"
+				panelTitle="Insurance Readiness"
+				panelValue={c.answered ? `${c.pct}%` : "—"}
+				panelDetail={c.answered ? `${level[1]} · ${c.answered} of ${c.total} answered` : "Your score updates with every answer."}
+			>
 							<div className='grid grid-cols-1 gap-8 lg:grid-cols-[1.4fr_1fr]'>
 								{/* questions */}
 								<div>
 									<div className='flex flex-wrap items-center justify-between gap-4'>
 										<h2 className='text-2xl font-bold sm:text-3xl' style={{ color: TEAL }}>Insurance Readiness Check</h2>
-										<button
+										<CTAButton
 											type='button'
+											label='Reset answers'
 											onClick={reset}
-											className='rounded-xl px-4 py-2 text-sm font-bold text-white transition-transform hover:scale-[1.02]'
-											style={{ backgroundColor: TEAL, boxShadow: `0 4px 0 ${TEAL_DEEP}` }}>
-											Reset answers
-										</button>
+											icon='/arrow-right.png'
+											className='h-12 px-5 lg:h-14'
+											aria-label='Reset answers'
+										/>
 									</div>
 
 									<div className='mt-6 space-y-4 sm:space-y-5'>
 										{/* role */}
-										<fieldset className='rounded-3xl border-2 p-4 sm:p-6' style={{ borderColor: TEAL, backgroundColor: "#e6f5f6", boxShadow: sectionCardShadow }}>
+										<fieldset className={`rounded-2xl p-4 transition duration-200 sm:p-6 [box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px] ${cardLift}`}>
 											<div className='flex justify-between text-xs font-bold text-gray-500'>
 												<span>Start here</span>
 												<span style={{ color: A.role ? TEAL : ORANGE }}>{A.role ? "Answered" : "Pending"}</span>
@@ -636,24 +675,23 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 											<h3 className='mt-1 text-lg font-extrabold text-gray-900'>What is your role?</h3>
 											<p className='mt-1 text-sm text-gray-500'>This tailors the questions and your report.</p>
 											<div className='mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2'>
-												{Object.entries(ROLES).map(([k, role]) => {
-													const on = A.role === k;
-													return (
-														<label key={k} className='cursor-pointer'>
-															<input type='radio' name='acc-role' value={k} checked={on} onChange={() => pick("role", k)} className='peer sr-only' />
-															<span
-																className='block rounded-xl px-3 py-2.5 text-center text-sm font-bold transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-[#FD7702]'
-																style={{ backgroundColor: on ? TEAL : "#ffffff", color: on ? "#fff" : TEAL_DEEP }}>
-																{role.label}
-															</span>
-														</label>
-													);
-												})}
+												{Object.entries(ROLES).map(([k, role]) => (
+													<RadioButton
+														key={k}
+														name='acc-role'
+														value={k}
+														selectedValue={A.role || ""}
+														onChange={(event) => pick("role", event.target.value)}
+														label={role.label}
+														color='teal'
+														width='full'
+													/>
+												))}
 											</div>
 										</fieldset>
 
 										{/* property address */}
-										<div className='rounded-3xl border-2 p-4 sm:p-6' style={{ borderColor: invalid.addr && !addrValid ? "#c62828" : TEAL, backgroundColor: "#e6f5f6", boxShadow: sectionCardShadow }}>
+										<div className={`rounded-2xl p-4 transition duration-200 sm:p-6 [box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px] ${cardLift}`}>
 											<div className='flex justify-between text-xs font-bold text-gray-500'>
 												<span>Property</span>
 												<span style={{ color: addrValid ? TEAL : ORANGE }}>{addrValid ? "Answered" : "Pending"}</span>
@@ -704,7 +742,6 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 											const v = A[q.id];
 											const opt = q.opts.find((o) => o[0] === v);
 											const f = opt ? factorOf(q, v, opt[2], A) : null;
-											const border = !opt ? "#e5e7eb" : f === 1 ? "#c62828" : f > 0 ? ORANGE : TEAL;
 											const statusText = !opt ? "Pending" : f === 1 ? "Risk flagged" : f > 0 ? "Needs attention" : "Good";
 											const statusColor = !opt ? ORANGE : f === 1 ? "#c62828" : f > 0 ? "#d96300" : TEAL;
 											const heading = q.sec !== lastSec ? q.sec : null;
@@ -712,7 +749,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 											return (
 												<div key={q.id}>
 													{heading ? <h3 className='mb-3 mt-6 text-xl font-extrabold uppercase tracking-wide' style={{ color: ORANGE }}>{heading}</h3> : null}
-													<fieldset className='rounded-3xl border-2 bg-white p-4 sm:p-6' style={{ borderColor: border, boxShadow: sectionCardShadow }}>
+													<fieldset className={`rounded-2xl bg-white p-4 transition duration-200 sm:p-6 [box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px] ${cardLift}`}>
 														<div className='flex justify-between text-xs font-bold text-gray-500'>
 															<span>Question {qNum}</span>
 															<span style={{ color: statusColor }}>{statusText}</span>
@@ -720,22 +757,23 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 														<legend className='sr-only'>{q.q(A)}</legend>
 														<h4 className='mt-1 text-lg font-extrabold text-gray-900'>{q.q(A)}</h4>
 														<p className='mt-1 text-sm text-gray-500'>{q.help(A)}</p>
-														<div className={`mt-4 grid gap-2 ${q.stack ? "grid-cols-1" : "grid-cols-1 sm:grid-cols-3"}`}>
-															{q.opts.map(([val, label, baseFactor]) => {
-																const on = v === val;
-																const factor = factorOf(q, val, baseFactor, A);
-																const bg = on ? (factor === 1 ? "#c62828" : factor > 0 ? ORANGE : TEAL) : "#e6f5f6";
-																return (
-																	<label key={val} className='cursor-pointer'>
-																		<input type='radio' name={`acc-${q.id}`} value={val} checked={on} onChange={() => pick(q.id, val)} className='peer sr-only' />
-																		<span
-																			className={`block rounded-xl px-3 py-2.5 text-sm font-bold transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-[#FD7702] ${q.stack ? "text-left" : "text-center"}`}
-																			style={{ backgroundColor: bg, color: on ? "#fff" : TEAL_DEEP }}>
-																			{label}
-																		</span>
-																	</label>
-																);
-															})}
+														<div className='mt-4'>
+															<RadioGroup
+																name={`acc-${q.id}`}
+																value={v || ""}
+																onChange={(event) => pick(q.id, event.target.value)}
+																disabled={!unlocked}
+																options={q.opts.map(([val, label]) => ({
+																	value: val,
+																	label,
+																	color: optionColor(val, label, q.opts),
+																	...(q.stack ? { width: "full" } : {}),
+																}))}
+																direction='vertical'
+																distributeWidth={!q.stack}
+																gridClass={q.stack ? "" : "sm:flex-row sm:flex-nowrap"}
+																gap='gap-2 sm:gap-3'
+															/>
 														</div>
 														<Feedback fb={opt ? feedbackFor(q, v, A) : null} />
 													</fieldset>
@@ -784,139 +822,273 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 							</div>
 
 							{/* ------------------------------------------------ report */}
-							<div id='insurance-report' className='mt-12 scroll-mt-28 space-y-5'>
-								<h2 className='text-3xl font-black uppercase sm:text-4xl' style={{ color: TEAL }}>Your insurance readiness report</h2>
-
-								<Card title={`Recommended coverage path: ${c.path[1]}`} tier={pathTier}>
-									<ul className='mt-3 list-disc space-y-2 pl-5 text-sm text-gray-800'>
-										{c.path[2].map((t, i) => <li key={i}>{t}</li>)}
-									</ul>
-								</Card>
-
-								<div className='grid grid-cols-1 gap-5 md:grid-cols-2'>
-									<Card title='To reach 100% readiness, you must fix:' tier='mid'>
-										<ul className='mt-3 list-disc space-y-2 pl-5 text-sm text-gray-800'>
-											{c.gaps.length ? c.gaps.map((t, i) => <li key={i}>{t}</li>) : <li>{c.answered ? "Nothing flagged so far." : "Your gaps appear here as you answer."}</li>}
-										</ul>
-									</Card>
-									<Card title='Alerts' tier='high'>
-										<ul className='mt-3 list-disc space-y-2 pl-5 text-sm font-semibold text-red-900'>
-											{c.alerts.length ? c.alerts.map((t, i) => <li key={i}>{t}</li>) : <li className='font-normal text-gray-700'>No alerts triggered{c.answered ? " so far" : " yet"}.</li>}
-										</ul>
-									</Card>
-								</div>
-
-								<Card title='Your action plan'>
-									{c.actions.length ? (
-										<>
-											<p className='mt-2 font-bold' style={{ color: TEAL_DEEP }}>
-												{lead
-													? `Your ${c.actions.length}-step action plan was emailed to ${lead.email}. Changed answers? Use “Send my updated report” below.`
-													: `${c.actions.length} required action${c.actions.length === 1 ? "" : "s"} ready. Enter your details below and we’ll email your step-by-step plan.`}
+							<div id='insurance-report' className='mt-12 scroll-mt-28'>
+								<div
+									className={`flex flex-col rounded-2xl border border-gray-200 bg-white p-6 sm:p-10 ${cardLift}`}
+									style={{ boxShadow: layerCardShadow }}>
+									<div className='mb-8 flex gap-3'>
+										<ShieldAlert
+											className='mt-[-0.45em] ml-[-0.2em] h-8 w-8 shrink-0 text-secondary group-hover:text-primary'
+											strokeWidth={2.5}
+											aria-hidden='true'
+											style={{ filter: "drop-shadow(0px 2px 0px rgba(0,0,0,0.25))" }}
+										/>
+										<div>
+											<h2 className='mt-[-0.3em] text-[1.375rem] font-bold text-primary group-hover:text-secondary'>
+												Your insurance readiness report
+											</h2>
+											<p className='mt-1 text-[1.375rem] font-bold text-black'>
+												Recommended coverage path: {c.path[1]}
 											</p>
-											<ol className='pointer-events-none mt-3 list-decimal space-y-2 pl-5 text-sm text-gray-800 blur-[5px] select-none' aria-hidden='true'>
-												{c.actions.map((t, i) => <li key={i}>{t.replace(/\S/g, "x")}</li>)}
-											</ol>
-										</>
-									) : (
-										<p className='mt-2 text-sm text-gray-700'>{c.answered ? "No actions needed based on your answers so far." : "Your action plan builds as you answer."}</p>
-									)}
-								</Card>
-
-								<div className='grid grid-cols-1 gap-5 md:grid-cols-2'>
-									<Card title='If no action is taken' tier='high'>
-										<ul className='mt-3 list-disc space-y-2 pl-5 text-sm text-gray-800'>
-											<li>Fire, water, or vandalism claims may be denied</li>
-											<li>Liability exposure may fall on the {r.title} personally</li>
-											<li>Insurance coverage may be considered void under current conditions</li>
-										</ul>
-									</Card>
-									<Card title='Coverage guidance'>
-										<p className='mt-3 text-sm text-gray-800'>Discuss vacant-property insurance with your insurer — often written on a DP-1 or DP-3 dwelling form, or added as a vacancy endorsement.</p>
-										<p className='mt-2 text-sm text-gray-800'>Confirm in writing: when the vacancy clause starts, any inspection requirements, and exclusions for vandalism, theft, glass breakage, and water damage.</p>
-									</Card>
-								</div>
-
-								{!lead ? (
-									<form onSubmit={submit} noValidate className='space-y-4 rounded-3xl border-[3px] bg-white p-5 sm:p-7' style={{ borderColor: TEAL, boxShadow: sectionCardShadow }}>
-										<h2 className='text-2xl font-black uppercase sm:text-3xl' style={{ color: TEAL }}>Get your full report &amp; action plan</h2>
-										<p className='text-gray-700'>Your step-by-step action plan and full report are sent to your email. Use an email you can open right now.</p>
-										<input type='text' tabIndex={-1} autoComplete='off' value={form.hp} onChange={(e) => setForm({ ...form, hp: e.target.value })} className='hidden' aria-hidden='true' />
-										<div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
-											{[
-												["first", "First name", "text", "given-name", ""],
-												["last", "Last name", "text", "family-name", ""],
-												["email", "Email", "email", "email", ""],
-												["phone", "Phone", "tel", "tel", "(555) 234-5678"],
-											].map(([k, label, type, ac, ph]) => (
-												<label key={k} className='block'>
-													<span className='text-sm font-bold text-gray-800'>{label} <span className='text-[#d96300]'>*</span></span>
-													<input
-														type={type}
-														autoComplete={ac}
-														placeholder={ph}
-														value={form[k]}
-														onChange={(e) => setForm({ ...form, [k]: e.target.value })}
-														className={`${inputCls} mt-1 ${invalid[k] ? "!border-red-600" : ""}`}
-													/>
-												</label>
-											))}
-											<label className='block sm:col-span-2'>
-												<span className='text-sm font-bold text-gray-800'>Also send a copy to my attorney (optional)</span>
-												<input
-													type='email'
-													placeholder='attorney@lawfirm.com'
-													value={form.atty}
-													onChange={(e) => setForm({ ...form, atty: e.target.value })}
-													className={`${inputCls} mt-1 ${invalid.atty ? "!border-red-600" : ""}`}
-												/>
-												<span className='mt-1 block text-xs text-gray-500'>Your attorney gets the same report when you click the button below. Leave blank to skip.</span>
-											</label>
 										</div>
-										<label className={`flex items-start gap-3 text-sm ${invalid.consent ? "text-red-700" : "text-gray-700"}`}>
-											<input type='checkbox' checked={form.consent} onChange={(e) => setForm({ ...form, consent: e.target.checked })} className='mt-1 h-4 w-4 accent-[#0097A7]' />
-											<span>
-												I agree that 833PROBAID® may contact me about this report by phone, text, or email, and I agree to the{" "}
-												<a href={TERMS_URL} target='_blank' rel='noopener noreferrer' className='font-bold underline' style={{ color: TEAL }}>
-													Website Terms of Use, Privacy Policy &amp; Disclosures
-												</a>
-												.
-											</span>
-										</label>
-										<button
-											type='submit'
-											disabled={sending}
-											className='rounded-xl px-6 py-3.5 text-base font-extrabold text-white transition-transform hover:scale-[1.02] disabled:opacity-60'
-											style={{ backgroundColor: ORANGE, boxShadow: "0 4px 0 #a84c00" }}>
-											{sending ? "Sending…" : "Email me my report & action plan"}
-										</button>
-										{status.text ? <p className={`font-bold ${status.type === "err" ? "text-red-700" : ""}`} role='status'>{status.text}</p> : null}
-									</form>
-								) : (
-									<div className='rounded-3xl p-6 text-white' style={{ backgroundColor: TEAL }}>
-										{thanks ? <p className='font-bold'>{thanks}</p> : null}
-										<h2 className='mt-2 text-2xl font-black uppercase'>Need help fixing this?</h2>
-										<p className='mt-2 text-white/95'>We regularly help executors, trustees, and conservators get vacant properties secured, documented, and properly insured — and we can point you to insurance professionals who handle vacant and probate properties.</p>
-										<div className='mt-4 flex flex-wrap gap-3'>
-											<a href={TEL} className='rounded-xl px-5 py-3 font-extrabold text-white no-underline' style={{ backgroundColor: ORANGE, boxShadow: "0 4px 0 #a84c00" }}>Call {PHONE}</a>
-											<button type='button' onClick={resend} disabled={sending} className='rounded-xl bg-white px-5 py-3 font-extrabold disabled:opacity-60' style={{ color: TEAL_DEEP }}>
-												{sending ? "Sending…" : "Done some steps? Send my updated report"}
-											</button>
-										</div>
-										{resendMsg ? <p className='mt-3 font-bold'>{resendMsg}</p> : null}
 									</div>
-								)}
 
-								<p className='rounded-2xl bg-white/70 p-4 text-xs text-gray-500'>
-									This tool is for general information only and is not legal, insurance, or financial advice. Results depend on the answers entered and don’t account for every circumstance of a specific estate, trust, or conservatorship. Confirm requirements with your attorney, insurance professional, and the court.
-								</p>
+									<div className='space-y-8'>
+										<div
+											className={`rounded-2xl border border-gray-200 bg-white p-6 pb-8 ${cardLift}`}
+											style={{ boxShadow: layerCardShadow }}>
+											<h3 className='-mt-[0.2em] text-[1.375rem] font-bold text-primary group-hover:text-secondary'>
+												Recommended coverage path: {c.path[1]}
+											</h3>
+											<LayerRows items={c.path[2]} />
+										</div>
+
+										<div
+											className={`rounded-2xl bg-secondary p-6 text-white ${cardLift}`}
+											style={{ boxShadow: layerCardShadow }}>
+											<p className='-mt-[0.15em] text-[1.375rem] font-bold tracking-[1px] text-white/80 uppercase'>
+												Insurance Readiness
+											</p>
+											<p className='mt-2 text-4xl font-black sm:text-5xl'>{c.answered ? `${c.pct}%` : "—"}</p>
+											<p className='-mb-[0.3em] mt-2 text-[1.375rem] font-bold text-white/85'>
+												{level ? `${level[1]}. ${level[3]}` : "Your score updates with every answer."}
+											</p>
+										</div>
+
+										<div
+											className={`rounded-2xl border border-gray-200 bg-white p-6 pb-8 ${cardLift}`}
+											style={{ boxShadow: layerCardShadow }}>
+											<h3 className='-mt-[0.2em] text-[1.375rem] font-bold text-primary group-hover:text-secondary'>
+												To reach 100% readiness, you must fix:
+											</h3>
+											{c.gaps.length ? (
+												<LayerRows items={c.gaps} />
+											) : (
+												<p className='mt-5 text-[1.375rem] font-bold'>
+													{c.answered ? "Nothing flagged so far." : "Your gaps appear here as you answer."}
+												</p>
+											)}
+										</div>
+
+										<div
+											className={`rounded-2xl border border-gray-200 bg-white p-6 pb-8 ${cardLift}`}
+											style={{ boxShadow: layerCardShadow }}>
+											<h3 className='-mt-[0.2em] text-[1.375rem] font-bold text-primary group-hover:text-secondary'>Alerts</h3>
+											{c.alerts.length ? (
+												<LayerRows items={c.alerts} />
+											) : (
+												<p className='mt-5 text-[1.375rem] font-bold'>
+													No alerts triggered{c.answered ? " so far" : " yet"}.
+												</p>
+											)}
+										</div>
+
+										<div
+											className={`rounded-2xl border border-gray-200 bg-white p-6 pb-8 ${cardLift}`}
+											style={{ boxShadow: layerCardShadow }}>
+											<h3 className='-mt-[0.2em] text-[1.375rem] font-bold text-primary group-hover:text-secondary'>Your action plan</h3>
+											{c.actions.length ? (
+												<>
+													<p className='mt-5 text-[1.375rem] font-bold text-black'>
+														{lead
+															? `Your ${c.actions.length}-step action plan was emailed to ${lead.email}. Changed answers? Use “Send my updated report” below.`
+															: `${c.actions.length} required action${c.actions.length === 1 ? "" : "s"} ready. Enter your details below and we’ll email your step-by-step plan.`}
+													</p>
+													<div className='pointer-events-none mt-5 space-y-4 blur-[5px] select-none' aria-hidden='true'>
+														{c.actions.map((text, index) => (
+															<div
+																key={index}
+																className='flex items-start gap-6 rounded-2xl p-6 [box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px]'>
+																<img src='https://833probaid.com/images/arrow.png' alt='' />
+																<p className='text-[1.375rem] font-bold'>{text.replace(/\S/g, "x")}</p>
+															</div>
+														))}
+													</div>
+												</>
+											) : (
+												<p className='mt-5 text-[1.375rem] font-bold'>
+													{c.answered ? "No actions needed based on your answers so far." : "Your action plan builds as you answer."}
+												</p>
+											)}
+										</div>
+
+										<div
+											className={`rounded-2xl border border-gray-200 bg-white p-6 pb-8 ${cardLift}`}
+											style={{ boxShadow: layerCardShadow }}>
+											<h3 className='-mt-[0.2em] text-[1.375rem] font-bold text-primary group-hover:text-secondary'>If no action is taken</h3>
+											<LayerRows
+												items={[
+													"Fire, water, or vandalism claims may be denied",
+													`Liability exposure may fall on the ${r.title} personally`,
+													"Insurance coverage may be considered void under current conditions",
+												]}
+											/>
+										</div>
+
+										<div
+											className={`rounded-2xl border border-gray-200 bg-white p-6 pb-8 ${cardLift}`}
+											style={{ boxShadow: layerCardShadow }}>
+											<h3 className='-mt-[0.2em] text-[1.375rem] font-bold text-primary group-hover:text-secondary'>Coverage guidance</h3>
+											<LayerRows
+												items={[
+													"Discuss vacant-property insurance with your insurer — often written on a DP-1 or DP-3 dwelling form, or added as a vacancy endorsement.",
+													"Confirm in writing: when the vacancy clause starts, any inspection requirements, and exclusions for vandalism, theft, glass breakage, and water damage.",
+												]}
+											/>
+										</div>
+
+										{!lead ? (
+											<form
+												onSubmit={submit}
+												noValidate
+												className={`space-y-6 rounded-2xl border-[3px] border-secondary bg-white p-6 sm:p-8 ${cardLift}`}
+												style={{ boxShadow: layerCardShadow }}>
+												<p className='text-2xl font-bold tracking-[1px] text-secondary uppercase group-hover:text-primary'>
+													Get your full report &amp; action plan
+												</p>
+												<h3 className='mt-2 text-2xl font-bold text-primary group-hover:text-secondary'>
+													Your step-by-step action plan and full report are sent to your email. Use an email you can open right now.
+												</h3>
+												<input type='text' tabIndex={-1} autoComplete='off' value={form.hp} onChange={(e) => setForm({ ...form, hp: e.target.value })} className='hidden' aria-hidden='true' />
+												<div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
+													{[
+														["first", "First name", "text", "given-name", ""],
+														["last", "Last name", "text", "family-name", ""],
+														["email", "Email", "email", "email", ""],
+														["phone", "Phone", "tel", "tel", "(555) 234-5678"],
+													].map(([k, label, type, ac, ph]) => (
+														<label key={k} className='block'>
+															<span className='text-[1.375rem] font-bold uppercase text-primary group-hover:text-secondary'>
+																{label} <span className='text-secondary'>*</span>
+															</span>
+															<input
+																type={type}
+																autoComplete={ac}
+																placeholder={ph}
+																value={form[k]}
+																onChange={(e) => setForm({ ...form, [k]: e.target.value })}
+																className={`${reportInputCls} mt-2`}
+																style={{
+																	borderColor: invalid[k] ? "#dc2626" : "var(--color-primary)",
+																	boxShadow: fieldShadow,
+																	"--tw-ring-color": invalid[k] ? "rgba(220, 38, 38, 0.25)" : "rgba(0, 151, 167, 0.25)",
+																}}
+															/>
+														</label>
+													))}
+													<label className='block sm:col-span-2'>
+														<span className='text-[1.375rem] font-bold uppercase text-primary group-hover:text-secondary'>
+															Also send a copy to my attorney (optional)
+														</span>
+														<input
+															type='email'
+															placeholder='attorney@lawfirm.com'
+															value={form.atty}
+															onChange={(e) => setForm({ ...form, atty: e.target.value })}
+															className={`${reportInputCls} mt-2`}
+															style={{
+																borderColor: invalid.atty ? "#dc2626" : "var(--color-primary)",
+																boxShadow: fieldShadow,
+																"--tw-ring-color": invalid.atty ? "rgba(220, 38, 38, 0.25)" : "rgba(0, 151, 167, 0.25)",
+															}}
+														/>
+														<span className='mt-2 block text-base font-bold text-black'>
+															Your attorney gets the same report when you click the button below. Leave blank to skip.
+														</span>
+													</label>
+												</div>
+												<label className={`flex items-start gap-3 cursor-pointer text-[1.125rem] font-bold ${invalid.consent ? "text-red-700" : "text-black"}`}>
+													<span className='relative mt-0.5 shrink-0'>
+														<input
+															type='checkbox'
+															checked={form.consent}
+															onChange={(e) => setForm({ ...form, consent: e.target.checked })}
+															className={`block h-8 w-8 appearance-none rounded border-[3.5px] bg-white focus:ring-2 focus:ring-[#FD7702] ${invalid.consent ? "border-red-500" : "border-[#FD7702]"}`}
+														/>
+														{form.consent ? (
+															<span className='pointer-events-none absolute top-0 left-1 flex h-full w-full items-center justify-center'>
+																<i className='fas fa-check text-5xl text-[#0097A7]'></i>
+															</span>
+														) : null}
+													</span>
+													<span>
+														I agree that 833PROBAID® may contact me about this report by phone, text, or email, and I agree to the{" "}
+														<a href={TERMS_URL} target='_blank' rel='noopener noreferrer' className='font-bold underline text-primary'>
+															Website Terms of Use, Privacy Policy &amp; Disclosures
+														</a>
+														.
+													</span>
+												</label>
+												<div className='flex justify-center'>
+													<CTAButton
+														type='submit'
+														label={sending ? "Sending…" : "Email me my report & action plan"}
+														disabled={sending}
+														icon='/arrow-right.png'
+														className='h-12 px-5 lg:h-14'
+														aria-label='Email me my report and action plan'
+													/>
+												</div>
+												{status.text ? <p className={`text-center text-[1.125rem] font-bold ${status.type === "err" ? "text-red-700" : "text-primary"}`} role='status'>{status.text}</p> : null}
+											</form>
+										) : (
+											<div
+												className={`rounded-2xl border-[3px] border-secondary bg-white p-6 text-center sm:p-8 ${cardLift}`}
+												style={{ boxShadow: layerCardShadow }}>
+												{thanks ? <p className='font-bold text-primary'>{thanks}</p> : null}
+												<p className='text-2xl font-bold tracking-[1px] text-secondary uppercase group-hover:text-primary'>
+													Need help fixing this?
+												</p>
+												<h3 className='mt-2 text-2xl font-bold text-primary group-hover:text-secondary'>
+													We regularly help executors, trustees, and conservators get vacant properties secured, documented, and properly insured — and we can point you to insurance professionals who handle vacant and probate properties.
+												</h3>
+												<div className='mt-8 flex flex-col items-center justify-center gap-4'>
+													<CTAButton
+														label={`Call ${PHONE}`}
+														onClick={handleCall}
+														icon='/arrow-right.png'
+														className='h-12 px-5 lg:h-14'
+														aria-label={`Call ${PHONE}`}
+													/>
+													<button
+														type='button'
+														onClick={resend}
+														disabled={sending}
+														className='text-[1.125rem] font-bold text-primary underline disabled:opacity-60'>
+														{sending ? "Sending…" : "Done some steps? Send my updated report"}
+													</button>
+												</div>
+												{resendMsg ? <p className='mt-4 font-bold text-primary'>{resendMsg}</p> : null}
+											</div>
+										)}
+
+										<div
+											className={`flex items-start gap-3 rounded-2xl border-[3px] border-secondary px-6 py-5 ${cardLift}`}
+											style={{ boxShadow: layerCardShadow }}>
+											<ShieldAlert
+												className='mt-1 h-6 w-6 shrink-0 text-secondary'
+												strokeWidth={2.5}
+												aria-hidden='true'
+											/>
+											<p className='text-[1.375rem] leading-relaxed font-bold text-secondary'>
+												This tool is for general information only and is not legal, insurance, or financial advice. Results depend on the answers entered and don’t account for every circumstance of a specific estate, trust, or conservatorship. Confirm requirements with your attorney, insurance professional, and the court.
+											</p>
+										</div>
+									</div>
+								</div>
 							</div>
-						</div>
-					</div>
-				</div>
-			</section>
-			<Footer />
-		</div>
+			</ServiceLayout>
+		</>
 	);
 };
 

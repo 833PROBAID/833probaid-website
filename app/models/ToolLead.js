@@ -22,6 +22,8 @@ const metaSchema = new mongoose.Schema(
 
 const toolLeadSchema = new mongoose.Schema(
 	{
+		firstName: { type: String, default: "", trim: true, maxlength: 70 },
+		lastName: { type: String, default: "", trim: true, maxlength: 70 },
 		fullName: { type: String, required: true, trim: true, maxlength: 140 },
 		email: {
 			type: String,
@@ -45,6 +47,14 @@ const toolLeadSchema = new mongoose.Schema(
 		sourceDetails: { type: sourceDetailsSchema, default: () => ({}) },
 		meta: { type: metaSchema, default: () => ({}) },
 		submittedAt: { type: Date, default: Date.now, index: true },
+		verified: { type: Boolean, default: false, index: true },
+		verifiedAt: { type: Date, default: null },
+		firstTool: { type: String, default: "", trim: true, maxlength: 120 },
+		lastToolUsed: { type: String, default: "", trim: true, maxlength: 120 },
+		firstAccess: { type: Date, default: null },
+		lastAccess: { type: Date, default: null },
+		totalToolUses: { type: Number, default: 0 },
+		accessExpiresAt: { type: Date, default: null },
 	},
 	{ timestamps: true },
 );
