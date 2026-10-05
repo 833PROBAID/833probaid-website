@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import toolAccessApi from "@/app/lib/api/toolAccess";
-import { hasFreshToolAccessGrant, markToolAccessGranted } from "@/app/lib/toolAccessGrant";
+// TEMPORARY: popup gate commented so the tool opens for UI work.
+// import toolAccessApi from "@/app/lib/api/toolAccess";
+// import { hasFreshToolAccessGrant } from "@/app/lib/toolAccessGrant";
+import { markToolAccessGranted } from "@/app/lib/toolAccessGrant";
 import AnimatedText from "./AnimatedText";
 import ToolAccessModal from "./ToolAccessModal";
 
@@ -12,7 +14,7 @@ const toolPath = (href) => (href.startsWith("/") ? href : `/${href}`);
 export default function ToolsCard({ id, index = 0, icon, title, description, href }) {
   const router = useRouter();
   const [isSafariBrowser, setIsSafariBrowser] = useState(false);
-  const [checking, setChecking] = useState(false);
+  const [checking] = useState(false);
   const [accessOpen, setAccessOpen] = useState(false);
   const [pendingHref, setPendingHref] = useState("");
 
@@ -32,20 +34,22 @@ export default function ToolsCard({ id, index = 0, icon, title, description, hre
     e.stopPropagation();
 
     setPendingHref(href);
-    setChecking(true);
-    try {
-      const session = await toolAccessApi.session();
-      if (session?.authorized || hasFreshToolAccessGrant()) {
-        openTool(href);
-        return;
-      }
-    } catch {
-      // No active session. Ask for tool access instead of opening the tool.
-    } finally {
-      setChecking(false);
-    }
-
-    setAccessOpen(true);
+    // TEMPORARY: skip the access popup and open the tool.
+    openTool(href);
+    // setChecking(true);
+    // try {
+    //   const session = await toolAccessApi.session();
+    //   if (session?.authorized || hasFreshToolAccessGrant()) {
+    //     openTool(href);
+    //     return;
+    //   }
+    // } catch {
+    //   // No active session. Ask for tool access instead of opening the tool.
+    // } finally {
+    //   setChecking(false);
+    // }
+    //
+    // setAccessOpen(true);
   };
 
   const handleVerified = () => {

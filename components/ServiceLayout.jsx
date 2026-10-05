@@ -1,12 +1,14 @@
 "use client";
 
 import toolAccessApi from "@/app/lib/api/toolAccess";
-import { hasFreshToolAccessGrant, markToolAccessGranted } from "@/app/lib/toolAccessGrant";
+import { markToolAccessGranted } from "@/app/lib/toolAccessGrant";
+// import { hasFreshToolAccessGrant } from "@/app/lib/toolAccessGrant";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import ToolAccessModal from "@/components/ToolAccessModal";
 import { Landmark } from "lucide-react";
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+// import { useLayoutEffect } from "react";
 
 const shellShadow =
   "rgba(0, 0, 0, 0.5) 0px 8px 12px, rgba(0, 0, 0, 0.7) 0px -5px 12px 1px";
@@ -57,7 +59,8 @@ const ServiceLayout = ({
   panelValue,
   panelDetail,
 }) => {
-  const [access, setAccess] = useState("checking");
+  // TEMPORARY: start granted so the tool page shows for UI work.
+  const [access, setAccess] = useState("granted");
   const [accessOpen, setAccessOpen] = useState(false);
   const verifiedRef = useRef(false);
 
@@ -68,38 +71,39 @@ const ServiceLayout = ({
     setAccess("granted");
   };
 
-  useLayoutEffect(() => {
-    if (hasFreshToolAccessGrant()) setAccess("granted");
-  }, []);
-
-  useEffect(() => {
-    let cancelled = false;
-    toolAccessApi
-      .session()
-      .then((session) => {
-        if (cancelled) return;
-        if (session?.authorized || verifiedRef.current || hasFreshToolAccessGrant()) {
-          setAccess("granted");
-          setAccessOpen(false);
-          return;
-        }
-        setAccess("required");
-        setAccessOpen(true);
-      })
-      .catch(() => {
-        if (cancelled) return;
-        if (verifiedRef.current || hasFreshToolAccessGrant()) {
-          setAccess("granted");
-          setAccessOpen(false);
-          return;
-        }
-        setAccess("required");
-        setAccessOpen(true);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [toolPage]);
+  // TEMPORARY: skip the access popup and show the tool.
+  // useLayoutEffect(() => {
+  //   if (hasFreshToolAccessGrant()) setAccess("granted");
+  // }, []);
+  //
+  // useEffect(() => {
+  //   let cancelled = false;
+  //   toolAccessApi
+  //     .session()
+  //     .then((session) => {
+  //       if (cancelled) return;
+  //       if (session?.authorized || verifiedRef.current || hasFreshToolAccessGrant()) {
+  //         setAccess("granted");
+  //         setAccessOpen(false);
+  //         return;
+  //       }
+  //       setAccess("required");
+  //       setAccessOpen(true);
+  //     })
+  //     .catch(() => {
+  //       if (cancelled) return;
+  //       if (verifiedRef.current || hasFreshToolAccessGrant()) {
+  //         setAccess("granted");
+  //         setAccessOpen(false);
+  //         return;
+  //       }
+  //       setAccess("required");
+  //       setAccessOpen(true);
+  //     });
+  //   return () => {
+  //     cancelled = true;
+  //   };
+  // }, [toolPage]);
 
   useEffect(() => {
     if (access !== "granted") return;

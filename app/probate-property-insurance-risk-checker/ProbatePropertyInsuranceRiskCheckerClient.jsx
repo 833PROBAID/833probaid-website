@@ -2,6 +2,7 @@
 
 import CTAButton from "@/components/CTAButton";
 import ServiceLayout from "@/components/ServiceLayout";
+import { RadioButton, RadioGroup } from "@/components/SharedComponents";
 import ToolLeadCaptureModal from "@/components/ToolLeadCaptureModal";
 import { ShieldAlert } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
@@ -29,14 +30,33 @@ const TEAL = "#0097A7";
 const TEAL_DEEP = "#004E57";
 const ORANGE = "#FD7702";
 
-const sectionCardShadow =
-	"0 clamp(8px, 1.7vw, 14px) clamp(16px, 3.4vw, 30px) rgba(15, 23, 42, 0.11), 0 1px 0 rgba(255,255,255,0.45) inset";
 const layerCardShadow =
 	"rgba(0, 0, 0, 0.4) 0px 8px 12px, rgba(0, 0, 0, 0.4) 0px -5px 12px 1px";
 const fieldShadow =
 	"0 clamp(4px, 1.1vw, 6px) clamp(8px, 2.4vw, 14px) rgba(15, 23, 42, 0.11), 0 1px 0 rgba(255,255,255,0.5) inset";
 const cardLift =
 	"hover:-translate-y-1.25 hover:![box-shadow:rgba(0,0,0,0.5)_0px_12px_20px,rgba(0,0,0,0.5)_0px_-8px_16px_2px]";
+const frameShadow =
+	"rgba(0, 0, 0, 0.5) 5px 7px 12px 10px,rgba(255, 255, 255, 0.25) 2.46px 3.46px 3.64px 0px inset,rgba(0, 0, 0, 0.25) -2.64px -3.55px 3.64px 0px inset";
+const frameInnerShadow =
+	"rgba(0, 0, 0, 0.4) 0px -2px 3px,rgba(0, 0, 0, 0.8) 0px 2px 5px 1px,rgba(255, 255, 255, 0.25) 5.46px 5.46px 3.64px 0px inset,rgba(0, 0, 0, 0.25) -3.64px -4.55px 3.64px 0px inset";
+const frameHover =
+	"transition duration-200 hover:-translate-y-1.25 hover:![box-shadow:rgba(0,0,0,0.8)_5px_7px_12px_10px,rgba(255,255,255,0.25)_2.46px_3.46px_3.64px_0px_inset,rgba(0,0,0,0.25)_-2.64px_-3.55px_3.64px_0px_inset]";
+
+function Frame({ children, className = "", innerClassName = "", innerStyle, as: Tag = "div", ...rest }) {
+	return (
+		<Tag
+			className={`group relative rounded-3xl border-2 border-[#c5d0d2] bg-transparent p-2 backdrop-blur-sm ${frameHover} ${className}`}
+			style={{ boxShadow: frameShadow }}
+			{...rest}>
+			<div
+				className={`relative rounded-[20px] border-2 border-white ${innerClassName}`}
+				style={{ boxShadow: frameInnerShadow, ...innerStyle }}>
+				{children}
+			</div>
+		</Tag>
+	);
+}
 
 /* ------------------------------------------------------------------ copy */
 const ROLES = {
@@ -56,6 +76,27 @@ const VENDOR =
 // factor: 0 = good, 0.5 = partial / unsure, 1 = full risk
 const BAD_YES = [["yes", "Yes", 1], ["no", "No", 0], ["unsure", "Unsure", 0.5]];
 const BAD_NO = [["yes", "Yes", 0], ["no", "No", 1], ["unsure", "Unsure", 0.5]];
+
+const isUnsureOption = (val, label) => {
+	const key = String(val || "").toLowerCase();
+	const text = String(label || "").toLowerCase();
+	return key === "unsure" || text === "unsure" || text === "not sure";
+};
+
+const optionColor = (val, label, opts = []) => {
+	const key = String(val || "").toLowerCase();
+	const text = String(label || "").toLowerCase();
+	if (key === "no" || text === "no") return "red";
+	if (isUnsureOption(val, label)) {
+		const hasYesNo = opts.some(([optVal, optLabel]) => {
+			const optKey = String(optVal || "").toLowerCase();
+			const optText = String(optLabel || "").toLowerCase();
+			return optKey === "yes" || optText === "yes" || optKey === "no" || optText === "no";
+		});
+		return hasYesNo ? "orange" : "teal";
+	}
+	return "teal";
+};
 
 /* ------------------------------------------------------------- questions */
 const QUESTIONS = [
@@ -417,18 +458,14 @@ function Feedback({ fb }) {
 }
 
 function Card({ title, tier, children, className = "" }) {
-	const t = tier ? tierColors[tier] : null;
 	return (
-		<div
-			className={`rounded-3xl border-l-[6px] p-5 sm:p-6 ${className}`}
-			style={{
-				borderColor: t ? t.border : TEAL,
-				backgroundColor: t ? t.bg : "#e6f5f6",
-				boxShadow: sectionCardShadow,
-			}}>
+		<Frame
+			className={className}
+			innerClassName='p-5 sm:p-6'
+	>
 			{title ? <p className='text-xs font-extrabold uppercase tracking-[0.15em] text-gray-600'>{title}</p> : null}
 			{children}
-		</div>
+		</Frame>
 	);
 }
 
@@ -617,18 +654,19 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 								<div>
 									<div className='flex flex-wrap items-center justify-between gap-4'>
 										<h2 className='text-2xl font-bold sm:text-3xl' style={{ color: TEAL }}>Insurance Readiness Check</h2>
-										<button
+										<CTAButton
 											type='button'
+											label='Reset answers'
 											onClick={reset}
-											className='rounded-xl px-4 py-2 text-sm font-bold text-white transition-transform hover:scale-[1.02]'
-											style={{ backgroundColor: TEAL, boxShadow: `0 4px 0 ${TEAL_DEEP}` }}>
-											Reset answers
-										</button>
+											icon='/arrow-right.png'
+											className='h-12 px-5 lg:h-14'
+											aria-label='Reset answers'
+										/>
 									</div>
 
 									<div className='mt-6 space-y-4 sm:space-y-5'>
 										{/* role */}
-										<fieldset className='rounded-3xl border-2 p-4 sm:p-6' style={{ borderColor: TEAL, backgroundColor: "#e6f5f6", boxShadow: sectionCardShadow }}>
+										<fieldset className={`rounded-2xl p-4 transition duration-200 sm:p-6 [box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px] ${cardLift}`}>
 											<div className='flex justify-between text-xs font-bold text-gray-500'>
 												<span>Start here</span>
 												<span style={{ color: A.role ? TEAL : ORANGE }}>{A.role ? "Answered" : "Pending"}</span>
@@ -637,24 +675,23 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 											<h3 className='mt-1 text-lg font-extrabold text-gray-900'>What is your role?</h3>
 											<p className='mt-1 text-sm text-gray-500'>This tailors the questions and your report.</p>
 											<div className='mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2'>
-												{Object.entries(ROLES).map(([k, role]) => {
-													const on = A.role === k;
-													return (
-														<label key={k} className='cursor-pointer'>
-															<input type='radio' name='acc-role' value={k} checked={on} onChange={() => pick("role", k)} className='peer sr-only' />
-															<span
-																className='block rounded-xl px-3 py-2.5 text-center text-sm font-bold transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-[#FD7702]'
-																style={{ backgroundColor: on ? TEAL : "#ffffff", color: on ? "#fff" : TEAL_DEEP }}>
-																{role.label}
-															</span>
-														</label>
-													);
-												})}
+												{Object.entries(ROLES).map(([k, role]) => (
+													<RadioButton
+														key={k}
+														name='acc-role'
+														value={k}
+														selectedValue={A.role || ""}
+														onChange={(event) => pick("role", event.target.value)}
+														label={role.label}
+														color='teal'
+														width='full'
+													/>
+												))}
 											</div>
 										</fieldset>
 
 										{/* property address */}
-										<div className='rounded-3xl border-2 p-4 sm:p-6' style={{ borderColor: invalid.addr && !addrValid ? "#c62828" : TEAL, backgroundColor: "#e6f5f6", boxShadow: sectionCardShadow }}>
+										<div className={`rounded-2xl p-4 transition duration-200 sm:p-6 [box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px] ${cardLift}`}>
 											<div className='flex justify-between text-xs font-bold text-gray-500'>
 												<span>Property</span>
 												<span style={{ color: addrValid ? TEAL : ORANGE }}>{addrValid ? "Answered" : "Pending"}</span>
@@ -705,7 +742,6 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 											const v = A[q.id];
 											const opt = q.opts.find((o) => o[0] === v);
 											const f = opt ? factorOf(q, v, opt[2], A) : null;
-											const border = !opt ? "#e5e7eb" : f === 1 ? "#c62828" : f > 0 ? ORANGE : TEAL;
 											const statusText = !opt ? "Pending" : f === 1 ? "Risk flagged" : f > 0 ? "Needs attention" : "Good";
 											const statusColor = !opt ? ORANGE : f === 1 ? "#c62828" : f > 0 ? "#d96300" : TEAL;
 											const heading = q.sec !== lastSec ? q.sec : null;
@@ -713,7 +749,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 											return (
 												<div key={q.id}>
 													{heading ? <h3 className='mb-3 mt-6 text-xl font-extrabold uppercase tracking-wide' style={{ color: ORANGE }}>{heading}</h3> : null}
-													<fieldset className='rounded-3xl border-2 bg-white p-4 sm:p-6' style={{ borderColor: border, boxShadow: sectionCardShadow }}>
+													<fieldset className={`rounded-2xl bg-white p-4 transition duration-200 sm:p-6 [box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px] ${cardLift}`}>
 														<div className='flex justify-between text-xs font-bold text-gray-500'>
 															<span>Question {qNum}</span>
 															<span style={{ color: statusColor }}>{statusText}</span>
@@ -721,22 +757,23 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 														<legend className='sr-only'>{q.q(A)}</legend>
 														<h4 className='mt-1 text-lg font-extrabold text-gray-900'>{q.q(A)}</h4>
 														<p className='mt-1 text-sm text-gray-500'>{q.help(A)}</p>
-														<div className={`mt-4 grid gap-2 ${q.stack ? "grid-cols-1" : "grid-cols-1 sm:grid-cols-3"}`}>
-															{q.opts.map(([val, label, baseFactor]) => {
-																const on = v === val;
-																const factor = factorOf(q, val, baseFactor, A);
-																const bg = on ? (factor === 1 ? "#c62828" : factor > 0 ? ORANGE : TEAL) : "#e6f5f6";
-																return (
-																	<label key={val} className='cursor-pointer'>
-																		<input type='radio' name={`acc-${q.id}`} value={val} checked={on} onChange={() => pick(q.id, val)} className='peer sr-only' />
-																		<span
-																			className={`block rounded-xl px-3 py-2.5 text-sm font-bold transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-[#FD7702] ${q.stack ? "text-left" : "text-center"}`}
-																			style={{ backgroundColor: bg, color: on ? "#fff" : TEAL_DEEP }}>
-																			{label}
-																		</span>
-																	</label>
-																);
-															})}
+														<div className='mt-4'>
+															<RadioGroup
+																name={`acc-${q.id}`}
+																value={v || ""}
+																onChange={(event) => pick(q.id, event.target.value)}
+																disabled={!unlocked}
+																options={q.opts.map(([val, label]) => ({
+																	value: val,
+																	label,
+																	color: optionColor(val, label, q.opts),
+																	...(q.stack ? { width: "full" } : {}),
+																}))}
+																direction='vertical'
+																distributeWidth={!q.stack}
+																gridClass={q.stack ? "" : "sm:flex-row sm:flex-nowrap"}
+																gap='gap-2 sm:gap-3'
+															/>
 														</div>
 														<Feedback fb={opt ? feedbackFor(q, v, A) : null} />
 													</fieldset>
@@ -970,8 +1007,20 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 														</span>
 													</label>
 												</div>
-												<label className={`flex items-start gap-3 text-[1.125rem] font-bold ${invalid.consent ? "text-red-700" : "text-black"}`}>
-													<input type='checkbox' checked={form.consent} onChange={(e) => setForm({ ...form, consent: e.target.checked })} className='mt-1 h-5 w-5 accent-[#0097A7]' />
+												<label className={`flex items-start gap-3 cursor-pointer text-[1.125rem] font-bold ${invalid.consent ? "text-red-700" : "text-black"}`}>
+													<span className='relative mt-0.5 shrink-0'>
+														<input
+															type='checkbox'
+															checked={form.consent}
+															onChange={(e) => setForm({ ...form, consent: e.target.checked })}
+															className={`block h-8 w-8 appearance-none rounded border-[3.5px] bg-white focus:ring-2 focus:ring-[#FD7702] ${invalid.consent ? "border-red-500" : "border-[#FD7702]"}`}
+														/>
+														{form.consent ? (
+															<span className='pointer-events-none absolute top-0 left-1 flex h-full w-full items-center justify-center'>
+																<i className='fas fa-check text-5xl text-[#0097A7]'></i>
+															</span>
+														) : null}
+													</span>
 													<span>
 														I agree that 833PROBAID® may contact me about this report by phone, text, or email, and I agree to the{" "}
 														<a href={TERMS_URL} target='_blank' rel='noopener noreferrer' className='font-bold underline text-primary'>
