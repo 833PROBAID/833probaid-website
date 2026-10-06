@@ -1462,6 +1462,18 @@
 				}
 			}
 
+			.\!border-secondary {
+				border-color: var(--secondary) !important;
+			}
+
+			.group-hover\:\!border-primary {
+				&:is(:where(.group):hover *) {
+					@media (hover: hover) {
+						border-color: var(--primary) !important;
+					}
+				}
+			}
+
 			.flex {
 				display: flex;
 			}
