@@ -555,7 +555,7 @@ export default function NewsletterSubscriptionModal({
 	);
 }
 
-const NSM_STYLES = `
+export const NSM_STYLES = `
 .nsm-backdrop {
   background: radial-gradient(120% 90% at 50% 0%, rgba(0,131,143,0.55) 0%, rgba(2,20,24,0.78) 55%, rgba(2,14,17,0.88) 100%);
   backdrop-filter: blur(6px);

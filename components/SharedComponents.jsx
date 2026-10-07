@@ -1279,7 +1279,7 @@ export const FileUpload = ({
 };
 
 // Radio pill palettes. `bgColor`/`labelBorderClass` style the label pill;
-// `dotColor` is the selected dot, and `borderClass`/`dotColor2` the two-tone
+// `dotColor` is the selected dot (a color or CSS gradient), and `borderClass`/`dotColor2` the two-tone
 // rings around it. "gray" is used for neutral answers such as "N/A".
 const RADIO_COLORS = {
 	teal: {
@@ -1298,10 +1298,18 @@ const RADIO_COLORS = {
 		borderClass: "border-[#0097A7]",
 		focusRingClass: "focus:ring-[#0097A7]",
 	},
+	red: {
+		bgColor: "bg-[#e51b23]",
+		labelBorderClass: "border-[#e51b23]",
+		dotColor: "linear-gradient(135deg, #0097A7 0%, #FD7702 100%)",
+		dotColor2: "#e51b23",
+		borderClass: "border-[#e51b23]",
+		focusRingClass: "focus:ring-[#e51b23]",
+	},
 	gray: {
 		bgColor: "bg-[#6B7280]",
 		labelBorderClass: "border-[#6B7280]",
-		dotColor: "#4B5563",
+		dotColor: "#6B7280",
 		dotColor2: "#6B7280",
 		borderClass: "border-[#9CA3AF]",
 		focusRingClass: "focus:ring-[#6B7280]",
@@ -1370,7 +1378,7 @@ export const RadioButton = ({
 					{isSelected && (
 						<div
 							className='absolute top-1.5 left-1.5 h-5 w-5 rounded-full z-40'
-							style={{ backgroundColor: dotColor }}></div>
+							style={{ background: dotColor }}></div>
 					)}
 				</div>
 
