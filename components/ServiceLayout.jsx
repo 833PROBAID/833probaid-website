@@ -171,7 +171,7 @@ const ServiceLayout = ({
       <section className="min-h-screen py-8 sm:py-12 lg:py-16 font-montserrat">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div
-            className="overflow-hidden rounded-3xl group hover:translate-y-[-5px] hover:![box-shadow:rgba(0,0,0,0.6)_0px_12px_20px,rgba(0,0,0,0.7)_0px_-8px_16px_2px]"
+            className="overflow-clip rounded-3xl group hover:translate-y-[-5px] hover:![box-shadow:rgba(0,0,0,0.6)_0px_12px_20px,rgba(0,0,0,0.7)_0px_-8px_16px_2px]"
             style={{ boxShadow: shellShadow }}
           >
             <div

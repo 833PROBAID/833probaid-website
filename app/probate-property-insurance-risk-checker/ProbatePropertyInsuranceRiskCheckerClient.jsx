@@ -27,8 +27,8 @@ const TEL = "tel:8337762243";
 const TERMS_URL = "/privacy";
 
 const TEAL = "#0097A7";
-const TEAL_DEEP = "#004E57";
 const ORANGE = "#FD7702";
+const RED = "#e51b23";
 
 const layerCardShadow =
 	"rgba(0, 0, 0, 0.4) 0px 8px 12px, rgba(0, 0, 0, 0.4) 0px -5px 12px 1px";
@@ -43,11 +43,11 @@ const frameInnerShadow =
 const frameHover =
 	"transition duration-200 hover:-translate-y-1.25 hover:![box-shadow:rgba(0,0,0,0.8)_5px_7px_12px_10px,rgba(255,255,255,0.25)_2.46px_3.46px_3.64px_0px_inset,rgba(0,0,0,0.25)_-2.64px_-3.55px_3.64px_0px_inset]";
 
-function Frame({ children, className = "", innerClassName = "", innerStyle, as: Tag = "div", ...rest }) {
+function Frame({ children, className = "", innerClassName = "", innerStyle, frameStyle, as: Tag = "div", ...rest }) {
 	return (
 		<Tag
 			className={`group relative rounded-3xl border-2 border-[#c5d0d2] bg-transparent p-2 backdrop-blur-sm ${frameHover} ${className}`}
-			style={{ boxShadow: frameShadow }}
+			style={{ boxShadow: frameShadow, ...frameStyle }}
 			{...rest}>
 			<div
 				className={`relative rounded-[20px] border-2 border-white ${innerClassName}`}
@@ -426,31 +426,51 @@ const formatAddress = (ad) => (ad.street.trim() ? `${ad.street.trim()}, ${ad.cit
 
 /* ------------------------------------------------------------ UI pieces */
 const toneBox = {
-	good: "border-green-700 bg-green-50 text-green-900",
+	good: "border-[#0097A7] bg-[#e6f5f6] text-[#004E57]",
 	warn: "border-[#FD7702] bg-orange-50 text-[#7a3a00]",
-	risk: "border-red-700 bg-red-50 text-red-900",
+	risk: "border-[#e51b23] bg-[#fdeaea] text-[#e51b23]",
 };
+// Hex values behind the RadioButton palettes, so notes can match the selected pill.
+const OPTION_HEX = { teal: TEAL, orange: ORANGE, red: RED };
 const tierColors = {
-	low: { border: "#2e7d32", bg: "#f1f8f2", bar: "#2e7d32" },
+	low: { border: TEAL, bg: "#e6f5f6", bar: TEAL },
 	mid: { border: ORANGE, bg: "#fff7ef", bar: ORANGE },
-	high: { border: "#c62828", bg: "#fdecea", bar: "#c62828" },
+	high: { border: RED, bg: "#fdeaea", bar: RED },
 };
 
-function Feedback({ fb }) {
+function Feedback({ fb, accent }) {
 	if (!fb) return null;
 	const [text, tone, vendor] = fb;
 	return (
-		<div className={`mt-4 rounded-xl border-l-4 px-4 py-3 text-sm font-semibold leading-relaxed ${toneBox[tone] || toneBox.risk}`}>
+		<div
+			className={`mt-4 rounded-xl border-l-4 px-4 py-3 text-sm font-semibold leading-relaxed ${toneBox[tone] || toneBox.risk}`}
+			style={
+				accent
+					? {
+							borderColor: accent,
+							color: accent,
+							backgroundColor: `color-mix(in srgb, ${accent} 10%, white)`,
+						}
+					: undefined
+			}>
 			<p>{text}</p>
 			{vendor ? (
 				<>
 					<p className='mt-2 font-bold'>{VENDOR}</p>
-					<a
-						href={TEL}
-						className='mt-2 inline-block rounded-lg px-4 py-2 text-sm font-extrabold text-white no-underline transition-transform hover:scale-[1.02]'
-						style={{ backgroundColor: ORANGE, boxShadow: "0 3px 0 #a84c00" }}>
-						Call {PHONE}
-					</a>
+					<div className='mt-3'>
+						<CTAButton
+							type='button'
+							label={`Call ${PHONE}`}
+							onClick={() => {
+								window.location.href = TEL;
+							}}
+							icon='/arrow-right.png'
+							className='h-10 px-4 lg:h-12'
+							textClassName='text-[14px] lg:text-[16px]'
+							iconClassName='w-6 lg:w-7 h-6 lg:h-7'
+							aria-label={`Call ${PHONE}`}
+						/>
+					</div>
 				</>
 			) : null}
 		</div>
@@ -458,12 +478,18 @@ function Feedback({ fb }) {
 }
 
 function Card({ title, tier, children, className = "" }) {
+	const t = tier ? tierColors[tier] : null;
+	const ring = t ? t.border : TEAL;
 	return (
 		<Frame
 			className={className}
+			frameStyle={{ backgroundColor: ring, borderColor: ring }}
 			innerClassName='p-5 sm:p-6'
-	>
-			{title ? <p className='text-xs font-extrabold uppercase tracking-[0.15em] text-gray-600'>{title}</p> : null}
+			innerStyle={{
+				backgroundColor: t ? t.bg : "#e6f5f6",
+				"--ring-soft": `color-mix(in srgb, ${ring} 72%, white)`,
+			}}>
+			{title ? <p className='text-xs font-extrabold uppercase tracking-[0.15em]' style={{ color: ring }}>{title}</p> : null}
 			{children}
 		</Frame>
 	);
@@ -722,7 +748,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 
 										{/* unlock notice */}
 										{unlocked ? (
-											<p className='rounded-2xl border-l-4 border-green-700 bg-green-50 px-4 py-3 text-sm font-bold text-green-900'>
+											<p className='rounded-2xl border-l-4 border-[#0097A7] bg-[#e6f5f6] px-4 py-3 text-sm font-bold text-[#004E57]'>
 												Unlocked. Answer the questions below — your score updates with every answer.
 											</p>
 										) : (
@@ -743,7 +769,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 											const opt = q.opts.find((o) => o[0] === v);
 											const f = opt ? factorOf(q, v, opt[2], A) : null;
 											const statusText = !opt ? "Pending" : f === 1 ? "Risk flagged" : f > 0 ? "Needs attention" : "Good";
-											const statusColor = !opt ? ORANGE : f === 1 ? "#c62828" : f > 0 ? "#d96300" : TEAL;
+											const statusColor = !opt ? ORANGE : f === 1 ? RED : f > 0 ? "#d96300" : TEAL;
 											const heading = q.sec !== lastSec ? q.sec : null;
 											lastSec = q.sec;
 											return (
@@ -775,7 +801,10 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 																gap='gap-2 sm:gap-3'
 															/>
 														</div>
-														<Feedback fb={opt ? feedbackFor(q, v, A) : null} />
+														<Feedback
+															fb={opt ? feedbackFor(q, v, A) : null}
+															accent={opt ? OPTION_HEX[optionColor(opt[0], opt[1], q.opts)] : undefined}
+														/>
 													</fieldset>
 												</div>
 											);
@@ -787,7 +816,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 								{/* sticky score panel */}
 								<aside className='space-y-4 lg:sticky lg:top-24 lg:self-start' aria-live='polite'>
 									<Card title='Insurance readiness' tier={tier}>
-										<p className='mt-1 text-5xl font-black' style={{ color: TEAL_DEEP }}>{c.answered ? `${c.pct}%` : "—"}</p>
+										<p className='mt-1 text-5xl font-black' style={{ color: "var(--ring-soft)" }}>{c.answered ? `${c.pct}%` : "—"}</p>
 										<div className='mt-3 h-2.5 overflow-hidden rounded-full bg-white'>
 											<div className='h-full rounded-full transition-all' style={{ width: `${c.answered ? c.pct : 0}%`, backgroundColor: tier ? tierColors[tier].bar : TEAL }} />
 										</div>
@@ -796,7 +825,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 										</p>
 									</Card>
 									<Card title='Readiness level' tier={tier}>
-										<p className='mt-1 text-3xl font-black' style={{ color: TEAL_DEEP }}>{level ? level[1] : "—"}</p>
+										<p className='mt-1 text-3xl font-black' style={{ color: "var(--ring-soft)" }}>{level ? level[1] : "—"}</p>
 										{level ? (
 											<p className='mt-2 text-sm text-gray-700'>
 												{complete ? "" : "Provisional — based on the answers so far. "}
@@ -806,17 +835,22 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 										) : null}
 									</Card>
 									<Card title='Your coverage path'>
-										<p className='mt-1 text-lg font-extrabold' style={{ color: TEAL_DEEP }}>{c.path[1]}</p>
+										<p className='mt-1 text-lg font-extrabold' style={{ color: "var(--ring-soft)" }}>{c.path[1]}</p>
 										<p className='mt-1 text-sm text-gray-600'>
 											{complete ? `All ${c.total} questions answered.` : `${c.answered} of ${c.total} answered${A.role ? "" : " · pick your role at the top"}.`}
 										</p>
-										<button
-											type='button'
-											onClick={scrollToReport}
-											className='mt-3 rounded-xl px-4 py-2 text-sm font-bold text-white transition-transform hover:scale-[1.02]'
-											style={{ backgroundColor: ORANGE, boxShadow: "0 4px 0 #a84c00" }}>
-											See what’s preventing 100%
-										</button>
+										<div className='mt-4'>
+											<CTAButton
+												type='button'
+												label='See what’s preventing 100%'
+												onClick={scrollToReport}
+												icon='/arrow-right.png'
+												className='h-11 px-4 lg:h-12'
+												textClassName='text-[14px] lg:text-[16px]'
+												iconClassName='w-6 lg:w-7 h-6 lg:h-7'
+												aria-label='See what’s preventing 100%'
+											/>
+										</div>
 									</Card>
 								</aside>
 							</div>
@@ -854,8 +888,8 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 										</div>
 
 										<div
-											className={`rounded-2xl bg-secondary p-6 text-white ${cardLift}`}
-											style={{ boxShadow: layerCardShadow }}>
+											className={`rounded-2xl p-6 text-white ${cardLift}`}
+											style={{ boxShadow: layerCardShadow, backgroundColor: tier ? tierColors[tier].border : TEAL }}>
 											<p className='-mt-[0.15em] text-[1.375rem] font-bold tracking-[1px] text-white/80 uppercase'>
 												Insurance Readiness
 											</p>
@@ -979,9 +1013,9 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 																onChange={(e) => setForm({ ...form, [k]: e.target.value })}
 																className={`${reportInputCls} mt-2`}
 																style={{
-																	borderColor: invalid[k] ? "#dc2626" : "var(--color-primary)",
+																	borderColor: invalid[k] ? RED : "var(--color-primary)",
 																	boxShadow: fieldShadow,
-																	"--tw-ring-color": invalid[k] ? "rgba(220, 38, 38, 0.25)" : "rgba(0, 151, 167, 0.25)",
+																	"--tw-ring-color": invalid[k] ? "rgba(229, 27, 35, 0.25)" : "rgba(0, 151, 167, 0.25)",
 																}}
 															/>
 														</label>
@@ -997,9 +1031,9 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 															onChange={(e) => setForm({ ...form, atty: e.target.value })}
 															className={`${reportInputCls} mt-2`}
 															style={{
-																borderColor: invalid.atty ? "#dc2626" : "var(--color-primary)",
+																borderColor: invalid.atty ? RED : "var(--color-primary)",
 																boxShadow: fieldShadow,
-																"--tw-ring-color": invalid.atty ? "rgba(220, 38, 38, 0.25)" : "rgba(0, 151, 167, 0.25)",
+																"--tw-ring-color": invalid.atty ? "rgba(229, 27, 35, 0.25)" : "rgba(0, 151, 167, 0.25)",
 															}}
 														/>
 														<span className='mt-2 block text-base font-bold text-black'>
@@ -1007,13 +1041,13 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 														</span>
 													</label>
 												</div>
-												<label className={`flex items-start gap-3 cursor-pointer text-[1.125rem] font-bold ${invalid.consent ? "text-red-700" : "text-black"}`}>
+												<label className={`flex items-start gap-3 cursor-pointer text-[1.125rem] font-bold ${invalid.consent ? "text-[#e51b23]" : "text-black"}`}>
 													<span className='relative mt-0.5 shrink-0'>
 														<input
 															type='checkbox'
 															checked={form.consent}
 															onChange={(e) => setForm({ ...form, consent: e.target.checked })}
-															className={`block h-8 w-8 appearance-none rounded border-[3.5px] bg-white focus:ring-2 focus:ring-[#FD7702] ${invalid.consent ? "border-red-500" : "border-[#FD7702]"}`}
+															className={`block h-8 w-8 appearance-none rounded border-[3.5px] bg-white focus:ring-2 focus:ring-[#FD7702] ${invalid.consent ? "border-[#e51b23]" : "border-[#FD7702]"}`}
 														/>
 														{form.consent ? (
 															<span className='pointer-events-none absolute top-0 left-1 flex h-full w-full items-center justify-center'>
@@ -1039,7 +1073,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 														aria-label='Email me my report and action plan'
 													/>
 												</div>
-												{status.text ? <p className={`text-center text-[1.125rem] font-bold ${status.type === "err" ? "text-red-700" : "text-primary"}`} role='status'>{status.text}</p> : null}
+												{status.text ? <p className={`text-center text-[1.125rem] font-bold ${status.type === "err" ? "text-[#e51b23]" : "text-primary"}`} role='status'>{status.text}</p> : null}
 											</form>
 										) : (
 											<div
