@@ -1,4 +1,3 @@
-import dns from "node:dns";
 import mongoose from "mongoose";
 
 const connectionState = {
@@ -29,10 +28,6 @@ export default async function connectToDatabase() {
 		autoIndex: false,
 		serverSelectionTimeoutMS: 5000,
 	};
-
-	if (uri.startsWith("mongodb+srv://")) {
-		dns.setServers(["1.1.1.1", "8.8.8.8"]);
-	}
 
 	connectionState.promise = mongoose.connect(uri, options);
 

@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState } from "react";
 import toolLeadsApi from "@/app/lib/api/toolLeads";
-import toolAccessApi from "@/app/lib/api/toolAccess";
 
 const SUBMITTED_KEY = "tool_lead_capture_submitted_v1";
 const NEWSLETTER_SIGNAL = /(newsletter|email|mailchimp|constantcontact|klaviyo|convertkit)/i;
@@ -99,13 +98,7 @@ export default function ToolLeadCaptureModal({ toolPage, title }) {
 		setSourceDetails(context.sourceDetails);
 
 		if (!submitted && context.shouldShowCapture) {
-			toolAccessApi
-				.session()
-				.then((session) => {
-					if (session?.authorized) return;
-					setIsOpen(true);
-				})
-				.catch(() => setIsOpen(true));
+			setIsOpen(true);
 		}
 	}, []);
 

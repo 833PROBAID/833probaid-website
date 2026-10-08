@@ -2,21 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-// TEMPORARY: popup gate commented so the tool opens for UI work.
-// import toolAccessApi from "@/app/lib/api/toolAccess";
-// import { hasFreshToolAccessGrant } from "@/app/lib/toolAccessGrant";
-import { markToolAccessGranted } from "@/app/lib/toolAccessGrant";
 import AnimatedText from "./AnimatedText";
-import ToolAccessModal from "./ToolAccessModal";
-
-const toolPath = (href) => (href.startsWith("/") ? href : `/${href}`);
 
 export default function ToolsCard({ id, index = 0, icon, title, description, href }) {
   const router = useRouter();
   const [isSafariBrowser, setIsSafariBrowser] = useState(false);
-  const [checking] = useState(false);
-  const [accessOpen, setAccessOpen] = useState(false);
-  const [pendingHref, setPendingHref] = useState("");
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -24,38 +14,10 @@ export default function ToolsCard({ id, index = 0, icon, title, description, hre
     setIsSafariBrowser(/^((?!chrome|android).)*safari/i.test(ua));
   }, []);
 
-  const openTool = (targetHref) => {
-    if (!targetHref) return;
-    router.push(toolPath(targetHref));
-  };
-
-  const handleClick = async (e) => {
-    if (!href || checking) return;
+  const handleClick = (e) => {
+    if (!href) return;
     e.stopPropagation();
-
-    setPendingHref(href);
-    // TEMPORARY: skip the access popup and open the tool.
-    openTool(href);
-    // setChecking(true);
-    // try {
-    //   const session = await toolAccessApi.session();
-    //   if (session?.authorized || hasFreshToolAccessGrant()) {
-    //     openTool(href);
-    //     return;
-    //   }
-    // } catch {
-    //   // No active session. Ask for tool access instead of opening the tool.
-    // } finally {
-    //   setChecking(false);
-    // }
-    //
-    // setAccessOpen(true);
-  };
-
-  const handleVerified = () => {
-    markToolAccessGranted();
-    setAccessOpen(false);
-    openTool(pendingHref || href);
+    router.push(href);
   };
 
   const handleKeyDown = (e) => {
@@ -66,13 +28,6 @@ export default function ToolsCard({ id, index = 0, icon, title, description, hre
   };
 
   return (
-    <>
-    <ToolAccessModal
-      isOpen={accessOpen}
-      toolPage={(pendingHref || href || "").replace(/^\/+/, "").split("/")[0]}
-      onClose={() => setAccessOpen(false)}
-      onVerified={handleVerified}
-    />
     <div id={href+'-identifier'} className={`flex w-full justify-center group tc-card-wrapper scroll-mt-[50vh] ${index < 2 ? "tc-card-first" : "tc-card-last"}`}>
       <div className="w-full">
         <svg
@@ -450,6 +405,5 @@ export default function ToolsCard({ id, index = 0, icon, title, description, hre
         </svg>
       </div>
     </div>
-    </>
   );
 }

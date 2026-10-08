@@ -1,10 +1,15 @@
 "use client";
 
-import ServiceLayout from "@/components/ServiceLayout";
+import Footer from "@/components/Footer";
+import Navbar from "@/components/Navbar";
 import { RadioGroup } from "@/components/SharedComponents";
 import ToolLeadCaptureModal from "@/components/ToolLeadCaptureModal";
 import { useMemo, useState } from "react";
 
+const shellShadow =
+	"0 clamp(12px, 2.5vw, 20px) clamp(26px, 5.5vw, 48px) rgba(15, 23, 42, 0.16), 0 1px 0 rgba(255,255,255,0.3) inset";
+const heroPanelShadow =
+	"0 clamp(10px, 2vw, 16px) clamp(20px, 4.5vw, 32px) rgba(15, 23, 42, 0.17), 0 1px 0 rgba(255,255,255,0.24) inset";
 const sectionCardShadow =
 	"0 clamp(8px, 1.7vw, 14px) clamp(16px, 3.4vw, 30px) rgba(15, 23, 42, 0.11), 0 1px 0 rgba(255,255,255,0.45) inset";
 const metricCardShadow =
@@ -262,25 +267,62 @@ const ExecutorReadinessQuizClient = () => {
 	};
 
 	return (
-		<>
+		<div>
+			<Navbar />
 			<ToolLeadCaptureModal
 				toolPage='executor-readiness-quiz'
 				title='Before You Continue The Readiness Assessment'
 			/>
-			<ServiceLayout
-				toolPage="executor-readiness-quiz"
-				title="Executor Command Center"
-				mainHeading="Executor Readiness Intelligence"
-				description="Track essential probate milestones, expose bottlenecks, and receive focus areas tailored to your current status."
-				logoImage="/icons/tool4.png"
-				panelTitle="Responses Captured"
-				panelValue={`${answeredCount}/${questions.length}`}
-				panelDetail={
-					answeredCount === questions.length
-						? "All readiness checkpoints are documented. Generate the scorecard."
-						: `${questions.length - answeredCount} checkpoints still need confirmation.`
-				}
-			>
+			<section className='min-h-screen py-8 sm:py-12 lg:py-16'>
+				<div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
+					<div
+						className='overflow-hidden rounded-[28px] border-[3px] border-secondary sm:rounded-[40px]'
+						style={{ boxShadow: shellShadow }}>
+						<div
+							className='px-5 py-8 sm:px-8 sm:py-10 lg:px-12 lg:py-12'
+							style={{
+								background:
+									"linear-gradient(to bottom right, var(--color-primary), var(--color-primaryDark))",
+							}}>
+							<div className='flex flex-col gap-6 xl:flex-row xl:items-start xl:justify-between xl:gap-8'>
+								<div className='flex-1'>
+									<p className='mb-3 text-sm font-semibold tracking-[0.15em] text-white sm:text-base'>
+										Executor Command Center
+									</p>
+									<h1 className='mb-3 text-[30px] leading-tight font-extrabold text-white sm:text-[38px]'>
+										Executor Readiness Intelligence
+									</h1>
+									<p className='max-w-2xl text-base font-bold text-white/95 sm:text-xl'>
+										Track essential probate milestones, expose bottlenecks, and
+										receive focus areas tailored to your current status.
+									</p>
+								</div>
+
+								<div className='w-full xl:w-132.5'>
+									<div
+										className='rounded-3xl border px-6 py-6 backdrop-blur-sm sm:px-8 sm:py-8'
+										style={{
+											backgroundColor: "rgba(0, 151, 167, 0.32)",
+											borderColor: "rgba(255,255,255,0.18)",
+											boxShadow: heroPanelShadow,
+										}}>
+										<h2 className='text-center text-[18px] font-bold tracking-[0.08em] text-white sm:text-[20px]'>
+											Responses Captured
+										</h2>
+										<p className='mt-2 text-center text-3xl font-extrabold text-white sm:text-5xl'>
+											{answeredCount}/{questions.length}
+										</p>
+										<p className='mt-2 text-center text-sm font-bold leading-relaxed text-white/95 sm:text-lg'>
+											{answeredCount === questions.length
+												? "All readiness checkpoints are documented. Generate the scorecard."
+												: `${questions.length - answeredCount} checkpoints still need confirmation.`}
+										</p>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div className='bg-linear-to-br from-gray-50 to-gray-100 px-5 py-8 sm:px-8 sm:py-10 lg:px-12 lg:py-12'>
 							<div className='space-y-8 sm:space-y-10'>
 								<div className='flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
 									<h2 className='text-2xl font-bold text-[#0097A7] sm:text-3xl'>
@@ -544,8 +586,12 @@ const ExecutorReadinessQuizClient = () => {
 									</div>
 								) : null}
 							</div>
-			</ServiceLayout>
-		</>
+						</div>
+					</div>
+				</div>
+			</section>
+			<Footer />
+		</div>
 	);
 };
 

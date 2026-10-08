@@ -22,8 +22,6 @@ export default function NewsletterSubscriptionViewPage() {
 	const router = useRouter();
 
 	const [subscription, setSubscription] = useState(null);
-	const [toolLinks, setToolLinks] = useState(null);
-	const [copiedTool, setCopiedTool] = useState("");
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState("");
 	const [deleting, setDeleting] = useState(false);
@@ -42,15 +40,6 @@ export default function NewsletterSubscriptionViewPage() {
 			})
 			.catch(() => setError("Failed to load newsletter subscription."))
 			.finally(() => setLoading(false));
-
-		fetch(`/api/dashboard/newsletter-subscriptions/${id}/tool-links`, {
-			credentials: "same-origin",
-		})
-			.then((response) => response.json())
-			.then((data) => {
-				if (data?.success) setToolLinks(data);
-			})
-			.catch(() => {});
 	}, [id]);
 
 	const submittedText = useMemo(() => {
@@ -186,39 +175,6 @@ export default function NewsletterSubscriptionViewPage() {
 							subscription?.submittedAt || subscription?.createdAt,
 						).toLocaleString("en-US")}
 					/>
-				</div>
-			</div>
-
-			<div className='mb-8 rounded-xl border border-gray-200 bg-white p-6 shadow-sm'>
-				<h2 className='font-montserrat mb-2 text-base font-semibold text-gray-800'>
-					Newsletter tool links
-				</h2>
-				<p className='mb-5 text-sm text-gray-500'>
-					Paste a link into Constant Contact for this subscriber. The link does not
-					include their email or phone. A click opens every tool for 12 hours while
-					this subscription is still active.
-				</p>
-				<div className='flex flex-col gap-4'>
-					{(toolLinks?.links || []).map((link) => (
-						<div key={link.toolPage} className='rounded-lg border border-gray-200 p-4'>
-							<div className='mb-2 flex items-center justify-between gap-3'>
-								<p className='text-sm font-semibold text-gray-800'>{link.label}</p>
-								<button
-									type='button'
-									onClick={() => {
-										navigator.clipboard?.writeText(link.url);
-										setCopiedTool(link.toolPage);
-									}}
-									className='shrink-0 rounded-lg border border-gray-300 px-3 py-1.5 text-xs font-semibold text-gray-700 hover:border-primary hover:text-primary'>
-									{copiedTool === link.toolPage ? "Copied" : "Copy"}
-								</button>
-							</div>
-							<p className='text-xs break-all text-gray-600'>{link.url}</p>
-						</div>
-					))}
-					{!toolLinks?.links?.length ? (
-						<p className='text-sm text-gray-500'>Tool links are not available for this subscription.</p>
-					) : null}
 				</div>
 			</div>
 
