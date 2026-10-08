@@ -13,7 +13,7 @@ import BlogHero from "@/components/BlogHero";
 //  Max card: 450 × 700 px  (aspect-ratio: 450 / 700 = 9 / 14)
 //  All layout values are expressed as % of those dimensions.
 // ══════════════════════════════════════════════════════════════════
-const D = {
+export const D = {
   // Card max size (px) — used only for maxWidth and aspect-ratio
   w: 550,
   h: 750,
@@ -43,7 +43,7 @@ const D = {
 // ── Percentage constants (derived from 450 × 700 grid) ─────────
 // Horizontal % → relative to card width (450px)
 // Vertical   % → relative to card height (700px)
-const P = {
+export const P = {
   // Inner/cover page insets
   coverPadV: "5%", // 35/700 — top & bottom gap from card edge
   hingeH: "9.33%", // (22+20)/450 — staple side inset
@@ -115,13 +115,19 @@ export function LearnMoreButton({
   label = "Learn More",
   size = "lg",
   mirrored = false,
+  // Callers outside the blog grid (e.g. the home book guide downloads) can swap
+  // the trailing arrow for their own glyph and dial the type down for labels
+  // longer than "Read Article"; omitted, both stay exactly as the grid has them.
+  icon = null,
+  textClassName = "text-[8px] md:text-[18px] xl:text-[23px]",
+  wrapperClassName = ""
 }) {
   const [hov, setHov] = useState(false);
   const rotateDir = mirrored ? "3deg" : "-3deg";
   const isVideoWatch = label.includes("Video")
   return (
     <button
-      className={`inline-flex items-center gap-2 sm:gap-1 px-2 h-[28px] md:h-[55px] xl:h-[70px] md:gap-3 rounded-sm md:rounded-[8px] pl-2.5 hover:${rotateDir} shadow-[0px_2.73px_6.64px_0px_rgba(0,0,0,0.68),2.46px_-2.46px_1.64px_0px_rgba(0,0,0,0.25)_inset,-2.64px_1.55px_1.64px_0px_rgba(255,255,255,0.25)_inset,-1.82px_-0.91px_3.64px_0px_rgba(0,0,0,0.6)] md:shadow-[0px_2.73px_6.64px_0px_rgba(0,0,0,0.68),5.46px_-5.46px_3.64px_0px_rgba(0,0,0,0.25)_inset,-3.64px_4.55px_3.64px_0px_rgba(255,255,255,0.25)_inset,-1.82px_-0.91px_3.64px_0px_rgba(0,0,0,0.6)]`}
+      className={`${wrapperClassName} inline-flex items-center gap-2 sm:gap-1 px-2 h-[28px] md:h-[55px] xl:h-[70px] md:gap-3 rounded-sm md:rounded-[8px] pl-2.5 hover:${rotateDir} shadow-[0px_2.73px_6.64px_0px_rgba(0,0,0,0.68),2.46px_-2.46px_1.64px_0px_rgba(0,0,0,0.25)_inset,-2.64px_1.55px_1.64px_0px_rgba(255,255,255,0.25)_inset,-1.82px_-0.91px_3.64px_0px_rgba(0,0,0,0.6)] md:shadow-[0px_2.73px_6.64px_0px_rgba(0,0,0,0.68),5.46px_-5.46px_3.64px_0px_rgba(0,0,0,0.25)_inset,-3.64px_4.55px_3.64px_0px_rgba(255,255,255,0.25)_inset,-1.82px_-0.91px_3.64px_0px_rgba(0,0,0,0.6)]`}
       type="button"
       onClick={onClick}
       onMouseEnter={() => setHov(true)}
@@ -137,18 +143,20 @@ export function LearnMoreButton({
         willChange: "transform",
       }}
     >
-      <span className="font-montserrat font-black text-[8px] md:text-[18px] xl:text-[23px] uppercase text-white tracking-wide [text-shadow:0.5_1px_0.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)] md:[text-shadow:1px_3px_1.6px_rgba(0,0,0,0.82),0_0_6px_rgba(255,255,255,0.25)]">
+      <span className={`font-montserrat font-black ${textClassName} uppercase text-white tracking-wide [text-shadow:0.5_1px_0.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)] md:[text-shadow:1px_3px_1.6px_rgba(0,0,0,0.82),0_0_6px_rgba(255,255,255,0.25)]`}>
         {" "}
         {label}
       </span>
-      <Image
-        src={isVideoWatch ? "/arrow-right-filled.png" : "/arrow-right.png"}
-        alt="arrow right"
-        width={100}
-        height={100}
-        priority
-        className={`object-contain ${isVideoWatch ? 'w-3.5 md:w-8.25 h-3.5 md:h-10.25' : 'w-4.5 md:w-11.25 h-4.5 md:h-11.25'}`}
-      />
+      {icon ?? (
+        <Image
+          src={isVideoWatch ? "/arrow-right-filled.png" : "/arrow-right.png"}
+          alt="arrow right"
+          width={100}
+          height={100}
+          priority
+          className={`object-contain ${isVideoWatch ? 'w-3.5 md:w-8.25 h-3.5 md:h-10.25' : 'w-4.5 md:w-11.25 h-4.5 md:h-11.25'}`}
+        />
+      )}
     </button>
   );
 }
