@@ -438,25 +438,43 @@ const tierColors = {
 	high: { border: RED, bg: "#fdeaea", bar: RED },
 };
 
+const toneLabel = { good: "Good", warn: "Needs attention", risk: "Risk flagged" };
+
+function StatusPill({ color, children }) {
+	return (
+		<span
+			className='inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-sm font-bold'
+			style={{ borderColor: color, color, backgroundColor: `color-mix(in srgb, ${color} 10%, white)` }}>
+			<span aria-hidden='true' className='h-2 w-2 rounded-full' style={{ backgroundColor: color }} />
+			{children}
+		</span>
+	);
+}
+
 function Feedback({ fb, accent }) {
 	if (!fb) return null;
 	const [text, tone, vendor] = fb;
 	return (
 		<div
-			className={`mt-4 rounded-xl border-l-4 px-4 py-3 text-sm font-semibold leading-relaxed ${toneBox[tone] || toneBox.risk}`}
-			style={
-				accent
+			role='note'
+			className={`mt-4 rounded-2xl border-2 p-4 text-sm leading-relaxed transition duration-200 sm:p-5 sm:text-[15px] ${toneBox[tone] || toneBox.risk}`}
+			style={{
+				boxShadow: fieldShadow,
+				...(accent
 					? {
 							borderColor: accent,
-							color: accent,
 							backgroundColor: `color-mix(in srgb, ${accent} 10%, white)`,
 						}
-					: undefined
-			}>
-			<p>{text}</p>
+					: {}),
+			}}>
+			<p className='flex items-center gap-2 text-xs font-extrabold uppercase tracking-wide' style={accent ? { color: accent } : undefined}>
+				<span aria-hidden='true' className='h-2.5 w-2.5 shrink-0 rounded-full' style={{ backgroundColor: accent || "currentColor" }} />
+				{toneLabel[tone] || toneLabel.risk}
+			</p>
+			<p className='mt-2 font-semibold text-gray-900'>{text}</p>
 			{vendor ? (
 				<>
-					<p className='mt-2 font-bold'>{VENDOR}</p>
+					<p className='mt-2 font-bold text-gray-900'>{VENDOR}</p>
 					<div className='mt-3'>
 						<CTAButton
 							type='button'
@@ -692,14 +710,16 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 
 									<div className='mt-6 space-y-4 sm:space-y-5'>
 										{/* role */}
-										<fieldset className={`rounded-2xl p-4 transition duration-200 sm:p-6 [box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px] ${cardLift}`}>
-											<div className='flex justify-between text-xs font-bold text-gray-500'>
-												<span>Start here</span>
-												<span style={{ color: A.role ? TEAL : ORANGE }}>{A.role ? "Answered" : "Pending"}</span>
+										<fieldset
+											aria-labelledby='acc-role-title'
+											aria-describedby='acc-role-help'
+											className={`rounded-2xl p-4 transition duration-200 sm:p-6 [box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px] ${cardLift}`}>
+											<div className='flex flex-wrap items-center justify-between gap-2'>
+												<span className='text-sm font-bold uppercase tracking-wide text-gray-700'>Start here</span>
+												<StatusPill color={A.role ? TEAL : ORANGE}>{A.role ? "Answered" : "Pending"}</StatusPill>
 											</div>
-											<legend className='sr-only'>What is your role?</legend>
-											<h3 className='mt-1 text-lg font-extrabold text-gray-900'>What is your role?</h3>
-											<p className='mt-1 text-sm text-gray-500'>This tailors the questions and your report.</p>
+											<h3 id='acc-role-title' className='mt-2 text-lg font-extrabold leading-snug text-gray-900 sm:text-xl'>What is your role?</h3>
+											<p id='acc-role-help' className='mt-2 text-sm leading-relaxed text-gray-700 sm:text-[15px]'>This tailors the questions and your report.</p>
 											<div className='mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2'>
 												{Object.entries(ROLES).map(([k, role]) => (
 													<RadioButton
@@ -718,12 +738,12 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 
 										{/* property address */}
 										<div className={`rounded-2xl p-4 transition duration-200 sm:p-6 [box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px] ${cardLift}`}>
-											<div className='flex justify-between text-xs font-bold text-gray-500'>
-												<span>Property</span>
-												<span style={{ color: addrValid ? TEAL : ORANGE }}>{addrValid ? "Answered" : "Pending"}</span>
+											<div className='flex flex-wrap items-center justify-between gap-2'>
+												<span className='text-sm font-bold uppercase tracking-wide text-gray-700'>Property</span>
+												<StatusPill color={addrValid ? TEAL : ORANGE}>{addrValid ? "Answered" : "Pending"}</StatusPill>
 											</div>
-											<h3 className='mt-1 text-lg font-extrabold text-gray-900'>What is the address of the property?</h3>
-											<p className='mt-1 text-sm text-gray-500'>The property this check is for — whether it’s part of an estate, a trust, or a conservatorship.</p>
+											<h3 className='mt-2 text-lg font-extrabold leading-snug text-gray-900 sm:text-xl'>What is the address of the property?</h3>
+											<p className='mt-2 text-sm leading-relaxed text-gray-700 sm:text-[15px]'>The property this check is for — whether it’s part of an estate, a trust, or a conservatorship.</p>
 											<div className='mt-4 grid grid-cols-1 gap-3 sm:grid-cols-6'>
 												<label className='block sm:col-span-6'>
 													<span className='text-sm font-bold text-gray-800'>Street address</span>
@@ -775,14 +795,16 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 											return (
 												<div key={q.id}>
 													{heading ? <h3 className='mb-3 mt-6 text-xl font-extrabold uppercase tracking-wide' style={{ color: ORANGE }}>{heading}</h3> : null}
-													<fieldset className={`rounded-2xl bg-white p-4 transition duration-200 sm:p-6 [box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px] ${cardLift}`}>
-														<div className='flex justify-between text-xs font-bold text-gray-500'>
-															<span>Question {qNum}</span>
-															<span style={{ color: statusColor }}>{statusText}</span>
+													<fieldset
+														aria-labelledby={`q-${q.id}-title`}
+														aria-describedby={`q-${q.id}-help`}
+														className={`rounded-2xl bg-white p-4 transition duration-200 sm:p-6 [box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px] ${cardLift}`}>
+														<div className='flex flex-wrap items-center justify-between gap-2'>
+															<span className='text-sm font-bold uppercase tracking-wide text-gray-700'>Question {qNum}</span>
+															<StatusPill color={statusColor}>{statusText}</StatusPill>
 														</div>
-														<legend className='sr-only'>{q.q(A)}</legend>
-														<h4 className='mt-1 text-lg font-extrabold text-gray-900'>{q.q(A)}</h4>
-														<p className='mt-1 text-sm text-gray-500'>{q.help(A)}</p>
+														<h4 id={`q-${q.id}-title`} className='mt-2 text-lg font-extrabold leading-snug text-gray-900 sm:text-xl'>{q.q(A)}</h4>
+														<p id={`q-${q.id}-help`} className='mt-2 text-sm leading-relaxed text-gray-700 sm:text-[15px]'>{q.help(A)}</p>
 														<div className='mt-4'>
 															<RadioGroup
 																name={`acc-${q.id}`}
@@ -857,9 +879,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 
 							{/* ------------------------------------------------ report */}
 							<div id='insurance-report' className='mt-12 scroll-mt-28'>
-								<div
-									className={`flex flex-col rounded-2xl border border-gray-200 bg-white p-6 sm:p-10 ${cardLift}`}
-									style={{ boxShadow: layerCardShadow }}>
+								<div className='flex flex-col'>
 									<div className='mb-8 flex gap-3'>
 										<ShieldAlert
 											className='mt-[-0.45em] ml-[-0.2em] h-8 w-8 shrink-0 text-secondary group-hover:text-primary'
@@ -879,7 +899,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 
 									<div className='space-y-8'>
 										<div
-											className={`rounded-2xl border border-gray-200 bg-white p-6 pb-8 ${cardLift}`}
+											className={`rounded-2xl border-[3px] border-secondary bg-white p-6 pb-8 ${cardLift}`}
 											style={{ boxShadow: layerCardShadow }}>
 											<h3 className='-mt-[0.2em] text-[1.375rem] font-bold text-primary group-hover:text-secondary'>
 												Recommended coverage path: {c.path[1]}
@@ -900,7 +920,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 										</div>
 
 										<div
-											className={`rounded-2xl border border-gray-200 bg-white p-6 pb-8 ${cardLift}`}
+											className={`rounded-2xl border-[3px] border-secondary bg-white p-6 pb-8 ${cardLift}`}
 											style={{ boxShadow: layerCardShadow }}>
 											<h3 className='-mt-[0.2em] text-[1.375rem] font-bold text-primary group-hover:text-secondary'>
 												To reach 100% readiness, you must fix:
@@ -915,7 +935,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 										</div>
 
 										<div
-											className={`rounded-2xl border border-gray-200 bg-white p-6 pb-8 ${cardLift}`}
+											className={`rounded-2xl border-[3px] border-secondary bg-white p-6 pb-8 ${cardLift}`}
 											style={{ boxShadow: layerCardShadow }}>
 											<h3 className='-mt-[0.2em] text-[1.375rem] font-bold text-primary group-hover:text-secondary'>Alerts</h3>
 											{c.alerts.length ? (
@@ -928,7 +948,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 										</div>
 
 										<div
-											className={`rounded-2xl border border-gray-200 bg-white p-6 pb-8 ${cardLift}`}
+											className={`rounded-2xl border-[3px] border-secondary bg-white p-6 pb-8 ${cardLift}`}
 											style={{ boxShadow: layerCardShadow }}>
 											<h3 className='-mt-[0.2em] text-[1.375rem] font-bold text-primary group-hover:text-secondary'>Your action plan</h3>
 											{c.actions.length ? (
@@ -957,7 +977,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 										</div>
 
 										<div
-											className={`rounded-2xl border border-gray-200 bg-white p-6 pb-8 ${cardLift}`}
+											className={`rounded-2xl border-[3px] border-secondary bg-white p-6 pb-8 ${cardLift}`}
 											style={{ boxShadow: layerCardShadow }}>
 											<h3 className='-mt-[0.2em] text-[1.375rem] font-bold text-primary group-hover:text-secondary'>If no action is taken</h3>
 											<LayerRows
@@ -970,7 +990,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 										</div>
 
 										<div
-											className={`rounded-2xl border border-gray-200 bg-white p-6 pb-8 ${cardLift}`}
+											className={`rounded-2xl border-[3px] border-secondary bg-white p-6 pb-8 ${cardLift}`}
 											style={{ boxShadow: layerCardShadow }}>
 											<h3 className='-mt-[0.2em] text-[1.375rem] font-bold text-primary group-hover:text-secondary'>Coverage guidance</h3>
 											<LayerRows
