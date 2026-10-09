@@ -510,7 +510,7 @@ function GuideCard({ guide }) {
                   <hr className="w-full h-[0.5px] border-[#14b3c2] border [box-sizing:unset] px-6.25 bg-primary" />
 
                   <p
-                    className="font-montserrat  flex-1 w-full text-center font-semibold text-black flex items-center mt-[-0.3em] text-[1rem] md:text-[1.2rem] lg:text-[1.375rem]"
+                    className={`${mirrored ? 'pl-4 pr-1' : 'pr-4 pl-1'} font-montserrat flex-1 w-full text-center flex items-center mt-[-0.3em] leading-[1.6] font-bold text-[1rem] md:text-[1.2rem] lg:text-[1.275rem]`}
                   >
                     {guide.caption}
                   </p>
