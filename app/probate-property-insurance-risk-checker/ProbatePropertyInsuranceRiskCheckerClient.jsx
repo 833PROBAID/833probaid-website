@@ -846,11 +846,12 @@ const toneLabel = {
 function StatusPill({ color, children }) {
   return (
     <span
-      className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-sm font-bold"
+      className="inline-flex items-center gap-1.5 rounded-full border border-solid px-2.5 py-0.5 text-sm font-bold"
       style={{
         borderColor: color,
         color,
         backgroundColor: `color-mix(in srgb, ${color} 10%, white)`,
+        boxShadow: fieldShadow,
       }}
     >
       <span
@@ -895,7 +896,7 @@ function Feedback({ fb, accent }) {
       {vendor ? (
         <>
           <p className="mt-2 font-bold text-gray-900">{VENDOR}</p>
-          <div className="mt-3">
+          <div className="mt-6">
             <CTAButton
               type="button"
               label={`Call ${PHONE}`}
@@ -1187,12 +1188,12 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                 label="Reset answers"
                 onClick={reset}
                 icon="/arrow-right.png"
-                className="h-12 px-5 lg:h-14"
+                className="h-12 px-5 lg:h-14 mt-2"
                 aria-label="Reset answers"
               />
             </div>
 
-            <div className="mt-6 space-y-4 sm:space-y-5">
+            <div className="mt-6 space-y-6 sm:space-y-7.5">
               {/* role */}
               <fieldset
                 aria-labelledby="acc-role-title"
@@ -1215,7 +1216,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                 </h3>
                 <p
                   id="acc-role-help"
-                  className="mt-2 text-sm leading-relaxed text-gray-700 sm:text-[15px]"
+                  className="mt-2 text-sm leading-relaxed text-gray-700 sm:text-[15px] font-semibold"
                 >
                   This tailors the questions and your report.
                 </p>
@@ -1250,7 +1251,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                 <h3 className="mt-2 text-lg font-extrabold leading-snug text-gray-900 sm:text-xl">
                   What is the address of the property?
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-gray-700 sm:text-[15px]">
+                <p className="mt-2 text-sm leading-relaxed text-gray-700 sm:text-[15px] font-semibold">
                   The property this check is for — whether it’s part of an
                   estate, a trust, or a conservatorship.
                 </p>
@@ -1350,7 +1351,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
               <fieldset
                 disabled={!unlocked}
                 aria-disabled={!unlocked}
-                className={`m-0 min-w-0 space-y-4 border-0 p-0 transition-[filter,opacity] sm:space-y-5 ${unlocked ? "" : "pointer-events-none select-none opacity-50 blur-[2px]"}`}
+                className={`m-0 min-w-0 space-y-6 border-0 p-0 transition-[filter,opacity] sm:space-y-7.5 ${unlocked ? "" : "pointer-events-none select-none opacity-50 blur-[2px]"}`}
               >
                 <legend className="sr-only">Insurance questions</legend>
                 {c.qs.map((q) => {
@@ -1365,20 +1366,17 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                       : f > 0
                         ? "Needs attention"
                         : "Good";
-                  const statusColor = !opt
-                    ? ORANGE
-                    : f === 1
-                      ? RED
-                      : f > 0
-                        ? "#d96300"
-                        : TEAL;
+                  const accent = opt
+                    ? OPTION_HEX[optionColor(opt[0], opt[1], q.opts)]
+                    : undefined;
+                  const statusColor = accent || ORANGE;
                   const heading = q.sec !== lastSec ? q.sec : null;
                   lastSec = q.sec;
                   return (
                     <div key={q.id}>
                       {heading ? (
                         <h3
-                          className="mb-3 mt-6 text-xl font-extrabold uppercase tracking-wide"
+                          className="mb-3 mt-10 text-3xl font-extrabold uppercase tracking-wide"
                           style={{ color: ORANGE }}
                         >
                           {heading}
@@ -1387,7 +1385,16 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                       <fieldset
                         aria-labelledby={`q-${q.id}-title`}
                         aria-describedby={`q-${q.id}-help`}
-                        className={`rounded-2xl bg-white p-4 transition duration-200 sm:p-6 [box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px] ${cardLift}`}
+                        className="rounded-2xl border-2 border-transparent bg-white p-4 transition duration-200 sm:p-6 [box-shadow:var(--sc,rgba(0,0,0,0.4))_0px_8px_12px,var(--sc,rgba(0,0,0,0.4))_0px_-5px_12px_1px] hover:-translate-y-1.25 hover:![box-shadow:var(--sc-hover,rgba(0,0,0,0.5))_0px_12px_20px,var(--sc-hover,rgba(0,0,0,0.5))_0px_-8px_16px_2px]"
+                        style={
+                          accent
+                            ? {
+                                borderColor: accent,
+                                "--sc": `color-mix(in srgb, ${accent} 22%, transparent)`,
+                                "--sc-hover": `color-mix(in srgb, ${accent} 30%, transparent)`,
+                              }
+                            : undefined
+                        }
                       >
                         <div className="flex flex-wrap items-center justify-between gap-2">
                           <span className="text-sm font-bold uppercase tracking-wide text-gray-700">
@@ -1405,7 +1412,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                         </h4>
                         <p
                           id={`q-${q.id}-help`}
-                          className="mt-2 text-sm leading-relaxed text-gray-700 sm:text-[15px]"
+                          className="mt-2 text-sm leading-relaxed text-gray-700 sm:text-[15px] font-semibold"
                         >
                           {q.help(A)}
                         </p>
@@ -1431,11 +1438,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                         </div>
                         <Feedback
                           fb={opt ? feedbackFor(q, v, A) : null}
-                          accent={
-                            opt
-                              ? OPTION_HEX[optionColor(opt[0], opt[1], q.opts)]
-                              : undefined
-                          }
+                          accent={accent}
                         />
                       </fieldset>
                     </div>
@@ -1480,7 +1483,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                 {level ? level[1] : "—"}
               </p>
               {level ? (
-                <p className="mt-2 text-sm text-gray-700">
+                <p className="mt-2 text-sm text-gray-700 font-semibold">
                   {complete
                     ? ""
                     : "Provisional — based on the answers so far. "}
@@ -1498,12 +1501,12 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
               >
                 {c.path[1]}
               </p>
-              <p className="mt-1 text-sm text-gray-600">
+              <p className="mt-1 text-sm text-gray-700 font-semibold">
                 {complete
                   ? `All ${c.total} questions answered.`
                   : `${c.answered} of ${c.total} answered${A.role ? "" : " · pick your role at the top"}.`}
               </p>
-              <div className="mt-4">
+              <div className="mt-6">
                 <CTAButton
                   type="button"
                   label="See what’s preventing 100%"
