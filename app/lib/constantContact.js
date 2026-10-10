@@ -1,7 +1,7 @@
 // Constant Contact helper — adds website subscribers to the "WEBSITE SUBSCRIBERS" list.
 // Uses the keys saved in Vercel: CTCT_CLIENT_ID, CTCT_CLIENT_SECRET, CTCT_REFRESH_TOKEN.
 
-const AUTH_BASE = "https://authentication.constantcontact.com/oauth2/default/v1";
+const AUTH_BASE = "https://authz.constantcontact.com/oauth2/default/v1";
 const API_BASE = "https://api.cc.email/v3";
 const LIST_NAME = process.env.CTCT_LIST_NAME || "WEBSITE SUBSCRIBERS";
 
