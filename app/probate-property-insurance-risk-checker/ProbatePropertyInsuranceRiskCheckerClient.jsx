@@ -3,7 +3,9 @@
 import CTAButton from "@/components/CTAButton";
 import ServiceLayout from "@/components/ServiceLayout";
 import { RadioButton, RadioGroup } from "@/components/SharedComponents";
+import { isEmpty, isValidEmail, isValidUSPhone } from "@/app/utils/formValidation";
 import ToolLeadCaptureModal from "@/components/ToolLeadCaptureModal";
+import ToolReportForm from "@/components/ToolReportForm";
 import { ShieldAlert } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
@@ -29,6 +31,7 @@ const TERMS_URL = "/privacy";
 const TEAL = "#0097A7";
 const ORANGE = "#FD7702";
 const RED = "#e51b23";
+const RISK_BG = "color-mix(in srgb, #e51b23 20%, white)";
 
 const layerCardShadow =
   "rgba(0, 0, 0, 0.4) 0px 8px 12px, rgba(0, 0, 0, 0.4) 0px -5px 12px 1px";
@@ -105,8 +108,6 @@ const vacantish = (A) => !!A.vacant && A.vacant !== "no";
 
 const SECURE_ALERT =
   "Unsecured property increases vandalism risk and can give the carrier grounds to deny a claim.";
-const VENDOR =
-  "833PROBAID® works with vetted vendors who can handle this for you. Call us and we’ll get it scheduled.";
 
 // factor: 0 = good, 0.5 = partial / unsure, 1 = full risk
 const BAD_YES = [
@@ -465,7 +466,7 @@ const FEEDBACK = {
     ],
     no: [
       "An overgrown yard signals an empty house and invites trespassers.",
-      "warn",
+      "risk",
       true,
     ],
     unsure: [
@@ -829,12 +830,27 @@ const toneBox = {
   warn: "border-[#FD7702] bg-orange-50 text-[#7a3a00]",
   risk: "border-[#e51b23] bg-[#fdeaea] text-[#e51b23]",
 };
-// Hex values behind the RadioButton palettes, so notes can match the selected pill.
-const OPTION_HEX = { teal: TEAL, orange: ORANGE, red: RED };
 const tierColors = {
   low: { border: TEAL, bg: "#e6f5f6", bar: TEAL },
   mid: { border: ORANGE, bg: "#fff7ef", bar: ORANGE },
   high: { border: RED, bg: "#fdeaea", bar: RED },
+};
+const gapsToneLook = {
+  high: {
+    border: "border-[#e51b23]",
+    title: "text-[#e51b23]",
+    row: "bg-[#e51b23]/20",
+  },
+  mid: {
+    border: "border-secondary",
+    title: "text-secondary",
+    row: "bg-[#ffddc0]",
+  },
+  low: {
+    border: "border-primary",
+    title: "text-primary",
+    row: "bg-[#bfe5e9]",
+  },
 };
 
 const toneLabel = {
@@ -864,7 +880,7 @@ function StatusPill({ color, children }) {
   );
 }
 
-function Feedback({ fb, accent }) {
+function Feedback({ fb, accent, title }) {
   if (!fb) return null;
   const [text, tone, vendor] = fb;
   return (
@@ -876,7 +892,10 @@ function Feedback({ fb, accent }) {
         ...(accent
           ? {
               borderColor: accent,
-              backgroundColor: `color-mix(in srgb, ${accent} 10%, white)`,
+              backgroundColor:
+                title === "Risk flagged" || tone === "risk"
+                  ? RISK_BG
+                  : `color-mix(in srgb, ${accent} 10%, white)`,
             }
           : {}),
       }}
@@ -890,24 +909,38 @@ function Feedback({ fb, accent }) {
           className="h-2.5 w-2.5 shrink-0 rounded-full"
           style={{ backgroundColor: accent || "currentColor" }}
         />
-        {toneLabel[tone] || toneLabel.risk}
+        {title || toneLabel[tone] || toneLabel.risk}
       </p>
       <p className="mt-2 font-semibold text-gray-900">{text}</p>
       {vendor ? (
         <>
-          <p className="mt-2 font-bold text-gray-900">{VENDOR}</p>
+          <p className="mt-2 font-bold text-gray-900">
+            <span className="text-primary transition-colors hover:text-secondary">
+              833PROBAID
+              <span
+                style={{
+                  verticalAlign: "super",
+                  fontSize: ".8em",
+                  lineHeight: 0,
+                }}
+              >
+                ®
+              </span>
+            </span>{" "}
+            works with vetted vendors who can handle this for you. Call us and
+            we’ll get it scheduled.
+          </p>
           <div className="mt-6">
             <CTAButton
               type="button"
-              label={`Call ${PHONE}`}
+              label="Call (833) PROBAID"
               onClick={() => {
                 window.location.href = TEL;
               }}
               icon="/arrow-right.png"
-              className="h-10 px-4 lg:h-12"
-              textClassName="text-[14px] lg:text-[16px]"
-              iconClassName="w-6 lg:w-7 h-6 lg:h-7"
-              aria-label={`Call ${PHONE}`}
+              className="h-12 px-5 lg:h-14"
+              textClassName="text-[16px]"
+              aria-label="Call (833) PROBAID"
             />
           </div>
         </>
@@ -944,19 +977,17 @@ function Card({ title, tier, children, className = "" }) {
 }
 
 const inputCls =
-  "w-full rounded-xl border-2 border-gray-200 bg-white px-4 py-3 text-base text-gray-800 outline-none focus:border-[#0097A7]";
-const reportInputCls =
-  "w-full rounded-2xl border-2 px-4 py-2.5 text-base font-bold text-gray-900 outline-none transition-all focus:ring-2 placeholder:text-secondary";
+  "w-full rounded-xl border-2 border-secondary bg-white px-4 py-3 text-base text-gray-800 outline-none focus:border-[#0097A7]";
 
 function LayerRows({ items, rowClassName = "" }) {
   if (!items.length) return null;
- 
+
   return (
-    <div className="mt-5 space-y-4 text-[1.375rem] leading-relaxed font-bold">
+    <div className="mt-5 space-y-4 text-[1.25rem] leading-relaxed font-bold">
       {items.map((text, index) => (
         <div
           key={`${text}-${index}`}
-          className={`flex items-start gap-6 rounded-2xl p-6 [box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px] ${rowClassName}`}
+          className={`flex items-center gap-6 rounded-2xl p-6 [box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px] ${rowClassName}`}
         >
           <img src="https://833probaid.com/images/arrow.png" alt="" />
           <p>{text}</p>
@@ -1078,13 +1109,19 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
     e.preventDefault();
     setStatus({ type: "", text: "" });
     if (form.hp) return; // bot
-    const emailOk = (x) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(x.trim());
+    const isNaValue = (v) =>
+      /^(n\/?a|not yet assigned)$/i.test(v?.toString().trim());
     const bad = {};
-    if (!form.first.trim()) bad.first = true;
-    if (!form.last.trim()) bad.last = true;
-    if (!emailOk(form.email)) bad.email = true;
-    if (form.phone.replace(/\D/g, "").length < 10) bad.phone = true;
-    if (form.atty.trim() && !emailOk(form.atty)) bad.atty = true;
+    if (isEmpty(form.first)) bad.first = true;
+    if (isEmpty(form.last)) bad.last = true;
+    if (isEmpty(form.email) || !isValidEmail(form.email)) bad.email = true;
+    if (isEmpty(form.phone) || !isValidUSPhone(form.phone)) bad.phone = true;
+    if (
+      !isEmpty(form.atty) &&
+      !isNaValue(form.atty) &&
+      !isValidEmail(form.atty)
+    )
+      bad.atty = true;
     if (!form.consent) bad.consent = true;
     if (!addrValid) bad.addr = true;
     setInvalid(bad);
@@ -1110,7 +1147,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
       last: form.last.trim(),
       email: form.email.trim(),
       phone: form.phone.trim(),
-      atty: form.atty.trim(),
+      atty: isNaValue(form.atty) ? "" : form.atty.trim(),
     };
     setSending(true);
     try {
@@ -1152,6 +1189,13 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
   let qNum = 0;
   let lastSec = "";
   const tier = level ? level[2] : null;
+  const gapsTone =
+    !level || level[2] === "low"
+      ? "low"
+      : level[1] === "AT RISK" || level[2] === "high"
+        ? "high"
+        : "mid";
+  const gapsLook = gapsToneLook[gapsTone];
 
   return (
     <>
@@ -1189,6 +1233,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                 onClick={reset}
                 icon="/arrow-right.png"
                 className="h-12 px-5 lg:h-14 mt-2"
+                textClassName="text-[16px]"
                 aria-label="Reset answers"
               />
             </div>
@@ -1198,10 +1243,10 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
               <fieldset
                 aria-labelledby="acc-role-title"
                 aria-describedby="acc-role-help"
-                className={`rounded-2xl p-4 transition duration-200 sm:p-6 [box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px] ${cardLift}`}
+                className={`rounded-2xl border-[3px] border-secondary p-4 transition duration-200 sm:p-6 [box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px] ${cardLift}`}
               >
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <span className="text-sm font-bold uppercase tracking-wide text-gray-700">
+                  <span className="text-sm font-bold uppercase tracking-wide text-secondary">
                     Start here
                   </span>
                   <StatusPill color={A.role ? TEAL : ORANGE}>
@@ -1238,10 +1283,10 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 
               {/* property address */}
               <div
-                className={`rounded-2xl p-4 transition duration-200 sm:p-6 [box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px] ${cardLift}`}
+                className={`rounded-2xl border-[3px] border-secondary p-4 transition duration-200 sm:p-6 [box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px] ${cardLift}`}
               >
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <span className="text-sm font-bold uppercase tracking-wide text-gray-700">
+                  <span className="text-sm font-bold uppercase tracking-wide text-secondary">
                     Property
                   </span>
                   <StatusPill color={addrValid ? TEAL : ORANGE}>
@@ -1316,37 +1361,50 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                     />
                   </label>
                 </div>
-              </div>
-
-              {/* unlock notice */}
-              {unlocked ? (
-                <p className="rounded-2xl border-l-4 border-[#0097A7] bg-[#e6f5f6] px-4 py-3 text-sm font-bold text-[#004E57]">
-                  Unlocked. Answer the questions below — your score updates with
-                  every answer.
-                </p>
-              ) : (
                 <div
-                  className="rounded-2xl border-l-4 px-4 py-3 text-sm font-bold"
+                  role="note"
+                  className={`mt-4 rounded-2xl border-2 p-4 text-sm leading-relaxed transition duration-200 sm:p-5 sm:text-[15px] ${unlocked ? toneBox.good : toneBox.warn}`}
                   style={{
-                    borderColor: ORANGE,
-                    backgroundColor: "#fff7ef",
-                    color: "#7a3a00",
+                    boxShadow: fieldShadow,
+                    borderColor: unlocked ? TEAL : ORANGE,
+                    backgroundColor: `color-mix(in srgb, ${unlocked ? TEAL : ORANGE} 10%, white)`,
                   }}
                 >
-                  <p>
-                    Answer both questions above to unlock the rest of the check.
+                  <p
+                    className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-wide"
+                    style={{ color: unlocked ? TEAL : ORANGE }}
+                  >
+                    <span
+                      aria-hidden="true"
+                      className="h-2.5 w-2.5 shrink-0 rounded-full"
+                      style={{ backgroundColor: unlocked ? TEAL : ORANGE }}
+                    />
+                    {unlocked ? "Unlocked" : "Needs attention"}
                   </p>
-                  <ul className="mt-2 space-y-1 font-semibold">
-                    <li>{A.role ? "✓" : "○"} Your role</li>
-                    <li>
-                      {addrValid ? "✓" : "○"} Property address
-                      {addrStarted && !addrValid
-                        ? ` — ${addrProblems.join("; ")}`
-                        : ""}
-                    </li>
-                  </ul>
+                  {unlocked ? (
+                    <p className="mt-2 font-semibold text-gray-900">
+                      Answer the questions below — your score updates with every
+                      answer.
+                    </p>
+                  ) : (
+                    <>
+                      <p className="mt-2 font-semibold text-gray-900">
+                        Answer both questions above to unlock the rest of the
+                        check.
+                      </p>
+                      <ul className="mt-2 space-y-1 font-semibold text-gray-900">
+                        <li>{A.role ? "✓" : "○"} Your role</li>
+                        <li>
+                          {addrValid ? "✓" : "○"} Property address
+                          {addrStarted && !addrValid
+                            ? ` — ${addrProblems.join("; ")}`
+                            : ""}
+                        </li>
+                      </ul>
+                    </>
+                  )}
                 </div>
-              )}
+              </div>
 
               <fieldset
                 disabled={!unlocked}
@@ -1366,10 +1424,14 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                       : f > 0
                         ? "Needs attention"
                         : "Good";
-                  const accent = opt
-                    ? OPTION_HEX[optionColor(opt[0], opt[1], q.opts)]
-                    : undefined;
-                  const statusColor = accent || ORANGE;
+                  const statusColor = !opt
+                    ? ORANGE
+                    : f === 1
+                      ? RED
+                      : f > 0
+                        ? ORANGE
+                        : TEAL;
+                  const accent = opt ? statusColor : undefined;
                   const heading = q.sec !== lastSec ? q.sec : null;
                   lastSec = q.sec;
                   return (
@@ -1397,7 +1459,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                         }
                       >
                         <div className="flex flex-wrap items-center justify-between gap-2">
-                          <span className="text-sm font-bold uppercase tracking-wide text-gray-700">
+                          <span className="text-sm font-bold uppercase tracking-wide text-secondary">
                             Question {qNum}
                           </span>
                           <StatusPill color={statusColor}>
@@ -1439,6 +1501,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                         <Feedback
                           fb={opt ? feedbackFor(q, v, A) : null}
                           accent={accent}
+                          title={opt ? statusText : undefined}
                         />
                       </fieldset>
                     </div>
@@ -1456,7 +1519,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
             <Card title="Insurance readiness" tier={tier}>
               <p
                 className="mt-1 text-5xl font-black"
-                style={{ color: "var(--ring-soft)" }}
+                style={{ color: tier ? tierColors[tier].border : TEAL }}
               >
                 {c.answered ? `${c.pct}%` : "—"}
               </p>
@@ -1478,7 +1541,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
             <Card title="Readiness level" tier={tier}>
               <p
                 className="mt-1 text-3xl font-black"
-                style={{ color: "var(--ring-soft)" }}
+                style={{ color: tier ? tierColors[tier].border : TEAL }}
               >
                 {level ? level[1] : "—"}
               </p>
@@ -1497,7 +1560,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
             <Card title="Your coverage path">
               <p
                 className="mt-1 text-lg font-extrabold"
-                style={{ color: "var(--ring-soft)" }}
+                style={{ color: TEAL }}
               >
                 {c.path[1]}
               </p>
@@ -1512,9 +1575,8 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                   label="See what’s preventing 100%"
                   onClick={scrollToReport}
                   icon="/arrow-right.png"
-                  className="h-11 px-4 lg:h-12"
-                  textClassName="text-[14px] lg:text-[16px]"
-                  iconClassName="w-6 lg:w-7 h-6 lg:h-7"
+                  className="h-12 px-5 lg:h-14"
+                  textClassName="text-[16px]"
                   aria-label="See what’s preventing 100%"
                 />
               </div>
@@ -1525,33 +1587,30 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
         {/* ------------------------------------------------ report */}
         <div id="insurance-report" className="mt-12 scroll-mt-28">
           <div className="flex flex-col">
-            <div className="mb-8 flex gap-3">
+            <div className="mt-6 mb-8 flex items-center gap-4">
               <ShieldAlert
-                className="mt-[-0.45em] ml-[-0.2em] h-8 w-8 shrink-0 text-secondary group-hover:text-primary"
+                className="ml-[-0.2em] h-10 w-10 shrink-0 text-primary sm:h-12 sm:w-12"
                 strokeWidth={2.5}
                 aria-hidden="true"
                 style={{ filter: "drop-shadow(0px 2px 0px rgba(0,0,0,0.25))" }}
               />
               <div>
-                <h2 className="mt-[-0.3em] text-[1.375rem] font-bold text-primary group-hover:text-secondary">
+                <h2 className="text-2xl font-bold text-primary sm:text-3xl">
                   Your insurance readiness report
                 </h2>
-                <p className="mt-1 text-[1.375rem] font-bold text-black">
-                  Recommended coverage path: {c.path[1]}
-                </p>
               </div>
             </div>
 
             <div className="space-y-8">
-              <div
+              {/* <div
                 className={`rounded-2xl border-[3px] border-secondary bg-secondary/10 p-6 pb-8 ${cardLift}`}
                 style={{ boxShadow: layerCardShadow }}
               >
-                <h3 className="-mt-[0.2em] text-[1.375rem] font-bold text-secondary">
+                <h3 className="-mt-[0.2em] text-[1.5rem] font-bold text-secondary">
                   Recommended coverage path: {c.path[1]}
                 </h3>
                 <LayerRows items={c.path[2]} rowClassName="bg-white" />
-              </div>
+              </div> */}
 
               <div
                 className={`rounded-2xl p-6 text-white ${cardLift}`}
@@ -1574,14 +1633,16 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
               </div>
 
               <div
-                className={`rounded-2xl border-[3px] border-secondary bg-white p-6 pb-8 ${cardLift}`}
+                className={`rounded-2xl border-[3px] bg-white p-6 pb-8 ${gapsLook.border} ${cardLift}`}
                 style={{ boxShadow: layerCardShadow }}
               >
-                <h3 className="-mt-[0.2em] text-[1.375rem] font-bold text-secondary">
+                <h3
+                  className={`-mt-[0.2em] text-[1.5rem] font-bold ${gapsLook.title}`}
+                >
                   To reach 100% readiness, you must fix:
                 </h3>
                 {c.gaps.length ? (
-                  <LayerRows items={c.gaps} rowClassName="bg-secondary/10" />
+                  <LayerRows items={c.gaps} rowClassName={gapsLook.row} />
                 ) : (
                   <p className="mt-5 text-[1.375rem] font-bold">
                     {c.answered
@@ -1595,7 +1656,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                 className={`rounded-2xl border-[3px] border-[#e51b23] bg-white p-6 pb-8 ${cardLift}`}
                 style={{ boxShadow: layerCardShadow }}
               >
-                <h3 className="-mt-[0.2em] text-[1.375rem] font-bold text-[#e51b23]">
+                <h3 className="-mt-[0.2em] text-[1.5rem] font-bold text-[#e51b23]">
                   Alerts
                 </h3>
                 {c.alerts.length ? (
@@ -1608,10 +1669,10 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
               </div>
 
               <div
-                className={`rounded-2xl border-[3px] border-secondary bg-white p-6 pb-8 ${cardLift}`}
+                className={`rounded-2xl border-[3px] border-[#e51b23] bg-white p-6 pb-8 ${cardLift}`}
                 style={{ boxShadow: layerCardShadow }}
               >
-                <h3 className="-mt-[0.2em] text-[1.375rem] font-bold text-primary group-hover:text-secondary">
+                <h3 className="-mt-[0.2em] text-[1.5rem] font-bold text-[#e51b23]">
                   Your action plan
                 </h3>
                 {c.actions.length ? (
@@ -1628,13 +1689,13 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                       {c.actions.map((text, index) => (
                         <div
                           key={index}
-                          className="flex items-start gap-6 rounded-2xl p-6 [box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px]"
+                          className="flex items-center gap-6 rounded-2xl bg-[#e51b23]/20 p-6 [box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px]"
                         >
                           <img
                             src="https://833probaid.com/images/arrow.png"
                             alt=""
                           />
-                          <p className="text-[1.375rem] font-bold">
+                          <p className="text-[1.25rem] font-bold">
                             {text.replace(/\S/g, "x")}
                           </p>
                         </div>
@@ -1651,13 +1712,14 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
               </div>
 
               <div
-                className={`rounded-2xl border-[3px] border-secondary bg-white p-6 pb-8 ${cardLift}`}
+                className={`rounded-2xl border-[3px] border-[#e51b23] bg-white p-6 pb-8 ${cardLift}`}
                 style={{ boxShadow: layerCardShadow }}
               >
-                <h3 className="-mt-[0.2em] text-[1.375rem] font-bold text-primary group-hover:text-secondary">
+                <h3 className="-mt-[0.2em] text-[1.5rem] font-bold text-[#e51b23]">
                   If no action is taken
                 </h3>
                 <LayerRows
+                  rowClassName="bg-[#e51b23]/20"
                   items={[
                     "Fire, water, or vandalism claims may be denied",
                     `Liability exposure may fall on the ${r.title} personally`,
@@ -1667,13 +1729,14 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
               </div>
 
               <div
-                className={`rounded-2xl border-[3px] border-secondary bg-white p-6 pb-8 ${cardLift}`}
+                className={`rounded-2xl border-[3px] border-primary bg-white p-6 pb-8 ${cardLift}`}
                 style={{ boxShadow: layerCardShadow }}
               >
-                <h3 className="-mt-[0.2em] text-[1.375rem] font-bold text-primary group-hover:text-secondary">
+                <h3 className="-mt-[0.2em] text-[1.5rem] font-bold text-primary">
                   Coverage guidance
                 </h3>
                 <LayerRows
+                  rowClassName="bg-[#bfe5e9]"
                   items={[
                     "Discuss vacant-property insurance with your insurer — often written on a DP-1 or DP-3 dwelling form, or added as a vacancy endorsement.",
                     "Confirm in writing: when the vacancy clause starts, any inspection requirements, and exclusions for vandalism, theft, glass breakage, and water damage.",
@@ -1681,185 +1744,23 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                 />
               </div>
 
-              {!lead ? (
-                <form
-                  onSubmit={submit}
-                  noValidate
-                  className={`space-y-6 rounded-2xl border-[3px] border-secondary bg-white p-6 sm:p-8 ${cardLift}`}
-                  style={{ boxShadow: layerCardShadow }}
-                >
-                  <p className="text-2xl font-bold tracking-[1px] text-secondary uppercase group-hover:text-primary">
-                    Get your full report &amp; action plan
-                  </p>
-                  <h3 className="mt-2 text-2xl font-bold text-primary group-hover:text-secondary">
-                    Your step-by-step action plan and full report are sent to
-                    your email. Use an email you can open right now.
-                  </h3>
-                  <input
-                    type="text"
-                    tabIndex={-1}
-                    autoComplete="off"
-                    value={form.hp}
-                    onChange={(e) => setForm({ ...form, hp: e.target.value })}
-                    className="hidden"
-                    aria-hidden="true"
-                  />
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    {[
-                      ["first", "First name", "text", "given-name", ""],
-                      ["last", "Last name", "text", "family-name", ""],
-                      ["email", "Email", "email", "email", ""],
-                      ["phone", "Phone", "tel", "tel", "(555) 234-5678"],
-                    ].map(([k, label, type, ac, ph]) => (
-                      <label key={k} className="block">
-                        <span className="text-[1.375rem] font-bold uppercase text-primary group-hover:text-secondary">
-                          {label} <span className="text-secondary">*</span>
-                        </span>
-                        <input
-                          type={type}
-                          autoComplete={ac}
-                          placeholder={ph}
-                          value={form[k]}
-                          onChange={(e) =>
-                            setForm({ ...form, [k]: e.target.value })
-                          }
-                          className={`${reportInputCls} mt-2`}
-                          style={{
-                            borderColor: invalid[k]
-                              ? RED
-                              : "var(--color-primary)",
-                            boxShadow: fieldShadow,
-                            "--tw-ring-color": invalid[k]
-                              ? "rgba(229, 27, 35, 0.25)"
-                              : "rgba(0, 151, 167, 0.25)",
-                          }}
-                        />
-                      </label>
-                    ))}
-                    <label className="block sm:col-span-2">
-                      <span className="text-[1.375rem] font-bold uppercase text-primary group-hover:text-secondary">
-                        Also send a copy to my attorney (optional)
-                      </span>
-                      <input
-                        type="email"
-                        placeholder="attorney@lawfirm.com"
-                        value={form.atty}
-                        onChange={(e) =>
-                          setForm({ ...form, atty: e.target.value })
-                        }
-                        className={`${reportInputCls} mt-2`}
-                        style={{
-                          borderColor: invalid.atty
-                            ? RED
-                            : "var(--color-primary)",
-                          boxShadow: fieldShadow,
-                          "--tw-ring-color": invalid.atty
-                            ? "rgba(229, 27, 35, 0.25)"
-                            : "rgba(0, 151, 167, 0.25)",
-                        }}
-                      />
-                      <span className="mt-2 block text-base font-bold text-black">
-                        Your attorney gets the same report when you click the
-                        button below. Leave blank to skip.
-                      </span>
-                    </label>
-                  </div>
-                  <label
-                    className={`flex items-start gap-3 cursor-pointer text-[1.125rem] font-bold ${invalid.consent ? "text-[#e51b23]" : "text-black"}`}
-                  >
-                    <span className="relative mt-0.5 shrink-0">
-                      <input
-                        type="checkbox"
-                        checked={form.consent}
-                        onChange={(e) =>
-                          setForm({ ...form, consent: e.target.checked })
-                        }
-                        className={`block h-8 w-8 appearance-none rounded border-[3.5px] bg-white focus:ring-2 focus:ring-[#FD7702] ${invalid.consent ? "border-[#e51b23]" : "border-[#FD7702]"}`}
-                      />
-                      {form.consent ? (
-                        <span className="pointer-events-none absolute top-0 left-1 flex h-full w-full items-center justify-center">
-                          <i className="fas fa-check text-5xl text-[#0097A7]"></i>
-                        </span>
-                      ) : null}
-                    </span>
-                    <span>
-                      I agree that 833PROBAID® may contact me about this report
-                      by phone, text, or email, and I agree to the{" "}
-                      <a
-                        href={TERMS_URL}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-bold underline text-primary"
-                      >
-                        Website Terms of Use, Privacy Policy &amp; Disclosures
-                      </a>
-                      .
-                    </span>
-                  </label>
-                  <div className="flex justify-center">
-                    <CTAButton
-                      type="submit"
-                      label={
-                        sending
-                          ? "Sending…"
-                          : "Email me my report & action plan"
-                      }
-                      disabled={sending}
-                      icon="/arrow-right.png"
-                      className="h-12 px-5 lg:h-14"
-                      aria-label="Email me my report and action plan"
-                    />
-                  </div>
-                  {status.text ? (
-                    <p
-                      className={`text-center text-[1.125rem] font-bold ${status.type === "err" ? "text-[#e51b23]" : "text-primary"}`}
-                      role="status"
-                    >
-                      {status.text}
-                    </p>
-                  ) : null}
-                </form>
-              ) : (
-                <div
-                  className={`rounded-2xl border-[3px] border-secondary bg-white p-6 text-center sm:p-8 ${cardLift}`}
-                  style={{ boxShadow: layerCardShadow }}
-                >
-                  {thanks ? (
-                    <p className="font-bold text-primary">{thanks}</p>
-                  ) : null}
-                  <p className="text-2xl font-bold tracking-[1px] text-secondary uppercase group-hover:text-primary">
-                    Need help fixing this?
-                  </p>
-                  <h3 className="mt-2 text-2xl font-bold text-primary group-hover:text-secondary">
-                    We regularly help executors, trustees, and conservators get
-                    vacant properties secured, documented, and properly insured
-                    — and we can point you to insurance professionals who handle
-                    vacant and probate properties.
-                  </h3>
-                  <div className="mt-8 flex flex-col items-center justify-center gap-4">
-                    <CTAButton
-                      label={`Call ${PHONE}`}
-                      onClick={handleCall}
-                      icon="/arrow-right.png"
-                      className="h-12 px-5 lg:h-14"
-                      aria-label={`Call ${PHONE}`}
-                    />
-                    <button
-                      type="button"
-                      onClick={resend}
-                      disabled={sending}
-                      className="text-[1.125rem] font-bold text-primary underline disabled:opacity-60"
-                    >
-                      {sending
-                        ? "Sending…"
-                        : "Done some steps? Send my updated report"}
-                    </button>
-                  </div>
-                  {resendMsg ? (
-                    <p className="mt-4 font-bold text-primary">{resendMsg}</p>
-                  ) : null}
-                </div>
-              )}
+              <ToolReportForm
+                lead={lead}
+                form={form}
+                setForm={setForm}
+                invalid={invalid}
+                status={status}
+                sending={sending}
+                thanks={thanks}
+                resendMsg={resendMsg}
+                onSubmit={submit}
+                onResend={resend}
+                onCall={handleCall}
+                phone={PHONE}
+                termsUrl={TERMS_URL}
+                successTitle="Need help fixing this?"
+                successBody="We regularly help executors, trustees, and conservators get vacant properties secured, documented, and properly insured — and we can point you to insurance professionals who handle vacant and probate properties."
+              />
 
               <div
                 className={`flex items-start gap-3 rounded-2xl border-[3px] border-secondary px-6 py-5 ${cardLift}`}
