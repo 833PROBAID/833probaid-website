@@ -5,6 +5,9 @@ import { createPortal } from "react-dom";
 import VendorForm from "@/components/Forms/Vendor";
 import ReferralForm from "@/components/Forms/Referral";
 import GuideDownloadCards from "@/components/GuideDownloadCards";
+import BookCardBigNew from "@/app/new-page/BookCardBigNew";
+
+const AGENT_PROFILE_URL = "https://luxurycollectiverealty.com/team/tigran-mkrtchian";
 
 /**
  * Creates (once) the host element a form's submit button portals into, so the
@@ -93,6 +96,16 @@ function ensureGuideDownloadsHost() {
 }
 
 /**
+ * Returns the authored `.big-book` section the agent-profile book renders
+ * into, marked `data-no-scope` so the home book's scoped GrapesJS CSS stays
+ * off the React markup.
+ */
+function findBigBookHost() {
+	const el = document.querySelector(".homebook-content .big-book");
+	return el;
+}
+
+/**
  * Portals React form components into placeholder elements that GrapesJS
  * content may embed via #vendor-intake / #referral-intake IDs, and renders the
  * guide download block below the authored `.guide-cards` row.
@@ -104,6 +117,7 @@ export default function HomeBookContentClient() {
 	const [referralIntakeEl, setReferralIntakeEl] = useState(null);
 	const [referralSubmitEl, setReferralSubmitEl] = useState(null);
 	const [guideDownloadsEl, setGuideDownloadsEl] = useState(null);
+	const [bigBookEl, setBigBookEl] = useState(null);
 
 	useEffect(() => {
 		const vendorEl = document.getElementById("vendor-intake");
@@ -119,7 +133,24 @@ export default function HomeBookContentClient() {
 		setVendorIntakeEl(vendorEl);
 		setReferralIntakeEl(referralEl);
 		setGuideDownloadsEl(ensureGuideDownloadsHost());
+		setBigBookEl(findBigBookHost());
 	}, []);
+
+	// The browser jumps to a #hash before the portaled forms/cards above mount,
+	// and their height then pushes the target down. Re-scroll once everything
+	// has rendered so links like /homebooks/your-resource-center#fiduciary-banking
+	// land on the element.
+	useEffect(() => {
+		const id = decodeURIComponent(window.location.hash.slice(1));
+		if (!id) return;
+		const frame = requestAnimationFrame(() => {
+			const target = document.getElementById(id);
+			if (!target) return;
+			const top = target.getBoundingClientRect().top + window.scrollY - 200;
+			window.scrollTo({ top });
+		});
+		return () => cancelAnimationFrame(frame);
+	}, [vendorIntakeEl, referralIntakeEl, guideDownloadsEl, bigBookEl]);
 
 	return (
 		<>
@@ -135,6 +166,19 @@ export default function HomeBookContentClient() {
 				)}
 			{guideDownloadsEl &&
 				createPortal(<GuideDownloadCards />, guideDownloadsEl)}
+			{bigBookEl &&
+				createPortal(
+					<BookCardBigNew
+						title="Tigran Mkrtchian"
+						subtitle="Probate & Trust Real Estate Specialist"
+						description="Meet the agent behind 833PROBAID®"
+						icon="/icons/card-icon-1.png"
+						href={AGENT_PROFILE_URL}
+						fullWidth
+						speed={3000}
+					/>,
+					bigBookEl
+				)}
 		</>
 	);
 }
