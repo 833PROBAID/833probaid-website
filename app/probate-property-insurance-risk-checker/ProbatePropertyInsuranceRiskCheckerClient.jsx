@@ -127,10 +127,11 @@ const isUnsureOption = (val, label) => {
   return key === "unsure" || text === "unsure" || text === "not sure";
 };
 
-const optionColor = (val, label, opts = []) => {
+const optionColor = (val, label, opts = [], invertYesNo = false) => {
   const key = String(val || "").toLowerCase();
   const text = String(label || "").toLowerCase();
-  if (key === "no" || text === "no") return "red";
+  if (key === "no" || text === "no") return invertYesNo ? "teal" : "red";
+  if (key === "yes" || text === "yes") return invertYesNo ? "red" : "teal";
   if (isUnsureOption(val, label)) {
     const hasYesNo = opts.some(([optVal, optLabel]) => {
       const optKey = String(optVal || "").toLowerCase();
@@ -835,24 +836,6 @@ const tierColors = {
   mid: { border: ORANGE, bg: "#fff7ef", bar: ORANGE },
   high: { border: RED, bg: "#fdeaea", bar: RED },
 };
-const gapsToneLook = {
-  high: {
-    border: "border-[#e51b23]",
-    title: "text-[#e51b23]",
-    row: "bg-[#e51b23]/20",
-  },
-  mid: {
-    border: "border-secondary",
-    title: "text-secondary",
-    row: "bg-[#ffddc0]",
-  },
-  low: {
-    border: "border-primary",
-    title: "text-primary",
-    row: "bg-[#bfe5e9]",
-  },
-};
-
 const toneLabel = {
   good: "Good",
   warn: "Needs attention",
@@ -911,7 +894,7 @@ function Feedback({ fb, accent, title }) {
         />
         {title || toneLabel[tone] || toneLabel.risk}
       </p>
-      <p className="mt-2 font-semibold text-gray-900">{text}</p>
+      <p className="mt-2 font-bold text-gray-900">{text}</p>
       {vendor ? (
         <>
           <p className="mt-2 font-bold text-gray-900">
@@ -977,7 +960,7 @@ function Card({ title, tier, children, className = "" }) {
 }
 
 const inputCls =
-  "w-full rounded-xl border-2 border-secondary bg-white px-4 py-3 text-base text-gray-800 outline-none focus:border-[#0097A7]";
+  "w-full rounded-xl border-2 bg-white px-4 py-3 text-base text-gray-800 outline-none focus:border-[#0097A7]";
 
 function LayerRows({ items, rowClassName = "" }) {
   if (!items.length) return null;
@@ -1189,13 +1172,6 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
   let qNum = 0;
   let lastSec = "";
   const tier = level ? level[2] : null;
-  const gapsTone =
-    !level || level[2] === "low"
-      ? "low"
-      : level[1] === "AT RISK" || level[2] === "high"
-        ? "high"
-        : "mid";
-  const gapsLook = gapsToneLook[gapsTone];
 
   return (
     <>
@@ -1243,13 +1219,13 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
               <fieldset
                 aria-labelledby="acc-role-title"
                 aria-describedby="acc-role-help"
-                className={`rounded-2xl border-[3px] border-secondary p-4 transition duration-200 sm:p-6 [box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px] ${cardLift}`}
+                className={`rounded-2xl border-[3px] p-4 transition duration-200 sm:p-6 [box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px] ${A.role ? "border-primary" : "border-[#e51b23]"} ${cardLift}`}
               >
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <span className="text-sm font-bold uppercase tracking-wide text-secondary">
                     Start here
                   </span>
-                  <StatusPill color={A.role ? TEAL : ORANGE}>
+                  <StatusPill color={A.role ? TEAL : RED}>
                     {A.role ? "Answered" : "Pending"}
                   </StatusPill>
                 </div>
@@ -1261,7 +1237,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                 </h3>
                 <p
                   id="acc-role-help"
-                  className="mt-2 text-sm leading-relaxed text-gray-700 sm:text-[15px] font-semibold"
+                  className="mt-2 text-sm leading-relaxed text-gray-700 sm:text-[15px] font-bold"
                 >
                   This tailors the questions and your report.
                 </p>
@@ -1283,20 +1259,20 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 
               {/* property address */}
               <div
-                className={`rounded-2xl border-[3px] border-secondary p-4 transition duration-200 sm:p-6 [box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px] ${cardLift}`}
+                className={`rounded-2xl border-[3px] p-4 transition duration-200 sm:p-6 [box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px] ${addrValid ? "border-primary" : "border-[#e51b23]"} ${cardLift}`}
               >
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <span className="text-sm font-bold uppercase tracking-wide text-secondary">
                     Property
                   </span>
-                  <StatusPill color={addrValid ? TEAL : ORANGE}>
+                  <StatusPill color={addrValid ? TEAL : RED}>
                     {addrValid ? "Answered" : "Pending"}
                   </StatusPill>
                 </div>
                 <h3 className="mt-2 text-lg font-extrabold leading-snug text-gray-900 sm:text-xl">
                   What is the address of the property?
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-gray-700 sm:text-[15px] font-semibold">
+                <p className="mt-2 text-sm leading-relaxed text-gray-700 sm:text-[15px] font-bold">
                   The property this check is for — whether it’s part of an
                   estate, a trust, or a conservatorship.
                 </p>
@@ -1312,7 +1288,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                       placeholder="123 Main St"
                       value={ad.street}
                       onChange={(e) => setPart("street", e.target.value)}
-                      className={`${inputCls} mt-1`}
+                      className={`${inputCls} mt-1 ${addrValid ? "border-primary" : "border-[#e51b23]"}`}
                     />
                   </label>
                   <label className="block sm:col-span-3">
@@ -1325,7 +1301,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                       placeholder="Los Angeles"
                       value={ad.city}
                       onChange={(e) => setPart("city", e.target.value)}
-                      className={`${inputCls} mt-1`}
+                      className={`${inputCls} mt-1 ${addrValid ? "border-primary" : "border-[#e51b23]"}`}
                     />
                   </label>
                   <label className="block sm:col-span-1">
@@ -1336,7 +1312,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                       autoComplete="address-level1"
                       value={ad.state}
                       onChange={(e) => setPart("state", e.target.value)}
-                      className={`${inputCls} mt-1 px-2`}
+                      className={`${inputCls} mt-1 px-2 ${addrValid ? "border-primary" : "border-[#e51b23]"}`}
                     >
                       {STATES.map((st) => (
                         <option key={st} value={st}>
@@ -1357,7 +1333,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                       maxLength={10}
                       value={ad.zip}
                       onChange={(e) => setPart("zip", e.target.value)}
-                      className={`${inputCls} mt-1`}
+                      className={`${inputCls} mt-1 ${addrValid ? "border-primary" : "border-[#e51b23]"}`}
                     />
                   </label>
                 </div>
@@ -1382,17 +1358,17 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                     {unlocked ? "Unlocked" : "Needs attention"}
                   </p>
                   {unlocked ? (
-                    <p className="mt-2 font-semibold text-gray-900">
+                    <p className="mt-2 font-bold text-gray-900">
                       Answer the questions below — your score updates with every
                       answer.
                     </p>
                   ) : (
                     <>
-                      <p className="mt-2 font-semibold text-gray-900">
+                      <p className="mt-2 font-bold text-gray-900">
                         Answer both questions above to unlock the rest of the
                         check.
                       </p>
-                      <ul className="mt-2 space-y-1 font-semibold text-gray-900">
+                      <ul className="mt-2 space-y-1 font-bold text-gray-900">
                         <li>{A.role ? "✓" : "○"} Your role</li>
                         <li>
                           {addrValid ? "✓" : "○"} Property address
@@ -1447,13 +1423,12 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                       <fieldset
                         aria-labelledby={`q-${q.id}-title`}
                         aria-describedby={`q-${q.id}-help`}
-                        className="rounded-2xl border-2 border-transparent bg-white p-4 transition duration-200 sm:p-6 [box-shadow:var(--sc,rgba(0,0,0,0.4))_0px_8px_12px,var(--sc,rgba(0,0,0,0.4))_0px_-5px_12px_1px] hover:-translate-y-1.25 hover:![box-shadow:var(--sc-hover,rgba(0,0,0,0.5))_0px_12px_20px,var(--sc-hover,rgba(0,0,0,0.5))_0px_-8px_16px_2px]"
+                        className={`rounded-2xl border-[3px] bg-white p-4 transition duration-200 sm:p-6 [box-shadow:var(--sc,rgba(0,0,0,0.4))_0px_8px_12px,var(--sc,rgba(0,0,0,0.4))_0px_-5px_12px_1px] hover:-translate-y-1.25 hover:![box-shadow:var(--sc-hover,rgba(0,0,0,0.5))_0px_12px_20px,var(--sc-hover,rgba(0,0,0,0.5))_0px_-8px_16px_2px] ${opt ? "border-primary" : "border-transparent"}`}
                         style={
-                          accent
+                          opt
                             ? {
-                                borderColor: accent,
-                                "--sc": `color-mix(in srgb, ${accent} 22%, transparent)`,
-                                "--sc-hover": `color-mix(in srgb, ${accent} 30%, transparent)`,
+                                "--sc": `color-mix(in srgb, ${TEAL} 22%, transparent)`,
+                                "--sc-hover": `color-mix(in srgb, ${TEAL} 30%, transparent)`,
                               }
                             : undefined
                         }
@@ -1474,7 +1449,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                         </h4>
                         <p
                           id={`q-${q.id}-help`}
-                          className="mt-2 text-sm leading-relaxed text-gray-700 sm:text-[15px] font-semibold"
+                          className="mt-2 text-sm leading-relaxed text-gray-700 sm:text-[15px] font-bold"
                         >
                           {q.help(A)}
                         </p>
@@ -1484,12 +1459,31 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                             value={v || ""}
                             onChange={(event) => pick(q.id, event.target.value)}
                             disabled={!unlocked}
-                            options={q.opts.map(([val, label]) => ({
-                              value: val,
-                              label,
-                              color: optionColor(val, label, q.opts),
-                              ...(q.stack ? { width: "full" } : {}),
-                            }))}
+                            options={q.opts.map(([val, label, factor]) => {
+                              const key = String(val || "").toLowerCase();
+                              const isYesNo = key === "yes" || key === "no";
+                              const colorByRisk =
+                                (qNum === 10 || qNum === 11) && isYesNo
+                                  ? factor === 1
+                                    ? "red"
+                                    : "teal"
+                                  : null;
+                              return {
+                                value: val,
+                                label,
+                                color:
+                                  qNum === 3 && isUnsureOption(val, label)
+                                    ? "orange"
+                                    : colorByRisk ||
+                                      optionColor(
+                                        val,
+                                        label,
+                                        q.opts,
+                                        qNum === 1,
+                                      ),
+                                ...(q.stack ? { width: "full" } : {}),
+                              };
+                            })}
                             direction="vertical"
                             distributeWidth={!q.stack}
                             gridClass={
@@ -1532,7 +1526,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                   }}
                 />
               </div>
-              <p className="mt-3 text-sm font-semibold text-gray-700">
+              <p className="mt-3 text-sm font-bold text-gray-700">
                 {!c.answered
                   ? "Answer the questions to see your score. It updates with every answer."
                   : `You are ${100 - c.pct}% exposed to potential claim denial, coverage gaps, or liability risk.`}
@@ -1546,7 +1540,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                 {level ? level[1] : "—"}
               </p>
               {level ? (
-                <p className="mt-2 text-sm text-gray-700 font-semibold">
+                <p className="mt-2 text-sm text-gray-700 font-bold">
                   {complete
                     ? ""
                     : "Provisional — based on the answers so far. "}
@@ -1564,7 +1558,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
               >
                 {c.path[1]}
               </p>
-              <p className="mt-1 text-sm text-gray-700 font-semibold">
+              <p className="mt-1 text-sm text-gray-700 font-bold">
                 {complete
                   ? `All ${c.total} questions answered.`
                   : `${c.answered} of ${c.total} answered${A.role ? "" : " · pick your role at the top"}.`}
@@ -1633,18 +1627,16 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
               </div>
 
               <div
-                className={`rounded-2xl border-[3px] bg-white p-6 pb-8 ${gapsLook.border} ${cardLift}`}
+                className={`rounded-2xl border-[3px] border-[#e51b23] bg-[#e51b23] p-6 pb-8 ${cardLift}`}
                 style={{ boxShadow: layerCardShadow }}
               >
-                <h3
-                  className={`-mt-[0.2em] text-[1.5rem] font-bold ${gapsLook.title}`}
-                >
+                <h3 className="-mt-[0.2em] text-[1.5rem] font-bold text-white">
                   To reach 100% readiness, you must fix:
                 </h3>
                 {c.gaps.length ? (
-                  <LayerRows items={c.gaps} rowClassName={gapsLook.row} />
+                  <LayerRows items={c.gaps} rowClassName="bg-white" />
                 ) : (
-                  <p className="mt-5 text-[1.375rem] font-bold">
+                  <p className="mt-5 text-[1.375rem] font-bold text-white">
                     {c.answered
                       ? "Nothing flagged so far."
                       : "Your gaps appear here as you answer."}
