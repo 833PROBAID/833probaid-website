@@ -2,7 +2,11 @@
 
 import CTAButton from "@/components/CTAButton";
 import ServiceLayout from "@/components/ServiceLayout";
-import { RadioButton, RadioGroup } from "@/components/SharedComponents";
+import {
+  RadioButton,
+  RadioGroup,
+  TextInput,
+} from "@/components/SharedComponents";
 import { isEmpty, isValidEmail, isValidUSPhone } from "@/app/utils/formValidation";
 import ToolLeadCaptureModal from "@/components/ToolLeadCaptureModal";
 import ToolReportForm from "@/components/ToolReportForm";
@@ -796,28 +800,14 @@ const STATES = [
   "WI",
   "WY",
 ];
-const STREET_TYPE =
-  /\b(st|street|ave|avenue|blvd|boulevard|dr|drive|rd|road|ln|lane|way|ct|court|pl|place|cir|circle|ter|terrace|pkwy|parkway|hwy|highway|trl|trail|sq|square|loop|row|walk|path|pike|plz|plaza|aly|alley)\.?\b/i;
 function checkAddress(ad) {
   const problems = [];
-  const street = ad.street.trim();
-  if (!/^\d+[A-Za-z]?\s+\S/.test(street))
-    problems.push("start the street with the house number (like 123 Main St)");
-  else if (
-    !/[A-Za-z]{2,}/.test(street.replace(/^\d+[A-Za-z]?\s+/, "")) ||
-    !STREET_TYPE.test(street)
-  )
-    problems.push("include the street name and type (St, Ave, Blvd, Dr…)");
-  if (!/^[A-Za-z][A-Za-z .'-]{1,}$/.test(ad.city.trim()))
-    problems.push("add the city");
-  if (!STATES.includes(ad.state)) problems.push("pick the state");
-  const zip = ad.zip.trim();
-  if (!/^\d{5}(-\d{4})?$/.test(zip)) problems.push("add a 5-digit ZIP code");
-  else if (
-    ad.state === "CA" &&
-    (+zip.slice(0, 5) < 90001 || +zip.slice(0, 5) > 96162)
-  )
-    problems.push("that ZIP code isn’t in California");
+  if (isEmpty(ad.street)) problems.push("add the street address");
+  if (isEmpty(ad.city)) problems.push("add the city");
+  if (isEmpty(ad.state) || !STATES.includes(ad.state))
+    problems.push("pick the state");
+  if (isEmpty(ad.zip) || !/^\d{5}(-\d{4})?$/.test(ad.zip.trim()))
+    problems.push("add a 5-digit ZIP code");
   return problems;
 }
 const formatAddress = (ad) =>
@@ -959,8 +949,9 @@ function Card({ title, tier, children, className = "" }) {
   );
 }
 
-const inputCls =
-  "w-full rounded-xl border-2 bg-white px-4 py-3 text-base text-gray-800 outline-none focus:border-[#0097A7]";
+const referralInputClass = "placeholder:italic placeholder-[#FD7702]";
+const referralSelectClass =
+  "w-full h-10 border-[3.5px] px-2 py-1 bg-gray-200 font-bold outline-none focus:ring-2 focus:ring-[#FD7702] focus:ring-offset-0";
 
 function LayerRows({ items, rowClassName = "" }) {
   if (!items.length) return null;
@@ -1259,7 +1250,11 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 
               {/* property address */}
               <div
-                className={`rounded-2xl border-[3px] p-4 transition duration-200 sm:p-6 [box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px] ${addrValid ? "border-primary" : "border-[#e51b23]"} ${cardLift}`}
+                className={`rounded-2xl border-[3px] bg-white p-4 transition duration-200 sm:p-6 [box-shadow:var(--sc,rgba(0,0,0,0.4))_0px_8px_12px,var(--sc,rgba(0,0,0,0.4))_0px_-5px_12px_1px] hover:-translate-y-1.25 hover:![box-shadow:var(--sc-hover,rgba(0,0,0,0.5))_0px_12px_20px,var(--sc-hover,rgba(0,0,0,0.5))_0px_-8px_16px_2px] ${addrValid ? "border-primary" : "border-[#e51b23]"}`}
+                style={{
+                  "--sc": `color-mix(in srgb, ${addrValid ? TEAL : RED} 22%, transparent)`,
+                  "--sc-hover": `color-mix(in srgb, ${addrValid ? TEAL : RED} 30%, transparent)`,
+                }}
               >
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <span className="text-sm font-bold uppercase tracking-wide text-secondary">
@@ -1278,41 +1273,45 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                 </p>
                 <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-6">
                   <label className="block sm:col-span-6">
-                    <span className="text-sm font-bold text-gray-800">
+                    <span className="mb-1 block text-sm font-bold text-gray-800">
                       Street address
                     </span>
-                    <input
+                    <TextInput
                       id="ins-property-address"
-                      type="text"
-                      autoComplete="address-line1"
-                      placeholder="123 Main St"
+                      name="street"
                       value={ad.street}
                       onChange={(e) => setPart("street", e.target.value)}
-                      className={`${inputCls} mt-1 ${addrValid ? "border-primary" : "border-[#e51b23]"}`}
+                      placeholder="123 Main St"
+                      inputClass={referralInputClass}
+                      width="full"
+                      autoComplete="address-line1"
+                      error={!addrValid}
                     />
                   </label>
                   <label className="block sm:col-span-3">
-                    <span className="text-sm font-bold text-gray-800">
+                    <span className="mb-1 block text-sm font-bold text-gray-800">
                       City
                     </span>
-                    <input
-                      type="text"
-                      autoComplete="address-level2"
-                      placeholder="Los Angeles"
+                    <TextInput
+                      name="city"
                       value={ad.city}
                       onChange={(e) => setPart("city", e.target.value)}
-                      className={`${inputCls} mt-1 ${addrValid ? "border-primary" : "border-[#e51b23]"}`}
+                      placeholder="Los Angeles"
+                      inputClass={referralInputClass}
+                      width="full"
+                      autoComplete="address-level2"
+                      error={!addrValid}
                     />
                   </label>
                   <label className="block sm:col-span-1">
-                    <span className="text-sm font-bold text-gray-800">
+                    <span className="mb-1 block text-sm font-bold text-gray-800">
                       State
                     </span>
                     <select
                       autoComplete="address-level1"
                       value={ad.state}
                       onChange={(e) => setPart("state", e.target.value)}
-                      className={`${inputCls} mt-1 px-2 ${addrValid ? "border-primary" : "border-[#e51b23]"}`}
+                      className={`${referralSelectClass} ${addrValid ? "border-[#0097A7]" : "border-red-500"}`}
                     >
                       {STATES.map((st) => (
                         <option key={st} value={st}>
@@ -1322,64 +1321,48 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                     </select>
                   </label>
                   <label className="block sm:col-span-2">
-                    <span className="text-sm font-bold text-gray-800">
+                    <span className="mb-1 block text-sm font-bold text-gray-800">
                       ZIP code
                     </span>
-                    <input
-                      type="text"
-                      inputMode="numeric"
-                      autoComplete="postal-code"
-                      placeholder="90041"
-                      maxLength={10}
+                    <TextInput
+                      name="zip"
                       value={ad.zip}
                       onChange={(e) => setPart("zip", e.target.value)}
-                      className={`${inputCls} mt-1 ${addrValid ? "border-primary" : "border-[#e51b23]"}`}
+                      placeholder="90041"
+                      inputClass={referralInputClass}
+                      width="full"
+                      inputMode="numeric"
+                      maxLength={10}
+                      autoComplete="postal-code"
+                      error={!addrValid}
                     />
                   </label>
                 </div>
-                <div
-                  role="note"
-                  className={`mt-4 rounded-2xl border-2 p-4 text-sm leading-relaxed transition duration-200 sm:p-5 sm:text-[15px] ${unlocked ? toneBox.good : toneBox.warn}`}
-                  style={{
-                    boxShadow: fieldShadow,
-                    borderColor: unlocked ? TEAL : ORANGE,
-                    backgroundColor: `color-mix(in srgb, ${unlocked ? TEAL : ORANGE} 10%, white)`,
-                  }}
-                >
-                  <p
-                    className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-wide"
-                    style={{ color: unlocked ? TEAL : ORANGE }}
+                {!addrValid ? (
+                  <div
+                    role="note"
+                    className={`mt-4 rounded-2xl border-2 p-4 text-sm leading-relaxed transition duration-200 sm:p-5 sm:text-[15px] ${toneBox.risk}`}
+                    style={{
+                      boxShadow: fieldShadow,
+                      borderColor: RED,
+                      backgroundColor: RISK_BG,
+                    }}
                   >
-                    <span
-                      aria-hidden="true"
-                      className="h-2.5 w-2.5 shrink-0 rounded-full"
-                      style={{ backgroundColor: unlocked ? TEAL : ORANGE }}
-                    />
-                    {unlocked ? "Unlocked" : "Needs attention"}
-                  </p>
-                  {unlocked ? (
                     <p className="mt-2 font-bold text-gray-900">
-                      Answer the questions below — your score updates with every
-                      answer.
+                      Answer both questions above to unlock the rest of the
+                      check.
                     </p>
-                  ) : (
-                    <>
-                      <p className="mt-2 font-bold text-gray-900">
-                        Answer both questions above to unlock the rest of the
-                        check.
-                      </p>
-                      <ul className="mt-2 space-y-1 font-bold text-gray-900">
-                        <li>{A.role ? "✓" : "○"} Your role</li>
-                        <li>
-                          {addrValid ? "✓" : "○"} Property address
-                          {addrStarted && !addrValid
-                            ? ` — ${addrProblems.join("; ")}`
-                            : ""}
-                        </li>
-                      </ul>
-                    </>
-                  )}
-                </div>
+                    <ul className="mt-2 space-y-1 font-bold text-gray-900">
+                      <li>{A.role ? "✓" : "○"} Your role</li>
+                      <li>
+                        {addrValid ? "✓" : "○"} Property address
+                        {addrStarted && !addrValid
+                          ? ` — ${addrProblems.join("; ")}`
+                          : ""}
+                      </li>
+                    </ul>
+                  </div>
+                ) : null}
               </div>
 
               <fieldset
