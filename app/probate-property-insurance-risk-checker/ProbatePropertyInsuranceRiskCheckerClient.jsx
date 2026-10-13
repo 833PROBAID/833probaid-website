@@ -970,7 +970,7 @@ function LayerRows({ items, rowClassName = "" }) {
       {items.map((text, index) => (
         <div
           key={`${text}-${index}`}
-          className={`flex items-center gap-6 rounded-2xl p-6 [box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px] ${rowClassName}`}
+          className={`flex items-center gap-6 rounded-2xl p-6 transition duration-200 [box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px] ${cardLift} ${rowClassName}`}
         >
           <img src="https://833probaid.com/images/arrow.png" alt="" />
           <p>{text}</p>
@@ -1681,7 +1681,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                       {c.actions.map((text, index) => (
                         <div
                           key={index}
-                          className="flex items-center gap-6 rounded-2xl bg-[#e51b23]/20 p-6 [box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px]"
+                          className={`flex items-center gap-6 rounded-2xl bg-[#e51b23]/20 p-6 transition duration-200 [box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px] ${cardLift}`}
                         >
                           <img
                             src="https://833probaid.com/images/arrow.png"
