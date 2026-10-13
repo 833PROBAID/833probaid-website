@@ -52,6 +52,9 @@ const SAVE_MS = FLIP_MS - 700;
  */
 const HANDOFF_MS = FLIP_MS - 500;
 
+/** Fired on `window` with `{ key }` to open and download one guide. */
+export const GUIDE_DOWNLOAD_EVENT = "guide-download";
+
 const GUIDES = [
   {
     key: "seller",
@@ -273,7 +276,7 @@ function GuideCard({ guide }) {
    * the PDFs are served from /public, same origin.
    */
   const handleDownload = (e) => {
-    e.stopPropagation();
+    e?.stopPropagation();
     if (isOpening) return;
 
     setIsOpening(true);
@@ -294,8 +297,26 @@ function GuideCard({ guide }) {
     );
   };
 
+  // Lets the authored `.buyer-download` / `.seller-download` links elsewhere
+  // in the book open this card as if its own button had been pressed (see
+  // HomeBookContentClient). The ref keeps the listener on the latest render's
+  // handler, so its `isOpening` guard is never stale.
+  const downloadRef = useRef(handleDownload);
+  downloadRef.current = handleDownload;
+
+  useEffect(() => {
+    const onRequest = (e) => {
+      if (e.detail?.key === guide.key) downloadRef.current();
+    };
+    window.addEventListener(GUIDE_DOWNLOAD_EVENT, onRequest);
+    return () => window.removeEventListener(GUIDE_DOWNLOAD_EVENT, onRequest);
+  }, [guide.key]);
+
   return (
-    <div className="flex w-full flex-col items-center gap-10">
+    <div
+      className="flex w-full flex-col items-center gap-10"
+      data-guide={guide.key}
+    >
       {/* ── STAGE: the perspective every layer below is read through ── */}
       <div
         className={`relative flex items-center w-full box-border ${

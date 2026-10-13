@@ -4,8 +4,19 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import VendorForm from "@/components/Forms/Vendor";
 import ReferralForm from "@/components/Forms/Referral";
-import GuideDownloadCards from "@/components/GuideDownloadCards";
+import GuideDownloadCards, {
+	GUIDE_DOWNLOAD_EVENT,
+} from "@/components/GuideDownloadCards";
 import BookCardBigNew from "@/app/new-page/BookCardBigNew";
+
+/** Authored trigger classes → the guide card each one opens. */
+const GUIDE_TRIGGERS = {
+	"buyer-download": "buyer",
+	"seller-download": "seller",
+};
+
+/** Fallback for browsers without `scrollend` (Safari < 18). */
+const SCROLL_SETTLE_MS = 900;
 
 const AGENT_PROFILE_URL = "https://luxurycollectiverealty.com/team/tigran-mkrtchian";
 
@@ -152,6 +163,58 @@ export default function HomeBookContentClient() {
 		return () => cancelAnimationFrame(frame);
 	}, [vendorIntakeEl, referralIntakeEl, guideDownloadsEl, bigBookEl]);
 
+	// Authored `.buyer-download` / `.seller-download` elements bring the viewer
+	// to the matching guide card and open it once the scroll has settled, so
+	// the cover turn is seen rather than played off-screen. Delegated from the
+	// document because the elements live in the server-rendered HTML.
+	useEffect(() => {
+		if (!guideDownloadsEl) return;
+
+		const selector = Object.keys(GUIDE_TRIGGERS)
+			.map((c) => `.${c}`)
+			.join(", ");
+		let cleanupScroll = () => {};
+
+		const onClick = (e) => {
+			const trigger = e.target.closest?.(selector);
+			if (!trigger || guideDownloadsEl.contains(trigger)) return;
+			const cls = Object.keys(GUIDE_TRIGGERS).find((c) =>
+				trigger.classList.contains(c)
+			);
+			const key = GUIDE_TRIGGERS[cls];
+			const card =
+				guideDownloadsEl.querySelector(`[data-guide="${key}"]`) ||
+				guideDownloadsEl;
+
+			e.preventDefault();
+			cleanupScroll();
+
+			let done = false;
+			const open = () => {
+				if (done) return;
+				done = true;
+				cleanupScroll();
+				window.dispatchEvent(
+					new CustomEvent(GUIDE_DOWNLOAD_EVENT, { detail: { key } })
+				);
+			};
+			const timer = setTimeout(open, SCROLL_SETTLE_MS);
+			window.addEventListener("scrollend", open, { once: true });
+			cleanupScroll = () => {
+				clearTimeout(timer);
+				window.removeEventListener("scrollend", open);
+			};
+
+			card.scrollIntoView({ behavior: "smooth", block: "center" });
+		};
+
+		document.addEventListener("click", onClick);
+		return () => {
+			document.removeEventListener("click", onClick);
+			cleanupScroll();
+		};
+	}, [guideDownloadsEl]);
+
 	return (
 		<>
 			{vendorIntakeEl &&
@@ -169,9 +232,9 @@ export default function HomeBookContentClient() {
 			{bigBookEl &&
 				createPortal(
 					<BookCardBigNew
-						title="Tigran Mkrtchian"
-						subtitle="Probate & Trust Real Estate Specialist"
-						description="Meet the agent behind 833PROBAID®"
+						title="THE REAL ESTATE COMMAND CENTER"
+						subtitle="Your Direct Access To The Market. Your Next Move Starts Here."
+						description="Explore Our Listings. Search Any Neighborhood. Discover Your Next Opportunity."
 						icon="/icons/card-icon-1.png"
 						href={AGENT_PROFILE_URL}
 						fullWidth

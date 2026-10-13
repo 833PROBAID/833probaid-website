@@ -538,7 +538,7 @@ function BookCardInner({
                 </p>
                 <LearnMoreButton
                   size="md"
-                  label="Search"
+                  label="Explore Properties"
                   mirrored={mirrored}
                   inView={inView}
                   onClick={handleLearnMore}
