@@ -1210,7 +1210,12 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
               <fieldset
                 aria-labelledby="acc-role-title"
                 aria-describedby="acc-role-help"
-                className={`rounded-2xl border-[3px] p-4 transition duration-200 sm:p-6 [box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px] ${A.role ? "border-primary" : "border-[#e51b23]"} ${cardLift}`}
+                className={`rounded-2xl border-[3px] bg-white p-4 transition duration-200 sm:p-6 [box-shadow:var(--sc,rgba(0,0,0,0.4))_0px_8px_12px,var(--sc,rgba(0,0,0,0.4))_0px_-5px_12px_1px] hover:-translate-y-1.25 hover:![box-shadow:var(--sc-hover,rgba(0,0,0,0.5))_0px_12px_20px,var(--sc-hover,rgba(0,0,0,0.5))_0px_-8px_16px_2px]`}
+                style={{
+                  borderColor: A.role ? TEAL : RED,
+                  "--sc": `color-mix(in srgb, ${A.role ? TEAL : RED} 22%, transparent)`,
+                  "--sc-hover": `color-mix(in srgb, ${A.role ? TEAL : RED} 30%, transparent)`,
+                }}
               >
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <span className="text-sm font-bold uppercase tracking-wide text-secondary">
@@ -1406,15 +1411,12 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                       <fieldset
                         aria-labelledby={`q-${q.id}-title`}
                         aria-describedby={`q-${q.id}-help`}
-                        className={`rounded-2xl border-[3px] bg-white p-4 transition duration-200 sm:p-6 [box-shadow:var(--sc,rgba(0,0,0,0.4))_0px_8px_12px,var(--sc,rgba(0,0,0,0.4))_0px_-5px_12px_1px] hover:-translate-y-1.25 hover:![box-shadow:var(--sc-hover,rgba(0,0,0,0.5))_0px_12px_20px,var(--sc-hover,rgba(0,0,0,0.5))_0px_-8px_16px_2px] ${opt ? "border-primary" : "border-transparent"}`}
-                        style={
-                          opt
-                            ? {
-                                "--sc": `color-mix(in srgb, ${TEAL} 22%, transparent)`,
-                                "--sc-hover": `color-mix(in srgb, ${TEAL} 30%, transparent)`,
-                              }
-                            : undefined
-                        }
+                        className="rounded-2xl border-[3px] bg-white p-4 transition duration-200 sm:p-6 [box-shadow:var(--sc,rgba(0,0,0,0.4))_0px_8px_12px,var(--sc,rgba(0,0,0,0.4))_0px_-5px_12px_1px] hover:-translate-y-1.25 hover:![box-shadow:var(--sc-hover,rgba(0,0,0,0.5))_0px_12px_20px,var(--sc-hover,rgba(0,0,0,0.5))_0px_-8px_16px_2px]"
+                        style={{
+                          borderColor: statusColor,
+                          "--sc": `color-mix(in srgb, ${statusColor} 22%, transparent)`,
+                          "--sc-hover": `color-mix(in srgb, ${statusColor} 30%, transparent)`,
+                        }}
                       >
                         <div className="flex flex-wrap items-center justify-between gap-2">
                           <span className="text-sm font-bold uppercase tracking-wide text-secondary">
@@ -1609,82 +1611,64 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                 </p>
               </div>
 
-              <div
-                className={`rounded-2xl border-[3px] border-[#e51b23] bg-[#e51b23] p-6 pb-8 ${cardLift}`}
-                style={{ boxShadow: layerCardShadow }}
-              >
-                <h3 className="-mt-[0.2em] text-[1.5rem] font-bold text-white">
-                  To reach 100% readiness, you must fix:
-                </h3>
-                {c.gaps.length ? (
+              {c.gaps.length ? (
+                <div
+                  className={`rounded-2xl border-[3px] border-[#e51b23] bg-[#e51b23] p-6 pb-8 ${cardLift}`}
+                  style={{ boxShadow: layerCardShadow }}
+                >
+                  <h3 className="-mt-[0.2em] text-[1.5rem] font-bold text-white">
+                    To reach 100% readiness, you must fix:
+                  </h3>
                   <LayerRows items={c.gaps} rowClassName="bg-white" />
-                ) : (
-                  <p className="mt-5 text-[1.375rem] font-bold text-white">
-                    {c.answered
-                      ? "Nothing flagged so far."
-                      : "Your gaps appear here as you answer."}
-                  </p>
-                )}
-              </div>
+                </div>
+              ) : null}
 
-              <div
-                className={`rounded-2xl border-[3px] border-[#e51b23] bg-white p-6 pb-8 ${cardLift}`}
-                style={{ boxShadow: layerCardShadow }}
-              >
-                <h3 className="-mt-[0.2em] text-[1.5rem] font-bold text-[#e51b23]">
-                  Alerts
-                </h3>
-                {c.alerts.length ? (
+              {c.alerts.length ? (
+                <div
+                  className={`rounded-2xl border-[3px] border-[#e51b23] bg-white p-6 pb-8 ${cardLift}`}
+                  style={{ boxShadow: layerCardShadow }}
+                >
+                  <h3 className="-mt-[0.2em] text-[1.5rem] font-bold text-[#e51b23]">
+                    Alerts
+                  </h3>
                   <LayerRows items={c.alerts} rowClassName="bg-[#e51b23]/20" />
-                ) : (
-                  <p className="mt-5 text-[1.375rem] font-bold">
-                    No alerts triggered{c.answered ? " so far" : " yet"}.
-                  </p>
-                )}
-              </div>
+                </div>
+              ) : null}
 
-              <div
-                className={`rounded-2xl border-[3px] border-[#e51b23] bg-white p-6 pb-8 ${cardLift}`}
-                style={{ boxShadow: layerCardShadow }}
-              >
-                <h3 className="-mt-[0.2em] text-[1.5rem] font-bold text-[#e51b23]">
-                  Your action plan
-                </h3>
-                {c.actions.length ? (
-                  <>
-                    <p className="mt-5 text-[1.375rem] font-bold text-black">
-                      {lead
-                        ? `Your ${c.actions.length}-step action plan was emailed to ${lead.email}. Changed answers? Use “Send my updated report” below.`
-                        : `${c.actions.length} required action${c.actions.length === 1 ? "" : "s"} ready. Enter your details below and we’ll email your step-by-step plan.`}
-                    </p>
-                    <div
-                      className="pointer-events-none mt-5 space-y-4 blur-[5px] select-none"
-                      aria-hidden="true"
-                    >
-                      {c.actions.map((text, index) => (
-                        <div
-                          key={index}
-                          className={`flex items-center gap-6 rounded-2xl bg-[#e51b23]/20 p-6 transition duration-200 [box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px] ${cardLift}`}
-                        >
-                          <img
-                            src="https://833probaid.com/images/arrow.png"
-                            alt=""
-                          />
-                          <p className="text-[1.25rem] font-bold">
-                            {text.replace(/\S/g, "x")}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  </>
-                ) : (
-                  <p className="mt-5 text-[1.375rem] font-bold">
-                    {c.answered
-                      ? "No actions needed based on your answers so far."
-                      : "Your action plan builds as you answer."}
+              {c.actions.length ? (
+                <div
+                  className={`rounded-2xl border-[3px] border-[#e51b23] bg-white p-6 pb-8 ${cardLift}`}
+                  style={{ boxShadow: layerCardShadow }}
+                >
+                  <h3 className="-mt-[0.2em] text-[1.5rem] font-bold text-[#e51b23]">
+                    Your action plan
+                  </h3>
+                  <p className="mt-5 text-[1.375rem] font-bold text-black">
+                    {lead
+                      ? `Your ${c.actions.length}-step action plan was emailed to ${lead.email}. Changed answers? Use “Send my updated report” below.`
+                      : `${c.actions.length} required action${c.actions.length === 1 ? "" : "s"} ready. Enter your details below and we’ll email your step-by-step plan.`}
                   </p>
-                )}
-              </div>
+                  <div
+                    className="pointer-events-none mt-5 space-y-4 blur-[5px] select-none"
+                    aria-hidden="true"
+                  >
+                    {c.actions.map((text, index) => (
+                      <div
+                        key={index}
+                        className={`flex items-center gap-6 rounded-2xl bg-[#e51b23]/20 p-6 transition duration-200 [box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px] ${cardLift}`}
+                      >
+                        <img
+                          src="https://833probaid.com/images/arrow.png"
+                          alt=""
+                        />
+                        <p className="text-[1.25rem] font-bold">
+                          {text.replace(/\S/g, "x")}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
 
               <div
                 className={`rounded-2xl border-[3px] border-[#e51b23] bg-white p-6 pb-8 ${cardLift}`}
