@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import CTAButton from "@/components/CTAButton";
 import {
   PhoneInput,
@@ -45,7 +46,14 @@ export default function ToolReportForm({
   successTitle = "Need help fixing this?",
   successBody,
 }) {
-  const setField = (key, value) => setForm({ ...form, [key]: value });
+  const [started, setStarted] = useState({});
+  const setField = (key, value) => {
+    if (String(value ?? "").length > 0) {
+      setStarted((prev) => (prev[key] ? prev : { ...prev, [key]: true }));
+    }
+    setForm({ ...form, [key]: value });
+  };
+  const live = (key) => started[key] || invalid[key];
   const emailErrorMsg =
     !isEmpty(form.email) && !isValidEmail(form.email)
       ? "Please enter a valid email address."
@@ -60,6 +68,17 @@ export default function ToolReportForm({
     !isValidEmail(form.atty)
       ? "Please enter a valid email address."
       : "";
+  const fieldError = {
+    first: live("first") && isEmpty(form.first),
+    last: live("last") && isEmpty(form.last),
+    email: live("email") && (isEmpty(form.email) || !isValidEmail(form.email)),
+    phone: live("phone") && (isEmpty(form.phone) || !isValidUSPhone(form.phone)),
+    atty:
+      live("atty") &&
+      !isEmpty(form.atty) &&
+      !isNaValue(form.atty) &&
+      !isValidEmail(form.atty),
+  };
   const handleCall =
     onCall ||
     (() => {
@@ -132,7 +151,7 @@ export default function ToolReportForm({
         {FIELDS.map(([k, label, type, ph]) => (
           <label
             key={k}
-            className={`block ${k === "email" && invalid.email && emailErrorMsg ? "mb-7" : ""}`}
+            className={`block ${k === "email" && fieldError.email && emailErrorMsg ? "mb-7" : ""}`}
           >
             <span className="mb-1 block text-[1.375rem] font-bold uppercase text-primary group-hover:text-secondary">
               {label} <span className="text-secondary">*</span>
@@ -145,12 +164,12 @@ export default function ToolReportForm({
               placeholder={ph}
               inputClass={referralInputClass}
               width="full"
-              error={!!invalid[k]}
+              error={!!fieldError[k]}
               errorMessage={k === "email" ? emailErrorMsg : ""}
             />
           </label>
         ))}
-        <label className={`block ${invalid.phone && phoneErrorMsg ? "mb-7" : ""}`}>
+        <label className={`block ${fieldError.phone && phoneErrorMsg ? "mb-7" : ""}`}>
           <span className="mb-1 block text-[1.375rem] font-bold uppercase text-primary group-hover:text-secondary">
             Phone <span className="text-secondary">*</span>
           </span>
@@ -161,11 +180,11 @@ export default function ToolReportForm({
             placeholder="(555) 234-5678"
             inputClass={referralInputClass}
             width="full"
-            error={!!invalid.phone}
+            error={!!fieldError.phone}
             errorMessage={phoneErrorMsg}
           />
         </label>
-        <label className={`block sm:col-span-2 ${invalid.atty && attyErrorMsg ? "mb-7" : ""}`}>
+        <label className={`block sm:col-span-2 ${fieldError.atty && attyErrorMsg ? "mb-7" : ""}`}>
           <span className="mb-1 block text-[1.375rem] font-bold uppercase text-primary group-hover:text-secondary">
             Also send a copy to my attorney (optional)
           </span>
@@ -177,7 +196,7 @@ export default function ToolReportForm({
             placeholder='e.g. attorney@firm.com (or "N/A")'
             inputClass={referralInputClass}
             width="full"
-            error={!!invalid.atty}
+            error={!!fieldError.atty}
             errorMessage={attyErrorMsg}
           />
           <span className="mt-2 block text-base font-bold text-black">
@@ -227,14 +246,6 @@ export default function ToolReportForm({
           aria-label={submitLabel}
         />
       </div>
-      {status.text ? (
-        <p
-          className={`text-center text-[1.125rem] font-bold ${status.type === "err" ? "text-[#e51b23]" : "text-primary"}`}
-          role="status"
-        >
-          {status.text}
-        </p>
-      ) : null}
     </form>
   );
 }
