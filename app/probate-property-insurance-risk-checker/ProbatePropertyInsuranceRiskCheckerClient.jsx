@@ -6,6 +6,7 @@ import {
   RadioButton,
   RadioGroup,
   TextInput,
+  renderLabel,
 } from "@/components/SharedComponents";
 import { isEmpty, isValidEmail, isValidUSPhone } from "@/app/utils/formValidation";
 import ToolLeadCaptureModal from "@/components/ToolLeadCaptureModal";
@@ -953,19 +954,47 @@ const referralInputClass = "placeholder:italic placeholder-[#FD7702]";
 const referralSelectClass =
   "w-full h-10 border-[3.5px] px-2 py-1 bg-gray-200 font-bold outline-none focus:ring-2 focus:ring-[#FD7702] focus:ring-offset-0";
 
+const POINT_REST_SHADOW =
+  "0 8px 12px rgba(0, 0, 0, 0.4), 0 -5px 12px 1px rgba(0, 0, 0, 0.4)";
+const POINT_HOVER_SHADOW =
+  "0 12px 20px rgba(0, 0, 0, 0.5), 0 -8px 16px 2px rgba(0, 0, 0, 0.5)";
+
+function ArrowPointItem({ children, className = "" }) {
+  return (
+    <div
+      className={`group/arrow relative flex items-start gap-6 rounded-2xl p-6 ${className}`}
+      style={{
+        boxShadow: POINT_REST_SHADOW,
+        transition: "transform 0.3s ease, box-shadow 0.3s ease",
+      }}
+      onMouseEnter={(event) => {
+        event.currentTarget.style.transform = "translateX(5px)";
+        event.currentTarget.style.boxShadow = POINT_HOVER_SHADOW;
+      }}
+      onMouseLeave={(event) => {
+        event.currentTarget.style.transform = "translateX(0)";
+        event.currentTarget.style.boxShadow = POINT_REST_SHADOW;
+      }}
+    >
+      <img
+        src="https://833probaid.com/images/arrow.png"
+        alt=""
+        className="mt-[0.225rem] w-7 shrink-0 transition-transform duration-300 ease-in-out group-hover/arrow:scale-[1.15] group-hover/arrow:rotate-[5deg] md:mt-0 md:w-9"
+      />
+      {children}
+    </div>
+  );
+}
+
 function LayerRows({ items, rowClassName = "" }) {
   if (!items.length) return null;
 
   return (
-    <div className="mt-5 space-y-4 text-[1.25rem] leading-relaxed font-bold">
+    <div className="mt-5 flex flex-col gap-4 overflow-visible text-[1.25rem] leading-relaxed font-bold">
       {items.map((text, index) => (
-        <div
-          key={`${text}-${index}`}
-          className={`flex items-center gap-6 rounded-2xl p-6 transition duration-200 [box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px] ${cardLift} ${rowClassName}`}
-        >
-          <img src="https://833probaid.com/images/arrow.png" alt="" />
-          <p>{text}</p>
-        </div>
+        <ArrowPointItem key={`${text}-${index}`} className={rowClassName}>
+          <p className="min-w-0 flex-1">{text}</p>
+        </ArrowPointItem>
       ))}
     </div>
   );
@@ -1277,10 +1306,13 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                   estate, a trust, or a conservatorship.
                 </p>
                 <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-6">
-                  <label className="block sm:col-span-6">
-                    <span className="mb-1 block text-sm font-bold text-gray-800">
-                      Street address
-                    </span>
+                  <div className="sm:col-span-6">
+                    <label
+                      className="block font-bold text-base mb-1 whitespace-nowrap min-w-max"
+                      style={{ fontFamily: "var(--font-poppins), sans-serif" }}
+                    >
+                      {renderLabel("Street address")}
+                    </label>
                     <TextInput
                       id="ins-property-address"
                       name="street"
@@ -1292,11 +1324,14 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                       autoComplete="address-line1"
                       error={!addrValid}
                     />
-                  </label>
-                  <label className="block sm:col-span-3">
-                    <span className="mb-1 block text-sm font-bold text-gray-800">
-                      City
-                    </span>
+                  </div>
+                  <div className="sm:col-span-3">
+                    <label
+                      className="block font-bold text-base mb-1 whitespace-nowrap min-w-max"
+                      style={{ fontFamily: "var(--font-poppins), sans-serif" }}
+                    >
+                      {renderLabel("City")}
+                    </label>
                     <TextInput
                       name="city"
                       value={ad.city}
@@ -1307,11 +1342,14 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                       autoComplete="address-level2"
                       error={!addrValid}
                     />
-                  </label>
-                  <label className="block sm:col-span-1">
-                    <span className="mb-1 block text-sm font-bold text-gray-800">
-                      State
-                    </span>
+                  </div>
+                  <div className="sm:col-span-1">
+                    <label
+                      className="block font-bold text-base mb-1 whitespace-nowrap min-w-max"
+                      style={{ fontFamily: "var(--font-poppins), sans-serif" }}
+                    >
+                      {renderLabel("State")}
+                    </label>
                     <select
                       autoComplete="address-level1"
                       value={ad.state}
@@ -1324,11 +1362,14 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                         </option>
                       ))}
                     </select>
-                  </label>
-                  <label className="block sm:col-span-2">
-                    <span className="mb-1 block text-sm font-bold text-gray-800">
-                      ZIP code
-                    </span>
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label
+                      className="block font-bold text-base mb-1 whitespace-nowrap min-w-max"
+                      style={{ fontFamily: "var(--font-poppins), sans-serif" }}
+                    >
+                      {renderLabel("ZIP code")}
+                    </label>
                     <TextInput
                       name="zip"
                       value={ad.zip}
@@ -1341,7 +1382,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                       autoComplete="postal-code"
                       error={!addrValid}
                     />
-                  </label>
+                  </div>
                 </div>
                 {!addrValid ? (
                   <div
@@ -1453,19 +1494,30 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                                     ? "red"
                                     : "teal"
                                   : null;
+                              const colorByStatus =
+                                q.id === "policy"
+                                  ? isUnsureOption(val, label)
+                                    ? "orange"
+                                    : v === val
+                                      ? factor === 1
+                                        ? "red"
+                                        : factor > 0
+                                          ? "orange"
+                                          : "teal"
+                                      : "teal"
+                                  : null;
                               return {
                                 value: val,
                                 label,
                                 color:
-                                  qNum === 3 && isUnsureOption(val, label)
-                                    ? "orange"
-                                    : colorByRisk ||
-                                      optionColor(
-                                        val,
-                                        label,
-                                        q.opts,
-                                        qNum === 1,
-                                      ),
+                                  colorByStatus ||
+                                  colorByRisk ||
+                                  optionColor(
+                                    val,
+                                    label,
+                                    q.opts,
+                                    qNum === 1,
+                                  ),
                                 ...(q.stack ? { width: "full" } : {}),
                               };
                             })}
@@ -1592,7 +1644,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
               </div> */}
 
               <div
-                className={`rounded-2xl p-6 text-white ${cardLift}`}
+                className={`rounded-2xl p-6 text-white transition duration-200 ${cardLift}`}
                 style={{
                   boxShadow: layerCardShadow,
                   backgroundColor: tier ? tierColors[tier].border : TEAL,
@@ -1613,7 +1665,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 
               {c.gaps.length ? (
                 <div
-                  className={`rounded-2xl border-[3px] border-[#e51b23] bg-[#e51b23] p-6 pb-8 ${cardLift}`}
+                  className={`overflow-visible rounded-2xl border-[3px] border-[#e51b23] bg-[#e51b23] p-6 pb-8 transition duration-200 ${cardLift}`}
                   style={{ boxShadow: layerCardShadow }}
                 >
                   <h3 className="-mt-[0.2em] text-[1.5rem] font-bold text-white">
@@ -1625,7 +1677,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 
               {c.alerts.length ? (
                 <div
-                  className={`rounded-2xl border-[3px] border-[#e51b23] bg-white p-6 pb-8 ${cardLift}`}
+                  className={`overflow-visible rounded-2xl border-[3px] border-[#e51b23] bg-white p-6 pb-8 transition duration-200 ${cardLift}`}
                   style={{ boxShadow: layerCardShadow }}
                 >
                   <h3 className="-mt-[0.2em] text-[1.5rem] font-bold text-[#e51b23]">
@@ -1637,7 +1689,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 
               {c.actions.length ? (
                 <div
-                  className={`rounded-2xl border-[3px] border-[#e51b23] bg-white p-6 pb-8 ${cardLift}`}
+                  className={`overflow-visible rounded-2xl border-[3px] border-[#e51b23] bg-white p-6 pb-8 transition duration-200 ${cardLift}`}
                   style={{ boxShadow: layerCardShadow }}
                 >
                   <h3 className="-mt-[0.2em] text-[1.5rem] font-bold text-[#e51b23]">
@@ -1653,25 +1705,18 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                     aria-hidden="true"
                   >
                     {c.actions.map((text, index) => (
-                      <div
-                        key={index}
-                        className={`flex items-center gap-6 rounded-2xl bg-[#e51b23]/20 p-6 transition duration-200 [box-shadow:rgba(0,0,0,0.4)_0px_8px_12px,rgba(0,0,0,0.4)_0px_-5px_12px_1px] ${cardLift}`}
-                      >
-                        <img
-                          src="https://833probaid.com/images/arrow.png"
-                          alt=""
-                        />
-                        <p className="text-[1.25rem] font-bold">
+                      <ArrowPointItem key={index} className="bg-[#e51b23]/20">
+                        <p className="min-w-0 flex-1 text-[1.25rem] font-bold">
                           {text.replace(/\S/g, "x")}
                         </p>
-                      </div>
+                      </ArrowPointItem>
                     ))}
                   </div>
                 </div>
               ) : null}
 
               <div
-                className={`rounded-2xl border-[3px] border-[#e51b23] bg-white p-6 pb-8 ${cardLift}`}
+                className={`overflow-visible rounded-2xl border-[3px] border-[#e51b23] bg-white p-6 pb-8 transition duration-200 ${cardLift}`}
                 style={{ boxShadow: layerCardShadow }}
               >
                 <h3 className="-mt-[0.2em] text-[1.5rem] font-bold text-[#e51b23]">
@@ -1688,7 +1733,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
               </div>
 
               <div
-                className={`rounded-2xl border-[3px] border-primary bg-white p-6 pb-8 ${cardLift}`}
+                className={`overflow-visible rounded-2xl border-[3px] border-primary bg-white p-6 pb-8 transition duration-200 ${cardLift}`}
                 style={{ boxShadow: layerCardShadow }}
               >
                 <h3 className="-mt-[0.2em] text-[1.5rem] font-bold text-primary">
@@ -1722,7 +1767,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
               />
 
               <div
-                className={`flex items-start gap-3 rounded-2xl border-[3px] border-secondary px-6 py-5 ${cardLift}`}
+                className={`flex items-start gap-3 rounded-2xl border-[3px] border-secondary px-6 py-5 transition duration-200 ${cardLift}`}
                 style={{ boxShadow: layerCardShadow }}
               >
                 <ShieldAlert
