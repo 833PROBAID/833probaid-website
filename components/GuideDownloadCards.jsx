@@ -64,7 +64,8 @@ const GUIDES = [
     inside: "/seller-guide.png",
     insideAlt: "A page from the Luxury Collective Home Seller's Guide",
     caption:
-      "How we position your property for faster sales, stronger offers, and maximum value.",
+    //   "How we position your property for faster sales, stronger offers, and maximum value.",
+      "Our strategy for attracting stronger offers, selling faster, and maximizing your property's value.",
     label: "Download Sellers Guide",
     href: "/books/seller-guide.pdf",
     fileName: "833PROBAID-Sellers-Guide.pdf",
@@ -77,7 +78,8 @@ const GUIDES = [
     inside: "/buyer-guide.png",
     insideAlt: "A page from the Luxury Collective Home Buyer's Guide",
     caption:
-      "What to expect from the first showing to closing day, and how to navigate it with full confidence.",
+    //   "What to expect from the first showing to closing day, and how to navigate it with full confidence.",
+      "From your first showing to closing day, navigate every step with knowledge and confidence.",
     label: "Download Buyers Guide",
     href: "/books/buyer-guide.pdf",
     fileName: "833PROBAID-Buyers-Guide.pdf",

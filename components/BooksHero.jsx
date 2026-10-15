@@ -2,12 +2,23 @@
 
 import { useEffect, useState } from "react";
 
+function withBullet(text) {
+  if (!text?.includes("•")) return text;
+  return text.split("•").map((part, i) => (
+    <span key={i}>
+      {i > 0 && <span className="text-secondary group-hover:text-primary">•</span>}
+      {part}
+    </span>
+  ));
+}
+
 function withSuper(text, type = "text") {
-  if (!text?.includes("®")) return text;
+  const format = type === "title" ? withBullet : (t) => t;
+  if (!text?.includes("®")) return format(text);
   const [before, after] = text.split("®");
   return (
     <>
-      {before}
+      {format(before)}
       <span
         style={
           type === "title"
@@ -26,7 +37,7 @@ function withSuper(text, type = "text") {
       >
         ®
       </span>
-      {after}
+      {format(after)}
     </>
   );
 }

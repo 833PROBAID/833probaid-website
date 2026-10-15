@@ -235,7 +235,7 @@ export default function HomeBookContentClient() {
 						title="THE REAL ESTATE COMMAND CENTER"
 						subtitle="Your Direct Access To The Market. Your Next Move Starts Here."
 						description="Explore Our Listings. Search Any Neighborhood. Discover Your Next Opportunity."
-						icon="/icons/card-icon-1.png"
+						icon="/icons/card-icon-8.png"
 						href={AGENT_PROFILE_URL}
 						fullWidth
 						speed={3000}
