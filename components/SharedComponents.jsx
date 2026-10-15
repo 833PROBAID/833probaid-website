@@ -664,7 +664,7 @@ export const TextInput = React.forwardRef(
 							</div>
 						)}
 					{error && errorMessage && (
-						<p className='absolute top-full left-0 text-red-500 font-bold text-sm mt-1'>
+						<p className='top-full left-0 text-red-500 font-bold text-sm mt-1'>
 							{errorMessage}
 						</p>
 					)}

@@ -129,13 +129,16 @@ export default function ToolReportForm({
     <form
       onSubmit={onSubmit}
       noValidate
-      className={`space-y-6 rounded-2xl border-[3px] border-secondary bg-white p-6 sm:p-8 ${cardLift}`}
-      style={{ boxShadow: layerCardShadow }}
+      className="space-y-6 rounded-2xl border-[3px] border-[#0097A7] bg-white p-4 transition duration-200 sm:p-6 [box-shadow:var(--sc,rgba(0,0,0,0.4))_0px_8px_12px,var(--sc,rgba(0,0,0,0.4))_0px_-5px_12px_1px] hover:-translate-y-1.25 hover:![box-shadow:var(--sc-hover,rgba(0,0,0,0.5))_0px_12px_20px,var(--sc-hover,rgba(0,0,0,0.5))_0px_-8px_16px_2px]"
+      style={{
+        "--sc": "color-mix(in srgb, #0097A7 22%, transparent)",
+        "--sc-hover": "color-mix(in srgb, #0097A7 30%, transparent)",
+      }}
     >
-      <p className="text-2xl font-bold tracking-[1px] text-secondary uppercase group-hover:text-primary">
+      <p className="uppercase tracking-wide text-secondary text-lg font-extrabold leading-snug sm:text-xl">
         {title}
       </p>
-      <h3 className="mt-2 text-2xl font-bold text-primary group-hover:text-secondary">
+      <h3 className="mt-2 text-lg font-extrabold leading-snug text-gray-900 sm:text-xl">
         {description}
       </h3>
       <input
@@ -153,7 +156,7 @@ export default function ToolReportForm({
             key={k}
             className={`block ${k === "email" && fieldError.email && emailErrorMsg ? "mb-7" : ""}`}
           >
-            <span className="mb-1 block text-[1.375rem] font-bold uppercase text-primary group-hover:text-secondary">
+            <span className="mb-1 block text-base font-bold text-gray-900">
               {label} <span className="text-secondary">*</span>
             </span>
             <TextInput
@@ -170,7 +173,7 @@ export default function ToolReportForm({
           </label>
         ))}
         <label className={`block ${fieldError.phone && phoneErrorMsg ? "mb-7" : ""}`}>
-          <span className="mb-1 block text-[1.375rem] font-bold uppercase text-primary group-hover:text-secondary">
+          <span className="mb-1 block text-base font-bold text-gray-900">
             Phone <span className="text-secondary">*</span>
           </span>
           <PhoneInput
@@ -185,7 +188,7 @@ export default function ToolReportForm({
           />
         </label>
         <label className={`block sm:col-span-2 ${fieldError.atty && attyErrorMsg ? "mb-7" : ""}`}>
-          <span className="mb-1 block text-[1.375rem] font-bold uppercase text-primary group-hover:text-secondary">
+          <span className="mb-1 block text-base font-bold text-gray-900">
             Also send a copy to my attorney (optional)
           </span>
           <TextInput
@@ -213,7 +216,7 @@ export default function ToolReportForm({
             type="checkbox"
             checked={form.consent}
             onChange={(e) => setField("consent", e.target.checked)}
-            className={`block h-8 w-8 appearance-none rounded border-[3.5px] bg-white focus:ring-2 focus:ring-[#FD7702] ${invalid.consent ? "border-[#e51b23]" : "border-[#FD7702]"}`}
+            className={`block h-8 w-8 appearance-none rounded border-[3.5px] bg-white focus:ring-2 focus:ring-[#FD7702] ${invalid.consent ? "border-[#e51b23]" : "border-[#0097A7]"}`}
           />
           {form.consent ? (
             <span className="pointer-events-none absolute top-0 left-1 flex h-full w-full items-center justify-center">

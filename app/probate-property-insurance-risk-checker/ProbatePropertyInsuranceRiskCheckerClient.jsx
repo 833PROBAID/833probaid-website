@@ -968,11 +968,11 @@ function ArrowPointItem({ children, className = "" }) {
         transition: "transform 0.3s ease, box-shadow 0.3s ease",
       }}
       onMouseEnter={(event) => {
-        event.currentTarget.style.transform = "translateX(5px)";
+        event.currentTarget.style.transform = "translate(5px, -5px)";
         event.currentTarget.style.boxShadow = POINT_HOVER_SHADOW;
       }}
       onMouseLeave={(event) => {
-        event.currentTarget.style.transform = "translateX(0)";
+        event.currentTarget.style.transform = "translate(0, 0)";
         event.currentTarget.style.boxShadow = POINT_REST_SHADOW;
       }}
     >
@@ -1496,14 +1496,14 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                                   : null;
                               const colorByStatus =
                                 q.id === "policy"
-                                  ? isUnsureOption(val, label)
-                                    ? "orange"
-                                    : v === val
-                                      ? factor === 1
-                                        ? "red"
-                                        : factor > 0
-                                          ? "orange"
-                                          : "teal"
+                                  ? v === val
+                                    ? factorOf(q, val, factor, A) === 1
+                                      ? "red"
+                                      : factorOf(q, val, factor, A) > 0
+                                        ? "orange"
+                                        : "teal"
+                                    : isUnsureOption(val, label)
+                                      ? "orange"
                                       : "teal"
                                   : null;
                               return {
@@ -1677,7 +1677,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 
               {c.alerts.length ? (
                 <div
-                  className={`overflow-visible rounded-2xl border-[3px] border-[#e51b23] bg-white p-6 pb-8 transition duration-200 ${cardLift}`}
+                  className={`overflow-visible rounded-2xl border-[3px] border-[#e51b23] bg-white p-6 transition mb-[1rem] duration-200 ${cardLift}`}
                   style={{ boxShadow: layerCardShadow }}
                 >
                   <h3 className="-mt-[0.2em] text-[1.5rem] font-bold text-[#e51b23]">
@@ -1689,7 +1689,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 
               {c.actions.length ? (
                 <div
-                  className={`overflow-visible rounded-2xl border-[3px] border-[#e51b23] bg-white p-6 pb-8 transition duration-200 ${cardLift}`}
+                  className={`overflow-visible rounded-2xl border-[3px] border-[#e51b23] bg-white p-6 transition mb-[1rem] duration-200 ${cardLift}`}
                   style={{ boxShadow: layerCardShadow }}
                 >
                   <h3 className="-mt-[0.2em] text-[1.5rem] font-bold text-[#e51b23]">
@@ -1706,7 +1706,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                   >
                     {c.actions.map((text, index) => (
                       <ArrowPointItem key={index} className="bg-[#e51b23]/20">
-                        <p className="min-w-0 flex-1 text-[1.25rem] font-bold">
+                        <p className="min-w-0 flex-1 pr-10 text-[1.25rem] font-bold sm:pr-12">
                           {text.replace(/\S/g, "x")}
                         </p>
                       </ArrowPointItem>
@@ -1716,7 +1716,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
               ) : null}
 
               <div
-                className={`overflow-visible rounded-2xl border-[3px] border-[#e51b23] bg-white p-6 pb-8 transition duration-200 ${cardLift}`}
+                className={`overflow-visible rounded-2xl border-[3px] border-[#e51b23] bg-white p-6 transition mb-[1rem] duration-200 ${cardLift}`}
                 style={{ boxShadow: layerCardShadow }}
               >
                 <h3 className="-mt-[0.2em] text-[1.5rem] font-bold text-[#e51b23]">
