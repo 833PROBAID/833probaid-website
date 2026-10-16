@@ -67,10 +67,10 @@ export default function Footer() {
               >
                 ®
               </span>
-            </span>{" "}
+            </span>
             . All rights reserved.
           </p>
-          <a className="text-secondary" href="#">
+          <a className="text-secondary" href="/terms-of-service">
             Privacy Policy & Terms of Service/Disclosure
           </a>
         </div>
