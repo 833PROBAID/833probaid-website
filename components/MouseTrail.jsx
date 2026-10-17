@@ -11,7 +11,7 @@ export default function MouseTrail() {
   const [isMobile, setIsMobile] = useState(false);
   const canvasRef = useRef(null);
   const stateRef = useRef({
-    mouse: { x: -999, y: -999 },
+    mouse: null,
     smoothed: null,
     points: [],
     raf: null,
@@ -30,15 +30,22 @@ export default function MouseTrail() {
     const s = stateRef.current;
 
     const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = Math.round(window.innerWidth * dpr);
+      canvas.height = Math.round(window.innerHeight * dpr);
+      canvas.style.width = `${window.innerWidth}px`;
+      canvas.style.height = `${window.innerHeight}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
     resize();
     window.addEventListener("resize", resize);
 
     const handleMouseMove = (e) => {
-      s.mouse.x = e.clientX;
-      s.mouse.y = e.clientY;
+      s.mouse = { x: e.clientX, y: e.clientY };
+      if (!s.smoothed) {
+        s.smoothed = { ...s.mouse };
+        s.points.push({ ...s.mouse, t: Date.now() });
+      }
     };
     window.addEventListener("mousemove", handleMouseMove);
 
@@ -53,7 +60,11 @@ export default function MouseTrail() {
     const draw = () => {
       const now = Date.now();
 
-      if (!s.smoothed) s.smoothed = { ...s.mouse };
+      if (!s.mouse) {
+        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+        s.raf = requestAnimationFrame(draw);
+        return;
+      }
       s.smoothed.x += (s.mouse.x - s.smoothed.x) * SMOOTH_FACTOR;
       s.smoothed.y += (s.mouse.y - s.smoothed.y) * SMOOTH_FACTOR;
 
@@ -71,7 +82,7 @@ export default function MouseTrail() {
         s.points = s.points.slice(-MAX_POINTS);
       }
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
       const pts = s.points;
       if (pts.length < 4) {
@@ -148,6 +159,8 @@ export default function MouseTrail() {
       style={{
         position: "fixed",
         inset: 0,
+        width: "100vw",
+        height: "100vh",
         pointerEvents: "none",
         zIndex: 9999,
       }}
