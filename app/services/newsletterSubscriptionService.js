@@ -1,5 +1,6 @@
 import connectToDatabase from "../utils/db.js";
 import NewsletterSubscription from "../models/NewsletterSubscription.js";
+import { addWebsiteSubscriber } from "../lib/constantContact.js";
 
 const ALLOWED_SOURCE_TYPES = new Set(["website", "newsletter"]);
 
@@ -75,7 +76,23 @@ export async function getNewsletterSubscriptionByEmail(email) {
 
 export async function createNewsletterSubscription(data) {
 	await connectToDatabase();
-	return NewsletterSubscription.create(data);
+	const saved = await NewsletterSubscription.create(data);
+
+	// Also add them to Constant Contact → WEBSITE SUBSCRIBERS.
+	// If Constant Contact is down or not connected yet, the dashboard copy is still saved.
+	try {
+		await addWebsiteSubscriber({
+			email: data?.email,
+			fullName: data?.fullName,
+			firstName: data?.firstName,
+			lastName: data?.lastName,
+			phone: data?.phone,
+		});
+	} catch (err) {
+		console.error("[Constant Contact] could not add subscriber:", err?.message || err);
+	}
+
+	return saved;
 }
 
 export async function deleteNewsletterSubscription(id) {
