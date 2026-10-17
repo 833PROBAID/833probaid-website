@@ -987,7 +987,7 @@ function ArrowPointItem({
       <img
         src="https://833probaid.com/images/arrow.png"
         alt=""
-        className="mt-[0.225rem] w-7 shrink-0 transition-transform duration-300 ease-in-out group-hover/arrow:scale-[1.15] group-hover/arrow:rotate-[5deg] md:mt-0 md:w-9"
+        className="mt-[2.25px] h-7 w-7 shrink-0 object-contain transition-transform duration-300 ease-in-out group-hover/arrow:scale-[1.15] group-hover/arrow:rotate-[5deg] md:mt-[-1.75px] md:h-9 md:w-9"
       />
       {children}
     </div>
@@ -998,7 +998,7 @@ function LayerRows({ items, activeBorderColor = RED }) {
   if (!items.length) return null;
 
   return (
-    <div className="mt-5 flex flex-col gap-6 overflow-visible text-[1.25rem] leading-relaxed font-bold">
+    <div className="mt-5 grid grid-cols-1 auto-rows-fr gap-6 overflow-visible text-[1.25rem] leading-relaxed font-bold">
       {items.map((text, index) => (
         <ArrowPointItem
           key={`${text}-${index}`}
@@ -1712,7 +1712,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                       : `${c.actions.length} required action${c.actions.length === 1 ? "" : "s"} ready. Enter your details below and we’ll email your step-by-step plan.`}
                   </p>
                   <div
-                    className="pointer-events-none mt-5 space-y-4 blur-[5px] select-none"
+                    className="pointer-events-none mt-5 grid grid-cols-1 auto-rows-fr gap-4 blur-[5px] select-none"
                     aria-hidden="true"
                   >
                     {c.actions.map((text, index) => (
@@ -1720,7 +1720,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                         key={index}
                         activeBorderColor={TEAL}
                       >
-                        <p className="min-w-0 flex-1 pr-10 text-[1.25rem] font-bold sm:pr-12">
+                        <p className="min-w-0 flex-1 pr-10 text-[1.25rem] leading-relaxed font-bold sm:pr-12">
                           {text.replace(/\S/g, "x")}
                         </p>
                       </ArrowPointItem>
