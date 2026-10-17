@@ -956,43 +956,54 @@ const referralSelectClass =
 
 const POINT_REST_SHADOW =
   "0 8px 12px rgba(0, 0, 0, 0.4), 0 -5px 12px 1px rgba(0, 0, 0, 0.4)";
-const POINT_HOVER_SHADOW =
-  "0 12px 20px rgba(0, 0, 0, 0.5), 0 -8px 16px 2px rgba(0, 0, 0, 0.5)";
 
-function ArrowPointItem({ children, className = "" }) {
+function ArrowPointItem({
+  children,
+  activeBorderColor = RED,
+}) {
   return (
     <div
-      className={`group/arrow relative flex items-start gap-6 rounded-2xl p-6 ${className}`}
+      className="group/arrow relative flex items-start gap-6 rounded-2xl border-2 border-b-6 border-l-[10px] p-6 transition-transform duration-300 hover:border-b-[10px] hover:border-l-[14px]"
       style={{
         boxShadow: POINT_REST_SHADOW,
-        transition: "transform 0.3s ease, box-shadow 0.3s ease",
+        borderTopColor: activeBorderColor,
+        borderRightColor: activeBorderColor,
+        borderBottomColor: activeBorderColor,
+        borderLeftColor: activeBorderColor,
       }}
       onMouseEnter={(event) => {
-        event.currentTarget.style.transform = "translate(5px, -5px)";
-        event.currentTarget.style.boxShadow = POINT_HOVER_SHADOW;
+        const row = event.currentTarget;
+        row.style.transform = "translate(5px, -5px)";
+        const arrowIcon = row.querySelector("img");
+        if (arrowIcon) arrowIcon.style.transform = "translate(5px, -5px)";
       }}
       onMouseLeave={(event) => {
-        event.currentTarget.style.transform = "translate(0, 0)";
-        event.currentTarget.style.boxShadow = POINT_REST_SHADOW;
+        const row = event.currentTarget;
+        row.style.transform = "translate(0, 0)";
+        const arrowIcon = row.querySelector("img");
+        if (arrowIcon) arrowIcon.style.transform = "translate(0, 0)";
       }}
     >
       <img
         src="https://833probaid.com/images/arrow.png"
         alt=""
-        className="mt-[0.225rem] w-7 shrink-0 transition-transform duration-300 ease-in-out group-hover/arrow:scale-[1.15] group-hover/arrow:rotate-[5deg] md:mt-0 md:w-9"
+        className="mt-[2.25px] h-7 w-7 shrink-0 object-contain transition-transform duration-300 ease-in-out group-hover/arrow:scale-[1.15] group-hover/arrow:rotate-[5deg] md:mt-[-1.75px] md:h-9 md:w-9"
       />
       {children}
     </div>
   );
 }
 
-function LayerRows({ items, rowClassName = "" }) {
+function LayerRows({ items, activeBorderColor = RED }) {
   if (!items.length) return null;
 
   return (
-    <div className="mt-5 flex flex-col gap-4 overflow-visible text-[1.25rem] leading-relaxed font-bold">
+    <div className="mt-5 grid grid-cols-1 auto-rows-fr gap-6 overflow-visible text-[1.25rem] leading-relaxed font-bold">
       {items.map((text, index) => (
-        <ArrowPointItem key={`${text}-${index}`} className={rowClassName}>
+        <ArrowPointItem
+          key={`${text}-${index}`}
+          activeBorderColor={activeBorderColor}
+        >
           <p className="min-w-0 flex-1">{text}</p>
         </ArrowPointItem>
       ))}
@@ -1632,7 +1643,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
               </div>
             </div>
 
-            <div className="space-y-8">
+            <div className="space-y-10">
               {/* <div
                 className={`rounded-2xl border-[3px] border-secondary bg-secondary/10 p-6 pb-8 ${cardLift}`}
                 style={{ boxShadow: layerCardShadow }}
@@ -1640,7 +1651,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                 <h3 className="-mt-[0.2em] text-[1.5rem] font-bold text-secondary">
                   Recommended coverage path: {c.path[1]}
                 </h3>
-                <LayerRows items={c.path[2]} rowClassName="bg-white" />
+                <LayerRows items={c.path[2]} />
               </div> */}
 
               <div
@@ -1665,34 +1676,34 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
 
               {c.gaps.length ? (
                 <div
-                  className={`overflow-visible rounded-2xl border-[3px] border-[#e51b23] bg-[#e51b23] p-6 pb-8 transition duration-200 ${cardLift}`}
+                  className="overflow-visible rounded-2xl border-[3px] border-secondary bg-white p-6 pb-8 transition duration-200 hover:-translate-y-1.25"
                   style={{ boxShadow: layerCardShadow }}
                 >
-                  <h3 className="-mt-[0.2em] text-[1.5rem] font-bold text-white">
+                  <h3 className="-mt-[0.2em] text-[1.5rem] font-bold text-secondary">
                     To reach 100% readiness, you must fix:
                   </h3>
-                  <LayerRows items={c.gaps} rowClassName="bg-white" />
+                  <LayerRows items={c.gaps} activeBorderColor={ORANGE} />
                 </div>
               ) : null}
 
               {c.alerts.length ? (
                 <div
-                  className={`overflow-visible rounded-2xl border-[3px] border-[#e51b23] bg-white p-6 transition mb-[1rem] duration-200 ${cardLift}`}
+                  className={`overflow-visible rounded-2xl border-[3px] border-[#e51b23] bg-white p-6 transition duration-200 ${cardLift}`}
                   style={{ boxShadow: layerCardShadow }}
                 >
                   <h3 className="-mt-[0.2em] text-[1.5rem] font-bold text-[#e51b23]">
                     Alerts
                   </h3>
-                  <LayerRows items={c.alerts} rowClassName="bg-[#e51b23]/20" />
+                  <LayerRows items={c.alerts} />
                 </div>
               ) : null}
 
               {c.actions.length ? (
                 <div
-                  className={`overflow-visible rounded-2xl border-[3px] border-[#e51b23] bg-white p-6 transition mb-[1rem] duration-200 ${cardLift}`}
+                  className={`overflow-visible rounded-2xl border-[3px] border-primary bg-white p-6 transition duration-200 ${cardLift}`}
                   style={{ boxShadow: layerCardShadow }}
                 >
-                  <h3 className="-mt-[0.2em] text-[1.5rem] font-bold text-[#e51b23]">
+                  <h3 className="-mt-[0.2em] text-[1.5rem] font-bold text-primary">
                     Your action plan
                   </h3>
                   <p className="mt-5 text-[1.375rem] font-bold text-black">
@@ -1701,12 +1712,15 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                       : `${c.actions.length} required action${c.actions.length === 1 ? "" : "s"} ready. Enter your details below and we’ll email your step-by-step plan.`}
                   </p>
                   <div
-                    className="pointer-events-none mt-5 space-y-4 blur-[5px] select-none"
+                    className="pointer-events-none mt-5 grid grid-cols-1 auto-rows-fr gap-4 blur-[5px] select-none"
                     aria-hidden="true"
                   >
                     {c.actions.map((text, index) => (
-                      <ArrowPointItem key={index} className="bg-[#e51b23]/20">
-                        <p className="min-w-0 flex-1 pr-10 text-[1.25rem] font-bold sm:pr-12">
+                      <ArrowPointItem
+                        key={index}
+                        activeBorderColor={TEAL}
+                      >
+                        <p className="min-w-0 flex-1 pr-10 text-[1.25rem] leading-relaxed font-bold sm:pr-12">
                           {text.replace(/\S/g, "x")}
                         </p>
                       </ArrowPointItem>
@@ -1716,14 +1730,13 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
               ) : null}
 
               <div
-                className={`overflow-visible rounded-2xl border-[3px] border-[#e51b23] bg-white p-6 transition mb-[1rem] duration-200 ${cardLift}`}
+                className={`overflow-visible rounded-2xl border-[3px] border-[#e51b23] bg-white p-6 transition duration-200 ${cardLift}`}
                 style={{ boxShadow: layerCardShadow }}
               >
                 <h3 className="-mt-[0.2em] text-[1.5rem] font-bold text-[#e51b23]">
                   If no action is taken
                 </h3>
                 <LayerRows
-                  rowClassName="bg-[#e51b23]/20"
                   items={[
                     "Fire, water, or vandalism claims may be denied",
                     `Liability exposure may fall on the ${r.title} personally`,
@@ -1740,7 +1753,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
                   Coverage guidance
                 </h3>
                 <LayerRows
-                  rowClassName="bg-[#bfe5e9]"
+                  activeBorderColor={TEAL}
                   items={[
                     "Discuss vacant-property insurance with your insurer — often written on a DP-1 or DP-3 dwelling form, or added as a vacancy endorsement.",
                     "Confirm in writing: when the vacancy clause starts, any inspection requirements, and exclusions for vandalism, theft, glass breakage, and water damage.",
