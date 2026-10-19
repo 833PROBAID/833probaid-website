@@ -46,12 +46,12 @@ export const TERMS_SECTIONS = [
         text: "833PROBAID® provides specialized real estate sales and structural coordination services only.",
       },
       {
-        type: "p",
-        text: "We are NOT attorneys, certified financial advisors, tax professionals, or mediators. We do not provide legal advice, tax strategies, financial planning, or formal dispute resolution. You are strictly instructed to consult licensed legal and financial professionals for those specific matters.",
-      },
-      {
         type: "points",
         items: [
+          {
+            label: "We are NOT attorneys, certified financial advisors, tax professionals, or mediators",
+            text: "We do not provide legal advice, tax strategies, financial planning, or formal dispute resolution. You are strictly instructed to consult licensed legal and financial professionals for those specific matters.",
+          },
           {
             label: "No Non-Real Estate Support",
             text: "Our services are strictly logistical, transactional, and operational. We do not provide personal counseling, legal advocacy, emotional support, or therapeutic services.",
@@ -116,12 +116,7 @@ export const TERMS_SECTIONS = [
     blocks: [
       {
         type: "p",
-        text: "833PROBAID® maintains a professional network of top independent resources—including attorneys, tax advisors, contractors, appraisers, inspectors, and other specialized experts—available to assist with your estate needs.",
-      },
-      {
-        type: "p",
-        text: "However, your utilization of this network or submission of a vendor application on our site is strictly governed by the following:",
-        primary: true,
+        text: "833PROBAID® maintains a professional network of top independent resources—including attorneys, tax advisors, contractors, appraisers, inspectors, and other specialized experts—available to assist with your estate needs. However, your utilization of this network or submission of a vendor application on our site is strictly governed by the following:",
       },
       {
         type: "points",
@@ -175,7 +170,7 @@ export const TERMS_SECTIONS = [
       {
         type: "p",
         text: "We assume absolutely zero responsibility or legal liability for:",
-        primary: true,
+        secondary: true,
       },
       {
         type: "points",
@@ -200,7 +195,7 @@ export const TERMS_SECTIONS = [
       },
       {
         type: "p",
-        text: "All responsibility for property access, legal disclosures, asset security, and completeness of information remains solely with the estate representative or responsible party. It is the sole responsibility of the Executor, Administrator, or Trustee to secure the premises, change the locks if necessary, and remove or secure all personal property of value prior to listing or granting marketing access to the property.",
+        text: "All responsibility for property access, legal disclosures, asset security, and completeness of information remains solely with the estate representative or responsible party. It is the sole responsibility of the executor, administrator, or trustee to secure the premises, change the locks if necessary, and remove or secure all personal property of value prior to listing or granting marketing access to the property.",
         last: true,
         top: "1.5rem",
       },
@@ -257,7 +252,7 @@ export const TERMS_SECTIONS = [
       {
         type: "p",
         text: "PLEASE READ THIS SECTION CAREFULLY. IT AFFECTS YOUR LEGAL RIGHTS.",
-        primary: true,
+        secondary: true,
       },
       {
         type: "points",
@@ -295,7 +290,11 @@ export const TERMS_SECTIONS = [
           { type: "heading", text: "Use of Information" },
           {
             type: "p",
-            text: "Collected information is used exclusively to respond to your direct inquiries, deliver requested newsletters or market analyses, evaluate real estate matters, coordinate requested service vendors, and optimize website functionality. We do NOT sell, rent, or lease your personal information to third-party data brokers. Information submitted through a referral intake, vendor application, document upload, property valuation request, or other website tool may also be used to review the submission, verify or clarify information provided, communicate with appropriate parties identified in or reasonably connected with the submission, coordinate requested real estate-related services, maintain business and transaction records, protect against fraud or misuse, and comply with applicable legal, regulatory, licensing, or recordkeeping obligations.",
+            text: "Collected information is used exclusively to respond to your direct inquiries, deliver requested newsletters or market analyses, evaluate real estate matters, coordinate requested service vendors, and optimize website functionality. We do NOT sell, rent, or lease your personal information to third-party data brokers.",
+          },
+          {
+            type: "p",
+            text: "Information submitted through a referral intake, vendor application, document upload, property valuation request, or other website tool may also be used to review the submission, verify or clarify information provided, communicate with appropriate parties identified in or reasonably connected with the submission, coordinate requested real estate-related services, maintain business and transaction records, protect against fraud or misuse, and comply with applicable legal, regulatory, licensing, or recordkeeping obligations.",
             last: true,
           },
         ],

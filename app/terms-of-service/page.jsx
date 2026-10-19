@@ -33,9 +33,44 @@ export const metadata = {
   },
 };
 
+/**
+ * Paints the words "teal" and "orange" in their brand colors and turns
+ * "(833) PROBAID" into a teal phone link. Inline styles (not
+ * text-primary/secondary) so the parent hover color swap doesn't flip them.
+ */
+const BRAND_WORD_COLORS = {
+  teal: "var(--primary)",
+  orange: "var(--secondary)",
+};
+const HIGHLIGHT_REGEX = /(\(833\) PROBAID|\bteal\b|\borange\b)/i;
+
+function withBrandColors(text) {
+  if (!text || !HIGHLIGHT_REGEX.test(text)) return text;
+  return text.split(new RegExp(HIGHLIGHT_REGEX, "gi")).map((part, i) => {
+    if (i % 2 === 0) return part;
+    if (part.startsWith("(833)")) {
+      return (
+        <a
+          key={i}
+          href="tel:+18337762243"
+          className="whitespace-nowrap"
+          style={{ color: "var(--primary)" }}
+        >
+          {part}
+        </a>
+      );
+    }
+    return (
+      <span key={i} style={{ color: BRAND_WORD_COLORS[part.toLowerCase()] }}>
+        {part}
+      </span>
+    );
+  });
+}
+
 /** Renders "®" as a superscript, matching the homebook content markup. */
 function withReg(text) {
-  if (!text?.includes("833PROBAID®")) return text;
+  if (!text?.includes("833PROBAID®")) return withBrandColors(text);
   const regex = /833PROBAID®(?= |,|\.)/g;
   const parts = [];
   let lastIndex = 0;
@@ -48,7 +83,7 @@ function withReg(text) {
 
     parts.push(
       <Fragment key={key++}>
-        {text.slice(lastIndex, match.index)}
+        {withBrandColors(text.slice(lastIndex, match.index))}
         <span
           className={`text-primary inline-block whitespace-nowrap after:relative after:bottom-1.5 ${
             nextChar === " "
@@ -64,7 +99,9 @@ function withReg(text) {
     lastIndex = end + (nextChar === " " ? 1 : 0);
   }
 
-  parts.push(<Fragment key={key++}>{text.slice(lastIndex)}</Fragment>);
+  parts.push(
+    <Fragment key={key++}>{withBrandColors(text.slice(lastIndex))}</Fragment>
+  );
 
   return parts;
 }
@@ -120,7 +157,9 @@ function Block({ block }) {
     default:
       return (
         <p
-          className={`body-text text-bold ${block.primary && "text-primary"}`}
+          className={`body-text text-bold ${block.primary && "text-primary"} ${
+            block.secondary && "!text-secondary group-hover:!text-primary"
+          }`}
           style={{
             marginTop: block.top ? block.top : "-0.3em",
             marginBottom: block.last ? "-0.3em" : "1.5rem",
@@ -146,7 +185,7 @@ export default function TermsOfServicePage() {
         <div className="mt-[12rem] mb-3">
           <style dangerouslySetInnerHTML={{ __html: designSystemCSS }} />
           <div
-            className="homebook-content flex flex-col gap-10"
+            className="homebook-content flex flex-col gap-10 group"
             style={{
               contain: "layout style",
               isolation: "isolate",
@@ -187,7 +226,7 @@ export default function TermsOfServicePage() {
                     Contact Information
                   </h2>
                   <p
-                    className="body-text text-primary text-bold"
+                    className="body-text text-bold"
                     style={{ marginBottom: "1.5rem", marginTop: "-0.3em" }}
                   >
                     If you have questions regarding these Terms of Use, Privacy
@@ -200,29 +239,12 @@ export default function TermsOfServicePage() {
                       gap: "1rem",
                     }}
                   >
-                    <div
-                      className="contact-item probaid-phone"
-                      style={{
-                        display: "flex",
-                        alignItems: "flex-start",
-                        gap: "1rem",
-                      }}
-                    >
+                    <div className="contact-item">
                       <img
-                        src="/svgs/phone-icon.svg"
+                        src="/images/footer-logo.png"
                         alt=""
-                        style={{ width: "2rem", height: "2rem", flexShrink: 0 }}
-                        className="!relative !mt-[0.2rem]"
+                        style={{ height: 100, width: "auto", objectFit: "contain"}}
                       />
-                      <div className="body-text text-bold !leading-[1.1]">
-                        <span className="text-bold text-secondary">
-                          (833) PROBAID
-                        </span>
-                        <br />
-                        <span className="text-bold text-primary !ml-16">
-                          776-2243
-                        </span>
-                      </div>
                     </div>
                     <div
                       className="contact-item"
@@ -239,7 +261,7 @@ export default function TermsOfServicePage() {
                           width: "2rem",
                           height: "2rem",
                           flexShrink: 0,
-                          margin: "-2em -1px 0px 1px",
+                          margin: "-2.1em -1px 0px 1px",
                         }}
                       />
                       <p className="body-text text-bold !leading-[1.4]">
@@ -247,6 +269,31 @@ export default function TermsOfServicePage() {
                         <br />
                         Beverly Hills, CA 90211
                       </p>
+                    </div>
+                    <div
+                      className="contact-item probaid-phone"
+                      style={{
+                        display: "flex",
+                        alignItems: "flex-start",
+                        gap: "1rem",
+                      }}
+                    >
+                      <img
+                        src="/svgs/phone-icon.svg"
+                        alt=""
+                        style={{ width: "2rem", height: "2rem", flexShrink: 0 }}
+                        className="!relative !mt-[-0.1em] left-[0.1em]"
+                      />
+                      <div className="body-text text-bold !leading-[1.1]">
+                        <span className="text-bold text-secondary">
+                          (833){" "}
+                          <span className="tracking-[0.07em]">PROBAID</span>
+                        </span>
+                        <br />
+                        <span className="text-bold text-primary !ml-16 tracking-[0.17em]">
+                          7762243
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
