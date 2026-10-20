@@ -171,7 +171,7 @@ const ServiceLayout = ({
       <section className="min-h-screen py-8 sm:py-12 lg:py-16 font-montserrat">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div
-            className="overflow-visible rounded-3xl group hover:translate-y-[-5px] hover:![box-shadow:rgba(0,0,0,0.6)_0px_12px_20px,rgba(0,0,0,0.7)_0px_-8px_16px_2px]"
+            className="group overflow-visible rounded-3xl transition-[box-shadow] duration-300 hover:![box-shadow:rgba(0,0,0,0.6)_0px_12px_20px,rgba(0,0,0,0.7)_0px_-8px_16px_2px]"
             style={{ boxShadow: shellShadow }}
           >
             <div
@@ -316,8 +316,8 @@ const ServiceLayout = ({
               </div>
             </div>
             <div
-              className="bg-linear-to-br from-gray-50 to-gray-100 p-[2.5rem] border-[3px] border-t-0 border-secondary rounded-b-[24px] [box-shadow:0_8px_12px_rgba(0,0,0,0.4),0_-5px_12px_1px_rgba(0,0,0,0.4)] hover:-translate-y-[5px] hover:[box-shadow:0_12px_20px_rgba(0,0,0,0.5),0_-8px_16px_2px_rgba(0,0,0,0.5)]"
-              style={{ transition: "transform 0.3s ease, box-shadow 0.3s ease" }}
+              className="bg-linear-to-br from-gray-50 to-gray-100 p-[2.5rem] border-[3px] border-t-0 border-secondary rounded-b-[24px] [box-shadow:0_8px_12px_rgba(0,0,0,0.4),0_-5px_12px_1px_rgba(0,0,0,0.4)] hover:[box-shadow:0_12px_20px_rgba(0,0,0,0.5),0_-8px_16px_2px_rgba(0,0,0,0.5)]"
+              style={{ transition: "box-shadow 0.3s ease" }}
             >
               {children}
             </div>

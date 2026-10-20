@@ -1,11 +1,11 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 
-const TRAIL_DURATION = 900;  // ms — reduced from 1200 for less draw work
-const SMOOTH_FACTOR = 0.15;  // higher = snappier tracking, prevents point bunching near cursor
-const MAX_POINTS = 45;       // reduced from 80 — fewer segments to draw
-const MIN_DIST = 3;          // increased from 1.5 — fewer redundant points
-const BUCKETS = 6;           // opacity buckets instead of per-segment draws
+const TRAIL_DURATION = 900;
+const SMOOTHING_TIME = 24;
+const MAX_POINTS = 80;
+const MIN_DIST = 1.5;
+const BUCKETS = 6;
 
 export default function MouseTrail() {
   const [isMobile, setIsMobile] = useState(false);
@@ -15,6 +15,7 @@ export default function MouseTrail() {
     smoothed: null,
     points: [],
     raf: null,
+    lastFrameTime: null,
   });
 
 	useEffect(() => {
@@ -29,6 +30,10 @@ export default function MouseTrail() {
     const ctx = canvas.getContext("2d");
     const s = stateRef.current;
 
+    const scheduleDraw = () => {
+      if (s.raf === null) s.raf = requestAnimationFrame(draw);
+    };
+
     const resize = () => {
       const dpr = window.devicePixelRatio || 1;
       canvas.width = Math.round(window.innerWidth * dpr);
@@ -36,18 +41,20 @@ export default function MouseTrail() {
       canvas.style.width = `${window.innerWidth}px`;
       canvas.style.height = `${window.innerHeight}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      if (s.points.length) scheduleDraw();
     };
     resize();
     window.addEventListener("resize", resize);
 
-    const handleMouseMove = (e) => {
+    const handlePointerMove = (e) => {
       s.mouse = { x: e.clientX, y: e.clientY };
       if (!s.smoothed) {
         s.smoothed = { ...s.mouse };
-        s.points.push({ ...s.mouse, t: Date.now() });
+        s.points.push({ ...s.mouse, t: performance.now() });
       }
+      scheduleDraw();
     };
-    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("pointermove", handlePointerMove, { passive: true });
 
     function catmullRomSegment(p0, p1, p2, p3) {
       const cp1x = p1.x + (p2.x - p0.x) / 6;
@@ -57,16 +64,20 @@ export default function MouseTrail() {
       ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, p2.x, p2.y);
     }
 
-    const draw = () => {
-      const now = Date.now();
+    function draw(timestamp) {
+      s.raf = null;
+      const now = timestamp;
+      const delta = s.lastFrameTime === null ? 16.67 : timestamp - s.lastFrameTime;
+      s.lastFrameTime = timestamp;
 
       if (!s.mouse) {
         ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-        s.raf = requestAnimationFrame(draw);
+        s.lastFrameTime = null;
         return;
       }
-      s.smoothed.x += (s.mouse.x - s.smoothed.x) * SMOOTH_FACTOR;
-      s.smoothed.y += (s.mouse.y - s.smoothed.y) * SMOOTH_FACTOR;
+      const smoothing = 1 - Math.exp(-delta / SMOOTHING_TIME);
+      s.smoothed.x += (s.mouse.x - s.smoothed.x) * smoothing;
+      s.smoothed.y += (s.mouse.y - s.smoothed.y) * smoothing;
 
       const last = s.points[s.points.length - 1];
       const dist = last
@@ -85,71 +96,72 @@ export default function MouseTrail() {
       ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
       const pts = s.points;
-      if (pts.length < 4) {
-        s.raf = requestAnimationFrame(draw);
-        return;
-      }
-
       ctx.save();
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
 
-      // Pass 1 — single wide glow (1 draw call)
-      ctx.beginPath();
-      ctx.moveTo(pts[1].x, pts[1].y);
-      for (let i = 1; i < pts.length - 2; i++) {
-        catmullRomSegment(pts[i - 1], pts[i], pts[i + 1], pts[i + 2]);
-      }
-      ctx.strokeStyle = "rgba(254, 119, 2, 0.05)";
-      ctx.lineWidth = 14;
-      ctx.stroke();
-
-      // Pass 2 — BUCKETS opacity levels (6 draw calls instead of 80)
-      // Each bucket covers an equal slice of the age range.
-      for (let b = 0; b < BUCKETS; b++) {
-        const loFrac = b / BUCKETS;
-        const hiFrac = (b + 1) / BUCKETS;
-        const midAlpha = 1 - (loFrac + hiFrac) / 2;
-
+      if (pts.length >= 4) {
+        // Pass 1 — single wide glow (1 draw call)
         ctx.beginPath();
-        let started = false;
-
+        ctx.moveTo(pts[1].x, pts[1].y);
         for (let i = 1; i < pts.length - 2; i++) {
-          const frac = (now - pts[i].t) / TRAIL_DURATION;
-          if (frac >= loFrac && frac < hiFrac) {
-            if (!started) {
-              ctx.moveTo(pts[i].x, pts[i].y);
-              started = true;
+          catmullRomSegment(pts[i - 1], pts[i], pts[i + 1], pts[i + 2]);
+        }
+        ctx.strokeStyle = "rgba(254, 119, 2, 0.05)";
+        ctx.lineWidth = 14;
+        ctx.stroke();
+
+        // Pass 2 — BUCKETS opacity levels (6 draw calls instead of 80)
+        for (let b = 0; b < BUCKETS; b++) {
+          const loFrac = b / BUCKETS;
+          const hiFrac = (b + 1) / BUCKETS;
+          const midAlpha = 1 - (loFrac + hiFrac) / 2;
+
+          ctx.beginPath();
+          let started = false;
+
+          for (let i = 1; i < pts.length - 2; i++) {
+            const frac = (now - pts[i].t) / TRAIL_DURATION;
+            if (frac >= loFrac && frac < hiFrac) {
+              if (!started) {
+                ctx.moveTo(pts[i].x, pts[i].y);
+                started = true;
+              }
+              catmullRomSegment(pts[i - 1], pts[i], pts[i + 1], pts[i + 2]);
             }
-            catmullRomSegment(pts[i - 1], pts[i], pts[i + 1], pts[i + 2]);
+          }
+
+          if (started) {
+            ctx.strokeStyle = `rgba(254, 119, 2, ${(midAlpha * 0.9).toFixed(3)})`;
+            ctx.lineWidth = 2.5 * midAlpha + 0.4;
+            ctx.stroke();
           }
         }
-
-        if (started) {
-          ctx.strokeStyle = `rgba(254, 119, 2, ${(midAlpha * 0.9).toFixed(3)})`;
-          ctx.lineWidth = 2.5 * midAlpha + 0.4;
-          ctx.stroke();
-        }
       }
 
-      // Bright tip dot
-      const tip = pts[pts.length - 1];
-      ctx.beginPath();
-      ctx.arc(tip.x, tip.y, 2.5, 0, Math.PI * 2);
-      ctx.fillStyle = "rgba(255, 160, 60, 0.95)";
-      ctx.fill();
+      if (pts.length) {
+        const tip = pts[pts.length - 1];
+        ctx.beginPath();
+        ctx.arc(tip.x, tip.y, 2.5, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(255, 160, 60, 0.95)";
+        ctx.fill();
+      }
 
       ctx.restore();
 
-      s.raf = requestAnimationFrame(draw);
-    };
-
-    s.raf = requestAnimationFrame(draw);
+      const remainingDistance = Math.hypot(
+        s.mouse.x - s.smoothed.x,
+        s.mouse.y - s.smoothed.y,
+      );
+      if (pts.length || remainingDistance > 0.05) scheduleDraw();
+      else s.lastFrameTime = null;
+    }
 
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("pointermove", handlePointerMove);
       window.removeEventListener("resize", resize);
-      cancelAnimationFrame(s.raf);
+      if (s.raf !== null) cancelAnimationFrame(s.raf);
+      s.raf = null;
     };
   }, []);
 
