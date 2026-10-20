@@ -230,7 +230,7 @@ export default function TermsOfServicePage() {
                     style={{ marginBottom: "1.5rem", marginTop: "-0.3em" }}
                   >
                     If you have questions regarding these Terms of Use, Privacy
-                    Policy, or Disclosures, please contact us at:
+                    Policy/Disclosures, please contact us at:
                   </p>
                   <div
                     style={{

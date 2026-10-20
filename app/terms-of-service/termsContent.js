@@ -49,7 +49,7 @@ export const TERMS_SECTIONS = [
         type: "points",
         items: [
           {
-            label: "We are NOT attorneys, certified financial advisors, tax professionals, or mediators",
+            label: "We are NOT Attorneys, Certified Financial Advisors, Tax Professionals, or Mediators",
             text: "We do not provide legal advice, tax strategies, financial planning, or formal dispute resolution. You are strictly instructed to consult licensed legal and financial professionals for those specific matters.",
           },
           {
