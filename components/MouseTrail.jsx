@@ -1,11 +1,11 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 
-const TRAIL_DURATION = 900;  // ms — reduced from 1200 for less draw work
-const SMOOTH_FACTOR = 0.15;  // higher = snappier tracking, prevents point bunching near cursor
-const MAX_POINTS = 45;       // reduced from 80 — fewer segments to draw
-const MIN_DIST = 3;          // increased from 1.5 — fewer redundant points
-const BUCKETS = 6;           // opacity buckets instead of per-segment draws
+const TRAIL_DURATION = 900;
+const SMOOTHING_TIME = 24;
+const MAX_POINTS = 80;
+const MIN_DIST = 1.5;
+const BUCKETS = 6;
 
 export default function MouseTrail() {
   const [isMobile, setIsMobile] = useState(false);
@@ -15,6 +15,7 @@ export default function MouseTrail() {
     smoothed: null,
     points: [],
     raf: null,
+    lastFrameTime: null,
   });
 
 	useEffect(() => {
@@ -40,14 +41,14 @@ export default function MouseTrail() {
     resize();
     window.addEventListener("resize", resize);
 
-    const handleMouseMove = (e) => {
+    const handlePointerMove = (e) => {
       s.mouse = { x: e.clientX, y: e.clientY };
       if (!s.smoothed) {
         s.smoothed = { ...s.mouse };
-        s.points.push({ ...s.mouse, t: Date.now() });
+        s.points.push({ ...s.mouse, t: performance.now() });
       }
     };
-    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("pointermove", handlePointerMove, { passive: true });
 
     function catmullRomSegment(p0, p1, p2, p3) {
       const cp1x = p1.x + (p2.x - p0.x) / 6;
@@ -57,16 +58,20 @@ export default function MouseTrail() {
       ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, p2.x, p2.y);
     }
 
-    const draw = () => {
-      const now = Date.now();
+    const draw = (timestamp) => {
+      const now = timestamp;
+      const delta = s.lastFrameTime === null ? 16.67 : timestamp - s.lastFrameTime;
+      s.lastFrameTime = timestamp;
 
       if (!s.mouse) {
         ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+        s.lastFrameTime = null;
         s.raf = requestAnimationFrame(draw);
         return;
       }
-      s.smoothed.x += (s.mouse.x - s.smoothed.x) * SMOOTH_FACTOR;
-      s.smoothed.y += (s.mouse.y - s.smoothed.y) * SMOOTH_FACTOR;
+      const smoothing = 1 - Math.exp(-delta / SMOOTHING_TIME);
+      s.smoothed.x += (s.mouse.x - s.smoothed.x) * smoothing;
+      s.smoothed.y += (s.mouse.y - s.smoothed.y) * smoothing;
 
       const last = s.points[s.points.length - 1];
       const dist = last
@@ -147,7 +152,7 @@ export default function MouseTrail() {
     s.raf = requestAnimationFrame(draw);
 
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("pointermove", handlePointerMove);
       window.removeEventListener("resize", resize);
       cancelAnimationFrame(s.raf);
     };

@@ -225,8 +225,21 @@ export default function ToolReportForm({
           ) : null}
         </span>
         <span>
-          I agree that 833PROBAID® may contact me about this report by phone,
-          text, or email, and I agree to the{" "}
+          I agree that{" "}
+          <span className="text-primary transition-colors hover:text-secondary">
+            833PROBAID
+            <span
+              style={{
+                verticalAlign: "super",
+                fontSize: ".8em",
+                lineHeight: 0,
+              }}
+            >
+              ®
+            </span>
+          </span>{" "}
+          may contact me about this report by phone, text, or email, and I agree
+          to the{" "}
           <a
             href={termsUrl}
             target="_blank"
