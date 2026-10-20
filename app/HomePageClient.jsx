@@ -218,7 +218,7 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
                 />
               </h1>
 
-              <h4 className="font-montserrat text-primary mt-3 text-center text-lg leading-snug font-extrabold lg:text-xl xl:text-2xl">
+              <h4 className="font-montserrat text-primary mt-3 text-center text-lg leading-snug font-extrabold lg:text-xl xl:text-2xl !mb-[-0.2em]">
                 <AnimatedText
                   text="We Handle the Sale—From Authority to Closing."
                   animate={false}
@@ -240,7 +240,7 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
                     animate={false}
                   />
                 </p>
-                <h4 className="font-montserrat text-primary text-center text-lg font-extrabold tracking-wide lg:text-xl xl:text-2xl mt-4">
+                <h4 className="font-montserrat text-primary text-center text-lg font-extrabold tracking-wide lg:text-xl xl:text-2xl mt-4 italic">
                   <AnimatedText text="FAST " />
                   <span className="text-secondary">•</span>{" "}
                   <AnimatedText text="FAIR " />

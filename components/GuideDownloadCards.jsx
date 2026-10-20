@@ -66,7 +66,7 @@ const GUIDES = [
     caption:
     //   "How we position your property for faster sales, stronger offers, and maximum value.",
       "Our strategy for attracting stronger offers, selling faster, and maximizing your property's value.",
-    label: "Download Sellers Guide",
+    label: "Download Seller's Guide",
     href: "/books/seller-guide.pdf",
     fileName: "833PROBAID-Sellers-Guide.pdf",
   },
@@ -80,7 +80,7 @@ const GUIDES = [
     caption:
     //   "What to expect from the first showing to closing day, and how to navigate it with full confidence.",
       "From your first showing to closing day, navigate every step with knowledge and confidence.",
-    label: "Download Buyers Guide",
+    label: "Download Buyer's Guide",
     href: "/books/buyer-guide.pdf",
     fileName: "833PROBAID-Buyers-Guide.pdf",
   },

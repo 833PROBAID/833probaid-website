@@ -456,11 +456,11 @@ function BookCardInner({
                 transform: "translateZ(0.01px)",
                 WebkitTransform: "translateZ(0.01px)",
                 justifyContent: "space-between",
-                padding: "4% 0",
+                padding: "3% 0",
               }}
             >
               {/* UPPER HALF — icon + title */}
-              <div className="flex flex-col items-center justify-start pt-2 3md:pt-5 lg:pt-6 gap-4">
+              <div className="flex flex-col items-center justify-start pt-2 3md:pt-5 lg:pt-6 gap-7">
                 <div className="sm:h-[50px] md:h-[60px] lg:h-[70px] xl:h-[90px] sm:w-[50px] md:w-[60px] lg:w-[70px] xl:w-[90px]">
                   <Image
                     src={icon}
@@ -519,7 +519,7 @@ function BookCardInner({
               </div>
 
               {/* LOWER HALF — description + button */}
-              <div className="flex items-center justify-between flex-col gap-8">
+              <div className="flex items-center justify-between flex-col gap-11">
                 <p
                   className={`bottom-[30%] xl:bottom-[var(--card-bottom)] 2xl:bottom-[30%] text-white tracking-wider text-center font-montserrat leading-[1.3] font-semibold sm:text-[14px] 2md:text-[15px] 3md:text-[17px] lg:text-[18px] 2lg:text-[19.5px] 3lg:text-[21px] xl:text-[22px] px-[1%]`}
                 >
