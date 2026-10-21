@@ -332,7 +332,7 @@ const publicPageStyles = `
 			}
 
 			.step-container:hover {
-				transform: scale(1.02);
+				transform: scale(1.02) !important;
 			}
 
 			.step-inner {

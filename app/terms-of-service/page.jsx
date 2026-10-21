@@ -221,78 +221,80 @@ export default function TermsOfServicePage() {
 
             <section id="contact-information">
               <div className="conclusion-block">
-                <div className="conclusion-content">
-                  <h2 className="section-title text-secondary !mb-[1.5rem] !text-[3rem]">
-                    Contact Information
-                  </h2>
-                  <p
-                    className="body-text text-bold"
-                    style={{ marginBottom: "1.5rem", marginTop: "-0.3em" }}
-                  >
-                    If you have questions regarding these Terms of Use, Privacy
-                    Policy/Disclosures, please contact us at:
-                  </p>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "1rem",
-                    }}
-                  >
-                    <div className="contact-item">
-                      <img
-                        src="/images/footer-logo.png"
-                        alt=""
-                        style={{ height: 100, width: "auto", objectFit: "contain"}}
-                      />
-                    </div>
+                <div className="drop-shadow-[0_0_18px_rgba(0,0,0,1)]">
+                  <div className="conclusion-content">
+                    <h2 className="section-title text-secondary !mb-[1.5rem] !text-[3rem]">
+                      Contact Information
+                    </h2>
+                    <p
+                      className="body-text text-bold"
+                      style={{ marginBottom: "1.5rem", marginTop: "-0.3em" }}
+                    >
+                      If you have questions regarding these Terms of Use, Privacy
+                      Policy/Disclosures, please contact us at:
+                    </p>
                     <div
-                      className="contact-item"
                       style={{
                         display: "flex",
-                        alignItems: "center",
+                        flexDirection: "column",
                         gap: "1rem",
                       }}
                     >
-                      <img
-                        src="/svgs/location-pin.svg"
-                        alt=""
+                      <div className="contact-item">
+                        <img
+                          src="/images/footer-logo.png"
+                          alt=""
+                          style={{ height: 100, width: "auto", objectFit: "contain"}}
+                        />
+                      </div>
+                      <div
+                        className="contact-item"
                         style={{
-                          width: "2rem",
-                          height: "2rem",
-                          flexShrink: 0,
-                          margin: "-2.1em -1px 0px 1px",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "1rem",
                         }}
-                      />
-                      <p className="body-text text-bold !leading-[1.4]">
-                        311 N. Robertson Blvd, Suite 444
-                        <br />
-                        Beverly Hills, CA 90211
-                      </p>
-                    </div>
-                    <div
-                      className="contact-item probaid-phone"
-                      style={{
-                        display: "flex",
-                        alignItems: "flex-start",
-                        gap: "1rem",
-                      }}
-                    >
-                      <img
-                        src="/svgs/phone-icon.svg"
-                        alt=""
-                        style={{ width: "2rem", height: "2rem", flexShrink: 0 }}
-                        className="!relative !mt-[-0.1em] left-[0.1em]"
-                      />
-                      <div className="body-text text-bold !leading-[1.1]">
-                        <span className="text-bold text-secondary">
-                          (833){" "}
-                          <span className="tracking-[0.07em]">PROBAID</span>
-                        </span>
-                        <br />
-                        <span className="text-bold text-primary !ml-16 tracking-[0.17em]">
-                          7762243
-                        </span>
+                      >
+                        <img
+                          src="/svgs/location-pin.svg"
+                          alt=""
+                          style={{
+                            width: "2rem",
+                            height: "2rem",
+                            flexShrink: 0,
+                            margin: "-2.1em -1px 0px 1px",
+                          }}
+                        />
+                        <p className="body-text text-bold !leading-[1.4]">
+                          311 N. Robertson Blvd, Suite 444
+                          <br />
+                          Beverly Hills, CA 90211
+                        </p>
+                      </div>
+                      <div
+                        className="contact-item probaid-phone"
+                        style={{
+                          display: "flex",
+                          alignItems: "flex-start",
+                          gap: "1rem",
+                        }}
+                      >
+                        <img
+                          src="/svgs/phone-icon.svg"
+                          alt=""
+                          style={{ width: "2rem", height: "2rem", flexShrink: 0 }}
+                          className="!relative !mt-[-0.1em] left-[0.1em]"
+                        />
+                        <div className="body-text text-bold !leading-[1.1]">
+                          <span className="text-bold text-secondary">
+                            (833){" "}
+                            <span className="tracking-[0.07em]">PROBAID</span>
+                          </span>
+                          <br />
+                          <span className="text-bold text-primary !ml-16 tracking-[0.17em]">
+                            7762243
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
