@@ -29,29 +29,30 @@ export default function ContactCard() {
               fill="white"
             />
           </g>
-          <foreignObject x="100" y="80" width="370" height="320" className="overflow-visible">
-            <div className="flex flex-col items-center justify-center h-full pt-20 w-full">
+          <foreignObject x="100" y="40" width="370" height="320" className="overflow-visible">
+            <div className="flex flex-col items-center justify-center pt-20 w-full">
               <h2 className="text-secondary text-center text-[30px] font-bold">Contact Us</h2>
-              <div className="flex flex-col justify-center items-start mt-4 sm:mt-6 text-[19px]">
-                <div className="mb-4 flex items-start gap-3">
+              <div className="flex flex-col justify-center items-start gap-[1em] mt-6 text-[19px]">
+                <div className="flex items-start gap-3">
                   <img src="/svgs/location-pin.svg" style={{ width: "35px" }} alt="Location" />
                   <p className="font-bold text-left">
                     311 N. Robertson Blvd #444, <br /> Beverly Hills, CA 90211
                   </p>
                 </div>
-                <a href="tel:8337762243" className="mb-8 flex items-center gap-3">
-                  <img src="/svgs/phone-icon.svg" style={{ width: "32px", marginTop: "-9px", marginLeft: "1px" }} alt="Phone" />
-                  <div className="flex flex-row items-start justify-start text-xl md:text-3xl">
-                    <b className="text-secondary font-bold">(833)&nbsp;</b>
-                    <div className="flex flex-col gap-3">
-                      <b className="text-secondary tracking-[0.1rem] font-bold">PROBAID</b>
-                      <b className="text-primary md:tracking-[0.28rem] tracking-[0.2rem] font-bold ml-0.5" style={{ lineHeight: "2px" }}>
-                        7762243
-                      </b>
-                    </div>
+                <a href="tel:8337762243" className="flex items-center gap-3">
+                  <img src="/svgs/phone-icon.svg" style={{ width: "32px", marginTop: "-0.8em", marginLeft: "1px" }} alt="Phone" />
+                  <div className="leading-[1.1] text-[19px]">
+                    <span className="text-secondary font-bold">
+                      (833)&nbsp;
+                      <span className="tracking-[0.07em]">PROBAID</span>
+                    </span>
+                    <br/>
+                    <span className="font-bold text-primary !ml-[2.9em] tracking-[0.17em]" >
+                      7762243
+                    </span>
                   </div>
                 </a>
-                <a href="mailto:info@833probaid.com" className="mb-6 flex items-center gap-3">
+                <a href="mailto:info@833probaid.com" className="flex items-center gap-3">
                   <img src="/svgs/uiw_mail.svg" style={{ height: "35px", marginTop: "-2px" }} alt="Email" />
                   <p className="font-bold text-[19px]">Info@833probaid.com</p>
                 </a>

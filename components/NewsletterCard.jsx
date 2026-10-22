@@ -100,18 +100,18 @@ export default function NewsletterCard() {
             />
             <foreignObject
               x="70"
-              y="90"
+              y="35"
               width="450"
               height="370"
               className="overflow-visible"
             >
               <div className="flex flex-col items-center justify-center w-full">
-                <div className="flex flex-col items-center justify-center pt-[31.6px]">
+                <div className="flex flex-col items-center justify-center pt-20">
                   <h2 className="text-[#0097A7] text-center text-[30px] font-bold  font-montserrat mb-6  pl-6">
                     Join Our Newsletter
                   </h2>
-                  <div className="flex flex-col gap-3 pr-6">
-                    <div className="pl-10">
+                  <div className="flex flex-col gap-[1em] pr-6">
+                    <div className="pl-10 flex flex-col gap-[1em]">
                       <p className="font-bold text-[19px]">
                         Stay up to date with the latest news and updates from{" "}
                         <b className="text-primary">
@@ -127,12 +127,12 @@ export default function NewsletterCard() {
                         </b>
                         .
                       </p>
-                      <p className="font-bold text-[19px] mt-4 ">
+                      <p className="font-bold text-[19px]">
                         Subscribe to our newsletter.
                       </p>
                     </div>
                     <form onSubmit={handleOpen} className="pl-5">
-                      <div className="border-secondary mx-auto mt-4 mb-5 w-[90%] border-b-4">
+                      <div className="border-secondary mx-auto w-[90%] border-b-4">
                         <input
                           type="email"
                           placeholder="Enter your E-mail"
