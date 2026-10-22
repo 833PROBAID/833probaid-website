@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
 import dynamic from "next/dynamic";
 import Hero from "../components/Home/Hero";
 import Navbar from "../components/Navbar";
@@ -12,6 +11,7 @@ import HomeBooksMobileShowcaseClient from "@/components/HomeBooksMobileShowcaseC
 import BookCardBig from "./new-page/BookCardBig";
 import BookCardGrid from "./new-page/BookCardGrid";
 import useIsMobile from "@/hooks/useIsMobile";
+import useHashPin from "@/hooks/useHashPin";
 
 const Footer = dynamic(() => import("../components/Footer"));
 const HomeCard = dynamic(() => import("../components/HomeCard"));
@@ -28,26 +28,10 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
 
   const hasHomeCards = homeCardData.length > 0;
 
-  // useEffect(() => {
-  //   if (!hasHomeCards) return;
-  //   if (window.location.hash !== "#qr-section" && !toolsCardData.map(e => '#' + e.href).includes(window.location.hash)) return;
-
-  //   setTimeout(() => {
-  //     requestAnimationFrame(() => {
-  //       if (window.location.hash === "#qr-section") {
-  //         document.getElementById("qr-section-scroll")?.scrollIntoView({
-  //           behavior: "smooth",
-  //           block: "start",
-  //         });
-  //       } else {
-  //         document.getElementById(window.location.hash.replace('#', '') + '-identifier')?.scrollIntoView({
-  //           behavior: "smooth",
-  //           block: "start",
-  //         });
-  //       }
-  //     });
-  //   }, 500)
-  // }, [hasHomeCards]);
+  // /#qr-section (and any other #hash) lands on its target once, without the
+  // page visibly jumping while content above it loads; the offset comes from
+  // the target's scroll-mt class.
+  useHashPin();
 
   const sectionContainerClass =
     "mx-auto w-full max-w-7xl px-4 sm:px-5 md:px-6 lg:px-8 xl:px-10 2xl:px-0";

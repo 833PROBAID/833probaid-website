@@ -15,7 +15,8 @@ import {
   getPublishedHomeBookSlugs,
 } from "@/app/services/homeBookService";
 import HomeBookContentClient from "./HomeBookContentClient";
-import { HASH_PENDING_CSS, HASH_PENDING_SCRIPT } from "./hashPending";
+import { HASH_ANCHOR_CSS } from "./hashPending";
+import HashPendingGuard from "@/components/HashPendingGuard";
 import { scopeCSS } from "@/app/utils/scopeCSS";
 import { stripEmptyHtml } from "@/app/utils/stripEmptyHtml";
 import publicPageStyles from "@/components/GrapesJSEditor/publicPageStyles";
@@ -212,16 +213,7 @@ export default async function HomeBookDetailPage({ params }) {
 
   return (
     <section className="font-montserrat">
-      <style dangerouslySetInnerHTML={{ __html: HASH_PENDING_CSS }} />
-      {/* Wrapped rather than a React <script>: the HTML parser still runs it
-          before first paint, but React itself never renders a script element
-          (which it rejects with a console error). */}
-      <span
-        hidden
-        dangerouslySetInnerHTML={{
-          __html: `<script>${HASH_PENDING_SCRIPT}</script>`,
-        }}
-      />
+      <HashPendingGuard css={HASH_ANCHOR_CSS} />
       {structuredDataScript && (
         <script
           type="application/ld+json"

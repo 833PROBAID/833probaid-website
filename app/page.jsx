@@ -46,6 +46,7 @@ export const metadata = {
   },
 };
 import HomePageClient from "./HomePageClient";
+import HashPendingGuard from "@/components/HashPendingGuard";
 import { getPublishedHomeBooksForHomepage } from "@/app/services/homeBookService";
 
 export const revalidate = 300;
@@ -74,5 +75,10 @@ export default async function HomePage() {
     console.error("Failed to load homepage home books:", error);
   }
 
-  return <HomePageClient initialHomeCardData={initialHomeCardData} />;
+  return (
+    <>
+      <HashPendingGuard />
+      <HomePageClient initialHomeCardData={initialHomeCardData} />
+    </>
+  );
 }
