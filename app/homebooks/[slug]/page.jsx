@@ -15,6 +15,7 @@ import {
   getPublishedHomeBookSlugs,
 } from "@/app/services/homeBookService";
 import HomeBookContentClient from "./HomeBookContentClient";
+import { HASH_PENDING_CSS, HASH_PENDING_SCRIPT } from "./hashPending";
 import { scopeCSS } from "@/app/utils/scopeCSS";
 import { stripEmptyHtml } from "@/app/utils/stripEmptyHtml";
 import publicPageStyles from "@/components/GrapesJSEditor/publicPageStyles";
@@ -63,6 +64,18 @@ function promoteDropShadowLayers(css) {
     }
     return additions.length ? `${selector}{${decls};${additions.join(";")}}` : match;
   });
+}
+
+/**
+ * Drops the document wrapper tags GrapesJS saves around the content
+ * (`<body id="…">…</body>`, and any `<html>` / `<head>`).
+ *
+ * Inside the content div the browser's parser discards those tags, so the DOM
+ * no longer matches the __html React hydrates against. Removing them on the
+ * server keeps the markup React sees and the markup the browser builds the same.
+ */
+function stripDocumentTags(html) {
+  return html.replace(/<\/?(?:html|head|body)\b[^>]*>/gi, "");
 }
 
 /**
@@ -193,10 +206,22 @@ export default async function HomeBookDetailPage({ params }) {
     }
   }
 
-  const contentHtml = stripEmptyHtml(grapesContent?.html || "");
+  const contentHtml = stripEmptyHtml(
+    stripDocumentTags(grapesContent?.html || "")
+  );
 
   return (
     <section className="font-montserrat">
+      <style dangerouslySetInnerHTML={{ __html: HASH_PENDING_CSS }} />
+      {/* Wrapped rather than a React <script>: the HTML parser still runs it
+          before first paint, but React itself never renders a script element
+          (which it rejects with a console error). */}
+      <span
+        hidden
+        dangerouslySetInnerHTML={{
+          __html: `<script>${HASH_PENDING_SCRIPT}</script>`,
+        }}
+      />
       {structuredDataScript && (
         <script
           type="application/ld+json"

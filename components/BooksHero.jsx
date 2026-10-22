@@ -93,7 +93,13 @@ export default function BooksHero({ bannerImage, title, subtitle }) {
               "rgba(0, 0, 0, 0.4) 0px 8px 12px, rgba(0, 0, 0, 0.4) 0px -5px 12px 1px",
           }}
         >
-          <div dangerouslySetInnerHTML={{ __html: svgMarkup }} />
+          {/* Reserves the SVG's box (its viewBox ratio) while it is fetched, so
+              the 3.7 MB file arriving late doesn't push the page down — that
+              shift moved #hash targets on home books after they were scrolled to. */}
+          <div
+            style={{ aspectRatio: "1512 / 1040" }}
+            dangerouslySetInnerHTML={{ __html: svgMarkup }}
+          />
         </div>
       </div>
     </div>

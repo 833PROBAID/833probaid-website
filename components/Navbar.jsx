@@ -21,6 +21,10 @@ export default function Navbar() {
       });
     };
 
+    // The page may already be scrolled when this mounts (a #hash link, or a
+    // refresh mid-page); without this the navbar would shrink only on the next
+    // scroll event, shifting the page under a #hash target after it's shown.
+    handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
