@@ -1422,6 +1422,14 @@
 				margin-bottom: 2rem !important;
 			}
 
+			.\!mt-\[5rem\] {
+				margin-top: 5rem !important;
+			}
+
+			.\!mb-\[5rem\] {
+				margin-bottom: 5rem !important;
+			}
+
 			.\!mt-\[2\.5rem\] {
 				margin-top: 2.5rem !important;
 			}
@@ -1432,6 +1440,10 @@
 
 			.\!text-secondary {
 				color: var(--secondary);
+			}
+
+			.\!text-primary {
+				color: var(--primary);
 			}
 
 			.decoration-\[max\(4\.5px\,0\.12em\)\]\! {

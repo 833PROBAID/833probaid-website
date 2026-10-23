@@ -753,6 +753,49 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 				.filter(Boolean)
 		: [];
 
+	// The Client Role "Other" option can only be picked when the Case Type allows it.
+	const clientRoleOtherAllowed =
+		!allowedClientRoles || allowedClientRoles.includes("Other");
+
+	// Clicking (or typing into) an input tied to a radio/checkbox auto-selects
+	// that option, so the input never has to be disabled while it's unselected.
+	const selectRoleOther = () => {
+		if (formData.role !== "Other")
+			handleChange({ target: { name: "role", value: "Other", type: "radio" } });
+	};
+	const selectClientRoleOther = () => {
+		if (!clientRoleOtherAllowed || selectedClientRoles.includes("Other")) return;
+		markTouched(
+			"clientRole",
+			"clientRoleOther",
+			"clientRole.probateRole",
+			"clientRole.conservatorRole",
+			"clientRole.trustRole",
+			"clientRole.successorRole",
+		);
+		setFormData((prev) => ({ ...prev, clientRole: "Other" }));
+	};
+	const selectPreparePhotos = () => {
+		if (!formData.requestedSupport.preparePhotos)
+			handleChange({
+				target: {
+					name: "preparePhotos",
+					type: "checkbox",
+					checked: true,
+					dataset: { group: "requestedSupport" },
+				},
+			});
+	};
+	const selectHearOther = () => {
+		if (!formData.other)
+			handleChange({ target: { name: "other", type: "checkbox", checked: true } });
+	};
+	// Wrap an input's onChange so typing (e.g. after tabbing in) also auto-selects.
+	const withSelect = (select, onChange) => (e) => {
+		select();
+		onChange(e);
+	};
+
 	// If the Case Type changes so a chosen Client Role is no longer allowed,
 	// drop just the invalid roles (keeps valid picks when toggling sub-options).
 	useEffect(() => {
@@ -1065,9 +1108,9 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 												<TextInput
 													name='roleOther'
 													value={formData.roleOther}
-													onChange={handleChange}
+													onChange={withSelect(selectRoleOther, handleChange)}
+													onMouseDown={selectRoleOther}
 													width='400px'
-													disabled={formData.role !== "Other"}
 													error={fieldErrors.has("roleOther")}
 													onOverflowChange={setFieldOverflow("roleOther")}
 												/>
@@ -1964,9 +2007,10 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 											<TextInput
 												name='clientRoleOther'
 												value={formData.clientRoleOther}
-												onChange={handleChange}
+												onChange={withSelect(selectClientRoleOther, handleChange)}
+												onMouseDown={selectClientRoleOther}
 												width='290px'
-												disabled={!selectedClientRoles.includes("Other")}
+												disabled={!clientRoleOtherAllowed}
 												error={fieldErrors.has("clientRoleOther")}
 												onOverflowChange={setFieldOverflow("clientRoleOther")}
 											/>
@@ -2723,9 +2767,12 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 												<TextInput
 													name='refereeFullName'
 													value={formData.requestedSupport.refereeFullName}
-													onChange={handleSupportFieldChange("refereeFullName")}
+													onChange={withSelect(
+														selectPreparePhotos,
+														handleSupportFieldChange("refereeFullName"),
+													)}
+													onMouseDown={selectPreparePhotos}
 													label="Referee's Full Name:"
-													disabled={!formData.requestedSupport.preparePhotos}
 													inputClass="!w-full"
 													error={fieldErrors.has("refereeFullName")}
 												/>
@@ -3043,10 +3090,10 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 												<TextInput
 													name='otherDetails'
 													value={formData.otherDetails}
-													onChange={handleChange}
+													onChange={withSelect(selectHearOther, handleChange)}
 													width='100%'
 													ref={howDidYouHearOtherRef}
-													disabled={!formData.other}
+													onMouseDown={selectHearOther}
 													error={fieldErrors.has("otherDetails")}
 													onOverflowChange={setFieldOverflow("otherDetails")}
 												/>

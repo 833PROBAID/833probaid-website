@@ -19,12 +19,14 @@ import { uploadToBlob } from "../../app/lib/blobUpload";
 import CTAButton from "../CTAButton";
 import SubmissionSuccessModal from "../SubmissionSuccessModal";
 
-const DummyYesRadio = ({ value = false }) => {
+// Mirrors a parent question's "Yes" answer; clicking it selects that "Yes".
+const DummyYesRadio = ({ value = false, onSelect }) => {
   return (
     <RadioButton
       name={"dummy"}
       value={"yes"}
       selectedValue={value ? "yes" : "no"}
+      onChange={() => onSelect?.()}
       label={"Yes"}
       color={"teal"}
     />
@@ -386,6 +388,57 @@ const Form2 = ({ readOnly = false, initialData = null, submitPortalTarget = null
           setFileResetKey((k) => k + 1);
       }
     }
+  };
+
+  // Clicking (or typing into) an input tied to a checkbox/radio auto-selects
+  // that option, so the input never has to be disabled while it's unselected.
+  const selectParentYes = (name) => () => {
+    if (formData[name] !== "yes")
+      handleChange({ target: { name, value: "yes", type: "radio" } });
+  };
+  const selectServicesOther = () => {
+    if (!formData.servicesOffered.others)
+      handleChange({
+        target: {
+          name: "others",
+          type: "checkbox",
+          checked: true,
+          dataset: { group: "servicesOffered" },
+        },
+      });
+  };
+  const selectOtherAvailability = () => {
+    if (formData.translationServices.otherAvailability) return;
+    markTouched(
+      "translationServices.availability",
+      "translationServices.otherAvailabilityList"
+    );
+    setFormData((prev) => ({
+      ...prev,
+      translationServices: {
+        ...prev.translationServices,
+        otherAvailability: true,
+      },
+    }));
+  };
+  const selectOtherSpecialization = () => {
+    if (formData.translationServices.specializations?.other) return;
+    markTouched("translationServices.otherSpecializationList");
+    setFormData((prev) => ({
+      ...prev,
+      translationServices: {
+        ...prev.translationServices,
+        specializations: {
+          ...prev.translationServices?.specializations,
+          other: true,
+        },
+      },
+    }));
+  };
+  // Wrap an input's onChange so typing (e.g. after tabbing in) also auto-selects.
+  const withSelect = (select, onChange) => (e) => {
+    select();
+    onChange(e);
   };
 
   const handleFileChange = (e) => {
@@ -905,6 +958,7 @@ const Form2 = ({ readOnly = false, initialData = null, submitPortalTarget = null
                               ? true
                               : false
                           }
+                          onSelect={selectParentYes("acceptDeferredPayment")}
                         />
                         <span className="text-[#FD7702] font-bold">,</span>{" "}
                         <span className="text-[#FD7702] font-bold">
@@ -1033,6 +1087,7 @@ const Form2 = ({ readOnly = false, initialData = null, submitPortalTarget = null
                           value={
                             formData.cancellationFee === "yes" ? true : false
                           }
+                          onSelect={selectParentYes("cancellationFee")}
                         />
                         <span className="text-[#FD7702] font-bold">,</span>{" "}
                         <span className="text-[#FD7702] font-bold mr-4">
@@ -1518,9 +1573,9 @@ const Form2 = ({ readOnly = false, initialData = null, submitPortalTarget = null
                         <TextInput
                           name="othersList"
                           value={formData.othersList}
-                          onChange={handleChange}
+                          onChange={withSelect(selectServicesOther, handleChange)}
+                          onMouseDown={selectServicesOther}
                           width="full"
-                          disabled={!formData.servicesOffered.others}
                           error={fieldErrors.has("othersList")}
                           onOverflowChange={setFieldOverflow("othersList")}
                         />
@@ -1534,7 +1589,6 @@ const Form2 = ({ readOnly = false, initialData = null, submitPortalTarget = null
                               onChange={handleChange}
                               width="full"
                               rows={1}
-                              disabled={!formData.servicesOffered.others}
                               inputClass={
                                 fieldErrors.has("othersList")
                                   ? "!border-red-500"
@@ -1798,11 +1852,12 @@ const Form2 = ({ readOnly = false, initialData = null, submitPortalTarget = null
                             value={
                               formData.translationServices.otherAvailabilityList
                             }
-                            onChange={handleChange}
+                            onChange={withSelect(
+                              selectOtherAvailability,
+                              handleChange
+                            )}
+                            onMouseDown={selectOtherAvailability}
                             width="full"
-                            disabled={
-                              !formData.translationServices.otherAvailability
-                            }
                             error={fieldErrors.has(
                               "translationServices.otherAvailabilityList"
                             )}
@@ -1824,9 +1879,6 @@ const Form2 = ({ readOnly = false, initialData = null, submitPortalTarget = null
                               onChange={handleChange}
                               width="full"
                               rows={1}
-                              disabled={
-                                !formData.translationServices.otherAvailability
-                              }
                               inputClass={
                                 fieldErrors.has(
                                   "translationServices.otherAvailabilityList"
@@ -2179,12 +2231,12 @@ const Form2 = ({ readOnly = false, initialData = null, submitPortalTarget = null
                                       formData.translationServices
                                         .otherSpecializationList
                                     }
-                                    onChange={handleChange}
+                                    onChange={withSelect(
+                                      selectOtherSpecialization,
+                                      handleChange
+                                    )}
+                                    onMouseDown={selectOtherSpecialization}
                                     width="full"
-                                    disabled={
-                                      !formData.translationServices.specializations
-                                        ?.other
-                                    }
                                     error={fieldErrors.has(
                                       "translationServices.otherSpecializationList"
                                     )}
