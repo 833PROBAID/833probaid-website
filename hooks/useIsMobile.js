@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useCallback, useSyncExternalStore } from "react";
 
 // Tailwind's `sm` breakpoint — below this width we treat the viewport as mobile.
 const MOBILE_BREAKPOINT = 640;
@@ -8,23 +8,28 @@ const MOBILE_BREAKPOINT = 640;
 /**
  * Returns `true` when the viewport width is below `breakpoint` (default 640px).
  *
- * SSR-safe: starts as `false` on the server / first render, then syncs to the
- * real viewport after mount and keeps updating on resize.
+ * SSR-safe: `false` on the server and while hydrating, then the real viewport,
+ * updating on resize. A client-side mount (e.g. coming Back to a page) reads
+ * the viewport in its very first render, so the layout is right immediately.
  *
  * @param {number} [breakpoint=640] - max width (exclusive) considered mobile
  * @returns {boolean}
  */
 export default function useIsMobile(breakpoint = MOBILE_BREAKPOINT) {
-	const [isMobile, setIsMobile] = useState(false);
+	const query = `(max-width: ${breakpoint - 1}px)`;
 
-	useEffect(() => {
-		const mql = window.matchMedia(`(max-width: ${breakpoint - 1}px)`);
-		const update = () => setIsMobile(mql.matches);
+	const subscribe = useCallback(
+		(onChange) => {
+			const mql = window.matchMedia(query);
+			mql.addEventListener("change", onChange);
+			return () => mql.removeEventListener("change", onChange);
+		},
+		[query]
+	);
 
-		update();
-		mql.addEventListener("change", update);
-		return () => mql.removeEventListener("change", update);
-	}, [breakpoint]);
-
-	return isMobile;
+	return useSyncExternalStore(
+		subscribe,
+		() => window.matchMedia(query).matches,
+		() => false
+	);
 }

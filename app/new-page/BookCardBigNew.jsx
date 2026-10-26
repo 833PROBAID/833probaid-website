@@ -207,7 +207,19 @@ function BookCardInner({
     setInstant(false);
     setOpen(true);
     if (href) {
-      setTimeout(() => window.location.assign(href), speed - 1200);
+      setTimeout(() => {
+        // A full-page navigation skips useHashPin's pushState hook, so the
+        // #hash is dropped here; otherwise Back would jump to the #hash
+        // target instead of returning to this book.
+        if (window.location.hash) {
+          history.replaceState(
+            history.state,
+            "",
+            window.location.pathname + window.location.search
+          );
+        }
+        window.location.assign(href);
+      }, speed - 1200);
       return;
     }
     if (slug) {

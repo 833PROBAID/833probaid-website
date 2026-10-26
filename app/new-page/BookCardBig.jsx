@@ -318,7 +318,7 @@ function BookCardInner({
                 alt={title}
                 className="block h-full w-[80%] mx-auto rounded-3xl shadow-[0_0_4px_3px_rgba(0,0,0,0.6)] md:shadow-[0_0_16px_4px_rgba(0,0,0,0.8)]"
               >
-                <div className="flex flex-col items-center text-center">
+                {/* <div className="flex flex-col items-center text-center">
                   <h1 className="font-anton text-2xl uppercase leading-tight text-primary hover:text-secondary">
                     {title}
                   </h1>
@@ -327,7 +327,7 @@ function BookCardInner({
                       {subtitle}
                     </p>
                   )}
-                </div>
+                </div> */}
               </HomeBorderImage>
             </div>
           </div>

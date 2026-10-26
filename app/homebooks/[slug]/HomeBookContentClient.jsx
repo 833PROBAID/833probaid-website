@@ -9,6 +9,8 @@ import GuideDownloadCards, {
 } from "@/components/GuideDownloadCards";
 import BookCardBigNew from "@/app/new-page/BookCardBigNew";
 import useHashPin from "@/hooks/useHashPin";
+import useBackScrollRestore from "@/hooks/useBackScrollRestore";
+import { usePathname } from "next/navigation";
 import { HASH_OFFSET_PX } from "./hashPending";
 
 /** Authored trigger classes → the guide card each one opens. */
@@ -174,7 +176,14 @@ export default function HomeBookContentClient() {
 		};
 	}, []);
 
-	useHashPin(HASH_OFFSET_PX);
+	// The #hash is dropped once landed, so Back from a page opened here (e.g.
+	// "Explore Properties" in the .big-book) returns to the plain URL.
+	useHashPin(HASH_OFFSET_PX, { clearHash: true });
+
+	// Back returns to the spot the visitor left from. The browser's own
+	// restoration runs before the portalled blocks (big book, guide cards,
+	// forms) are in, so it lands short of it.
+	useBackScrollRestore(`homebook:${usePathname()}`);
 
 	// Authored `.buyer-download` / `.seller-download` elements bring the viewer
 	// to the matching guide card and open it once the scroll has settled, so

@@ -194,7 +194,7 @@ export default function TermsOfServicePage() {
             }}
           >
             <section>
-              <div className="content-block shadow-card">
+              <div className="content-block shadow-card hover:scale-x-[1.02] hover:scale-y-[1.003] !transition-transform duration-300 ease !mb-[2.5rem]">
                 <h2 className="section-title text-secondary !mb-[2.5rem] !mt-0 !text-[4rem]">
                   WEBSITE TERMS OF USE, PRIVACY POLICY, AND PROFESSIONAL
                   DISCLOSURE

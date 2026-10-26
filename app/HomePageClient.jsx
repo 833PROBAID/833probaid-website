@@ -12,6 +12,7 @@ import BookCardBig from "./new-page/BookCardBig";
 import BookCardGrid from "./new-page/BookCardGrid";
 import useIsMobile from "@/hooks/useIsMobile";
 import useHashPin from "@/hooks/useHashPin";
+import useBackScrollRestore from "@/hooks/useBackScrollRestore";
 
 const Footer = dynamic(() => import("../components/Footer"));
 const HomeCard = dynamic(() => import("../components/HomeCard"));
@@ -30,8 +31,14 @@ export default function HomePageClient({ initialHomeCardData = [] }) {
 
   // /#qr-section (and any other #hash) lands on its target once, without the
   // page visibly jumping while content above it loads; the offset comes from
-  // the target's scroll-mt class.
-  useHashPin();
+  // the target's scroll-mt class. The #hash stays in the URL (a refresh lands
+  // on it again) and is dropped only when a book is opened, so Back returns to
+  // plain "/" at the spot left.
+  useHashPin(undefined, { clearHash: true });
+
+  // Back from a book returns to the spot it was opened from, including books
+  // only shown after "Show More".
+  useBackScrollRestore("home");
 
   const sectionContainerClass =
     "mx-auto w-full max-w-7xl px-4 sm:px-5 md:px-6 lg:px-8 xl:px-10 2xl:px-0";

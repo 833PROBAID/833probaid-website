@@ -1,40 +1,51 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import BookCard from "./NewBook";
 import BookCardBig from "./BookCardBig";
 import CTAButton from "@/components/CTAButton";
 
 const INITIAL_COUNT = 7;
+const SHOW_ALL_KEY = "bookCardGridShowAll";
+
+// "Show More" lasts for the browser tab, so coming Back from a book finds the
+// grid as it was left.
+const showAllListeners = new Set();
+const subscribeShowAll = (onChange) => {
+  showAllListeners.add(onChange);
+  return () => showAllListeners.delete(onChange);
+};
+const readShowAll = () => {
+  try {
+    return sessionStorage.getItem(SHOW_ALL_KEY) === "true";
+  } catch {
+    return false;
+  }
+};
+const writeShowAll = (value) => {
+  try {
+    sessionStorage.setItem(SHOW_ALL_KEY, String(value));
+  } catch {
+    // storage blocked — the toggle still works for this visit
+  }
+  showAllListeners.forEach((onChange) => onChange());
+};
 
 export default function BookCardGrid({
   cards = [],
   bigLast = true,
   initialCount = INITIAL_COUNT,
 }) {
-  // Starts collapsed so the client's first render matches the server's, then
-  // syncs to the persisted preference after mount.
-  const [showAll, setShowAll] = useState(false);
+  // Collapsed on the server and while hydrating; a client-side mount (coming
+  // Back from a book) reads the saved state in its first render, before the
+  // scroll position is restored.
+  const showAll = useSyncExternalStore(
+    subscribeShowAll,
+    readShowAll,
+    () => false
+  );
 
-  useEffect(() => {
-    // try {
-    //   setShowAll(
-    //     JSON.parse(localStorage.getItem("bookCardGridShowAll") ?? "false")
-    //   );
-    // } catch {
-    //   // ignore unreadable/corrupt storage — stay collapsed
-    // }
-  }, []);
-
-  const toggleShowAll = () => {
-    setShowAll((prev) => {
-      const next = !prev;
-      // if (typeof window !== "undefined") {
-      //   localStorage.setItem("bookCardGridShowAll", JSON.stringify(next));
-      // }
-      return next;
-    });
-  };
+  const toggleShowAll = () => writeShowAll(!showAll);
 
   const visible = showAll ? cards : cards.slice(0, initialCount);
   const hasOverflow = cards.length > initialCount;

@@ -14,14 +14,48 @@ const HASH_REVEAL_MAX_MS = 2500;
 /** Pending reveal from an unmount; cancelled when the effect remounts. */
 let unmountRevealTimer = 0;
 
+/** Whether a mounted page asked for its #hash to be dropped when leaving it. */
+let clearHashOnLeave = false;
+let clearHashOffTimer = 0;
+let pushStatePatched = false;
+
+/**
+ * Wraps history.pushState so that, right before navigating to another page,
+ * the current entry loses its #hash. The URL keeps the #hash while on the
+ * page (refresh lands on it again), but Back returns to the plain URL.
+ */
+function patchPushState() {
+	if (pushStatePatched) return;
+	pushStatePatched = true;
+	const pushState = history.pushState;
+	history.pushState = function (state, unused, url) {
+		if (clearHashOnLeave && window.location.hash && url != null) {
+			const next = new URL(url, window.location.href);
+			if (next.pathname !== window.location.pathname) {
+				history.replaceState(
+					history.state,
+					"",
+					window.location.pathname + window.location.search
+				);
+			}
+		}
+		return pushState.apply(this, arguments);
+	};
+}
+
 /**
  * Scrolls a page opened with a #hash to its target and keeps it there while the
  * layout settles. Pair with HashPendingGuard on the server page.
  *
  * @param {number} [offset] - px kept above the target; defaults to the
  *   target's own CSS scroll-margin-top, so native jumps land on the same spot
+ * @param {object} [options]
+ * @param {boolean} [options.clearHash=false] - drop the #hash from the URL
+ *   when navigating from this page to another one, so Back returns to the
+ *   plain URL (at the spot left) instead of jumping to the #hash target again.
+ *   A refresh keeps the #hash.
  */
-export default function useHashPin(offset) {
+export default function useHashPin(offset, { clearHash = false } = {}) {
 	const offsetFor = (el) =>
 		offset ?? (parseFloat(getComputedStyle(el).scrollMarginTop) || 0);
 
@@ -44,6 +78,12 @@ export default function useHashPin(offset) {
 		// A remount right after unmount (React StrictMode in development runs
 		// every effect twice) takes over from the previous run, page still hidden.
 		clearTimeout(unmountRevealTimer);
+
+		if (clearHash) {
+			patchPushState();
+			clearTimeout(clearHashOffTimer);
+			clearHashOnLeave = true;
+		}
 
 		let stopPinning = () => {};
 		const reveal = () =>
@@ -195,6 +235,13 @@ export default function useHashPin(offset) {
 			// remount, so it waits a tick; a remount cancels it and keeps pinning.
 			stopPinning(false);
 			unmountRevealTimer = setTimeout(reveal, 0);
+			// Turned off a tick later: the router's pushState for the next page
+			// can run in the same commit that unmounts this one.
+			if (clearHash) {
+				clearHashOffTimer = setTimeout(() => {
+					clearHashOnLeave = false;
+				}, 0);
+			}
 		};
-	}, [offset]);
+	}, [offset, clearHash]);
 }

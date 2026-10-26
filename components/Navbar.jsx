@@ -9,6 +9,11 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  // Size transitions start off, so a navbar mounting on an already scrolled
+  // page (Back to a spot mid-page, a #hash link) takes its compact size at
+  // once instead of shrinking over 300ms and shifting the page under the
+  // restored position.
+  const [animate, setAnimate] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -26,7 +31,14 @@ export default function Navbar() {
     // scroll event, shifting the page under a #hash target after it's shown.
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    // Two frames: the initial size is painted before transitions switch on.
+    let frame = requestAnimationFrame(() => {
+      frame = requestAnimationFrame(() => setAnimate(true));
+    });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      cancelAnimationFrame(frame);
+    };
   }, []);
 
   useEffect(() => {
@@ -57,7 +69,7 @@ export default function Navbar() {
     <header
       className={`sticky top-0 z-50 transition-colors duration-300 ${
         isScrolled ? "bg-white/95 shadow-xl" : "bg-white/95 shadow-lg"
-      }`}
+      } ${animate ? "" : "[&_*]:transition-none!"}`}
     >
       <div className="container mx-auto px-4">
         <div
