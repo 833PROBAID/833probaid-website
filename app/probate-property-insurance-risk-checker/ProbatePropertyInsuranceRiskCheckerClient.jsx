@@ -28,6 +28,16 @@ import { useEffect, useMemo, useState } from "react";
 const REPORT_ENDPOINT = "/api/tool-report";
 const TOOL_PAGE = "probate-property-insurance-risk-checker";
 const STORAGE_KEY = "tool-insurance-v3";
+const EMPTY_AD = { street: "", city: "", state: "CA", zip: "" };
+const EMPTY_FORM = {
+  first: "",
+  last: "",
+  email: "",
+  phone: "",
+  atty: "",
+  consent: false,
+  hp: "",
+};
 const PHONE = "(833) 776-2243";
 const TEL = "tel:8337762243";
 // Link to the Website Terms of Use, Privacy Policy & Disclosures page — change if your page lives elsewhere
@@ -1014,7 +1024,7 @@ function LayerRows({ items, activeBorderColor = RED }) {
 /* ================================================================ page */
 const ProbatePropertyInsuranceRiskCheckerClient = () => {
   const [A, setA] = useState({});
-  const [ad, setAd] = useState({ street: "", city: "", state: "CA", zip: "" });
+  const [ad, setAd] = useState(EMPTY_AD);
   const addr = formatAddress(ad);
   const setPart = (k, v) => {
     setAd((cur) => ({ ...cur, [k]: v }));
@@ -1023,15 +1033,8 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
   const [lead, setLead] = useState(null);
   const [sentAt, setSentAt] = useState(null);
   const [updatedAt, setUpdatedAt] = useState(null);
-  const [form, setForm] = useState({
-    first: "",
-    last: "",
-    email: "",
-    phone: "",
-    atty: "",
-    consent: false,
-    hp: "",
-  });
+  const [form, setForm] = useState(EMPTY_FORM);
+  const [formKey, setFormKey] = useState(0);
   const [invalid, setInvalid] = useState({});
   const [status, setStatus] = useState({ type: "", text: "" });
   const [sending, setSending] = useState(false);
@@ -1079,7 +1082,19 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
   };
   const reset = () => {
     setA({});
+    setAd(EMPTY_AD);
     setUpdatedAt(null);
+    setLead(null);
+    setSentAt(null);
+    setForm(EMPTY_FORM);
+    setInvalid({});
+    setStatus({ type: "", text: "" });
+    setThanks("");
+    setResendMsg("");
+    setFormKey((key) => key + 1);
+    try {
+      sessionStorage.removeItem(STORAGE_KEY);
+    } catch {}
   };
 
   const sendReport = async (L) => {
@@ -1762,6 +1777,7 @@ const ProbatePropertyInsuranceRiskCheckerClient = () => {
               </div>
 
               <ToolReportForm
+                key={formKey}
                 lead={lead}
                 form={form}
                 setForm={setForm}
