@@ -24,6 +24,23 @@ const SCROLL_SETTLE_MS = 900;
 
 const AGENT_PROFILE_URL = "https://luxurycollectiverealty.com/team/tigran-mkrtchian";
 
+/** Extra height a `.step-container` grows by on hover. */
+const STEP_HOVER_GROWTH_PX = 20;
+
+/**
+ * Writes `--step-scale-y` = (height + 25px) / height onto a step section, the
+ * Y factor its hover transform reads in publicPageStyles. offsetHeight is the
+ * layout height, so a section measured mid-hover isn't skewed by its own scale.
+ */
+function setStepScale(el) {
+	const height = el.offsetHeight;
+	if (!height) return;
+	el.style.setProperty(
+		"--step-scale-y",
+		String((height + STEP_HOVER_GROWTH_PX) / height)
+	);
+}
+
 /**
  * Creates (once) the host element a form's submit button portals into, so the
  * reading order on the page becomes:
@@ -172,6 +189,43 @@ export default function HomeBookContentClient() {
 
 		return () => {
 			observer.disconnect();
+			cancelAnimationFrame(frame);
+		};
+	}, []);
+
+	// Keeps each step section's hover scale matched to its current height —
+	// sections reflow with the viewport and with late-loading content, so they
+	// are re-measured on resize. New sections are picked up as the DOM changes.
+	useEffect(() => {
+		const resizeObserver = new ResizeObserver((entries) => {
+			entries.forEach((entry) => setStepScale(entry.target));
+		});
+		const observed = new Set();
+		const observeSteps = () => {
+			document
+				.querySelectorAll(".homebook-content .step-container")
+				.forEach((el) => {
+					if (observed.has(el)) return;
+					observed.add(el);
+					resizeObserver.observe(el);
+				});
+		};
+
+		observeSteps();
+
+		let frame = 0;
+		const mutationObserver = new MutationObserver(() => {
+			if (frame) return;
+			frame = requestAnimationFrame(() => {
+				frame = 0;
+				observeSteps();
+			});
+		});
+		mutationObserver.observe(document.body, { childList: true, subtree: true });
+
+		return () => {
+			resizeObserver.disconnect();
+			mutationObserver.disconnect();
 			cancelAnimationFrame(frame);
 		};
 	}, []);

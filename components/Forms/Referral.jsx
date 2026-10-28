@@ -1357,6 +1357,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 													label='Probate'
 													containerClass="w-fit"
 													checked={formData.caseType.probate}
+													width="full"
 													onChange={(e) => {
 														markTouched(
 															"caseType",
@@ -1388,7 +1389,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 													}}
 												/>
 											</div>
-											<div className='flex gap-[47px]'>
+											<div className='flex'>
 												<Checkbox
 													name='fullAuthority'
 													group='caseType'
@@ -1417,7 +1418,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 															},
 														});
 													}}
-													width='160px'
+													width='207'
 													error={fieldErrors.has(
 														"caseType.probateAuthority"
 													)}
@@ -1450,7 +1451,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 															},
 														});
 													}}
-													width='400px'
+													width='fit'
 													error={fieldErrors.has(
 														"caseType.probateAuthority"
 													)}
@@ -1458,7 +1459,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 											</div>
 										</div>
 										<div className='flex justify-start gap-2 w-full'>
-											<div className='w-[545px]'>
+											<div className='min-w-[545px]'>
 												<Checkbox
 													name='conservatorship'
 													group='caseType'
@@ -1495,10 +1496,10 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 															}
 														});
 													}}
-													width='180px'
+													width='full'
 												/>
 											</div>
-											<div className='flex gap-[47px]'>
+											<div className='flex w-full'>
 												<Checkbox
 													name='ofTheEstate'
 													group='caseType'
@@ -1527,7 +1528,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 															},
 														});
 													}}
-													width='160px'
+													width='207'
 													error={fieldErrors.has(
 														"caseType.conservatorshipScope"
 													)}
@@ -1560,7 +1561,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 															},
 														});
 													}}
-													width='170px'
+													width='207px'
 													error={fieldErrors.has(
 														"caseType.conservatorshipScope"
 													)}
@@ -1593,7 +1594,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 															},
 														});
 													}}
-													width='150px'
+													width='200'
 													error={fieldErrors.has(
 														"caseType.conservatorshipScope"
 													)}
@@ -1601,7 +1602,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 											</div>
 										</div>
 										<div className='flex justify-start gap-2 w-full'>
-											<div className='w-[545px]'>
+											<div className='min-w-[545px]'>
 												<Checkbox
 													name='trustSale'
 													group='caseType'
@@ -1637,10 +1638,10 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 															},
 														});
 													}}
-													width='200px'
+													width='full'
 												/>
 											</div>
-											<div className='flex gap-[39px]'>
+											<div className='flex w-full'>
 												<Checkbox
 													name='trustee'
 													group='caseType'
@@ -1668,7 +1669,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 															},
 														});
 													}}
-													width='168px'
+													width='207'
 													error={fieldErrors.has(
 														"caseType.trustSaleRole"
 													)}
@@ -1700,7 +1701,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 															},
 														});
 													}}
-													width='250px'
+													width='400'
 													error={fieldErrors.has(
 														"caseType.trustSaleRole"
 													)}
@@ -1742,7 +1743,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 														},
 													});
 												}}
-												width='240px'
+												width='full'
 											/>
 										</div>
 										<div className='flex justify-start gap-2 w-full'>
@@ -1780,7 +1781,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 														},
 													});
 												}}
-												width='240px'
+												width='full'
 											/>
 										</div>
 										<div className='flex justify-start gap-2 w-full'>
@@ -1818,7 +1819,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 														},
 													});
 												}}
-												width='240px'
+												width='full'
 											/>
 										</div>
 										<div className='flex justify-start gap-2 w-full'>
@@ -1856,7 +1857,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 														},
 													});
 												}}
-												width='240px'
+												width='full'
 											/>
 										</div>
 										{fieldErrors.has("caseType") && (
@@ -2729,6 +2730,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 												containerClass="w-fit"
 												checked={formData.requestedSupport.contactClient}
 												onChange={handleChange}
+												width="full"
 											/>
 											<Checkbox
 												name='waitForIntro'
@@ -2737,6 +2739,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 												containerClass="w-fit"
 												checked={formData.requestedSupport.waitForIntro}
 												onChange={handleChange}
+												width="full"
 											/>
 											<Checkbox
 												name='provideOpinion'
@@ -2745,6 +2748,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 												containerClass="w-fit"
 												checked={formData.requestedSupport.provideOpinion}
 												onChange={handleChange}
+												width="full"
 											/>
 											<Checkbox
 												name='conductWalkthrough'
@@ -2753,17 +2757,18 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 												containerClass="w-fit"
 												checked={formData.requestedSupport.conductWalkthrough}
 												onChange={handleChange}
+												width="full"
 											/>
 											<div className="flex gap-3 items-center w-full">
 												<Checkbox
 													name='preparePhotos'
 													group='requestedSupport'
-													label='Prepare Photos for Referee'
+													label="Prepare Photos for Referee / Referee's Full Name"
 													checked={formData.requestedSupport.preparePhotos}
 													onChange={handleChange}
-													width='300px'
+													width='fit'
 												/>
-												<span className="font-bold text-xl text-[#FD7702]">/</span>
+												<span className="font-bold text-xl text-[#FD7702] -mx-2">:</span>
 												<TextInput
 													name='refereeFullName'
 													value={formData.requestedSupport.refereeFullName}
@@ -2772,13 +2777,13 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 														handleSupportFieldChange("refereeFullName"),
 													)}
 													onMouseDown={selectPreparePhotos}
-													label="Referee's Full Name:"
+													label=""
 													inputClass="!w-full"
 													error={fieldErrors.has("refereeFullName")}
 												/>
 											</div>
 											{formData.requestedSupport.preparePhotos && (
-												<div className={`flex gap-2 items-center ml-102.25 ${(!isEmpty(formData.requestedSupport.refereePhone) &&
+												<div className={`flex gap-2 items-center ml-98.25 ${(!isEmpty(formData.requestedSupport.refereePhone) &&
 															!isValidUSPhone(formData.requestedSupport.refereePhone)) || (!isEmpty(formData.requestedSupport.refereeEmail) &&
 															!isValidEmail(formData.requestedSupport.refereeEmail)) ? 'mb-[35px]' : ''}`}>
 													<PhoneInput
@@ -2822,7 +2827,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 													label='No Referee Assigned? Will You Be Ordering a Private Appraisal?'
 													checked={formData.requestedSupport.refereeAssigned}
 													onChange={handleChange}
-													width='450px'
+													width='full'
 												/>
 
 												<div className='flex gap-1 flex-1 justify-end'>
@@ -2878,6 +2883,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 												containerClass="w-fit"
 												checked={formData.requestedSupport.coordinateVendors}
 												onChange={handleChange}
+												width="full"
 											/>
 											<Checkbox
 												name='notReadyForListing'
@@ -2886,6 +2892,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 												containerClass="w-fit"
 												checked={formData.requestedSupport.notReadyForListing}
 												onChange={handleChange}
+												width="full"
 											/>
 										</div>
 										{fieldErrors.has("requestedSupport") && (
@@ -2914,7 +2921,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 														formData.documentUpload.lettersOfAdministration
 													}
 													onChange={handleChange}
-													width='fit'
+													width='full'
 												/>
 												<Checkbox
 													name='lettersOfConservatorship'
@@ -2924,7 +2931,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 														formData.documentUpload.lettersOfConservatorship
 													}
 													onChange={handleChange}
-													width='fit'
+													width='full'
 												/>
 												<Checkbox
 													name='trustCertification'
@@ -2932,7 +2939,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 													label='Trust Certification Page (or Full Trust Agreement if Unavailable)'
 													checked={formData.documentUpload.trustCertification}
 													onChange={handleChange}
-													width='fit'
+													width='full'
 												/>
 												<Checkbox
 													name='recordedDeed'
@@ -2940,7 +2947,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 													label='Recorded Deed in Trust Name (to Confirm Title Vesting Prior to Prelim — Optional, But Helps Speed Up Coordination)'
 													checked={formData.documentUpload.recordedDeed}
 													onChange={handleChange}
-													width='fit'
+													width='full'
 												/>
 
 												<Checkbox
@@ -2949,7 +2956,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 													label='Minute Order or Court Filling Confirming Sale Authority'
 													checked={formData.documentUpload.courtMinuteOrder}
 													onChange={handleChange}
-													width='fit'
+													width='full'
 												/>
 												<Checkbox
 													name='relevantFilings'
@@ -2957,7 +2964,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 													label='Any Relevant Filings, Petitions, or Timeline Documents'
 													checked={formData.documentUpload.relevantFilings}
 													onChange={handleChange}
-													width='fit'
+													width='full'
 												/>
 											</div>
 											{fieldErrors.has("documentUpload") && (
@@ -3027,7 +3034,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 												checked={formData.onlineSearch}
 												onChange={handleChange}
 												label='Online Search'
-												width='fit'
+												width='full'
 											/>
 											<Checkbox
 												name='socialMedia'
@@ -3035,7 +3042,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 												checked={formData.socialMedia}
 												onChange={handleChange}
 												label='Social Media'
-												width='fit'
+												width='full'
 											/>
 											<Checkbox
 												name='directAttorneyReferral'
@@ -3043,7 +3050,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 												checked={formData.directAttorneyReferral}
 												onChange={handleChange}
 												label='Direct Attorney Referral'
-												width='fit'
+												width='full'
 											/>
 											<Checkbox
 												name='pastCasePriorMatter'
@@ -3051,7 +3058,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 												checked={formData.pastCasePriorMatter}
 												onChange={handleChange}
 												label='Past Case / Prior Matter'
-												width='fit'
+												width='full'
 											/>
 											<Checkbox
 												name='emailNewsletterOrBrochure'
@@ -3059,7 +3066,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 												checked={formData.emailNewsletterOrBrochure}
 												onChange={handleChange}
 												label='Email Newsletter or Brochure'
-												width='fit'
+												width='full'
 											/>
 											<Checkbox
 												name='barAssociationOrLegalEvent'
@@ -3067,7 +3074,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 												checked={formData.barAssociationOrLegalEvent}
 												onChange={handleChange}
 												label='Bar Association / Legal Event'
-												width='fit'
+												width='full'
 											/>
 											<Checkbox
 												name='courtClerkOrProbateExaminer'
@@ -3075,7 +3082,7 @@ const Form = ({ readOnly = false, initialData = null, submitPortalTarget = null 
 												checked={formData.courtClerkOrProbateExaminer}
 												onChange={handleChange}
 												label='Court Clerk or Probate Examiner'
-												width='fit'
+												width='full'
 											/>
 											<div className='w-full flex items-center gap-2'>
 												<Checkbox

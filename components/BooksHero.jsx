@@ -2,18 +2,28 @@
 
 import { useEffect, useState } from "react";
 
-function withBullet(text, type) {
-  if (!text?.includes("•")) return text;
-  return text.split("•").map((part, i) => (
+function withPipe(text) {
+  if (!text?.includes("|")) return text;
+  return text.split("|").map((part, i) => (
     <span key={i}>
-      {i > 0 && <span className={`${type === 'title' ? 'text-secondary group-hover:text-primary' : 'text-primary group-hover:text-secondary'}`}>•</span>}
+      {i > 0 && <span className="text-secondary group-hover:text-primary">|</span>}
       {part}
     </span>
   ));
 }
 
+function withBullet(text, type) {
+  if (!text?.includes("•")) return withPipe(text);
+  return text.split("•").map((part, i) => (
+    <span key={i}>
+      {i > 0 && <span className={`${type === 'title' ? 'text-secondary group-hover:text-primary' : 'text-primary group-hover:text-secondary'}`}>•</span>}
+      {withPipe(part)}
+    </span>
+  ));
+}
+
 function withSuper(text, type = "text") {
-  const format = type === "title" || type === "subtitle" ? (t) => withBullet(t, type) : (t) => t;
+  const format = type === "title" || type === "subtitle" ? (t) => withBullet(t, type) : withPipe;
   if (!text?.includes("®")) return format(text);
   const [before, after] = text.split("®");
   return (

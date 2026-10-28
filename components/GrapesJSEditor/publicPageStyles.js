@@ -328,11 +328,13 @@ const publicPageStyles = `
 				border-radius: 1rem;
 				background-color: var(--white);
 				padding: 1.5rem;
-				transition: transform 0.3s ease;
+				transition: transform 0.3s ease !important;
 			}
 
+			/* --step-scale-y is set per section on the public page so the hover
+			   grows each one by 25px of height, whatever its size. */
 			.step-container:hover {
-				transform: scale(1.02) !important;
+				transform: scale(1.02, var(--step-scale-y, 1.02)) !important;
 			}
 
 			.step-inner {
@@ -413,6 +415,12 @@ const publicPageStyles = `
 				padding: 0;
 				background-color: transparent;
 				border-radius: 0;
+			}
+
+			.step-container .step-content>.content-block:hover,
+			.step-container>.content-block:hover {
+				box-shadow: 0 12px 20px rgba(0, 0, 0, 0.5), 0 -8px 16px 2px rgba(0, 0, 0, 0.5) !important;
+				transition: transform 0.3s ease !important;
 			}
 
 			.step-container .step-inner {
