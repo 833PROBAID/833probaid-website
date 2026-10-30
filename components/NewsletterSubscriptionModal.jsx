@@ -85,9 +85,12 @@ export default function NewsletterSubscriptionModal({ isOpen, initialEmail, entr
 	const firstRef = useRef(null);
 	const openedAt = useRef(0);
 
+	const closeRef = useRef(onClose);
+	closeRef.current = onClose;
+
 	useEffect(() => setMounted(true), []);
 
-	// Fresh form each time it opens; footer email carried in
+	// Fresh form ONLY when the pop-up opens (not when the page behind it refreshes)
 	useEffect(() => {
 		if (!isOpen) return;
 		setStep("form");
@@ -98,14 +101,15 @@ export default function NewsletterSubscriptionModal({ isOpen, initialEmail, entr
 		const prev = document.body.style.overflow;
 		document.body.style.overflow = "hidden";
 		const t = setTimeout(() => firstRef.current?.focus(), 300);
-		const onKey = (e) => e.key === "Escape" && onClose?.();
+		const onKey = (e) => e.key === "Escape" && closeRef.current?.();
 		document.addEventListener("keydown", onKey);
 		return () => {
 			document.body.style.overflow = prev;
 			clearTimeout(t);
 			document.removeEventListener("keydown", onKey);
 		};
-	}, [isOpen, initialEmail, onClose]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [isOpen]);
 
 	if (!mounted || !isOpen) return null;
 
