@@ -207,16 +207,16 @@ const loadCustomBlocks = (editor) => {
 
   // ===================== CATEGORY BANNER — SECONDARY =====================
   // Source: faq.html
-  blockManager.add("banner-secondary", {
-    label: "Banner — Secondary",
-    media: '<i class="fa fa-bookmark"></i>',
-    category: "Banners",
-    content: `<section id="category-banner-section">
-	<div class="category-banner banner-secondary shadow-card">
-		<h2>Probate</h2>
-	</div>
-</section>`,
-  });
+//   blockManager.add("banner-secondary", {
+//     label: "Banner — Secondary",
+//     media: '<i class="fa fa-bookmark"></i>',
+//     category: "Banners",
+//     content: `<section id="category-banner-section">
+// 	<div class="category-banner banner-secondary shadow-card">
+// 		<h2>Probate</h2>
+// 	</div>
+// </section>`,
+//   });
 
   // ===================== CONCLUSION / CTA SECTION =====================
   // Source: court-confirmed-sales.html — conclusion section with contact items

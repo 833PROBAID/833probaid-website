@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import AnimatedText from "./AnimatedText";
 import NewsletterSubscriptionModal from "./NewsletterSubscriptionModal";
 import CTAButton from "./CTAButton";
+import ScaledCardContent from "./ScaledCardContent";
 import { isValidEmail } from "@/app/utils/formValidation";
 
 export default function NewsletterCard() {
@@ -98,57 +99,6 @@ export default function NewsletterCard() {
               d="M524.4 64.5996V121.6L438.4 36.5996H496.236L524.4 64.5996Z"
               fill="#0097A7"
             />
-            <foreignObject
-              x="70"
-              y="35"
-              width="450"
-              height="370"
-              className="overflow-visible"
-            >
-              <div className="flex flex-col items-center justify-center w-full">
-                <div className="flex flex-col items-center justify-center pt-20">
-                  <h2 className="text-[#0097A7] text-center text-[30px] font-bold  font-montserrat mb-6  pl-6">
-                    Join Our Newsletter
-                  </h2>
-                  <div className="flex flex-col gap-[1em] pr-6">
-                    <div className="pl-10 flex flex-col gap-[1em]">
-                      <p className="font-bold text-[19px]">
-                        Stay up to date with the latest news and updates from{" "}
-                        <b className="text-primary">
-                          833PROBAID
-                          <span
-                            style={{
-                              verticalAlign: "super",
-                              lineHeight: "0",
-                            }}
-                          >
-                            ®
-                          </span>
-                        </b>
-                        .
-                      </p>
-                      <p className="font-bold text-[19px]">
-                        Subscribe to our newsletter.
-                      </p>
-                    </div>
-                    <form onSubmit={handleOpen} className="pl-5">
-                      <div className="border-secondary mx-auto w-[90%] border-b-4">
-                        <input
-                          type="email"
-                          placeholder="Enter your E-mail"
-                          value={newsletterEmail}
-                          onChange={(event) => {
-                            setNewsletterEmail(event.target.value);
-                            if (subscriptionNotice) setSubscriptionNotice("");
-                          }}
-                          className="placeholder-secondary bg-transparent py-2.5 text-[20px] font-semibold outline-none placeholder:font-extrabold"
-                        />
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </foreignObject>
             <defs>
               <filter
                 id="filter0_dii_273_11"
@@ -405,18 +355,66 @@ export default function NewsletterCard() {
               </linearGradient>
             </defs>
           </svg>
-          <div className="absolute left-1/2 -translate-x-1/2 top-[68.58%] min-w-[35.84%] h-[10.63%] flex items-center justify-center">
-            <CTAButton
-              label="Subscribe"
-              className="gap-2 sm:gap-1 xl:gap-3 h-full rounded-sm lg:rounded-md xl:rounded-lg px-3"
-              textClassName="text-[14px] sm:text-[7px] lg:text-[11px] xl:text-[14px]"
-              iconClassName="w-7 sm:w-4 lg:w-7 h-7 sm:h-4 lg:h-7"
-              onClick={(event) => {
-                if (isOpen) return;
-                handleOpen(event);
-              }}
-            />
-          </div>
+          <ScaledCardContent x={70} y={35} width={450} height={370}>
+            <div className="flex flex-col items-center justify-center w-full">
+              <div className="flex flex-col items-center justify-center pt-[calc(80*var(--u))]">
+                <h2 className="text-[#0097A7] text-center text-[length:calc(30*var(--u))] font-bold font-montserrat mb-[calc(24*var(--u))] pl-[calc(24*var(--u))]">
+                  Join Our Newsletter
+                </h2>
+                <div className="flex flex-col gap-[1em] pr-[calc(24*var(--u))]">
+                  <div className="pl-[calc(40*var(--u))] flex flex-col gap-[1em]">
+                    <p className="font-bold text-[length:calc(19*var(--u))]">
+                      Stay up to date with the latest news and updates from{" "}
+                      <b className="text-primary">
+                        833PROBAID
+                        <span
+                          style={{
+                            verticalAlign: "super",
+                            lineHeight: "0",
+                          }}
+                        >
+                          ®
+                        </span>
+                      </b>
+                      .
+                    </p>
+                    <p className="font-bold text-[length:calc(19*var(--u))]">
+                      Subscribe to our newsletter.
+                    </p>
+                  </div>
+                  <form onSubmit={handleOpen} className="pl-[calc(20*var(--u))]">
+                    <div className="border-secondary mx-auto w-[90%] border-b-[calc(4*var(--u))]">
+                      <input
+                        type="email"
+                        placeholder="Enter your E-mail"
+                        value={newsletterEmail}
+                        onChange={(event) => {
+                          setNewsletterEmail(event.target.value);
+                          if (subscriptionNotice) setSubscriptionNotice("");
+                        }}
+                        className="placeholder-secondary bg-transparent py-[calc(10*var(--u))] text-[length:calc(20*var(--u))] font-semibold outline-none placeholder:font-extrabold"
+                      />
+                    </div>
+                  </form>
+                </div>
+              </div>
+              {/* In the content flow (not pinned to the card), so it always
+                  sits below the e-mail field. The negative margin centres it on the card
+                  rather than on the content box, which is offset right. */}
+              <div className="mt-[calc(44*var(--u))] ml-[calc(-24*var(--u))] flex h-[calc(62*var(--u))] min-w-[calc(203*var(--u))] items-center justify-center">
+                <CTAButton
+                  label="Subscribe"
+                  className="h-full !gap-[calc(14*var(--u))] !rounded-[calc(10*var(--u))] px-[calc(15*var(--u))]"
+                  textClassName="text-[length:calc(17*var(--u))]"
+                  iconClassName="w-[calc(34*var(--u))] h-[calc(34*var(--u))]"
+                  onClick={(event) => {
+                    if (isOpen) return;
+                    handleOpen(event);
+                  }}
+                />
+              </div>
+            </div>
+          </ScaledCardContent>
         </div>
       </div>
 

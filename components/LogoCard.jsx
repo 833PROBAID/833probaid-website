@@ -1,11 +1,10 @@
 import Image from "next/image";
+import ScaledCardContent from "./ScaledCardContent";
 
 export default function LogoCard() {
   return (
     <div className="flex w-full justify-center">
-      <div
-        className="w-full "
-      >
+      <div className="relative w-full">
         <svg
           width="100%"
           height="100%"
@@ -72,30 +71,6 @@ export default function LogoCard() {
             fill="#0097A7"
             className="-translate-y-[6px]"
           />
-          <foreignObject
-            x="85"
-            y="82"
-            width="370"
-            height="320"
-            className="overflow-visible"
-          >
-            <div className="flex flex-col items-center justify-center pt-16 h-full ">
-              <Image
-                src="/images/footer-logo.png"
-                alt="Footer logo"
-                width={1000}
-                height={1000}
-                className="h-[111px] w-full object-contain px-6 sm:-mt-16 -mt-10"
-              />
-
-              <p className="text-left font-bold  mt-6 font-montserrat text-[#2A2A2A] pl-8 text-[19px] leading-tight">
-                Expert Probate, Conservatorship, and Trust Real Estate Services
-                handled personally from start to finish. Trusted by attorneys.
-                Relied on by families. Built to keep the process moving, even
-                when things get complicated
-              </p>
-            </div>
-          </foreignObject>
           <defs>
             <filter
               id="filter0_dii_273_13"
@@ -370,6 +345,24 @@ export default function LogoCard() {
             </linearGradient>
           </defs>
         </svg>
+        <ScaledCardContent x={85} y={82} width={370} height={320}>
+          <div className="flex flex-col items-center justify-center pt-[calc(64*var(--u))] h-full">
+            <Image
+              src="/images/footer-logo.png"
+              alt="Footer logo"
+              width={1000}
+              height={1000}
+              className="h-[calc(111*var(--u))] w-full object-contain px-[calc(24*var(--u))] mt-[calc(-40*var(--u))] sm:mt-[calc(-64*var(--u))]"
+            />
+
+            <p className="text-left font-bold mt-[calc(24*var(--u))] font-montserrat text-[#2A2A2A] pl-[calc(32*var(--u))] text-[length:calc(19*var(--u))] leading-tight">
+              Expert Probate, Conservatorship, and Trust Real Estate Services
+              handled personally from start to finish. Trusted by attorneys.
+              Relied on by families. Built to keep the process moving, even
+              when things get complicated
+            </p>
+          </div>
+        </ScaledCardContent>
       </div>
     </div>
   );

@@ -1,7 +1,9 @@
+import ScaledCardContent from "./ScaledCardContent";
+
 export default function ContactCard() {
   return (
     <div className="flex w-full justify-center">
-      <div className="w-full" style={{ transform: "translate3d(0,0,0)", willChange: "transform" }}>
+      <div className="relative -top-0.75 -left-1.25 w-full" style={{ transform: "translate3d(0,0,0)", willChange: "transform" }}>
         <svg
           width="100%"
           height="100%"
@@ -9,7 +11,6 @@ export default function ContactCard() {
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           style={{ transform: "translate3d(0,0,0)", willChange: "transform", isolation: "isolate" }}
-          className="relative -top-0.75 -left-1.25"
         >
           <g filter="url(#filter0_dii_273_12)">
             <rect x="14.6001" y="13.5996" width="541" height="556" rx="22" fill="#0097A7" />
@@ -29,40 +30,6 @@ export default function ContactCard() {
               fill="white"
             />
           </g>
-          <foreignObject x="100" y="40" width="370" height="320" className="overflow-visible">
-            <div className="flex flex-col items-center justify-center pt-20 w-full">
-              <h2 className="text-secondary text-center text-[30px] font-bold">Contact Us</h2>
-              <div className="flex flex-col justify-center items-start gap-[1em] mt-6 text-[19px]">
-                <div className="flex items-start gap-3">
-                  <img src="/svgs/location-pin.svg" style={{ width: "35px" }} alt="Location" />
-                  <p className="font-bold text-left">
-                    311 N. Robertson Blvd #444, <br /> Beverly Hills, CA 90211
-                  </p>
-                </div>
-                <a href="tel:8337762243" className="flex items-center gap-3">
-                  <img src="/svgs/phone-icon.svg" style={{ width: "32px", marginTop: "-0.8em", marginLeft: "1px" }} alt="Phone" />
-                  <div className="leading-[1.1] text-[19px]">
-                    <span className="text-secondary font-bold">
-                      (833)&nbsp;
-                      <span className="tracking-[0.07em]">PROBAID</span>
-                    </span>
-                    <br/>
-                    <span className="font-bold text-primary !ml-[2.9em] tracking-[0.17em]" >
-                      7762243
-                    </span>
-                  </div>
-                </a>
-                <a href="mailto:info@833probaid.com" className="flex items-center gap-3">
-                  <img src="/svgs/uiw_mail.svg" style={{ height: "35px", marginTop: "-2px" }} alt="Email" />
-                  <p className="font-bold text-[19px]">Info@833probaid.com</p>
-                </a>
-                <a href="https://www.833probaid.com" className="flex items-center gap-3">
-                  <img className="ml-0.5" src="/svgs/globe.svg" style={{ height: "30px", marginTop: "2px", marginLeft: "3px" }} alt="Website" />
-                  <p className="ml-0.5 font-bold text-[19px]">www.833probaid.com</p>
-                </a>
-              </div>
-            </div>
-          </foreignObject>
           <defs>
             <filter
               id="filter0_dii_273_12"
@@ -161,6 +128,40 @@ export default function ContactCard() {
             </filter>
           </defs>
         </svg>
+        <ScaledCardContent x={100} y={40} width={370} height={320}>
+          <div className="flex flex-col items-center justify-center pt-[calc(80*var(--u))] w-full">
+            <h2 className="text-secondary text-center text-[length:calc(30*var(--u))] font-bold">Contact Us</h2>
+            <div className="flex flex-col justify-center items-start gap-[1em] mt-[calc(24*var(--u))] text-[length:calc(19*var(--u))]">
+              <div className="flex items-start gap-[calc(12*var(--u))]">
+                <img src="/svgs/location-pin.svg" style={{ width: "calc(35*var(--u))" }} alt="Location" />
+                <p className="font-bold text-left">
+                  311 N. Robertson Blvd #444, <br /> Beverly Hills, CA 90211
+                </p>
+              </div>
+              <a href="tel:8337762243" className="flex items-center gap-[calc(12*var(--u))]">
+                <img src="/svgs/phone-icon.svg" style={{ width: "calc(32*var(--u))", marginTop: "-0.8em", marginLeft: "calc(1*var(--u))" }} alt="Phone" />
+                <div className="leading-[1.1] text-[length:calc(19*var(--u))]">
+                  <span className="text-secondary font-bold">
+                    (833)&nbsp;
+                    <span className="tracking-[0.07em]">PROBAID</span>
+                  </span>
+                  <br/>
+                  <span className="font-bold text-primary !ml-[2.9em] tracking-[0.17em]" >
+                    7762243
+                  </span>
+                </div>
+              </a>
+              <a href="mailto:info@833probaid.com" className="flex items-center gap-[calc(12*var(--u))]">
+                <img src="/svgs/uiw_mail.svg" style={{ height: "calc(35*var(--u))", marginTop: "calc(-2*var(--u))" }} alt="Email" />
+                <p className="font-bold text-[length:calc(19*var(--u))]">Info@833probaid.com</p>
+              </a>
+              <a href="https://www.833probaid.com" className="flex items-center gap-[calc(12*var(--u))]">
+                <img src="/svgs/globe.svg" style={{ height: "calc(30*var(--u))", marginTop: "calc(2*var(--u))", marginLeft: "calc(3*var(--u))" }} alt="Website" />
+                <p className="ml-[calc(2*var(--u))] font-bold text-[length:calc(19*var(--u))]">www.833probaid.com</p>
+              </a>
+            </div>
+          </div>
+        </ScaledCardContent>
       </div>
     </div>
   );

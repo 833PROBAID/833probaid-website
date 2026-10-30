@@ -259,12 +259,19 @@ const publicPageStyles = `
 				border-left: 4px solid;
 				transition:
 					transform 0.3s ease,
-					border-left-width 0.3s ease;
+					border-left-width 0.3s ease,
+					margin-left 0.3s ease;
 			}
 
+			/* The left border grows by 4px on hover (here, or 12px → 16px via
+			   hover:!border-l-16 in saved rows). The card widens 4px to the left
+			   to absorb it, so the text box keeps its width and the heading
+			   doesn't re-wrap. Margin, because saved rows lock padding with
+			   !p-[…]. */
 			.category-banner:hover {
 				transform: translateX(8px);
 				border-left-width: 8px;
+				margin-left: -4px;
 			}
 
 			.category-banner h2 {
@@ -436,6 +443,14 @@ const publicPageStyles = `
 				padding: 0 !important;
 				background-color: transparent !important;
 				box-shadow: none !important;
+			}
+
+			/* A content-block nested in a step-body is an invisible wrapper (no
+			   background or shadow), but .shadow-card:hover still lifts it — so
+			   its text and buttons rose a second time on top of the card. The
+			   card around it already lifts; the wrapper must ride along. */
+			.step-container .step-body .content-block:hover {
+				transform: none !important;
 			}
 
 			@media (min-width: 768px) {
@@ -1150,6 +1165,7 @@ const publicPageStyles = `
 				.category-banner:hover {
 					transform: none !important;
 					border-left-width: 4px !important;
+					margin-left: 0 !important;
 				}
 
 				.shadow-card {
