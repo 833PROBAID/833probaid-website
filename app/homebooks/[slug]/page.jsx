@@ -15,6 +15,7 @@ import {
   getPublishedHomeBookSlugs,
 } from "@/app/services/homeBookService";
 import HomeBookContentClient from "./HomeBookContentClient";
+import { applyLocalPreview } from "./localPreview";
 import { HASH_ANCHOR_CSS } from "./hashPending";
 import HashPendingGuard from "@/components/HashPendingGuard";
 import { scopeCSS } from "@/app/utils/scopeCSS";
@@ -207,8 +208,9 @@ export default async function HomeBookDetailPage({ params }) {
     }
   }
 
-  const contentHtml = stripEmptyHtml(
-    stripDocumentTags(grapesContent?.html || "")
+  const contentHtml = applyLocalPreview(
+    homeBook.slug,
+    stripEmptyHtml(stripDocumentTags(grapesContent?.html || ""))
   );
 
   return (
