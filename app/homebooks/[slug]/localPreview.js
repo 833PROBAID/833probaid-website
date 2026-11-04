@@ -72,8 +72,28 @@ function resourceCenterFrames(html) {
 	return html;
 }
 
+// A heading framed in orange starts teal and turns orange on hover (of the
+// heading or of its container). Only the colour changes: .text-secondary is
+// kept because the page's saved CSS sizes `.section-title.text-secondary`
+// (4rem), and the important Tailwind colours win over that CSS's colours.
+const TEAL_HEADING =
+	"!text-primary hover:!text-secondary [.content-block:hover_&]:!text-secondary";
+
+function tealHeading(html, sectionId, headingId) {
+	const section = findSection(html, sectionId);
+	const from = `<h2 id="${headingId}" class="section-title text-secondary`;
+	if (!section || !section.includes(from)) return html;
+	return html.replace(section, section.replace(from, `${from} ${TEAL_HEADING}`));
+}
+
 const PREVIEWS = {
-	"your-resource-center": (html) => resourceRedCopy(resourceCenterFrames(html)),
+	"your-resource-center": (html) => {
+		html = resourceRedCopy(resourceCenterFrames(html));
+		// After the red copy is taken, so only the orange-framed originals change.
+		html = tealHeading(html, "intro", "i2wmw");
+		html = tealHeading(html, "intro-3-2", "i2wmw-4-3");
+		return html;
+	},
 };
 
 // Vercel sets VERCEL_ENV to "preview" on branch deployments and to

@@ -70,6 +70,35 @@ const publicPageStyles = `
 				height: auto;
 			}
 
+			/* React components portalled into the authored content (e.g. the
+			   agent-profile book in .big-book) are styled with Tailwind, which
+			   lives in cascade layers — so the unlayered element defaults here
+			   (the * reset, img, h1–h4) would override them and the component
+			   would look different than everywhere else. Hand those properties
+			   back to the layered styles inside .react-island. */
+			.react-island,
+			.react-island * {
+				margin: revert-layer;
+				padding: revert-layer;
+			}
+
+			.react-island img {
+				display: revert-layer;
+				max-width: revert-layer;
+				height: revert-layer;
+			}
+
+			.react-island h1,
+			.react-island h2,
+			.react-island h3,
+			.react-island h4 {
+				font-family: revert-layer;
+				text-transform: revert-layer;
+				line-height: revert-layer;
+				font-weight: revert-layer;
+				transition: revert-layer;
+			}
+
 			/* =========================================
 			   2. TYPOGRAPHY
 			   ========================================= */
@@ -198,6 +227,15 @@ const publicPageStyles = `
 			}
 
 			@media (max-width: 767px) {
+				/* Holds the portrait agent-profile book on mobile (see
+				   HomeBookContentClient). The book draws its own frame and
+				   shadow, and its text is fixed-size, so give it the full
+				   width instead of insetting it again. */
+				.big-book {
+					padding-left: 0 !important;
+					padding-right: 0 !important;
+				}
+
 				.section-title {
 					font-size: 1.5rem !important;
 				}

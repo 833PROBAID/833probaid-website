@@ -51,8 +51,9 @@ export function LearnMoreButton({
   const rotateDir = mirrored ? "3deg" : "-3deg";
   return (
     <div
-      className="lg:mt-1"
+      className="lg:mt-1 bottom-[6.5%]"
       style={{
+        position: "absolute",
         display: "inline-flex",
         animation: hov ? "none" : "floatBounce 2s ease-in-out infinite",
         transform: hov
@@ -451,7 +452,7 @@ function BookCardInner({
             {/* COVER SURFACE */}
             <div
               style={{
-                height: "100%",
+                position: "absolute",
                 top: 0,
                 right: 0,
                 bottom: 0,
@@ -467,12 +468,10 @@ function BookCardInner({
                 overflow: "hidden",
                 transform: "translateZ(0.01px)",
                 WebkitTransform: "translateZ(0.01px)",
-                justifyContent: "space-between",
-                padding: "3% 0",
               }}
             >
               {/* UPPER HALF — icon + title */}
-              <div className="flex flex-col items-center justify-start pt-2 3md:pt-5 lg:pt-6 gap-7">
+              <div className="flex flex-col items-center justify-start pt-2 3md:pt-5 lg:pt-6">
                 <div className="sm:h-[50px] md:h-[60px] lg:h-[70px] xl:h-[90px] sm:w-[50px] md:w-[60px] lg:w-[70px] xl:w-[90px]">
                   <Image
                     src={icon}
@@ -488,7 +487,7 @@ function BookCardInner({
                     }`}
                   />
                 </div>
-                <h1 className="pt-3 text-white font-bold text-center uppercase leading-[1.2] !font-montserrat md:text-[15px] 2md:text-[16px] 3md:text-[19px] lg:text-[20px] 2lg:text-[21.5px] 3lg:text-[22.5px]  xl:text-[24px] px-[5%] drop-shadow-[4.31px_4.31px_4.31px_rgba(0,0,0,0.25)] [text-shadow:1_2px_1.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
+                <h1 className="pt-3 text-white font-bold text-center uppercase leading-[1.2] !font-montserrat md:text-[11px] 2md:text-[12px] 3md:text-[15px] lg:text-[16px] 2lg:text-[17.5px] 3lg:text-[18.5px] xl:text-[24px] px-[5%] drop-shadow-[4.31px_4.31px_4.31px_rgba(0,0,0,0.25)] [text-shadow:1_2px_1.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
                   {String(title)
                     .split("®")
                     .map((part, i, arr) =>
@@ -531,9 +530,15 @@ function BookCardInner({
               </div>
 
               {/* LOWER HALF — description + button */}
-              <div className="flex items-center justify-between flex-col gap-11">
+              {/* Description and button are positioned from the cover's bottom
+                  edge (not stacked in flow), so they keep clear of the centred
+                  band at every width — same layout as BookCardBig. */}
+              <div
+                className="flex items-center justify-between flex-col gap-4"
+                style={{ padding: "0% 6% 2.5%", "--card-bottom": bottom }}
+              >
                 <p
-                  className={`bottom-[30%] xl:bottom-[var(--card-bottom)] 2xl:bottom-[30%] text-white tracking-wider text-center font-montserrat leading-[1.3] font-semibold sm:text-[14px] 2md:text-[15px] 3md:text-[17px] lg:text-[18px] 2lg:text-[19.5px] 3lg:text-[21px] xl:text-[22px] px-[1%]`}
+                  className={`absolute bottom-[30%] xl:bottom-[var(--card-bottom)] 2xl:bottom-[30%] text-white tracking-wider text-center font-montserrat leading-[1.3] font-semibold sm:text-[10px] 2md:text-[11px] 3md:text-[13px] lg:text-[14px] 2lg:text-[15.5px] 3lg:text-[17px] xl:text-[22px] px-[1%]`}
                 >
                   {String(description)
                     .split("®")

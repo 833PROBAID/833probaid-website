@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useState, useRef } from "react";
+import { memo, useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import HomeBorderImage from "@/components/HomeBorderImage";
@@ -47,12 +47,18 @@ export function LearnMoreButton({
   arrowRotation = "0deg",
 }) {
   const [hov, setHov] = useState(false);
+  // On phones a long label ("Explore Properties") doesn't fit on one line in
+  // the book. Wrapped text keeps its box at the full available width, so set
+  // it one word per line (w-min) to let the button shrink to the text.
+  const stackLabel = label.length > 12 ? "max-sm:w-min" : "";
   const rotateDir = mirrored ? "3deg" : "-3deg";
   return (
     <div
       style={{
         position: "relative",
         display: "inline-flex",
+        // Never wider than the book: a long label wraps instead.
+        maxWidth: "100%",
         animation: hov ? "none" : "floatBounce 2s ease-in-out infinite",
         transform: hov
           ? `scale(1.08) rotate(${rotateDir})`
@@ -76,7 +82,7 @@ export function LearnMoreButton({
         }}
       />
       <button
-        className="inline-flex items-center gap-2 sm:gap-1 px-2 h-[48px] md:h-[42px] 2md:h-[45px] lg:h-[55px] xl:h-[70px] lg:gap-3 rounded-[8px] pl-2.5"
+        className="inline-flex max-w-full items-center gap-[clamp(4px,2.4cqw,8px)] sm:gap-2 px-[clamp(8px,4.3cqw,16px)] py-[clamp(2px,1cqw,6px)] min-h-[clamp(20px,calc(48px_-_(327px_-_100cqw)_*_0.4),48px)] md:h-[42px] 2md:h-[45px] lg:h-[55px] xl:h-[70px] lg:gap-3 rounded-[8px]"
         type="button"
         onClick={onClick}
         onMouseEnter={() => setHov(true)}
@@ -90,7 +96,7 @@ export function LearnMoreButton({
             "inset 5.46px -5.46px 3.64px 0px #00000040, inset -3.64px 4.55px 3.64px 0px #FFFFFF40",
         }}
       >
-        <span className="font-montserrat font-black text-[18px] sm:text-[18px] md:text-[14.5px] 2md:text-[15.5px] 3md:text-[18px] xl:text-[23px] uppercase text-white tracking-wide [text-shadow:1_2px_1.6px_rgba(0,0,0,0.82),0_0_6px_rgba(255,255,255,0.25)]">
+        <span className={`${stackLabel} text-center leading-[1.05] font-montserrat font-black text-[clamp(8px,5.5cqw,18px)] sm:text-[18px] md:text-[14.5px] 2md:text-[15.5px] 3md:text-[18px] xl:text-[23px] uppercase text-white tracking-wide [text-shadow:1_2px_1.6px_rgba(0,0,0,0.82),0_0_6px_rgba(255,255,255,0.25)]`}>
           {label}
         </span>
         <Image
@@ -99,7 +105,7 @@ export function LearnMoreButton({
           width={100}
           height={100}
           priority
-          className="object-contain h-[48px] w-[35px] sm:h-[28px] sm:w-[28px] lg:h-[45px] lg:w-[45px]"
+          className="shrink-0 object-contain h-[clamp(20px,14.7cqw,48px)] w-[clamp(14px,10.7cqw,35px)] sm:h-[28px] sm:w-[28px] lg:h-[45px] lg:w-[45px]"
           style={{
             transform: `rotate(${arrowRotation})`,
             transition: "transform 400ms ease",
@@ -117,6 +123,10 @@ function BookCardInner({
   imageSrc,
   imageAlt = "",
   slug,
+  // External/full-page target instead of a homebook slug (e.g. the agent
+  // profile), and the button text to go with it.
+  href,
+  buttonLabel = "Learn More",
   speed = D.flipDur,
   width = D.w,
   height = D.h,
@@ -169,12 +179,37 @@ function BookCardInner({
     e.stopPropagation();
     setFlipping(true);
     setOpen(true);
-    if (slug) {
+    if (href) {
+      setTimeout(() => {
+        // Drop the #hash first, as BookCardBigNew does: a full-page
+        // navigation skips useHashPin, so Back would otherwise jump to the
+        // #hash target instead of returning to this book.
+        if (window.location.hash) {
+          history.replaceState(
+            history.state,
+            "",
+            window.location.pathname + window.location.search
+          );
+        }
+        window.location.assign(href);
+      }, speed - 800);
+    } else if (slug) {
       router.prefetch(`/homebooks/${slug}`);
       setTimeout(() => router.push(`/homebooks/${slug}`), speed - 800);
     }
     setTimeout(() => setFlipping(false), speed + 300);
   };
+
+  // Coming Back to a page left through `href` can restore it from the
+  // back/forward cache with the cover still flipped open — close it.
+  useEffect(() => {
+    if (!href) return;
+    const onPageShow = (e) => {
+      if (e.persisted) setOpen(false);
+    };
+    window.addEventListener("pageshow", onPageShow);
+    return () => window.removeEventListener("pageshow", onPageShow);
+  }, [href]);
 
   return (
     <div
@@ -189,6 +224,11 @@ function BookCardInner({
         perspectiveOrigin: "50% 45%",
         WebkitPerspectiveOrigin: "50% 45%",
         isolation: "isolate",
+        // Lets the text/icon/button sizes below shrink with the book when it
+        // is narrower than on a phone home page (clamp(…cqw…) values, capped
+        // at their original px). Kept off the book itself, whose 3D flip
+        // must not be contained.
+        containerType: "inline-size",
       }}
     >
       <div
@@ -464,7 +504,7 @@ function BookCardInner({
                   zIndex: 3,
                 }}
               >
-                <p className="text-white text-center tracking-wider font-bold font-montserrat leading-[1.3] md:text-[11px] 2md:text-[13px] 3md:text-[16px] lg:text-sm 2lg:text-[15.5px] 3lg:text-[16.5px] xl:text-lg 2xl:text-xl px-[6%] sm:px-[7%] [text-shadow:1px_2px_2.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
+                <p className="text-white text-center tracking-wider font-bold font-montserrat leading-[1.3] text-[clamp(8px,4.9cqw,16px)] md:text-[11px] 2md:text-[13px] 3md:text-[16px] lg:text-sm 2lg:text-[15.5px] 3lg:text-[16.5px] xl:text-lg 2xl:text-xl px-[6%] sm:px-[7%] [text-shadow:1px_2px_2.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]">
                   {subtitle}
                 </p>
               </div>
@@ -474,20 +514,20 @@ function BookCardInner({
                 className="absolute left-0 right-0 h-[36%] flex flex-col items-center justify-start"
                 style={{ paddingTop: "7.5%" }}
               >
-                <div className="h-[100px] lg:h-[90px] xl:h-[100px]">
+                <div className="h-[clamp(30px,30.6cqw,100px)] lg:h-[90px] xl:h-[100px]">
                   <Image
                     src={icon}
                     alt={title}
                     width={120}
                     height={120}
                     priority={priority}
-                    className={`object-contain w-full h-[100px] md:h-[80px] lg:h-[90px] xl:h-[100px] floating-text cursor-pointer hover:scale-[1.1] transition-all duration-300 ${
+                    className={`object-contain w-full h-[clamp(30px,30.6cqw,100px)] md:h-[80px] lg:h-[90px] xl:h-[100px] floating-text cursor-pointer hover:scale-[1.1] transition-all duration-300 ${
                       mirrored ? "hover:rotate-10" : "hover:-rotate-10"
                     }`}
                   />
                 </div>
                 <h1
-                  className="text-white font-bold text-center uppercase leading-[1.2] font-montserrat md:text-[11px] 2md:text-[12px] 3md:text-[15px] lg:text-[16px] 2lg:text-[17.5px] 3lg:text-[18.5px]  xl:text-[20px] px-[5%] drop-shadow-[4.31px_4.31px_4.31px_rgba(0,0,0,0.25)] [text-shadow:1_2px_1.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]"
+                  className="text-white font-bold text-center uppercase leading-[1.2] font-montserrat text-[clamp(8px,4.9cqw,16px)] md:text-[11px] 2md:text-[12px] 3md:text-[15px] lg:text-[16px] 2lg:text-[17.5px] 3lg:text-[18.5px]  xl:text-[20px] px-[5%] drop-shadow-[4.31px_4.31px_4.31px_rgba(0,0,0,0.25)] [text-shadow:1_2px_1.6px_rgba(0,0,0,0.62),0_0_6px_rgba(255,255,255,0.25)]"
                   style={{ paddingTop: "4%" }}
                 >
                   {String(title)
@@ -507,15 +547,20 @@ function BookCardInner({
 
               {/* LOWER HALF — description + button */}
               <div
-                className="absolute top-[63%] left-0 right-0 bottom-0 flex items-center justify-between flex-col"
-                style={{ padding: "2% 4% 6.5%" }}
+                className={`absolute top-[63%] left-0 right-0 bottom-0 flex items-center justify-between flex-col [--book-pb:6.5%] ${
+                  // A long label is set on two lines on phones (see
+                  // LearnMoreButton); that taller button sits lower so it
+                  // keeps clear of the description, which it floats up into.
+                  buttonLabel.length > 12 ? "max-sm:[--book-pb:3%]" : ""
+                }`}
+                style={{ padding: "2% 4% var(--book-pb)" }}
               >
-                <p className="text-white tracking-wider text-center font-montserrat leading-[1.3] font-semibold sm:text-[10px] 2md:text-[11px] 3md:text-[13px] lg:text-[14px] 2lg:text-[15.5px] 3lg:text-[17px] xl:text-lg 2xl:text-[17px] px-[1%]">
+                <p className="text-white tracking-wider text-center font-montserrat leading-[1.3] font-semibold text-[clamp(8px,4.9cqw,16px)] sm:text-[10px] 2md:text-[11px] 3md:text-[13px] lg:text-[14px] 2lg:text-[15.5px] 3lg:text-[17px] xl:text-lg 2xl:text-[17px] px-[1%]">
                   {description}
                 </p>
                 <LearnMoreButton
                   size="md"
-                  label="Learn More"
+                  label={buttonLabel}
                   mirrored={mirrored}
                   onClick={handleLearnMore}
                 />

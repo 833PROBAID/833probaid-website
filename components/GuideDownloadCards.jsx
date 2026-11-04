@@ -94,7 +94,7 @@ function DownloadIcon() {
       height="72"
       viewBox="0 0 72 72"
       fill="none"
-	  className="w-4 md:w-12"
+      className="h-[clamp(16px,5.5cqw,32px)] w-[clamp(16px,5.5cqw,32px)] shrink-0 md:h-12 md:w-12"
     >
       <g clipPath="url(#clip0_2220_40)">
         <g filter="url(#filter0_dd_2220_40)">
@@ -318,6 +318,8 @@ function GuideCard({ guide }) {
     <div
       className="flex w-full flex-col items-center gap-10"
       data-guide={guide.key}
+      // Lets the button below md size itself to the column (cqw).
+      style={{ containerType: "inline-size" }}
     >
       {/* ── STAGE: the perspective every layer below is read through ── */}
       <div
@@ -340,12 +342,16 @@ function GuideCard({ guide }) {
           style={{
             position: "relative",
             width: "100%",
-            // maxWidth: D.w,
+            // The desktop book's proportions at every width (a fixed height
+            // turned it landscape in a wide single column and squeezed the
+            // caption in narrow ones). The cover is laid out in %/cqw of this
+            // box, so both books — always the same size — line up exactly.
+            maxWidth: 516,
+            aspectRatio: "516 / 720",
             transformStyle: "preserve-3d",
             WebkitTransformStyle: "preserve-3d",
             containerType: "inline-size",
           }}
-          className="h-130 md:h-140 lg:h-164 xl:h-180"
         >
           {/* BASE SHELL shadow */}
           <div
@@ -520,20 +526,25 @@ function GuideCard({ guide }) {
                 <div className="absolute inset-0 flex flex-col items-center px-3 md:px-4 top-[3%]">
                   {/* Cover art — the PNG carries its own orange frame, so it is
 									    contained rather than cropped into a bordered well. */}
-                  <div className="flex min-h-0 w-full items-center justify-center pb-[3%]">
+                  {/* A share of the height set by the book's width only (never by
+                      its caption), so the rule under it sits at the same level
+                      in both books. Below the desktop width (516px) the cover
+                      gives up a little height to the caption, whose type stops
+                      shrinking at 12px. */}
+                  <div className="flex h-[calc(74%_-_(516px_-_100cqw)_*_0.15)] w-full shrink-0 items-center justify-center pb-[3%]">
                     <Image
                       src={guide.cover}
                       alt={guide.alt}
                       width={519}
                       height={619}
-                      className="h-auto w-full"
+                      className="h-full w-auto max-w-full object-contain"
                     />
                   </div>
 
                   <hr className="w-full h-[0.5px] border-[#14b3c2] border [box-sizing:unset] px-6.25 bg-primary" />
 
                   <p
-                    className={`${mirrored ? 'pl-4 pr-1' : 'pr-4 pl-1'} font-montserrat flex-1 w-full text-center flex items-center mt-[-0.3em] leading-[1.6] font-bold text-[1rem] md:text-[1.2rem] lg:text-[1.275rem]`}
+                    className={`${mirrored ? 'pl-4 pr-1' : 'pr-4 pl-1'} font-montserrat flex-1 min-h-0 w-full text-center flex items-center justify-center leading-[1.5] font-bold text-[1rem] md:text-[1.2rem] lg:text-[1.275rem]`}
                   >
                     {guide.caption}
                   </p>
@@ -570,8 +581,10 @@ function GuideCard({ guide }) {
         // Three words where the blog grid has two, so the type steps down a
         // tier; past that the label wraps rather than clipping, since the
         // button shrink-to-fits inside the column.
-        textClassName="text-[12px] md:text-[15px] lg:text-[18px] xl:text-[21px] leading-tight text-center"
-		wrapperClassName={`${!mirrored ? 'flex-row-reverse' : ''} w-full justify-center`}
+        textClassName="text-[clamp(12px,3.6cqw,20px)] md:text-[15px] lg:text-[18px] xl:text-[21px] leading-tight text-center"
+        // Sized to its label (not the column), growing in height when the
+        // label wraps on narrow columns.
+        wrapperClassName={`${!mirrored ? "flex-row-reverse" : ""} max-w-full justify-center !h-auto min-h-[clamp(28px,9cqw,55px)] md:min-h-[55px] xl:min-h-[70px] py-1.5 !px-[clamp(12px,2.6cqw,16px)] md:!px-4 gap-[clamp(8px,1.6cqw,12px)]`}
         onClick={handleDownload}
       />
     </div>

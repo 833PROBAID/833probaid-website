@@ -8,6 +8,8 @@ import GuideDownloadCards, {
 	GUIDE_DOWNLOAD_EVENT,
 } from "@/components/GuideDownloadCards";
 import BookCardBigNew from "@/app/new-page/BookCardBigNew";
+import BookCard from "@/app/new-page/NewBook";
+import useIsMobile from "@/hooks/useIsMobile";
 import useHashPin from "@/hooks/useHashPin";
 import useBackScrollRestore from "@/hooks/useBackScrollRestore";
 import { usePathname } from "next/navigation";
@@ -23,6 +25,15 @@ const GUIDE_TRIGGERS = {
 const SCROLL_SETTLE_MS = 900;
 
 const AGENT_PROFILE_URL = "https://luxurycollectiverealty.com/team/tigran-mkrtchian";
+
+// The agent-profile book rendered into the authored `.big-book` section.
+const COMMAND_CENTER_BOOK = {
+	title: "THE REAL ESTATE COMMAND CENTER",
+	subtitle: "Your Direct Access To The Market. Your Next Move Starts Here.",
+	description:
+		"Explore Our Listings. Search Any Neighborhood. Discover Your Next Opportunity.",
+	icon: "/icons/card-icon-8.png",
+};
 
 /** Extra height a `.step-container` grows by on hover. */
 const STEP_HOVER_GROWTH_PX = 20;
@@ -150,6 +161,8 @@ export default function HomeBookContentClient() {
 	const [referralSubmitEl, setReferralSubmitEl] = useState(null);
 	const [guideDownloadsEl, setGuideDownloadsEl] = useState(null);
 	const [bigBookEl, setBigBookEl] = useState(null);
+	// Same switch point as the home page: portrait books below md (768px).
+	const isBelowMd = useIsMobile(768);
 
 	// The hosts live in server-rendered HTML that React doesn't own, so a single
 	// lookup on mount can miss one — the content not yet in place on a hard
@@ -304,18 +317,35 @@ export default function HomeBookContentClient() {
 					referralIntakeEl
 				)}
 			{guideDownloadsEl &&
-				createPortal(<GuideDownloadCards />, guideDownloadsEl)}
+				createPortal(
+					<div className="react-island">
+						<GuideDownloadCards />
+					</div>,
+					guideDownloadsEl
+				)}
 			{bigBookEl &&
 				createPortal(
-					<BookCardBigNew
-						title="THE REAL ESTATE COMMAND CENTER"
-						subtitle="Your Direct Access To The Market. Your Next Move Starts Here."
-						description="Explore Our Listings. Search Any Neighborhood. Discover Your Next Opportunity."
-						icon="/icons/card-icon-8.png"
-						href={AGENT_PROFILE_URL}
-						fullWidth
-						speed={3000}
-					/>,
+					// Below md the landscape book is too short for its content, so
+					// switch to the portrait book — same as the home page does.
+					// .react-island shields it from the homebook element styles
+					// (see publicPageStyles) so it renders exactly as on home.
+					<div className="react-island">
+						{isBelowMd ? (
+							<BookCard
+								{...COMMAND_CENTER_BOOK}
+								href={AGENT_PROFILE_URL}
+								buttonLabel="Explore Properties"
+								speed={3000}
+							/>
+						) : (
+							<BookCardBigNew
+								{...COMMAND_CENTER_BOOK}
+								href={AGENT_PROFILE_URL}
+								fullWidth
+								speed={3000}
+							/>
+						)}
+					</div>,
 					bigBookEl
 				)}
 		</>
