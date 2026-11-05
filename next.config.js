@@ -35,21 +35,6 @@ const nextConfig = {
     };
     return config;
   },
-  // The agent-profile book (homebooks) leaves through this same-site path
-  // rather than straight to the agent's site. It navigates from a timer after
-  // the cover animation, and iOS Safari treats a page that sends the visitor
-  // to *another site* from script as a redirect hop and skips it on Back —
-  // Back then lands two pages back. Leaving same-site (like the guide PDFs)
-  // keeps the homebook in history; the server redirect adds no entry.
-  async redirects() {
-    return [
-      {
-        source: "/agent-profile",
-        destination: "https://luxurycollectiverealty.com/team/tigran-mkrtchian",
-        permanent: false,
-      },
-    ];
-  },
   images: {
     localPatterns: [
       {

@@ -24,9 +24,7 @@ const GUIDE_TRIGGERS = {
 /** Fallback for browsers without `scrollend` (Safari < 18). */
 const SCROLL_SETTLE_MS = 900;
 
-// Same-site path redirected to the agent's profile (see next.config.js) —
-// going straight to the other site breaks Back on iOS Safari.
-const AGENT_PROFILE_URL = "/agent-profile";
+const AGENT_PROFILE_URL = "https://luxurycollectiverealty.com/team/tigran-mkrtchian";
 
 // The agent-profile book rendered into the authored `.big-book` section.
 const COMMAND_CENTER_BOOK = {
