@@ -1,6 +1,7 @@
 "use client";
 
 import { memo, useEffect, useState, useRef } from "react";
+import { flushSync } from "react-dom";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import HomeBorderImage from "@/components/HomeBorderImage";
@@ -138,6 +139,9 @@ function BookCardInner({
   const coverRef = useRef(null);
   const router = useRouter();
   const [flipping, setFlipping] = useState(false);
+  // When true, the cover snaps shut with no animation (leaving the page or
+  // coming back to it through `href`).
+  const [instant, setInstant] = useState(false);
 
   const clipPath = mirrored ? COVER_CLIP_PATH_MIRROR : COVER_CLIP_PATH;
 
@@ -167,7 +171,9 @@ function BookCardInner({
     ? "linear-gradient(270deg, rgba(0,0,0,0.4), transparent)"
     : "linear-gradient(90deg, rgba(0,0,0,0.4), transparent)";
 
-  const coverTransition = `
+  const coverTransition = instant
+    ? "none"
+    : `
     transform ${speed}ms cubic-bezier(0.7,0,0.3,1),
     opacity   ${D.fadeDur}ms ease ${speed - D.fadeDur}ms
   `;
@@ -177,6 +183,7 @@ function BookCardInner({
 
   const handleLearnMore = (e) => {
     e.stopPropagation();
+    setInstant(false);
     setFlipping(true);
     setOpen(true);
     if (href) {
@@ -201,14 +208,27 @@ function BookCardInner({
   };
 
   // Coming Back to a page left through `href` can restore it from the
-  // back/forward cache with the cover still flipped open — close it.
+  // back/forward cache with the cover still flipped open. Close it instantly
+  // (no animation) both when leaving — so the cached snapshot is already
+  // closed — and when the page is restored. Same as BookCardBigNew.
   useEffect(() => {
     if (!href) return;
-    const onPageShow = (e) => {
-      if (e.persisted) setOpen(false);
+    const closeInstantly = () => {
+      flushSync(() => {
+        setInstant(true);
+        setOpen(false);
+        setFlipping(false);
+      });
     };
+    const onPageShow = (e) => {
+      if (e.persisted) closeInstantly();
+    };
+    window.addEventListener("pagehide", closeInstantly);
     window.addEventListener("pageshow", onPageShow);
-    return () => window.removeEventListener("pageshow", onPageShow);
+    return () => {
+      window.removeEventListener("pagehide", closeInstantly);
+      window.removeEventListener("pageshow", onPageShow);
+    };
   }, [href]);
 
   return (
@@ -579,8 +599,8 @@ function BookCardInner({
               background: spineGradient,
               pointerEvents: "none",
               opacity: open ? 1 : 0,
-              transition: `opacity ${speed}ms ease`,
-              WebkitTransition: `opacity ${speed}ms ease`,
+              transition: instant ? "none" : `opacity ${speed}ms ease`,
+              WebkitTransition: instant ? "none" : `opacity ${speed}ms ease`,
               zIndex: 2,
             }}
           />

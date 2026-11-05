@@ -543,8 +543,11 @@ function GuideCard({ guide }) {
 
                   <hr className="w-full h-[0.5px] border-[#14b3c2] border [box-sizing:unset] px-6.25 bg-primary" />
 
+                  {/* Caption size steps down with the viewport so it always fits
+                      under the rule, tablets included (two narrow columns from
+                      768px). All steps are min-[…px] so they apply in order. */}
                   <p
-                    className={`${mirrored ? 'pl-4 pr-1' : 'pr-4 pl-1'} font-montserrat flex-1 min-h-0 w-full text-center flex items-center justify-center leading-[1.5] font-bold text-[1rem] md:text-[1.2rem] lg:text-[1.275rem]`}
+                    className={`${mirrored ? 'pl-4 pr-1' : 'pr-4 pl-1'} font-montserrat flex-1 min-h-0 w-full text-center flex items-center justify-center leading-[1.5] font-bold text-[10px] min-[360px]:text-[12px] min-[375px]:text-[13px] min-[414px]:text-[15px] min-[440px]:text-[16px] min-[768px]:text-[15px] min-[800px]:text-[15.5px] min-[900px]:text-[17px] min-[960px]:text-[17.5px] min-[1000px]:text-[18.5px] min-[1024px]:text-[19px] min-[1100px]:text-[20.4px]`}
                   >
                     {guide.caption}
                   </p>
